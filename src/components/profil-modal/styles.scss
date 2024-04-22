@@ -1,0 +1,72 @@
+.profile-modal-content {
+  text-align: center;
+}
+
+.profile-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  margin-top: 30px;
+}
+
+.profile-button {
+  padding: 15px 30px;
+  border-radius: 15px; 
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out; 
+  color: white;
+  margin-bottom: 15px; 
+}
+
+.profile-button.profile1 {
+  background-color: #ff6347;
+}
+
+.profile-button.profile2 {
+  background-color: #4682b4;
+}
+
+.profile-button.profile3 {
+  background-color: #8a2be2;
+}
+
+.profile-button.profile4 {
+  background-color: #34e22b;
+}
+
+.profile-button.profile5 {
+  background-color: #efa716;
+}
+
+.profile-button.profile6 {
+  background-color: #c4a6dc;
+}
+
+.profile-button.profile7 {
+  background-color: #325b73;
+}
+
+.profile-button.profile8 {
+  background-color: #ad577f;
+}
+
+.profile-button.profile9 {
+  background-color: #a7ca6f;
+}
+
+.profile-button.profile10 {
+  background-color: #473a07;
+}
+
+.profile-button:hover {
+  transform: scale(1.03);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.description {
+  font-size: 16px;
+  color: #555;
+  margin-top: 20px;
+}
