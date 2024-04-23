@@ -87,16 +87,18 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
             Dernière page
           </Button>
         </Col>
-        <Col>
+        <Col offsetLg="1">
           <select
+            className="fr-select"
             name="order"
             id="order"
             onChange={(e) => setSort(e.target.value)}
           >
-            <option value="DESC">Plus récentes</option>
+            <option value="DESC">Plus récentes </option>
             <option value="ASC">Plus anciennes</option>
           </select>
           <select
+            className="fr-select"
             name="status"
             id="status"
             onChange={(e) => setStatus(e.target.value)}
