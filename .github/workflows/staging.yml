@@ -6,9 +6,9 @@ on:
       - staging
 
 env:
-  DEPLOYMENT: ticket-office
-  DEPLOYMENT_NAMESPACE: ticket
-  DEPLOYMENT_URL: https://ticket-office.staging.dataesr.ovh
+  # DEPLOYMENT: ticket-office
+  # DEPLOYMENT_NAMESPACE: ticket-office
+  # DEPLOYMENT_URL: https://ticket-office.staging.dataesr.ovh
   MM_NOTIFICATION_CHANNEL: bots
 
 jobs:
@@ -38,7 +38,7 @@ jobs:
         run: |
           IMAGE_ID=ghcr.io/dataesr/ticket-office
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker push --all-tags $IMAGE_ID
+          docker push $IMAGE_ID:${{ steps.version.outputs.tag }}
 
   notify:
     name: 📢 Notify in mattermost channel
