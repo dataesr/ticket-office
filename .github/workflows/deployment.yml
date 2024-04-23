@@ -1,10 +1,9 @@
-name: Build and deploy staging
+name: Deployment workflow
 
 on:
   push:
     branches:
       - staging
-
 env:
   DEPLOYMENT: ticket-office
   DEPLOYMENT_NAMESPACE: ticket-office
