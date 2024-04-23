@@ -1,13 +1,11 @@
-version: "3.8"
-
 services:
   app:
-    image: node:18-alpine
+    image: ghcr.io/dataesr/ticket-office
     working_dir: /app
-    volumes:
-      - .:/app
+
     ports:
-      - "3000:3000"
+      - "5173:5173"
+
     environment:
       - NODE_ENV=staging
       - VITE_SCANR_API_AUTORIZATION=${VITE_SCANR_API_AUTORIZATION}
