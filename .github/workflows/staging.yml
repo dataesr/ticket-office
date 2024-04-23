@@ -1,10 +1,9 @@
-name: Build and deploy staging
+name: Deployment workflow
 
 on:
   push:
     branches:
       - staging
-
 env:
   DEPLOYMENT: ticket-office
   DEPLOYMENT_NAMESPACE: ticket-office
@@ -38,11 +37,11 @@ jobs:
         run: |
           IMAGE_ID=ghcr.io/dataesr/ticket-office
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker push $IMAGE_ID:${{ steps.version.outputs.tag }}
+          docker push $IMAGE_ID:staging
 
   notify:
     name: 📢 Notify in mattermost channel
-    needs: deploy
+    needs: publish-ghcr
     if: always()
     runs-on: ubuntu-latest
     steps:
