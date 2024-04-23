@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  app:
+    image: node:18-alpine
+    working_dir: /app
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=staging
+      - VITE_SCANR_API_AUTORIZATION=${VITE_SCANR_API_AUTORIZATION}
+      - VITE_BREVO_API_AUTHORIZATION=${VITE_BREVO_API_AUTHORIZATION}
+    command: npm run dev
