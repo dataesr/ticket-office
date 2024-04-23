@@ -41,7 +41,7 @@ jobs:
 
   notify:
     name: 📢 Notify in mattermost channel
-    needs: publish
+    needs: publish-ghcr
     if: always()
     runs-on: ubuntu-latest
     steps:
