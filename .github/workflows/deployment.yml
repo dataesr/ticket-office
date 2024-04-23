@@ -40,14 +40,13 @@ jobs:
           docker push $IMAGE_ID:${{ steps.version.outputs.tag }}
 
   notify:
-    name: 📢 Notify in mattermost channel
     needs: deploy
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: dataesr/mm-notifier-action@v1.0.2
+      - uses: dataesr/mm-notifier-action@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN}}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           mattermost_webhook_url: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
-          mattermost_channel: ${{ env.MM_NOTIFICATION_CHANNEL}}
-          deployment_url: ${{ env.DEPLOYMENT_URL }}
+          mattermost_channel: bots
+          deployment_url: ${{ steps.s3-deploy.outputs.deployment_url }}
