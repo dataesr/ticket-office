@@ -12,6 +12,7 @@ import "./styles.scss";
 import ContributorInfo from "./contributor-info";
 import StaffActions from "./staff-action";
 import { Contribution } from "../../types";
+import HighlightedMessage from "../../components/highlightedMessage";
 
 const ContributionItem = ({
   data,
@@ -51,8 +52,14 @@ const ContributionItem = ({
             {data.name}
           </Text>
           <i className="message">
-            {data.message.slice(0, 130)}
-            {data.message.length > 70 ? "..." : ""}
+            <HighlightedMessage
+              message={
+                data.message.length > 70
+                  ? `${data.message.slice(0, 70)}...`
+                  : data.message
+              }
+              highlightedQuery={highlightedQuery}
+            />
           </i>
         </Col>
       </Row>

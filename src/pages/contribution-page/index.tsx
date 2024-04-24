@@ -7,6 +7,7 @@ import {
   SearchBar,
   Text,
   Title,
+  Toggle,
 } from "@dataesr/dsfr-plus";
 import ContributionItem from "./contribution-card";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
@@ -42,7 +43,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     setQuery(value.trim());
     setHighlightedQuery(value.trim());
   };
-  console.log(highlightedQuery);
 
   const filteredContributions = contrib?.filter((contribution) => {
     const nameMatches = contribution.name
@@ -118,13 +118,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
             <option value="ongoing">Contribution en traitement</option>
             <option value="treated">Contributions traités</option>
           </select>
-          <input
-            type="checkbox"
-            id="searchInMessage"
+          <Toggle
             checked={searchInMessage}
+            id="searchInMessage"
+            name={"Rechercher dans les messages"}
             onChange={(e) => setSearchInMessage(e.target.checked)}
+            label="Rechercher dans les messages"
           />
-          <label htmlFor="searchInMessage">Rechercher dans les messages</label>
         </Col>
       </Row>
       {filteredContributions.map((contribution) => (
