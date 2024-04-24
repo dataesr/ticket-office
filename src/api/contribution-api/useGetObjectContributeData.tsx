@@ -6,7 +6,6 @@ function useGetContributionData(URL: {}, reload: unknown) {
   const [isError, setError] = useState(false);
 
   const { VITE_SCANR_API_AUTHORIZATION } = import.meta.env;
-  console.log(VITE_SCANR_API_AUTHORIZATION);
   useEffect(() => {
     async function getData() {
       const url = URL;
