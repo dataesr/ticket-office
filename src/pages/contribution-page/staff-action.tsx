@@ -1,20 +1,11 @@
-import { Button, Col, Text } from "@dataesr/dsfr-plus";
+import { Col, Text } from "@dataesr/dsfr-plus";
 import EmailSender from "../../api/send-mail";
+import type { Contribution } from "../../types";
 
-const StaffActions = ({ data, showReplyForm, toggleReplyForm }) => {
+const StaffActions = ({ data }: { data: Contribution }) => {
   return (
     <Col className="staffSide">
-      {!showReplyForm && (
-        <Button
-          size="sm"
-          className="fr-mt-2w"
-          onClick={toggleReplyForm}
-          variant="secondary"
-        >
-          Répondre à ce mail
-        </Button>
-      )}
-      {showReplyForm && <EmailSender contribution={data} />}
+      <EmailSender contribution={data} />
       {data.comment && <Text size="sm">Réponse : {data.comment}</Text>}
     </Col>
   );

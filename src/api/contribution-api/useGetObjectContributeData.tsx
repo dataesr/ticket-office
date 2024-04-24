@@ -26,7 +26,6 @@ function useGetContributionData(URL: {}, reload: unknown) {
       }
     }
     getData();
-    console.log(data);
   }, [URL, reload]);
 
   return { data, isLoading, isError };

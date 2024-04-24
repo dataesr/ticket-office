@@ -1,52 +1,62 @@
-import { Row, Text } from "@dataesr/dsfr-plus";
-import { Contribution } from "../../types/contribution";
-
+import { Col, Row, Text } from "@dataesr/dsfr-plus";
+import type { Contribution } from "../../types";
 const MessagePreview = ({
   data,
-  renderMessage,
-  showDetails,
+  highlightedQuery,
 }: {
   data: Contribution;
-  renderMessage: () => JSX.Element;
-  showDetails: boolean;
+  highlightedQuery: string;
 }) => {
+  const renderHighlightedMessage = () => {
+    console.log(highlightedQuery);
+    if (!highlightedQuery) return data?.message;
+
+    const lowerCaseMessage = data?.message?.toLowerCase();
+    const lowerCaseQuery = highlightedQuery?.toLowerCase();
+    const index = lowerCaseMessage.indexOf(lowerCaseQuery);
+    if (index === -1) return data?.message;
+
+    const prefix = data?.message.substring(0, index);
+    const highlight = data?.message.substring(
+      index,
+      index + highlightedQuery?.length
+    );
+    const suffix = data?.message?.substring(index + highlightedQuery?.length);
+
+    return (
+      <>
+        {prefix}
+        <span style={{ backgroundColor: "yellow" }}>{highlight}</span>
+        {suffix}
+      </>
+    );
+  };
+
   return (
     <Row className="contributorSide">
-      <Text size="sm">
-        <div className="message-info">
-          <div className="info-group">
-            <div className="info-item">
-              {data.id && (
-                <div
-                  className={
-                    data.type === "structure"
-                      ? "fr-icon-building-line"
-                      : "fr-icon-user-line"
-                  }
-                >
-                  ID de l'objet concerné : {data.id}
-                </div>
-              )}
-            </div>
-            <div className="info-item">
-              <div className="name">
-                {data.name ? `Nom: ${data.name}` : "Nom non renseigné"}
-              </div>
-              {data.email && <div>Email: {data.email}</div>}
-            </div>
-            <div className="info-item">
-              {data.organisation && (
-                <div>Organisation: {data.organisation}</div>
-              )}
-              {data.fonction && <div>Fonction: {data.fonction}</div>}
-            </div>
-            <div className="info-item">
-              Reçu le {new Date(data.created_at).toLocaleDateString()}
-            </div>
-          </div>
-        </div>
-        Message: {showDetails ? data.message : renderMessage()}
-      </Text>
+      <>
+        {data.id && (
+          <Col
+            className={
+              data.type === "structure"
+                ? "fr-icon-building-line"
+                : "fr-icon-user-line"
+            }
+          >
+            ID de l'objet concerné : {data.id}
+          </Col>
+        )}
+        <Col>
+          <Text>{data.name ? `Nom: ${data.name}` : "Nom non renseigné"}</Text>
+          {data.email && <Text>Email: {data.email}</Text>}
+        </Col>
+        <Col className="contributorInfo">
+          {data.organisation && <Text>Organisation: {data.organisation}</Text>}
+          {data.fonction && <Text>Fonction: {data.fonction}</Text>}
+          <Text>Reçu le {new Date(data.created_at).toLocaleDateString()}</Text>
+        </Col>
+      </>
+      <Text>Message: {renderHighlightedMessage()}</Text>
     </Row>
   );
 };
