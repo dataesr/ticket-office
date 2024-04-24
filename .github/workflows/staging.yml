@@ -5,8 +5,8 @@ on:
     branches:
       - staging
 env:
-  # DEPLOYMENT: ticket-office
-  # DEPLOYMENT_NAMESPACE: ticket-office
+  DEPLOYMENT: ticket-office
+  DEPLOYMENT_NAMESPACE: ticket-office
   DEPLOYMENT_URL: https://ticket-office.staging.dataesr.ovh
   MM_NOTIFICATION_CHANNEL: bots
 
