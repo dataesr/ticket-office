@@ -14,6 +14,7 @@ function useGetContributionData(URL: {}, reload: unknown) {
         const response = await fetch(url as RequestInfo, {
           headers: {
             Authorization: VITE_SCANR_API_AUTHORIZATION,
+            "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/json",
           },
         });
