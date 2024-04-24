@@ -13,7 +13,7 @@ export const buildURL = (
     : "contact";
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
   const where: any = {};
-
+  console.log("test");
   if (query.trim() !== "") {
     where.$or = [{ name: { $regex: `.*${query}.*`, $options: "i" } }];
     if (searchInMessages) {
