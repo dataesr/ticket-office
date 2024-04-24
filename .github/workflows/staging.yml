@@ -39,7 +39,7 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker push $IMAGE_ID:staging
 
-    deploy:
+  deploy:
     name: 💭 Update staging deployment
     runs-on: ubuntu-latest
     needs: publish-ghcr
