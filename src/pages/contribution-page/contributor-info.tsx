@@ -1,21 +1,14 @@
+import { Contribution } from "../../types";
 import MessagePreview from "./message-preview";
 
 const ContributorInfo = ({
   data,
-  renderMessage,
-  showDetails,
+  highlightedQuery,
 }: {
-  data: any;
-  renderMessage: any;
-  showDetails: any;
+  data: Contribution;
+  highlightedQuery: string;
 }) => {
-  return (
-    <MessagePreview
-      data={data}
-      renderMessage={renderMessage}
-      showDetails={showDetails}
-    />
-  );
+  return <MessagePreview data={data} highlightedQuery={highlightedQuery} />;
 };
 
 export default ContributorInfo;

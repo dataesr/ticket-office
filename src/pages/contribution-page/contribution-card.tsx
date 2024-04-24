@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Accordion,
   AccordionGroup,
@@ -12,22 +11,15 @@ import {
 import "./styles.scss";
 import ContributorInfo from "./contributor-info";
 import StaffActions from "./staff-action";
+import { Contribution } from "../../types";
 
-const ContributionItem = ({ data }: { data: any }) => {
-  const [showReplyForm, setShowReplyForm] = useState(false);
-
-  const toggleReplyForm = () => {
-    setShowReplyForm(!showReplyForm);
-  };
-
-  const renderMessage = () => {
-    const messageLines = data.message.split("\n");
-    if (messageLines.length <= 4) {
-      return data.message;
-    } else {
-      return messageLines.slice(8, 4).join("\n");
-    }
-  };
+const ContributionItem = ({
+  data,
+  highlightedQuery,
+}: {
+  data: Contribution;
+  highlightedQuery: string;
+}) => {
   const renderAccordion = () => (
     <Container fluid className="accordion">
       <Row className="top-accordion">
@@ -38,7 +30,7 @@ const ContributionItem = ({ data }: { data: any }) => {
               color="purple-glycine"
               className="fr-mr-1w fr-mb-1w tag"
             >
-              {data?.tags?.join(", ")}
+              {data.tags.join(", ")}
             </Badge>
           )}
           <Badge
@@ -75,16 +67,8 @@ const ContributionItem = ({ data }: { data: any }) => {
             Aucune réponse apportée à ce message pour l'instant
           </Notice>
         )}
-        <ContributorInfo
-          data={data}
-          renderMessage={renderMessage}
-          showDetails={undefined}
-        />
-        <StaffActions
-          data={data}
-          showReplyForm={showReplyForm}
-          toggleReplyForm={toggleReplyForm}
-        />
+        <ContributorInfo data={data} highlightedQuery={highlightedQuery} />
+        <StaffActions data={data} />
       </Accordion>
     </AccordionGroup>
   );

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Button, Text, TextArea } from "@dataesr/dsfr-plus";
 import SibApiV3Sdk from "sib-api-v3-sdk";
+import { Contribution } from "../../types";
 
-function EmailSender({ contribution }) {
+function EmailSender({ contribution }: { contribution: Contribution }) {
   const [emailSent, setEmailSent] = useState(false);
   const [response, setResponse] = useState("");
+
   const { VITE_BREVO_API_AUTHORIZATION } = import.meta.env;
 
   const sendEmail = async () => {

@@ -1,4 +1,4 @@
-import { useState, useEffect, Key } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Col,
@@ -10,46 +10,55 @@ import {
 } from "@dataesr/dsfr-plus";
 import ContributionItem from "./contribution-card";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
+import { Contribution, ContributionPageProps } from "../../types";
+import { useLocation } from "react-router-dom";
+import { buildURL } from "../../api/utils/buildURL";
 
-type ContributionPageProps = {
-  url: string;
-};
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("new");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+  const [searchInMessage, setSearchInMessage] = useState(false);
+  const [highlightedQuery, setHighlightedQuery] = useState("");
 
-  const buildURL = () => {
-    const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
-    const where: any = {};
-    if (query) {
-      where.data = { $text: { $search: query } };
-    }
-    if (["new", "ongoing", "treated"].includes(status)) {
-      where.status = status;
-    }
-
-    return `https://scanr-api.dataesr.ovh/contribute?${sorted}&page=${page}&max_results=20&where=${JSON.stringify(
-      where
-    )}`;
-  };
+  const location = useLocation();
 
   const { data, isLoading, isError } = useGetContributionData(
-    buildURL(),
+    buildURL(sort, status, query, page, searchInMessage),
     reload
   );
+
   useEffect(() => {
     setPage(1);
-  }, [reload]);
+  }, [reload, location.pathname]);
 
   const meta = (data as { meta: any }).meta;
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
-  const contrib = (data as { data: any }).data;
+  const contrib: Contribution[] = (data as { data: Contribution[] }).data;
 
-  if (isLoading) return <span>LOADING</span>;
-  if (isError) return <span>ERROR</span>;
+  const handleSearch = (value: string) => {
+    setQuery(value.trim());
+    setHighlightedQuery(value.trim());
+  };
+  console.log(highlightedQuery);
+
+  const filteredContributions = contrib?.filter((contribution) => {
+    const nameMatches = contribution.name
+      .toLowerCase()
+      .includes(query.toLowerCase());
+    if (searchInMessage) {
+      const messageMatches = contribution.message
+        .toLowerCase()
+        .includes(query.toLowerCase());
+      return nameMatches || messageMatches;
+    }
+    return nameMatches;
+  });
+
+  if (isLoading) return <Text>LOADING</Text>;
+  if (isError) return <Text>ERROR</Text>;
 
   return (
     <Container className="fr-my-5w">
@@ -58,7 +67,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         <Col md="8" xs="12">
           <SearchBar
             className="fr-mb-1w"
-            onSearch={(e: any) => setQuery(e.target.value)}
+            onSearch={(value) => handleSearch(value || "")}
             isLarge
             buttonLabel="Rechercher"
             placeholder="Rechercher par nom"
@@ -109,10 +118,20 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
             <option value="ongoing">Contribution en traitement</option>
             <option value="treated">Contributions traités</option>
           </select>
+          <input
+            type="checkbox"
+            id="searchInMessage"
+            checked={searchInMessage}
+            onChange={(e) => setSearchInMessage(e.target.checked)}
+          />
+          <label htmlFor="searchInMessage">Rechercher dans les messages</label>
         </Col>
       </Row>
-      {contrib.map((contribution: { _id: Key | null | undefined }) => (
-        <ContributionItem key={contribution._id} data={contribution} />
+      {filteredContributions.map((contribution) => (
+        <ContributionItem
+          data={contribution}
+          highlightedQuery={highlightedQuery}
+        />
       ))}
       <Row className="fr-grid-row--center fr-mt-5w">
         <Button
