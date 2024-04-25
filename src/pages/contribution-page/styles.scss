@@ -6,9 +6,24 @@
   margin-right: 200px;
   padding: 20px;
 }
+.contributorSideContact {
+  background-color: var(--background-alt-brown-caramel);
+  border: 1px solid var(--background-alt-brown-caramel);
+  border-radius: 10px;
+  margin-bottom: 10px;
+  margin-right: 200px;
+  padding: 20px;
+}
 .staffSide {
   text-align: right;
   background-color: var(--background-alt-pink-macaron);
+  border-radius: 20px;
+  padding: 20px;
+  margin-left: 140px;
+}
+.staffSideContact {
+  text-align: right;
+  background-color: var(--background-alt-blue-cumulus);
   border-radius: 20px;
   padding: 20px;
   margin-left: 140px;

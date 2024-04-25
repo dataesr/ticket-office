@@ -1,6 +1,7 @@
 import { Col, Row, Text } from "@dataesr/dsfr-plus";
 import type { Contribution } from "../../types";
 import HighlightedMessage from "../../components/highlightedMessage";
+import { useLocation } from "react-router-dom";
 const MessagePreview = ({
   data,
   highlightedQuery,
@@ -8,9 +9,13 @@ const MessagePreview = ({
   data: Contribution;
   highlightedQuery: string;
 }) => {
+  const location = useLocation();
+  const contributorClassName = location.pathname.includes("contributionpage")
+    ? "contributorSide"
+    : "contributorSideContact";
   return (
     <>
-      <Row className="contributorSide">
+      <Row className={contributorClassName}>
         {data.id && (
           <Col
             className={
@@ -37,6 +42,9 @@ const MessagePreview = ({
             highlightedQuery={highlightedQuery}
           />
         </span>
+        <div>
+          <pre>{JSON.stringify(data || "", null, 2)}</pre>
+        </div>
       </Row>
     </>
   );

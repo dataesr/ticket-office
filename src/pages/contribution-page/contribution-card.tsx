@@ -55,7 +55,7 @@ const ContributionItem = ({
             <HighlightedMessage
               message={
                 data.message.length > 70
-                  ? `${data.message.slice(0, 70)}...`
+                  ? `${data.message.slice(0, 300)}...`
                   : data.message
               }
               highlightedQuery={highlightedQuery}

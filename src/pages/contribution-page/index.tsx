@@ -25,6 +25,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [highlightedQuery, setHighlightedQuery] = useState("");
 
   const location = useLocation();
+  console.log(location.pathname);
 
   const { data, isLoading, isError } = useGetContributionData(
     buildURL(sort, status, query, page, searchInMessage),
@@ -63,7 +64,11 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   return (
     <Container className="fr-my-5w">
       <Row gutters className="fr-mb-3w">
-        <Title as="h1">Contribution par objets</Title>
+        {location.pathname.includes("contributionpage") ? (
+          <Title as="h1">Contribution par objets</Title>
+        ) : (
+          <Title as="h1">Contribution via formulaire</Title>
+        )}
         <Col md="8" xs="12">
           <SearchBar
             className="fr-mb-1w"
