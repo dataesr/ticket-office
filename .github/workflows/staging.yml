@@ -32,6 +32,7 @@ jobs:
           IMAGE_ID=ghcr.io/dataesr/ticket-office
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker build -t $IMAGE_ID:staging .
+          docker build Dockerfile -t $IMAGE_ID:staging . --build-arg VITE_SCANR_API_AUTHORIZATION=${{ secrets.VITE_SCANR_API_AUTHORIZATION }} VITE_BREVO_API_AUTHORIZATION=${{ secrets.VITE_BREVO_API_AUTHORIZATION }} .
 
       - name: 📦 Push Docker image
         run: |
