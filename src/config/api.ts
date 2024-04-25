@@ -1,5 +1,3 @@
-const { VITE_SCANR_API_AUTHORIZATION } = import.meta.env;
-export const postHeaders = {
-  Authorization: `Basic ${VITE_SCANR_API_AUTHORIZATION}`,
-  "Content-Type": "application/json",
-};
+const { VITE_SCANR_API_AUTHORIZATION: API_KEY } = import.meta.env;
+export const headers = API_KEY ? { Authorization: `Basic ${API_KEY}` } : {};
+export const postHeaders = { ...headers, "Content-Type": "application/json" };
