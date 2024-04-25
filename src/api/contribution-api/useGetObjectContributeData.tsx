@@ -1,20 +1,16 @@
 import { useState, useEffect } from "react";
+import { postHeaders } from "../../config/api";
 
-function useGetContributionData(URL: {}, reload: unknown) {
+function useGetContributionData(URL: unknown, reload: unknown) {
   const [data, setData] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [isError, setError] = useState(false);
-
-  const { VITE_SCANR_API_AUTHORIZATION } = import.meta.env;
   useEffect(() => {
     async function getData() {
-      const url = URL;
+      const url = URL as RequestInfo;
       try {
-        const response = await fetch(url as RequestInfo, {
-          headers: {
-            Authorization: VITE_SCANR_API_AUTHORIZATION,
-            "Content-Type": "application/json",
-          },
+        const response = await fetch(url, {
+          headers: postHeaders,
         });
         const res = await response.json();
         setData(res);
