@@ -1,20 +1,6 @@
-FROM node:18-alpine
-
-WORKDIR /app
-
-COPY package*.json .
-
-RUN npm install
-
-COPY . .
-
-ARG VITE_SCANR_API_AUTHORIZATION
-
-ENV VITE_SCANR_API_AUTHORIZATION=VITE_SCANR_API_AUTHORIZATION
-
-RUN npm run build
-
+FROM nginx:stable
+COPY dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/templates/nginx.conf.template
+ENV API_KEY VITE_SCANR_API_AUTHORIZATION
 EXPOSE 5173
-
-CMD [ "npm", "run", "preview" ]
 
