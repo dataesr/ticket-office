@@ -5,6 +5,7 @@ function useGetContributionData(URL: unknown, reload: unknown) {
   const [data, setData] = useState({});
   const [isLoading, setLoading] = useState(true);
   const [isError, setError] = useState(false);
+  console.log(postHeaders);
   useEffect(() => {
     async function getData() {
       const url = URL as RequestInfo;
