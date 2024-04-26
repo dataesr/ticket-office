@@ -1,6 +1,5 @@
+# https://github.com/docker-library/docs/tree/master/nginx#using-environment-variables-in-nginx-configuration-new-in-119
 FROM nginx:stable
-ARG VITE_SCANR_API_AUTHORIZATION
-ENV VITE_SCANR_API_AUTHORIZATION=$VITE_SCANR_API_AUTHORIZATION
-COPY dist /usr/share/nginx/html
+COPY  dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/templates/nginx.conf.template
 EXPOSE 5173
