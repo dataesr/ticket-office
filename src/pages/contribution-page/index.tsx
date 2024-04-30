@@ -25,7 +25,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [highlightedQuery, setHighlightedQuery] = useState("");
 
   const location = useLocation();
-  console.log(location.pathname);
 
   const { data, isLoading, isError } = useGetContributionData(
     buildURL(sort, status, query, page, searchInMessage),
