@@ -1,7 +1,9 @@
-import { Col, Row, Text } from "@dataesr/dsfr-plus";
+import { Button, Col, Row, Text } from "@dataesr/dsfr-plus";
 import type { Contribution } from "../../types";
-import HighlightedMessage from "../../components/highlightedMessage";
+import HighlightedMessage from "../../components/highlighted-message";
 import { useLocation } from "react-router-dom";
+import EditModal from "../../components/edit-modal";
+import { useState } from "react";
 const MessagePreview = ({
   data,
   highlightedQuery,
@@ -10,11 +12,22 @@ const MessagePreview = ({
   highlightedQuery: string;
 }) => {
   const location = useLocation();
+  const [showModal, setShowModal] = useState(false);
+
   const contributorClassName = location.pathname.includes("contributionpage")
     ? "contributorSide"
     : "contributorSideContact";
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
+      <EditModal isOpen={showModal} onClose={handleCloseModal} data={data} />
       <Row className={contributorClassName}>
         {data.id && (
           <Col
@@ -46,6 +59,7 @@ const MessagePreview = ({
           <pre>{JSON.stringify(data || "", null, 2)}</pre>
         </div>
       </Row>
+      <Button onClick={handleOpenModal}>Editer la contribution</Button>
     </>
   );
 };

@@ -1,4 +1,5 @@
 export type Contribution = {
+  _id: any;
   status: string;
   tags: any;
   message: string;

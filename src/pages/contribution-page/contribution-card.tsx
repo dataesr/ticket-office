@@ -12,7 +12,7 @@ import "./styles.scss";
 import ContributorInfo from "./contributor-info";
 import StaffActions from "./staff-action";
 import { Contribution } from "../../types";
-import HighlightedMessage from "../../components/highlightedMessage";
+import HighlightedMessage from "../../components/highlighted-message";
 
 const ContributionItem = ({
   data,
@@ -42,25 +42,29 @@ const ContributionItem = ({
             {data.status}
           </Badge>
         </Col>
-        <i className="date">
-          Reçu le {new Date(data.created_at).toLocaleDateString()}
-        </i>
+        <Text size="sm">
+          <i className="date">
+            Reçu le {new Date(data.created_at).toLocaleDateString()}
+          </i>
+        </Text>
       </Row>
       <Row>
         <Col>
-          <Text bold className="name">
+          <Text size="sm" bold className="name">
             {data.name}
           </Text>
-          <i className="message">
-            <HighlightedMessage
-              message={
-                data.message.length > 70
-                  ? `${data.message.slice(0, 300)}...`
-                  : data.message
-              }
-              highlightedQuery={highlightedQuery}
-            />
-          </i>
+          <Text size="sm">
+            <i className="message">
+              <HighlightedMessage
+                message={
+                  data.message.length > 70
+                    ? `${data.message.slice(0, 300)}...`
+                    : data.message
+                }
+                highlightedQuery={highlightedQuery}
+              />
+            </i>
+          </Text>
         </Col>
       </Row>
     </Container>
