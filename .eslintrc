@@ -29,7 +29,7 @@
       }
     ]
   },
-  "extends": ["airbnb", "airbnb/hooks"],
+  "extends": ["airbnb", "airbnb/hooks", "prettier"],
   "sort-imports": [
     "error",
     {
