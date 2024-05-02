@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
-  Button,
   Col,
   Container,
   Row,
   SearchBar,
   Text,
   Title,
-  Toggle,
 } from "@dataesr/dsfr-plus";
 import ContributionItem from "./contribution-card";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
 import { Contribution, ContributionPageProps } from "../../types";
 import { useLocation } from "react-router-dom";
 import { buildURL } from "../../api/utils/buildURL";
+import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
+import Selectors from "../../components/selectors";
+import TopPaginationButtons from "../../components/pagination/top-buttons";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -26,14 +27,40 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
 
   const location = useLocation();
 
-  const { data, isLoading, isError } = useGetContributionData(
-    buildURL(sort, status, query, page, searchInMessage),
-    reload
-  );
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    setPage(parseInt(params.get("page") || "1"));
+    setSearchInMessage(params.get("searchInMessage") === "true");
+    setQuery(params.get("query") || "");
+  }, [location.search]);
+
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams();
+    newSearchParams.set("page", page.toString());
+    newSearchParams.set("query", query);
+    newSearchParams.set("searchInMessage", searchInMessage.toString());
+
+    const newURL = `${window.location.pathname}?${newSearchParams.toString()}`;
+    window.history.pushState({}, "", newURL);
+  }, [page, query, searchInMessage]);
 
   useEffect(() => {
     setPage(1);
   }, [reload, location.pathname]);
+
+  useEffect(() => {
+    if (
+      location.pathname.includes("contributionPage") ||
+      location.pathname.includes("contact")
+    ) {
+      setSearchInMessage(false);
+    }
+  }, [location.pathname]);
+
+  const { data, isLoading, isError } = useGetContributionData(
+    buildURL(sort, status, query, page, searchInMessage),
+    reload
+  );
 
   const meta = (data as { meta: any }).meta;
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
@@ -63,7 +90,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   return (
     <Container className="fr-my-5w">
       <Row gutters className="fr-mb-3w">
-        {location.pathname.includes("contributionpage") ? (
+        {location.pathname.includes("contributionPage") ? (
           <Title as="h1">Contribution par objets</Title>
         ) : (
           <Title as="h1">Contribution via formulaire</Title>
@@ -76,58 +103,20 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
             buttonLabel="Rechercher"
             placeholder="Rechercher par nom"
           />
-          <Text size="sm" bold>
-            Résultats: 1-20 de {meta.total}
-          </Text>
-          <Button
-            onClick={() => setPage(1)}
-            disabled={page === 1}
-            title="Page 1"
-            className="fr-mr-1w"
-            variant="secondary"
-            size="sm"
-          >
-            Retour à la page 1
-          </Button>
-          <Button
-            onClick={() => setPage(maxPage)}
-            disabled={page === maxPage}
-            title={`Page ${maxPage}`}
-            className="fr-mr-1w"
-            variant="secondary"
-            size="sm"
-          >
-            Dernière page
-          </Button>
+          <TopPaginationButtons
+            meta={meta}
+            page={page}
+            maxPage={maxPage}
+            setPage={setPage}
+          />
         </Col>
         <Col offsetLg="1">
-          <select
-            className="fr-select"
-            name="order"
-            id="order"
-            onChange={(e) => setSort(e.target.value)}
-          >
-            <option value="DESC">Plus récentes </option>
-            <option value="ASC">Plus anciennes</option>
-          </select>
-          <select
-            className="fr-select"
-            name="status"
-            id="status"
-            onChange={(e) => setStatus(e.target.value)}
-            defaultValue={status}
-          >
-            <option value="choose">Toutes les contributions</option>
-            <option value="new">Nouvelles contributions</option>
-            <option value="ongoing">Contribution en traitement</option>
-            <option value="treated">Contributions traités</option>
-          </select>
-          <Toggle
-            checked={searchInMessage}
-            id="searchInMessage"
-            name={"Rechercher dans les messages"}
-            onChange={(e) => setSearchInMessage(e.target.checked)}
-            label="Rechercher dans les messages"
+          <Selectors
+            setSort={setSort}
+            status={status}
+            setStatus={setStatus}
+            searchInMessage={searchInMessage}
+            setSearchInMessage={setSearchInMessage}
           />
         </Col>
       </Row>
@@ -137,46 +126,11 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           highlightedQuery={highlightedQuery}
         />
       ))}
-      <Row className="fr-grid-row--center fr-mt-5w">
-        <Button
-          onClick={() => setPage(1)}
-          disabled={page === 1}
-          title="Page 1"
-          className="fr-mr-2w"
-          variant="secondary"
-          size="sm"
-        >
-          Retour à la page 1
-        </Button>
-        <Button
-          onClick={() => setPage(page - 1)}
-          disabled={page === 1}
-          title="Page précédente"
-          className="fr-mr-2w"
-        >
-          Précédente
-        </Button>
-        <span>{`${page} sur ${maxPage}`}</span>
-        <Button
-          disabled={page === maxPage}
-          onClick={() => setPage(page + 1)}
-          title="Page suivante"
-          className="fr-ml-2w"
-        >
-          Suivante
-        </Button>
-
-        <Button
-          onClick={() => setPage(maxPage)}
-          disabled={page === maxPage}
-          title={`Page ${maxPage}`}
-          className="fr-ml-2w"
-          variant="secondary"
-          size="sm"
-        >
-          Dernière page
-        </Button>
-      </Row>
+      <BottomPaginationButtons
+        page={page}
+        maxPage={maxPage}
+        setPage={setPage}
+      />
     </Container>
   );
 };
