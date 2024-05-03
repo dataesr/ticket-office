@@ -12,11 +12,9 @@ export default function MainFooter() {
   return (
     <Footer fluid={true}>
       <FooterTop>
-        <Container>
-          Ceci est un footer (mais on sait pas quoi mettre dedans)
-        </Container>
+        <Container>Le Guichet Numérique du DIST</Container>
       </FooterTop>
-      <FooterBody description="coucou">
+      <FooterBody>
         <Logo
           splitCharacter="|"
           text="Ministère|de l'enseignement|supérieur|et de la recherche"
@@ -59,23 +57,13 @@ export default function MainFooter() {
         </Link>
       </FooterBody>
       <FooterBottom>
-        <button className="fr-footer__bottom-link" data-fr-opened="false">
-          "coucou1"
-        </button>
         <button
           className="fr-footer__bottom-link fr-icon-theme-fill fr-btn--icon-left"
           aria-controls="fr-theme-modal"
           data-fr-opened="false"
         >
-          "coucou2"
+          Paramètres d'affichage
         </button>
-        <Link
-          target="_blank"
-          rel="noreferer noopenner"
-          className="fr-footer__bottom-link"
-        >
-          "coucou3"
-        </Link>
       </FooterBottom>
       <SwitchTheme />
     </Footer>

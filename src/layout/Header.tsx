@@ -48,7 +48,7 @@ const Header: React.FC = () => {
         splitCharacter="|"
         text="Ministère|de l'enseignement|supérieur|et de la recherche"
       />
-      <Service name="scanR Contact" tagline="Force et robustesse" />
+      <Service name="Le Guichet numérique" tagline="Force et robustesse" />
       <FastAccess>
         <Button
           data-fr-opened="false"

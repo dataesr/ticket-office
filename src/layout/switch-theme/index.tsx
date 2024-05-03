@@ -23,7 +23,7 @@ export default function SwitchTheme() {
                 </div>
                 <div className="fr-modal__content">
                   <h1 id="fr-theme-modal-title" className="fr-modal__title">
-                    Titre
+                    Paramètres d’affichage
                   </h1>
                   <div id="fr-display" className="fr-display">
                     <fieldset className="fr-fieldset" id="display-fieldset">
@@ -31,7 +31,8 @@ export default function SwitchTheme() {
                         className="fr-fieldset__legend--regular fr-fieldset__legend"
                         id="display-fieldset-legend"
                       >
-                        Legende
+                        Choisissez un thème pour personnaliser l’apparence du
+                        site.
                       </legend>
                       <div className="fr-fieldset__element">
                         <div className="fr-radio-group fr-radio-rich">
@@ -45,7 +46,7 @@ export default function SwitchTheme() {
                             className="fr-label"
                             htmlFor="fr-radios-theme-light"
                           >
-                            light
+                            Thème clair
                           </label>
                           <div className="fr-radio-rich__img">
                             <svg
@@ -83,7 +84,7 @@ export default function SwitchTheme() {
                             className="fr-label"
                             htmlFor="fr-radios-theme-dark"
                           >
-                            Dark
+                            Thème sombre
                           </label>
                           <div className="fr-radio-rich__img">
                             <svg
@@ -121,8 +122,10 @@ export default function SwitchTheme() {
                             className="fr-label"
                             htmlFor="fr-radios-theme-system"
                           >
-                            System
-                            <span className="fr-hint-text">Syten</span>
+                            Systeme
+                            <span className="fr-hint-text">
+                              Utilise les paramètres systeme
+                            </span>
                           </label>
                           <div className="fr-radio-rich__img">
                             <svg
