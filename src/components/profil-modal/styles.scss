@@ -11,62 +11,43 @@
 
 .profile-button {
   padding: 15px 30px;
-  border-radius: 15px; 
-  font-size: 18px;
+  border-radius: 50px;
   font-weight: bold;
   cursor: pointer;
-  transition: all 0.2s ease-in-out; 
+  transition: all 0.3s ease-in-out;
   color: white;
-  margin-bottom: 15px; 
-}
-
-.profile-button.profile1 {
-  background-color: #ff6347;
-}
-
-.profile-button.profile2 {
-  background-color: #4682b4;
-}
-
-.profile-button.profile3 {
-  background-color: #8a2be2;
-}
-
-.profile-button.profile4 {
-  background-color: #34e22b;
-}
-
-.profile-button.profile5 {
-  background-color: #efa716;
-}
-
-.profile-button.profile6 {
-  background-color: #c4a6dc;
-}
-
-.profile-button.profile7 {
-  background-color: #325b73;
-}
-
-.profile-button.profile8 {
-  background-color: #ad577f;
-}
-
-.profile-button.profile9 {
-  background-color: #a7ca6f;
-}
-
-.profile-button.profile10 {
-  background-color: #473a07;
+  margin-bottom: 15px;
+  border: none;
+  outline: none;
+  background-color: #4c82af;
 }
 
 .profile-button:hover {
-  transform: scale(1.03);
-  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+  transform: rotate(10deg);
+  box-shadow: 0px 8px 16px rgba(152, 14, 14, 0.2);
 }
 
 .description {
-  font-size: 16px;
-  color: #555;
+  font-size: 18px;
+  color: #878c23;
   margin-top: 20px;
+}
+
+.profile-buttons::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 150%;
+  height: 150%;
+  background-color: rgba(122, 28, 70, 0.1);
+  border-radius: 50%;
+  z-index: -1;
+  transform: translate(-50%, -50%);
+  transition: all 0.6s ease-in-out;
+}
+
+.profile-buttons:hover::before {
+  width: 200%;
+  height: 200%;
 }
