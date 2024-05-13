@@ -6,12 +6,12 @@ import {
   Col,
   TextArea,
   Title,
-  Text,
   Button,
   Row,
 } from "@dataesr/dsfr-plus";
 import { Contribution } from "../../types";
 import { postHeaders } from "../../config/api";
+import Select from "react-select";
 
 type EditModalProps = {
   isOpen: boolean;
@@ -37,10 +37,11 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
     });
   }, [data, user]);
 
-  const handleInputChange = (event) => {
-    event.persist();
-    const newStatus = event.target.value;
-    setInputs((prevInputs) => ({ ...prevInputs, status: newStatus }));
+  const handleStatusChange = (selectedOption) => {
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      status: selectedOption.value,
+    }));
   };
 
   const handleTagChange = (event) => {
@@ -50,7 +51,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
 
   const handleIdRefChange = (event) => {
     const newIdref = event.target.value;
-    setInputs((prevInputs) => ({ ...prevInputs, tag: newIdref }));
+    setInputs((prevInputs) => ({ ...prevInputs, idRef: newIdref }));
   };
 
   const handleSubmit = async () => {
@@ -80,25 +81,38 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
     }
   };
 
+  const statusOptions = [
+    { value: "new", label: "Nouveau" },
+    { value: "ongoing", label: "En traitement" },
+    { value: "treated", label: "Traité" },
+  ];
+
+  const customStyles = {
+    control: (provided, state) => ({
+      ...provided,
+      borderRadius: 8,
+      borderColor: state.isFocused ? "#2684FF" : "#CED4DA",
+      boxShadow: state.isFocused
+        ? "0 0 0 0.2rem rgba(38, 132, 255, 0.25)"
+        : null,
+    }),
+  };
+
   return (
     <Modal isOpen={isOpen} hide={onClose}>
       <ModalTitle>Modifier la contribution </ModalTitle>
       <ModalContent className="profile-modal-content">
         <Col className="fr-mb-1w">
-          <label className="label" htmlFor="statusInput">
-            <Text>Mettre à jour le statut :</Text>
-            <select
-              className="fr-select"
-              id="statusInput"
-              name="status"
-              value={inputs.status}
-              onChange={handleInputChange}
-            >
-              <option value="new">Nouveau</option>
-              <option value="ongoing">En traitement</option>
-              <option value="treated">Traité</option>
-            </select>
-          </label>
+          <Select
+            id="statusInput"
+            name="status"
+            options={statusOptions}
+            value={statusOptions.find(
+              (option) => option.value === inputs.status
+            )}
+            onChange={handleStatusChange}
+            styles={customStyles}
+          />
         </Col>
         <Row gutters>
           <Col>

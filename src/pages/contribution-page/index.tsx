@@ -123,7 +123,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         <Col offsetLg="1">
           <Selectors
             setSort={setSort}
-            status={status}
             setStatus={setStatus}
             searchInMessage={searchInMessage}
             setSearchInMessage={setSearchInMessage}
