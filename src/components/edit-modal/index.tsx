@@ -1,5 +1,15 @@
-import { Modal, ModalTitle, ModalContent, Col } from "@dataesr/dsfr-plus";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import {
+  Modal,
+  ModalTitle,
+  ModalContent,
+  Col,
+  TextArea,
+  Title,
+  Text,
+  Button,
+  Row,
+} from "@dataesr/dsfr-plus";
 import { Contribution } from "../../types";
 import { postHeaders } from "../../config/api";
 
@@ -14,35 +24,56 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
   const [inputs, setInputs] = useState({
     team: [user],
     status: data.status,
+    tag: "",
+    idRef: "",
   });
 
   useEffect(() => {
     setInputs({
       team: [user],
       status: "treated",
+      tag: "",
+      idRef: "",
     });
   }, [data, user]);
 
-  const handleInputChange = async (event) => {
+  const handleInputChange = (event) => {
     event.persist();
     const newStatus = event.target.value;
     setInputs((prevInputs) => ({ ...prevInputs, status: newStatus }));
+  };
 
+  const handleTagChange = (event) => {
+    const newTag = event.target.value;
+    setInputs((prevInputs) => ({ ...prevInputs, tag: newTag }));
+  };
+
+  const handleIdRefChange = (event) => {
+    const newIdref = event.target.value;
+    setInputs((prevInputs) => ({ ...prevInputs, tag: newIdref }));
+  };
+
+  const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `https://scanr-api.dataesr.ovh/contributions/${data._id}`,
+        `https://scanr-api.staging.dataesr.ovh/contributions/${data._id}`,
         {
-          method: "POST",
+          method: "PATCH",
           headers: postHeaders,
-          body: JSON.stringify({ status: newStatus }),
+          body: JSON.stringify({
+            status: inputs.status,
+            tag: inputs.tag,
+            idref: inputs.idRef,
+          }),
         }
       );
-
+      console.log(response);
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
-        const data = await response.json();
-        console.log("Données de réponse", data);
+        const responseData = await response.json();
+        console.log("Données de réponse", responseData);
+        onClose();
       }
     } catch (error) {
       console.error("Erreur de requête", error);
@@ -53,9 +84,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
     <Modal isOpen={isOpen} hide={onClose}>
       <ModalTitle>Modifier la contribution </ModalTitle>
       <ModalContent className="profile-modal-content">
-        <Col>
+        <Col className="fr-mb-1w">
           <label className="label" htmlFor="statusInput">
-            <span>Mettre à jour le statut :</span>
+            <Text>Mettre à jour le statut :</Text>
             <select
               className="fr-select"
               id="statusInput"
@@ -68,6 +99,31 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
               <option value="treated">Traité</option>
             </select>
           </label>
+        </Col>
+        <Row gutters>
+          <Col>
+            <TextArea
+              label="Ajouter un tag"
+              maxLength={6}
+              hint="Décrivez en un mot la contribution"
+              value={inputs.tag}
+              onChange={handleTagChange}
+            />
+          </Col>
+          <Col>
+            <TextArea
+              label="Ajouter un idref"
+              value={inputs.idRef}
+              onChange={handleIdRefChange}
+              hint="Ajoutez un identifiant"
+            />
+          </Col>
+        </Row>
+
+        <Col className="fr-mt-5w">
+          <Button onClick={handleSubmit} variant="secondary" size="sm">
+            <Title as="h3">Enregistrer</Title>
+          </Button>
         </Col>
       </ModalContent>
     </Modal>

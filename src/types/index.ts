@@ -1,4 +1,6 @@
 export type Contribution = {
+  modified_at: string;
+  team: any;
   _id: any;
   status: string;
   tags: any;
