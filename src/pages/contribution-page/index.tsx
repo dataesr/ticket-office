@@ -84,8 +84,18 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     return nameMatches;
   });
 
-  if (isLoading) return <Text>LOADING</Text>;
-  if (isError) return <Text>ERROR</Text>;
+  if (isLoading)
+    return (
+      <Container className="fr-my-5w">
+        <Text>Chargement</Text>
+      </Container>
+    );
+  if (isError)
+    return (
+      <Container className="fr-my-5w">
+        <Text>Erreur</Text>
+      </Container>
+    );
 
   return (
     <Container className="fr-my-5w">

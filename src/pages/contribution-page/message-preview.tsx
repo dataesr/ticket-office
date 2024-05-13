@@ -28,7 +28,7 @@ const MessagePreview = ({
   return (
     <>
       <EditModal isOpen={showModal} onClose={handleCloseModal} data={data} />
-      <Row className={contributorClassName}>
+      <Row gutters className={contributorClassName}>
         {data.id && (
           <Col
             className={
@@ -38,28 +38,53 @@ const MessagePreview = ({
             }
           >
             ID de l'objet concerné : {data.id}
+            {data.team && data.team.length > 0 && (
+              <Text>
+                Traité par : {data?.team[0]} le{" "}
+                {new Date(data.modified_at).toLocaleDateString()}
+              </Text>
+            )}
           </Col>
         )}
+
         <Col>
           <Text>{data.name ? `Nom: ${data.name}` : "Nom non renseigné"}</Text>
           {data.email && <Text>Email: {data.email}</Text>}
         </Col>
         <Col className="contributorInfo">
-          {data.organisation && <Text>Organisation: {data.organisation}</Text>}
-          {data.fonction && <Text>Fonction: {data.fonction}</Text>}
-          <Text>Reçu le {new Date(data.created_at).toLocaleDateString()}</Text>
+          {data.organisation ? (
+            <Text>Organisation: {data.organisation}</Text>
+          ) : (
+            <Text>Organisation non renseignée</Text>
+          )}
+          {data.fonction ? (
+            <Text>Fonction: {data.fonction}</Text>
+          ) : (
+            <Text>Fonction non renseignée</Text>
+          )}
+
+          {data.team && data.team.length > 0 ? (
+            <Text>
+              Traité par : {data.team[0]} le{" "}
+              {new Date(data.modified_at).toLocaleDateString()}
+            </Text>
+          ) : (
+            <Text>Non traité</Text>
+          )}
         </Col>
-        <span>
-          <HighlightedMessage
-            message={data.message}
-            highlightedQuery={highlightedQuery}
-          />
-        </span>
-        <div>
-          <pre>{JSON.stringify(data || "", null, 2)}</pre>
-        </div>
+        <Col>
+          <Text>
+            <HighlightedMessage
+              message={data.message}
+              highlightedQuery={highlightedQuery}
+            />
+          </Text>
+          <div>
+            <pre>{JSON.stringify(data || "", null, 2)}</pre>
+          </div>
+          <Button onClick={handleOpenModal}>Editer la contribution</Button>
+        </Col>
       </Row>
-      <Button onClick={handleOpenModal}>Editer la contribution</Button>
     </>
   );
 };
