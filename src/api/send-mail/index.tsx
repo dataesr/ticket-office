@@ -1,5 +1,12 @@
-import { useState } from "react";
-import { Button, Col, Row, Text, TextArea } from "@dataesr/dsfr-plus";
+import { useEffect, useState } from "react";
+import {
+  Button,
+  Col,
+  Container,
+  Row,
+  Text,
+  TextArea,
+} from "@dataesr/dsfr-plus";
 import SibApiV3Sdk from "sib-api-v3-sdk";
 import { Contribution } from "../../types";
 import { postHeaders } from "../../config/api";
@@ -8,6 +15,17 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
   const [emailSent, setEmailSent] = useState(false);
   const [response, setResponse] = useState("");
   const { VITE_BREVO_API_AUTHORIZATION } = import.meta.env;
+  const contributorName = contribution.name;
+
+  const [selectedProfile, setSelectedProfile] = useState("");
+
+  useEffect(() => {
+    const profileFromLocalStorage = sessionStorage.getItem("selectedProfile");
+    console.log(profileFromLocalStorage);
+    if (profileFromLocalStorage) {
+      setSelectedProfile(profileFromLocalStorage);
+    }
+  }, []);
 
   const sendEmail = async () => {
     try {
@@ -19,12 +37,12 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
       var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
       sendSmtpEmail.sender = {
-        name: "From name",
+        name: `${selectedProfile} - de l'équipe scanR`,
         email: "debache.mihoub@gmail.com",
       };
       sendSmtpEmail.to = [
         {
-          name: "debache.mihoub@gmail.com",
+          name: contributorName,
           email: "debache.mihoub@gmail.com",
         },
       ];
@@ -36,7 +54,6 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
       const data = {
         comment: response,
       };
-
       const responsePatch = await fetch(
         `https://scanr-api.staging.dataesr.ovh/contributions/${contribution.id}`,
         {
@@ -61,20 +78,24 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
   };
 
   return (
-    <Row gutters>
-      <Col offsetMd="2">
-        <TextArea
-          value={response}
-          onChange={(e) => setResponse(e.target.value)}
-          placeholder="Votre réponse..."
-          rows={2}
-        />
-      </Col>
-      <Button variant="secondary" onClick={sendEmail} size="sm">
-        {contribution.comment ? "Renvoyer un mail" : "Répondre"}
-      </Button>
-      {emailSent && <Text>Mail envoyé!</Text>}
-    </Row>
+    <Container>
+      <Row gutters>
+        <Col offsetMd="2" md="8">
+          <TextArea
+            value={response}
+            onChange={(e) => setResponse(e.target.value)}
+            placeholder="Votre réponse..."
+            rows={2}
+          />
+        </Col>
+        <Col className="fr-mt-10w">
+          <Button variant="secondary" onClick={sendEmail} size="sm">
+            {contribution.comment ? "Renvoyer un mail" : "Répondre"}
+          </Button>
+        </Col>
+        {emailSent && <Text>Mail envoyé!</Text>}
+      </Row>
+    </Container>
   );
 }
 
