@@ -48,12 +48,24 @@ const Header: React.FC = () => {
         splitCharacter="|"
         text="Ministère|de l'enseignement|supérieur|et de la recherche"
       />
-      <Service name="Le Guichet numérique" tagline="Force et robustesse" />
+      <Service
+        name="Le Guichet numérique"
+        tagline={import.meta.env.VITE_HEADER_TAG}
+      />
       <FastAccess>
         <Button
           data-fr-opened="false"
           aria-controls="modal-4"
           onClick={handleButtonClick}
+          style={
+            selectedProfile
+              ? {}
+              : {
+                  animation: "blink 1s steps(5, start) infinite",
+                  backgroundColor: "#6a6af4",
+                  color: "#f95c5e",
+                }
+          }
         >
           {selectedProfile
             ? `Salut ${selectedProfile} !`

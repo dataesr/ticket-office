@@ -54,10 +54,14 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
     setInputs((prevInputs) => ({ ...prevInputs, idRef: newIdref }));
   };
 
+  const basePath = window.location.pathname.includes("contact")
+    ? "contact"
+    : "contribute";
+
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `https://scanr-api.staging.dataesr.ovh/contributions/${data._id}`,
+        `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`,
         {
           method: "PATCH",
           headers: postHeaders,
@@ -68,7 +72,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
           }),
         }
       );
-      console.log(response);
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
@@ -77,7 +80,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
         onClose();
       }
     } catch (error) {
-      console.error("Erreur de requête", error);
+      console.error(error);
     }
   };
 
