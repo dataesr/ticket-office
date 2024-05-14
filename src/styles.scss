@@ -194,3 +194,8 @@ $icons: ("intersect", "/icons/intersect.svg") ("union", "/icons/union.svg")
     margin-right: -0.25rem;
   }
 }
+@keyframes blink {
+  to {
+    visibility: hidden;
+  }
+}

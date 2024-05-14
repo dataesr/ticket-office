@@ -4,7 +4,7 @@ const TopPaginationButtons = ({ meta, page, maxPage, setPage }) => {
   return (
     <>
       <Text size="sm" bold>
-        Résultats: 1-20 de {meta.total}
+        Résultats: 1-20 de {meta?.total}
       </Text>
       <Button
         onClick={() => setPage(1)}

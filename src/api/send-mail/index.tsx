@@ -16,12 +16,14 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
   const [response, setResponse] = useState("");
   const { VITE_BREVO_API_AUTHORIZATION } = import.meta.env;
   const contributorName = contribution.name;
+  const basePath = window.location.pathname.includes("contact")
+    ? "contact"
+    : "contribute";
 
   const [selectedProfile, setSelectedProfile] = useState("");
 
   useEffect(() => {
     const profileFromLocalStorage = sessionStorage.getItem("selectedProfile");
-    console.log(profileFromLocalStorage);
     if (profileFromLocalStorage) {
       setSelectedProfile(profileFromLocalStorage);
     }
@@ -55,7 +57,7 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
         comment: response,
       };
       const responsePatch = await fetch(
-        `https://scanr-api.staging.dataesr.ovh/contributions/${contribution.id}`,
+        `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`,
         {
           method: "PATCH",
           headers: postHeaders,

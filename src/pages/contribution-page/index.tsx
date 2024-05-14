@@ -63,7 +63,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   );
 
   const meta = (data as { meta: any }).meta;
-  const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
+  const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
   const contrib: Contribution[] = (data as { data: Contribution[] }).data;
 
   const handleSearch = (value: string) => {
@@ -129,7 +129,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           />
         </Col>
       </Row>
-      {filteredContributions.map((contribution) => (
+      {filteredContributions?.map((contribution) => (
         <ContributionItem
           data={contribution}
           highlightedQuery={highlightedQuery}
