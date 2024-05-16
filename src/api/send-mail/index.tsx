@@ -56,14 +56,11 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
       const data = {
         comment: response,
       };
-      const responsePatch = await fetch(
-        `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`,
-        {
-          method: "PATCH",
-          headers: postHeaders,
-          body: JSON.stringify(data),
-        }
-      );
+      const responsePatch = await fetch(`api/${basePath}/${contribution._id}`, {
+        method: "PATCH",
+        headers: postHeaders,
+        body: JSON.stringify(data),
+      });
       if (!responsePatch.ok) {
         console.log("Erreur lors de la mise à jour de la contribution");
         return;
