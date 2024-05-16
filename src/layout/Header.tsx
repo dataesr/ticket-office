@@ -61,9 +61,9 @@ const Header: React.FC = () => {
             selectedProfile
               ? {}
               : {
-                  animation: "blink 1s steps(5, start) infinite",
-                  backgroundColor: "#6a6af4",
-                  color: "#f95c5e",
+                  animation: "blink 2s steps(5, start) infinite",
+                  backgroundColor: "#000091",
+                  color: "#e1000f",
                 }
           }
         >
