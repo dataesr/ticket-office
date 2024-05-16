@@ -21,7 +21,7 @@ jobs:
 
       - name: 🪚 Build app
         run: |
-          npm install
+          npm ci --silent
           npm run build
 
       - name: 🔑 Login Docker
@@ -29,13 +29,13 @@ jobs:
 
       - name: 🐳 Build Docker image
         run: |
-          IMAGE_ID=ghcr.io/dataesr/ticket-office
+          IMAGE_ID=ghcr.io/${{ github.repository }}
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker build -t $IMAGE_ID:staging .  --build-arg VITE_SCANR_API_AUTHORIZATION=${{ secrets.VITE_SCANR_API_AUTHORIZATION }}
+          docker build -t $IMAGE_ID:staging .
 
       - name: 📦 Push Docker image
         run: |
-          IMAGE_ID=ghcr.io/dataesr/ticket-office
+          IMAGE_ID=ghcr.io/${{ github.repository }}
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker push $IMAGE_ID:staging
 
