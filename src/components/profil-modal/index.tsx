@@ -1,8 +1,6 @@
 import { Modal, ModalTitle, ModalContent } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import profiles from "../../../profil-config.json"
-
-
+import profiles from "../../config/profil-config.json";
 
 type ProfileModalProps = {
   isOpen: boolean;
