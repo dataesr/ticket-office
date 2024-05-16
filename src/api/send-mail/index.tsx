@@ -64,7 +64,6 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
           body: JSON.stringify(data),
         }
       );
-
       if (!responsePatch.ok) {
         console.log("Erreur lors de la mise à jour de la contribution");
         return;
