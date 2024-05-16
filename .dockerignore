@@ -1,0 +1,26 @@
+# IDE
+.vscode
+
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+npm-debug.log*
+es_requests
+.husky
+
+# Git
+.git
+.github
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile

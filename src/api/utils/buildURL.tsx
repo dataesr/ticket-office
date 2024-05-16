@@ -27,5 +27,5 @@ export const buildURL = (
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
-  return `${window.location.origin}/api/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
+  return `/api/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
 };
