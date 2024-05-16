@@ -27,5 +27,5 @@ export const buildURL = (
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
-  return `https://scanr-api.dataesr.ovh/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
+  return `api/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
 };

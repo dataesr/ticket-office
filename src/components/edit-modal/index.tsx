@@ -60,18 +60,15 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(
-        `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`,
-        {
-          method: "PATCH",
-          headers: postHeaders,
-          body: JSON.stringify({
-            status: inputs.status,
-            tag: inputs.tag,
-            idref: inputs.idRef,
-          }),
-        }
-      );
+      const response = await fetch(`api/${basePath}/${data._id}`, {
+        method: "PATCH",
+        headers: postHeaders,
+        body: JSON.stringify({
+          status: inputs.status,
+          tag: inputs.tag,
+          idref: inputs.idRef,
+        }),
+      });
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
