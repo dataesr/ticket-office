@@ -56,7 +56,7 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
       const data = {
         comment: response,
       };
-      const responsePatch = await fetch(`api/${basePath}/${contribution._id}`, {
+      const responsePatch = await fetch(`${window.location.origin}/api/${basePath}/${contribution._id}`, {
         method: "PATCH",
         headers: postHeaders,
         body: JSON.stringify(data),

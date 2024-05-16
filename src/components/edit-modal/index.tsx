@@ -60,7 +60,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`api/${basePath}/${data._id}`, {
+      const response = await fetch(`${window.location.origin}/api/${basePath}/${data._id}`, {
         method: "PATCH",
         headers: postHeaders,
         body: JSON.stringify({
