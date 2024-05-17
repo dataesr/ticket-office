@@ -3,7 +3,7 @@ import HighchartsReact from "highcharts-react-official";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
 import { contributionUrl, contactUrl } from "../../config/api";
 import { useState } from "react";
-import { Button, Col, Row } from "@dataesr/dsfr-plus";
+import { Button } from "@dataesr/dsfr-plus";
 
 const ContributionsGraphByYear = () => {
   const [filter, setFilter] = useState("contributions");
@@ -44,7 +44,9 @@ const ContributionsGraphByYear = () => {
       type: "column",
     },
     title: {
-      text: "Nombre de contributions par mois et par année",
+      text: `Nombre de contributions ${
+        filter === "object" ? "par objet" : "via formulaire contact"
+      } par mois et par année`,
     },
     xAxis: {
       categories: [
@@ -74,12 +76,15 @@ const ContributionsGraphByYear = () => {
     <>
       <Button
         className="fr-mr-1w"
-        variant="secondary"
+        variant={filter === "object" ? "primary" : "secondary"}
         onClick={() => setFilter("object")}
       >
         Par objet
       </Button>
-      <Button variant="secondary" onClick={() => setFilter("contact")}>
+      <Button
+        variant={filter === "contact" ? "primary" : "secondary"}
+        onClick={() => setFilter("contact")}
+      >
         Via formulaire contact
       </Button>
       <HighchartsReact highcharts={Highcharts} options={options} />
