@@ -1,14 +1,16 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { contributionUrl } from "../../config/api";
+import { contributionUrl, contactUrl } from "../../config/api";
+import { useState } from "react";
+import { Button, Col, Row } from "@dataesr/dsfr-plus";
 
 const ContributionsGraphByYear = () => {
-  const { data, isLoading, isError } = useGetContributionData(
-    contributionUrl,
-    0
-  );
+  const [filter, setFilter] = useState("contributions");
+  const url = filter === "object" ? contributionUrl : contactUrl;
+  const { data, isLoading, isError } = useGetContributionData(url, 0);
   const contributions = (data as { data: [] })?.data;
+
   if (isLoading) {
     return <div>Chargement...</div>;
   }
@@ -42,7 +44,7 @@ const ContributionsGraphByYear = () => {
       type: "column",
     },
     title: {
-      text: "Nombre de contributions par mois via formulaire de contribution par objet",
+      text: "Nombre de contributions par mois et par année",
     },
     xAxis: {
       categories: [
@@ -68,7 +70,21 @@ const ContributionsGraphByYear = () => {
     ),
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <>
+      <Button
+        className="fr-mr-1w"
+        variant="secondary"
+        onClick={() => setFilter("object")}
+      >
+        Par objet
+      </Button>
+      <Button variant="secondary" onClick={() => setFilter("contact")}>
+        Via formulaire contact
+      </Button>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
 };
 
 export default ContributionsGraphByYear;

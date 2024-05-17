@@ -2,15 +2,16 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
 import { Contribution } from "../../types";
-import { contributionUrl } from "../../config/api";
+import { contactUrl, contributionUrl } from "../../config/api";
+import { Button } from "@dataesr/dsfr-plus";
+import { useState } from "react";
 
 const ContributionsGraphByName = () => {
-  const { data, isLoading, isError } = useGetContributionData(
-    contributionUrl,
-    0
-  );
-  const contributions: Contribution[] = (data as { data: Contribution[] })
-    ?.data;
+  const [filter, setFilter] = useState("contributions");
+  const url = filter === "object" ? contributionUrl : contactUrl;
+  const { data, isLoading, isError } = useGetContributionData(url, 0);
+  const contributions = (data as { data: [] })?.data;
+
   if (isLoading) {
     return <div>Chargement...</div>;
   }
@@ -23,17 +24,20 @@ const ContributionsGraphByName = () => {
     return <div>Les données ne sont pas disponibles</div>;
   }
 
-  const contributionsByName = contributions.reduce((acc, contribution) => {
-    const name = contribution.name;
+  const contributionsByName = contributions.reduce(
+    (acc: Record<string, number>, contribution: Contribution) => {
+      const name = contribution.name;
 
-    if (!acc[name]) {
-      acc[name] = 0;
-    }
+      if (!acc[name]) {
+        acc[name] = 0;
+      }
 
-    acc[name]++;
+      acc[name]++;
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {}
+  );
 
   let names: string[] = Object.keys(contributionsByName);
   let contributionCounts: number[] = Object.values(contributionsByName);
@@ -54,7 +58,7 @@ const ContributionsGraphByName = () => {
       type: "bar",
     },
     title: {
-      text: "Top 15 des contributeurs via le formulaire de contribution par objet",
+      text: "Top 15 des contributeurs",
     },
     xAxis: {
       categories: names,
@@ -75,7 +79,21 @@ const ContributionsGraphByName = () => {
     ],
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <>
+      <Button
+        className="fr-mr-1w"
+        variant="secondary"
+        onClick={() => setFilter("object")}
+      >
+        Par objet
+      </Button>
+      <Button variant="secondary" onClick={() => setFilter("contact")}>
+        Via formulaire contact
+      </Button>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </>
+  );
 };
 
 export default ContributionsGraphByName;
