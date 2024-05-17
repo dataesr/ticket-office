@@ -11,7 +11,7 @@ const ContributionsGraphByName = () => {
   const url = filter === "object" ? contributionUrl : contactUrl;
   const { data, isLoading, isError } = useGetContributionData(url, 0);
   const contributions = (data as { data: [] })?.data;
-
+  console.log(filter);
   if (isLoading) {
     return <div>Chargement...</div>;
   }
@@ -58,7 +58,9 @@ const ContributionsGraphByName = () => {
       type: "bar",
     },
     title: {
-      text: "Top 15 des contributeurs",
+      text: `Top 15 des contributeurs ${
+        filter === "object" ? "par objet" : "via formulaire contact"
+      }`,
     },
     xAxis: {
       categories: names,
@@ -83,12 +85,15 @@ const ContributionsGraphByName = () => {
     <>
       <Button
         className="fr-mr-1w"
-        variant="secondary"
+        variant={filter === "object" ? "primary" : "secondary"}
         onClick={() => setFilter("object")}
       >
         Par objet
       </Button>
-      <Button variant="secondary" onClick={() => setFilter("contact")}>
+      <Button
+        variant={filter === "contact" ? "primary" : "secondary"}
+        onClick={() => setFilter("contact")}
+      >
         Via formulaire contact
       </Button>
       <HighchartsReact highcharts={Highcharts} options={options} />
