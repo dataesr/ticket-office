@@ -7,15 +7,12 @@ import {
   Text,
   TextArea,
 } from "@dataesr/dsfr-plus";
-import SibApiV3Sdk from "sib-api-v3-sdk";
 import { Contribution } from "../../types";
 import { postHeaders } from "../../config/api";
 
 function EmailSender({ contribution }: { contribution: Contribution }) {
   const [emailSent, setEmailSent] = useState(false);
-  const [response, setResponse] = useState("");
-  const { VITE_BREVO_API_AUTHORIZATION } = import.meta.env;
-  const contributorName = contribution.name;
+  const [userResponse, setUserResponse] = useState("");
   const basePath = window.location.pathname.includes("contact")
     ? "contact"
     : "contribute";
@@ -28,51 +25,47 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
       setSelectedProfile(profileFromLocalStorage);
     }
   }, []);
-
   const sendEmail = async () => {
-    try {
-      var defaultClient = SibApiV3Sdk.ApiClient.instance;
-      var apiKey = defaultClient.authentications["api-key"];
-      apiKey.apiKey = VITE_BREVO_API_AUTHORIZATION;
-
-      var apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
-      var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
-
-      sendSmtpEmail.sender = {
-        name: `${selectedProfile} - de l'équipe scanR`,
-        email: "debache.mihoub@gmail.com",
-      };
-      sendSmtpEmail.to = [
+    const data = {
+      sender: {
+        email: "mihoub.debache@enseignementsup.gouv.fr",
+        name: "Debache ",
+      },
+      to: [
         {
-          name: contributorName,
-          email: "debache.mihoub@gmail.com",
+          email: "mihoub.debache@enseignementsup.gouv.fr",
+          name: "Mihoub mihoub",
         },
-      ];
-      sendSmtpEmail.subject = "Réponse à votre contribution";
-      sendSmtpEmail.htmlContent = response;
+      ],
+      subject: `${selectedProfile} de l'équipe scanR`,
+      htmlContent: userResponse,
+    };
 
-      await apiInstance.sendTransacEmail(sendSmtpEmail);
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "api-key": import.meta.env.VITE_BREVO_API_AUTHORIZATION,
+      },
+      body: JSON.stringify(data),
+    });
 
-      const data = {
-        comment: response,
-      };
-      const responsePatch = await fetch(`${window.location.origin}/api/${basePath}/${contribution._id}`, {
-        method: "PATCH",
-        headers: postHeaders,
-        body: JSON.stringify(data),
-      });
-      if (!responsePatch.ok) {
-        console.log("Erreur lors de la mise à jour de la contribution");
-        return;
-      }
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-      setEmailSent(true);
-    } catch (error) {
-      console.error(
-        "Erreur lors de l'envoi de l'email ou de la mise à jour de la contribution:",
-        error
+    const responsePatch = await fetch(`/api/${basePath}/${contribution._id}`, {
+      method: "PATCH",
+      headers: postHeaders,
+      body: JSON.stringify(data),
+    });
+
+    if (!responsePatch.ok) {
+      throw new Error(
+        `Erreur pendant la mise à jour de l'api ! status: ${response.status}`
       );
     }
+
+    setEmailSent(true);
   };
 
   return (
@@ -80,8 +73,8 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
       <Row gutters>
         <Col offsetMd="2" md="8">
           <TextArea
-            value={response}
-            onChange={(e) => setResponse(e.target.value)}
+            value={userResponse}
+            onChange={(e) => setUserResponse(e.target.value)}
             placeholder="Votre réponse..."
             rows={2}
           />
