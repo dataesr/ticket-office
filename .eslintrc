@@ -1,40 +1,59 @@
 {
+  // Configuration des options du parseur
   "parserOptions": {
-    "ecmaVersion": 13
+    "ecmaVersion": 2021, // Utilisation de la version ECMAScript 2021
+    "sourceType": "module" // Indique que le code utilise des modules ES
   },
+  // Définition des environnements globaux
   "env": {
-    "browser": true
+    "browser": true, // Indique que le code est destiné à être exécuté dans un navigateur
+    "es2021": true, // Active les globals ECMAScript 2021
+    "node": true // Active les globals Node.js
   },
+  // Extensions de configurations partagées
+  "extends": [
+    "airbnb", // Utilise la configuration ESLint de base d'Airbnb
+    "airbnb/hooks", // Utilise les règles spécifiques aux hooks React d'Airbnb
+    "prettier", // Désactive les règles ESLint qui entrent en conflit avec Prettier
+    "plugin:react/recommended", // Recommandations pour React
+    "plugin:jsx-a11y/recommended" // Recommandations pour l'accessibilité avec JSX
+  ],
+  // Plugins supplémentaires
+  "plugins": [
+    "react", // Plugin pour les règles spécifiques à React
+    "jsx-a11y", // Plugin pour les règles d'accessibilité JSX
+    "import" // Plugin pour les règles de gestion des imports
+  ],
+  // Définition des règles spécifiques
   "rules": {
-    "jsx-a11y/anchor-is-valid": "off",
-    "react/jsx-filename-extension": 0,
-    "react/react-in-jsx-scope": 0,
-    "react/forbid-prop-types": 0,
-    "react/no-unescaped-entities": 0,
-    "no-unused-vars": "warn",
-    "template-curly-spacing": "off",
-    "object-curly-newline": "off",
-    "react/jsx-props-no-spreading": "off",
-    "react-hooks/exhaustive-deps": "warn",
-    "max-len": ["warn", 200],
-    "react/prop-types": "warn",
-    "import/prefer-default-export": 0,
-    "no-underscore-dangle": 0,
-    "no-console": "warn",
-    "indent": [
-      "warn",
-      2,
+    "react/jsx-filename-extension": ["warn", { "extensions": [".jsx", ".js"] }], // Avertit si les fichiers JSX ont des extensions non .jsx ou .js
+    "react/react-in-jsx-scope": "off", // Désactive l'obligation d'importer React dans chaque fichier JSX (nécessaire avec React 17+)
+    "react/forbid-prop-types": "off", // Permet l'utilisation de prop-types arbitraires
+    "react/no-unescaped-entities": "warn", // Avertit si des entités non échappées sont trouvées dans JSX
+    "react/jsx-props-no-spreading": "off", // Permet la propagation des props dans JSX
+    "react-hooks/exhaustive-deps": "warn", // Avertit si des dépendances manquent dans les hooks React
+    "react/prop-types": "warn", // Avertit si des prop-types sont manquants
+    "no-unused-vars": "warn", // Avertit si des variables inutilisées sont trouvées
+    "template-curly-spacing": "off", // Désactive l'espacement dans les littéraux template
+    "object-curly-newline": "off", // Désactive la règle pour les nouvelles lignes dans les objets
+    "max-len": ["warn", 200], // Avertit si une ligne dépasse 200 caractères
+    "import/prefer-default-export": "off", // Permet les exports nommés même si un seul export est présent
+    "no-underscore-dangle": "off", // Permet l'utilisation de tirets bas dans les identifiants
+    "no-console": "warn", // Avertit si des appels à console.log sont trouvés
+    "indent": ["warn", 2, { "ignoredNodes": ["TemplateLiteral"] }], // Avertit si l'indentation n'est pas de 2 espaces, ignore les littéraux template
+    "sort-imports": [
+      "error",
       {
-        "ignoredNodes": ["TemplateLiteral"]
+        "ignoreCase": true, // Ignore la casse lors du tri des imports
+        "ignoreDeclarationSort": true // Ignore le tri des déclarations d'importation
       }
-    ]
+    ],
+    "jsx-a11y/anchor-is-valid": "off" // Désactive la règle qui vérifie la validité des balises <a>
   },
-  "extends": ["airbnb", "airbnb/hooks", "prettier"],
-  "sort-imports": [
-    "error",
-    {
-      "ignoreCase": true,
-      "ignoreDeclarationSort": true
+  // Paramètres supplémentaires pour ESLint
+  "settings": {
+    "react": {
+      "version": "detect" // Détection automatique de la version de React utilisée dans le projet
     }
-  ]
+  }
 }
