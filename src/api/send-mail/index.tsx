@@ -41,7 +41,7 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
       htmlContent: userResponse,
     };
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    const response = await fetch("/email/", {
       method: "POST",
       headers: {
         "api-key": import.meta.env.VITE_BREVO_API_AUTHORIZATION,

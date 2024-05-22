@@ -5,7 +5,7 @@ import ContributionsGraphByName from "../../components/graphs/contributions-by-n
 const Home = () => {
   return (
     <Container className="fr-mt-10v">
-      <h1>Bienvenue sur le Guichet numérique du DIST</h1>
+      <h1>Bienvenue sur le Guichet numérique du DISD</h1>
       <Row gutters className="fr-grid-row--center fr-mt-5w">
         <Col>
           <ContributionsGraphByYear />

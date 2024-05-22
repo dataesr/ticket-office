@@ -12,7 +12,7 @@ export default function MainFooter() {
   return (
     <Footer fluid={true}>
       <FooterTop>
-        <Container>Le Guichet Numérique du DIST</Container>
+        <Container>Le Guichet Numérique du DISD</Container>
       </FooterTop>
       <FooterBody>
         <Logo
