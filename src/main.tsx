@@ -3,6 +3,8 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Link } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 import Router from "./router";
 import "./styles.scss";
@@ -28,6 +30,7 @@ if (rootElement) {
     <React.StrictMode>
       <DSFRConfig routerComponent={RouterLink}>
         <BrowserRouter>
+          <ToastContainer />
           <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools />
             <Router />

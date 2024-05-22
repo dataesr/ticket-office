@@ -13,6 +13,7 @@ import ContributorInfo from "./contributor-info";
 import StaffActions from "./staff-action";
 import { Contribution } from "../../types";
 import HighlightedMessage from "../../components/highlighted-message";
+import { BadgeColor } from "./utils";
 
 const ContributionItem = ({
   data,
@@ -40,6 +41,13 @@ const ContributionItem = ({
             className="fr-mr-1w fr-mb-1w status"
           >
             {data.status}
+          </Badge>
+          <Badge
+            size="sm"
+            color={BadgeColor({ type: data.type })}
+            className="fr-mr-1w fr-mb-1w status"
+          >
+            {data.type}
           </Badge>
         </Col>
         <Text size="sm">
@@ -74,7 +82,7 @@ const ContributionItem = ({
     <AccordionGroup>
       <Accordion title={renderAccordion}>
         {!data.comment && (
-          <Notice type="info" closeMode={"disallow"} className="fr-mb-2w">
+          <Notice type="info" closeMode={"disallow"} className="fr-mb-1w">
             Aucune réponse apportée à ce message pour l'instant
           </Notice>
         )}

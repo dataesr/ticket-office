@@ -1,4 +1,6 @@
 export type Contribution = {
+  responseByMail: string;
+  responseFrom: string;
   modified_at: string;
   team: any;
   _id: any;

@@ -1,17 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  Col,
-  Container,
-  Row,
-  Text,
-  TextArea,
-} from "@dataesr/dsfr-plus";
+import { Button, Col, Container, Row, TextArea } from "@dataesr/dsfr-plus";
 import { Contribution } from "../../types";
 import { postHeaders } from "../../config/api";
-
+import { toast } from "react-toastify";
 function EmailSender({ contribution }: { contribution: Contribution }) {
-  const [emailSent, setEmailSent] = useState(false);
+  const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
   const basePath = window.location.pathname.includes("contact")
     ? "contact"
@@ -26,7 +19,7 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
     }
   }, []);
   const sendEmail = async () => {
-    const data = {
+    const dataForBrevo = {
       sender: {
         email: "mihoub.debache@enseignementsup.gouv.fr",
         name: "Debache ",
@@ -41,31 +34,35 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
       htmlContent: userResponse,
     };
 
-    const response = await fetch("/email/", {
+    const responseBrevo = await fetch("/email/", {
       method: "POST",
       headers: {
         "api-key": import.meta.env.VITE_BREVO_API_AUTHORIZATION,
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(dataForBrevo),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+    if (!responseBrevo.ok) {
+      throw new Error(`HTTP error! status: ${responseBrevo.status}`);
     }
 
-    const responsePatch = await fetch(`/api/${basePath}/${contribution._id}`, {
+    const dataForScanR = {
+      comment: userResponse,
+      responseFrom: selectedProfile,
+    };
+
+    const responseScanR = await fetch(`/api/${basePath}/${contribution._id}`, {
       method: "PATCH",
       headers: postHeaders,
-      body: JSON.stringify(data),
+      body: JSON.stringify(dataForScanR),
     });
 
-    if (!responsePatch.ok) {
-      throw new Error(
-        `Erreur pendant la mise à jour de l'api ! status: ${response.status}`
-      );
+    if (!responseScanR.ok) {
+      throw new Error(`HTTP error! status: ${responseScanR.status}`);
     }
 
     setEmailSent(true);
+    toast.success("Mail envoyé!");
   };
 
   return (
@@ -79,12 +76,11 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
             rows={2}
           />
         </Col>
-        <Col className="fr-mt-10w">
+        <Col>
           <Button variant="secondary" onClick={sendEmail} size="sm">
             {contribution.comment ? "Renvoyer un mail" : "Répondre"}
           </Button>
         </Col>
-        {emailSent && <Text>Mail envoyé!</Text>}
       </Row>
     </Container>
   );

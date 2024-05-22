@@ -1,4 +1,11 @@
-.contributorSide {
+.contributorSideInfo {
+  background-color: var(--background-alt-green-emeraude);
+  border: 1px solid var(--background-alt-green-emeraude);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+.contributorSideMessage {
   background-color: var(--background-alt-green-emeraude);
   border: 1px solid var(--background-alt-green-emeraude);
   border-radius: 10px;
@@ -6,7 +13,14 @@
   margin-right: 250px;
   padding: 20px;
 }
-.contributorSideContact {
+.contributorSideContactInfo {
+  background-color: var(--background-alt-brown-caramel);
+  border: 1px solid var(--background-alt-brown-caramel);
+  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+.contributorSideContactMessage {
   background-color: var(--background-alt-brown-caramel);
   border: 1px solid var(--background-alt-brown-caramel);
   border-radius: 10px;
