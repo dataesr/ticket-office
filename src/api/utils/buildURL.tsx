@@ -11,6 +11,7 @@ export const buildURL = (
   const baseUrl = location.pathname.includes("contributionpage")
     ? "contribute"
     : "contact";
+
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
   const where: any = {};
   if (query.trim() !== "") {
@@ -27,5 +28,5 @@ export const buildURL = (
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
-  return `/api/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
+  return `https://scanr-api.dataesr.ovh/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
 };
