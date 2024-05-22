@@ -11,15 +11,13 @@ const StaffActions = ({ data }: { data: Contribution }) => {
 
   return (
     <>
-      {data.comment && (
+      {data?.comment && (
         <Col className={contributorClassName}>
-          <Text size="sm">Commentaire laissé par {data?.team[0]}</Text>
-          <Text>{data.comment}</Text>
           <Text size="sm">
-            Réponse déjà apportée par {data?.team[0]} le{" "}
-            {new Date(data.modified_at).toLocaleDateString()} :
+            Réponse apportée par {data?.responseFrom || data.team[0]} le{" "}
+            {new Date(data?.modified_at).toLocaleDateString()}{" "}
           </Text>
-          <Text>{data.message}</Text>
+          <Text>{data?.comment}</Text>
         </Col>
       )}
       <EmailSender contribution={data} />
