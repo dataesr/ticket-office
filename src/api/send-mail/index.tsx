@@ -3,7 +3,14 @@ import { Button, Col, Container, Row, TextArea } from "@dataesr/dsfr-plus";
 import { Contribution } from "../../types";
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
-function EmailSender({ contribution }: { contribution: Contribution }) {
+
+function EmailSender({
+  contribution,
+  setResponseScanR,
+}: {
+  contribution: Contribution;
+  setResponseScanR: any;
+}) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
   const basePath = window.location.pathname.includes("contact")
@@ -60,7 +67,7 @@ function EmailSender({ contribution }: { contribution: Contribution }) {
     if (!responseScanR.ok) {
       throw new Error(`HTTP error! status: ${responseScanR.status}`);
     }
-
+    setResponseScanR(dataForScanR);
     setEmailSent(true);
     toast.success("Mail envoyé!");
   };
