@@ -42,13 +42,15 @@ const ContributionItem = ({
           >
             {data.status}
           </Badge>
-          <Badge
-            size="sm"
-            color={BadgeColor({ type: data.type })}
-            className="fr-mr-1w fr-mb-1w status"
-          >
-            {data.type}
-          </Badge>
+          {data.type && (
+            <Badge
+              size="sm"
+              color={BadgeColor({ type: data.type })}
+              className="fr-mr-1w fr-mb-1w status"
+            >
+              {data.type}
+            </Badge>
+          )}
         </Col>
         <Text size="sm">
           <i className="date">
