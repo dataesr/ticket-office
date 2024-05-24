@@ -1,16 +1,19 @@
-import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
+import Highcharts from "highcharts";
+
+import { useState } from "react";
+import { ContributionData } from "../../types";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { Contribution } from "../../types";
 import { contactUrl, contributionUrl } from "../../config/api";
 import { Button, Col } from "@dataesr/dsfr-plus";
-import { useState } from "react";
 
-const ContributionsGraphByName = () => {
+const AdminResponseGraph = () => {
   const [filter, setFilter] = useState("contributions");
   const url = filter === "object" ? contributionUrl : contactUrl;
   const { data, isLoading, isError } = useGetContributionData(url, 0);
-  const contributions = (data as { data: [] })?.data;
+
+  const contributions = (data as { data: ContributionData[] })?.data;
+
   if (isLoading) {
     return <div>Chargement...</div>;
   }
@@ -23,59 +26,68 @@ const ContributionsGraphByName = () => {
     return <div>Les données ne sont pas disponibles</div>;
   }
 
-  const contributionsByName = contributions.reduce(
-    (acc: Record<string, number>, contribution: Contribution) => {
-      const name = contribution.name;
-
-      if (!acc[name]) {
-        acc[name] = 0;
+  const responsesByAdmin = contributions.reduce(
+    (acc: Record<string, number>, contribution: ContributionData) => {
+      if (contribution.team) {
+        contribution.team.forEach((admin: string) => {
+          if (!acc[admin]) {
+            acc[admin] = 1;
+          } else {
+            acc[admin] += 1;
+          }
+        });
       }
-
-      acc[name]++;
 
       return acc;
     },
     {}
   );
 
-  let names: string[] = Object.keys(contributionsByName);
-  let contributionCounts: number[] = Object.values(contributionsByName);
-
-  let pairs: [string, number][] = names.map((name, index) => [
-    name,
-    contributionCounts[index],
-  ]);
-
-  pairs.sort((a, b) => b[1] - a[1]);
-  pairs = pairs.slice(0, 15);
-
-  names = pairs.map((pair) => pair[0]);
-  contributionCounts = pairs.map((pair) => pair[1]);
+  const chartData = Object.entries(responsesByAdmin)
+    .map(([name, y]) => ({ name, y }))
+    .sort((a, b) => b.y - a.y);
 
   const options = {
     chart: {
-      type: "bar",
+      type: "column",
+      options3d: {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25,
+      },
     },
     title: {
-      text: `Top 15 des contributeurs ${
-        filter === "object" ? "par objet" : "via formulaire contact"
-      }`,
+      text: "Réponses par admin",
+    },
+    plotOptions: {
+      column: {
+        depth: 25,
+        dataLabels: {
+          enabled: true,
+          format: function () {
+            if (this.point.index === 0) {
+              return '<i class="fr-icon-building-line"></i>';
+            }
+            return "";
+          },
+          useHTML: true,
+        },
+      },
     },
     xAxis: {
-      categories: names,
-      title: {
-        text: "Noms",
-      },
+      type: "category",
     },
     yAxis: {
       title: {
-        text: "Nombre de contributions",
+        text: "Nombre de réponses",
       },
     },
     series: [
       {
-        name: "Contributions",
-        data: contributionCounts,
+        name: "Traitements",
+        data: chartData,
       },
     ],
   };
@@ -104,4 +116,4 @@ const ContributionsGraphByName = () => {
   );
 };
 
-export default ContributionsGraphByName;
+export default AdminResponseGraph;

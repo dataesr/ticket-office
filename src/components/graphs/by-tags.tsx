@@ -1,16 +1,16 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { contributionUrl, contactUrl } from "../../config/api";
-import { useState } from "react";
+import { ContributionData } from "../../types";
+import { contactUrl, contributionUrl } from "../../config/api";
 import { Button, Col } from "@dataesr/dsfr-plus";
+import { useState } from "react";
 
-const ContributionsGraphByYear = () => {
+const ContributionsGraphByTags = () => {
   const [filter, setFilter] = useState("contributions");
   const url = filter === "object" ? contributionUrl : contactUrl;
   const { data, isLoading, isError } = useGetContributionData(url, 0);
   const contributions = (data as { data: [] })?.data;
-
   if (isLoading) {
     return <div>Chargement...</div>;
   }
@@ -23,53 +23,50 @@ const ContributionsGraphByYear = () => {
     return <div>Les données ne sont pas disponibles</div>;
   }
 
-  const contributionsByMonth = (
-    contributions as { created_at: string }[]
-  ).reduce((acc, contribution) => {
-    const date = new Date(contribution.created_at);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
+  const contributionsByTag = contributions.reduce(
+    (acc: Record<string, number>, contribution: ContributionData) => {
+      const { tags } = contribution;
+      if (tags) {
+        tags.forEach((tag: string) => {
+          if (!acc[tag]) {
+            acc[tag] = 1;
+          } else {
+            acc[tag] += 1;
+          }
+        });
+      }
 
-    if (!acc[year]) {
-      acc[year] = Array(12).fill(0);
-    }
+      return acc;
+    },
+    {}
+  );
 
-    acc[year][month - 1]++;
-
-    return acc;
-  }, {});
+  const chartData = Object.entries(contributionsByTag).map(([name, y]) => ({
+    name,
+    y,
+  }));
 
   const options = {
     chart: {
-      type: "column",
+      type: "pie",
     },
     title: {
-      text: `Nombre de contributions ${
-        filter === "object" ? "par objet" : "via formulaire contact"
-      } par mois et par année`,
+      text: "Contributions par tag",
     },
     xAxis: {
-      categories: [
-        "Jan",
-        "Fev",
-        "Mar",
-        "Avr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Aou",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      type: "category",
     },
-    series: Object.entries(contributionsByMonth).map(
-      ([year, contributions]) => ({
-        name: year,
-        data: contributions,
-      })
-    ),
+    yAxis: {
+      title: {
+        text: "Nombre de contributions",
+      },
+    },
+    series: [
+      {
+        name: "Tag",
+        data: chartData,
+      },
+    ],
   };
 
   return (
@@ -96,4 +93,4 @@ const ContributionsGraphByYear = () => {
   );
 };
 
-export default ContributionsGraphByYear;
+export default ContributionsGraphByTags;
