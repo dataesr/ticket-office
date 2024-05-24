@@ -42,6 +42,7 @@ function EmailSender({
     };
 
     const responseBrevo = await fetch("/email/", {
+      // const responseBrevo = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
         "api-key": import.meta.env.VITE_BREVO_API_AUTHORIZATION,
@@ -59,6 +60,9 @@ function EmailSender({
     };
 
     const responseScanR = await fetch(`/api/${basePath}/${contribution._id}`, {
+      // const responseScanR = await fetch(
+      //   `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`,
+      //   {
       method: "PATCH",
       headers: postHeaders,
       body: JSON.stringify(dataForScanR),
