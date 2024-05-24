@@ -1,11 +1,12 @@
 import { Col, Container, Row } from "@dataesr/dsfr-plus";
 import ContributionsGraphByYear from "../../components/graphs/contributions-by-year";
 import ContributionsGraphByName from "../../components/graphs/contributions-by-name";
-import AdminResponseGraph from "../../components/graphs/response-by-admin";
 import ContributionsGraphByStatus from "../../components/graphs/by-status";
 import ContributionsGraphByTags from "../../components/graphs/by-tags";
 import ContributionsGraphByDomains from "../../components/graphs/by-domains";
 import ContributionsGraphByTypes from "../../components/graphs/by-types";
+import AdminTreatmentGraph from "../../components/graphs/treatment-by-admin";
+import AdminResponseGraph from "../../components/graphs/response-by-admin";
 
 const Home = () => {
   return (
@@ -21,7 +22,7 @@ const Home = () => {
       </Row>
       <Row gutters className="fr-grid-row--center fr-mt-5w">
         <Col md="6">
-          <AdminResponseGraph />
+          <AdminTreatmentGraph />
         </Col>
         <Col md="6">
           <ContributionsGraphByStatus />
@@ -39,9 +40,9 @@ const Home = () => {
         <Col md="6">
           <ContributionsGraphByTypes />
         </Col>
-        {/* <Col md="6">
-          <ContributionsGraphByDomains />
-        </Col> */}
+        <Col md="6">
+          <AdminResponseGraph />
+        </Col>
       </Row>
     </Container>
   );
