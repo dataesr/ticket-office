@@ -23,6 +23,7 @@ export type Contribution = {
 };
 
 export type ContributionData = {
+  responseFrom: string;
   idref: any;
   tags: any;
   id: string;

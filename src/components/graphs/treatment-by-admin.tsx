@@ -7,7 +7,7 @@ import useGetContributionData from "../../api/contribution-api/useGetObjectContr
 import { contactUrl, contributionUrl } from "../../config/api";
 import { Button, Col } from "@dataesr/dsfr-plus";
 
-const AdminResponseGraph = () => {
+const AdminTreatmentGraph = () => {
   const [filter, setFilter] = useState("contributions");
   const url = filter === "object" ? contributionUrl : contactUrl;
   const { data, isLoading, isError } = useGetContributionData(url, 0);
@@ -26,15 +26,16 @@ const AdminResponseGraph = () => {
     return <div>Les données ne sont pas disponibles</div>;
   }
 
-  const occurrencesByUser = contributions.reduce(
+  const responsesByAdmin = contributions.reduce(
     (acc: Record<string, number>, contribution: ContributionData) => {
-      const { responseFrom } = contribution;
-      if (responseFrom) {
-        if (!acc[responseFrom]) {
-          acc[responseFrom] = 1;
-        } else {
-          acc[responseFrom] += 1;
-        }
+      if (contribution.team) {
+        contribution.team.forEach((admin: string) => {
+          if (!acc[admin]) {
+            acc[admin] = 1;
+          } else {
+            acc[admin] += 1;
+          }
+        });
       }
 
       return acc;
@@ -42,21 +43,50 @@ const AdminResponseGraph = () => {
     {}
   );
 
-  const chartData = Object.entries(occurrencesByUser).map(([name, y]) => ({
-    name,
-    y,
-  }));
+  const chartData = Object.entries(responsesByAdmin)
+    .map(([name, y]) => ({ name, y }))
+    .sort((a, b) => b.y - a.y);
 
   const options = {
     chart: {
-      type: "pie",
+      type: "column",
+      options3d: {
+        enabled: true,
+        alpha: 15,
+        beta: 15,
+        depth: 50,
+        viewDistance: 25,
+      },
     },
     title: {
-      text: "Nombre de mail envoyé",
+      text: "Traitements par admin",
+    },
+    plotOptions: {
+      column: {
+        depth: 25,
+        dataLabels: {
+          enabled: true,
+          format: function () {
+            if (this.point.index === 0) {
+              return '<i class="fr-icon-building-line"></i>';
+            }
+            return "";
+          },
+          useHTML: true,
+        },
+      },
+    },
+    xAxis: {
+      type: "category",
+    },
+    yAxis: {
+      title: {
+        text: "Nombre de traitement",
+      },
     },
     series: [
       {
-        name: "Mail de réponse depuis le guichet",
+        name: "Traitements",
         data: chartData,
       },
     ],
@@ -86,4 +116,4 @@ const AdminResponseGraph = () => {
   );
 };
 
-export default AdminResponseGraph;
+export default AdminTreatmentGraph;
