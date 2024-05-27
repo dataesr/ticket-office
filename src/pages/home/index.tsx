@@ -7,6 +7,7 @@ import ContributionsGraphByDomains from "../../components/graphs/by-domains";
 import ContributionsGraphByTypes from "../../components/graphs/by-types";
 import AdminTreatmentGraph from "../../components/graphs/treatment-by-admin";
 import AdminResponseGraph from "../../components/graphs/response-by-admin";
+import ContributionsGraphByProductions from "../../components/graphs/by-missing-productions";
 
 const Home = () => {
   return (
@@ -42,6 +43,11 @@ const Home = () => {
         </Col>
         <Col md="6">
           <AdminResponseGraph />
+        </Col>
+      </Row>
+      <Row gutters className="fr-grid-row--center fr-mt-5w">
+        <Col md="6">
+          <ContributionsGraphByProductions />
         </Col>
       </Row>
     </Container>

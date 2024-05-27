@@ -2,6 +2,7 @@ import EmailSender from "../../api/send-mail";
 import type { Contribute_Production } from "../../types";
 import { useState } from "react";
 import { Col, Text } from "@dataesr/dsfr-plus";
+import "./styles.scss";
 
 const StaffProductionActions = ({ data }: { data: Contribute_Production }) => {
   const [responseScanR, setResponseScanR] = useState(null);

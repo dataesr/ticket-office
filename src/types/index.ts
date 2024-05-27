@@ -54,6 +54,7 @@ export type MessagePreviewProps = {
 };
 
 export type Contribute_Production = {
+  tag: string;
   _id: string;
   team: any;
   modified_at: string | number | Date;

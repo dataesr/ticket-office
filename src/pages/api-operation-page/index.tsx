@@ -53,7 +53,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     buildURL(sort, status, query, page),
     reload
   );
-  console.log(data);
 
   const meta = (data as { meta: any }).meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;

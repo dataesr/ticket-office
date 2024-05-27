@@ -23,37 +23,9 @@ const MessagePreview = ({ data }: { data: Contribute_Production }) => {
   const handleCloseModal = () => {
     setShowModal(false);
   };
-
   return (
     <Container fluid>
-      <EditModal
-        isOpen={showModal}
-        onClose={handleCloseModal}
-        data-production={data}
-        data={{
-          responseByMail: "",
-          responseFrom: "",
-          modified_at: "",
-          team: undefined,
-          _id: undefined,
-          status: "",
-          tags: undefined,
-          message: "",
-          created_at: "",
-          fonction: undefined,
-          organisation: undefined,
-          email: undefined,
-          name: undefined,
-          type: "",
-          id: "",
-          comment: "",
-          data: [],
-          meta: {
-            total: 0,
-          },
-          highlightedQuery: "",
-        }}
-      />
+      <EditModal isOpen={showModal} onClose={handleCloseModal} data={data} />
       <Row className="contributorProductionSideInfo">
         {data.id && (
           <Text
