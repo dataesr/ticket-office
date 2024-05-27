@@ -13,9 +13,13 @@ function EmailSender({
 }) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
-  const basePath = window.location.pathname.includes("contact")
-    ? "contact"
-    : "contribute";
+  let basePath = "contact";
+
+  if (window.location.pathname.includes("contribute")) {
+    basePath = "contribute";
+  } else if (window.location.pathname.includes("apioperations")) {
+    basePath = "contribute_productions";
+  }
 
   const [selectedProfile, setSelectedProfile] = useState("");
 
@@ -74,6 +78,7 @@ function EmailSender({
     setResponseScanR(dataForScanR);
     setEmailSent(true);
     toast.success("Mail envoyé!");
+    setUserResponse("");
   };
 
   return (
@@ -88,7 +93,12 @@ function EmailSender({
           />
         </Col>
         <Col>
-          <Button variant="secondary" onClick={sendEmail} size="sm">
+          <Button
+            className="fr-mt-1w"
+            variant="secondary"
+            onClick={sendEmail}
+            size="sm"
+          >
             {contribution.comment ? "Renvoyer un mail" : "Répondre"}
           </Button>
         </Col>

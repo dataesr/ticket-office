@@ -9,13 +9,13 @@ import {
   Button,
   Row,
 } from "@dataesr/dsfr-plus";
-import { Contribution } from "../../types";
+import { Contribute_Production, Contribution } from "../../types";
 import { postHeaders } from "../../config/api";
 import Select from "react-select";
 
 type EditModalProps = {
   isOpen: boolean;
-  data: Contribution;
+  data: Contribution | Contribute_Production;
   onClose: () => void;
 };
 
@@ -58,13 +58,13 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
 
   if (window.location.pathname.includes("contribute")) {
     basePath = "contribute";
-  } else if (window.location.pathname.includes("contribute_production")) {
-    basePath = "contribute_production";
+  } else if (window.location.pathname.includes("apioperations")) {
+    basePath = "contribute_productions";
   }
-
   const handleSubmit = async () => {
     try {
       const response = await fetch(
+        // `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`,
         `${window.location.origin}/api/${basePath}/${data._id}`,
         {
           method: "PATCH",

@@ -28,6 +28,16 @@ const ContributionProductionItem = ({
           >
             {data.status}
           </Badge>
+          {data.tag && (
+            <Badge
+              size="sm"
+              color="pink-tuile"
+              className="fr-mr-1w fr-mb-1w status"
+            >
+              {data.tag}
+            </Badge>
+          )}
+
           <Badge
             size="sm"
             color="green-emeraude"
