@@ -54,7 +54,8 @@ const MessagePreview = ({
                 : "fr-icon-user-line"
             }
           >
-            <div
+            <Text
+              size="sm"
               style={{ cursor: "pointer" }}
               onClick={() => copyToClipboard(data.id, "ID copié")}
             >
@@ -73,9 +74,9 @@ const MessagePreview = ({
                   {copySuccess}
                 </span>
               )}
-            </div>
+            </Text>
             {data.team && data.team.length > 0 && (
-              <Text>
+              <Text size="sm">
                 Traité par : {data?.team[0]} le{" "}
                 {new Date(data.modified_at).toLocaleDateString()}
               </Text>
@@ -83,9 +84,12 @@ const MessagePreview = ({
           </Col>
         )}
         <Col md="4">
-          <Text>{data.name ? `Nom: ${data.name}` : "Nom non renseigné"}</Text>
+          <Text size="sm">
+            {data.name ? `Nom: ${data.name}` : "Nom non renseigné"}
+          </Text>
           {data.email && (
-            <div
+            <Text
+              size="sm"
               style={{ cursor: "pointer" }}
               onClick={() => copyToClipboard(data.email, "Email copié")}
             >
@@ -104,24 +108,24 @@ const MessagePreview = ({
                   {copySuccess}
                 </span>
               )}
-            </div>
+            </Text>
           )}
         </Col>
         <Col md="4" className="contributorInfo">
           {data.organisation ? (
-            <Text>Organisation: {data.organisation}</Text>
+            <Text size="sm">Organisation: {data.organisation}</Text>
           ) : (
-            <Text>Organisation non renseignée</Text>
+            <Text size="sm">Organisation non renseignée</Text>
           )}
           {data.fonction ? (
-            <Text>Fonction: {data.fonction}</Text>
+            <Text size="sm">Fonction: {data.fonction}</Text>
           ) : (
             <Text>Fonction non renseignée</Text>
           )}
         </Col>
       </Row>
       <Row className={contributorMessageClassName}>
-        <Text>
+        <Text size="sm">
           <HighlightedMessage
             message={data.message}
             highlightedQuery={highlightedQuery}
