@@ -1,0 +1,20 @@
+.contributorProductionSideInfo {
+  display: flex;
+  justify-content: center;
+}
+.contributorProductionSide {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.staffSide {
+  text-align: right;
+  background-color: var(--background-alt-blue-ecume);
+  border-radius: 20px;
+  padding: 20px;
+  margin-left: 140px;
+}
+.textInCard {
+  text-align: center;
+}

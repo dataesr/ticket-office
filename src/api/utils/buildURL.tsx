@@ -8,9 +8,13 @@ export const buildURL = (
   searchInMessages: boolean = false
 ): string => {
   const location = useLocation();
-  const baseUrl = location.pathname.includes("contributionpage")
-    ? "contribute"
-    : "contact";
+  let baseUrl = "contact";
+
+  if (location.pathname.includes("contributionpage")) {
+    baseUrl = "contribute";
+  } else if (location.pathname.includes("apioperations")) {
+    baseUrl = "contribute_productions";
+  }
 
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
   const where: any = {};

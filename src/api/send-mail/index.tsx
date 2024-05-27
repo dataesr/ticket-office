@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Container, Row, TextArea } from "@dataesr/dsfr-plus";
-import { Contribution } from "../../types";
+import { Contribution, Contribute_Production } from "../../types";
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 
@@ -8,7 +8,7 @@ function EmailSender({
   contribution,
   setResponseScanR,
 }: {
-  contribution: Contribution;
+  contribution: Contribution | Contribute_Production;
   setResponseScanR: any;
 }) {
   const [, setEmailSent] = useState(false);
