@@ -54,21 +54,28 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
     setInputs((prevInputs) => ({ ...prevInputs, idRef: newIdref }));
   };
 
-  const basePath = window.location.pathname.includes("contact")
-    ? "contact"
-    : "contribute";
+  let basePath = "contact";
+
+  if (window.location.pathname.includes("contribute")) {
+    basePath = "contribute";
+  } else if (window.location.pathname.includes("contribute_production")) {
+    basePath = "contribute_production";
+  }
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch(`${window.location.origin}/api/${basePath}/${data._id}`, {
-        method: "PATCH",
-        headers: postHeaders,
-        body: JSON.stringify({
-          status: inputs.status,
-          tag: inputs.tag,
-          idref: inputs.idRef,
-        }),
-      });
+      const response = await fetch(
+        `${window.location.origin}/api/${basePath}/${data._id}`,
+        {
+          method: "PATCH",
+          headers: postHeaders,
+          body: JSON.stringify({
+            status: inputs.status,
+            tag: inputs.tag,
+            idref: inputs.idRef,
+          }),
+        }
+      );
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
@@ -133,7 +140,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
             />
           </Col>
         </Row>
-
         <Col className="fr-mt-5w">
           <Button onClick={handleSubmit} variant="secondary" size="sm">
             <Title as="h3">Enregistrer</Title>

@@ -45,13 +45,15 @@ const Selectors = ({
         onChange={(selectedOption) => setStatus(selectedOption.value)}
         styles={customStyles}
       />
-      <Toggle
-        checked={searchInMessage}
-        id="searchInMessage"
-        name={"Rechercher dans les messages"}
-        onChange={(e) => setSearchInMessage(e.target.checked)}
-        label="Rechercher dans les messages"
-      />
+      {location.pathname !== "/apioperations" && (
+        <Toggle
+          checked={searchInMessage}
+          id="searchInMessage"
+          name={"Rechercher dans les messages"}
+          onChange={(e) => setSearchInMessage(e.target.checked)}
+          label="Rechercher dans les messages"
+        />
+      )}
     </Col>
   );
 };

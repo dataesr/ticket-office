@@ -52,3 +52,30 @@ export type StaffActionsProps = {
 export type MessagePreviewProps = {
   renderMessage: any;
 };
+
+export type Contribute_Production = {
+  _id: string;
+  team: any;
+  modified_at: string | number | Date;
+  comment: any;
+  id: string;
+  treated_at: Date;
+  created_at: Date;
+  email: string;
+  message?: string;
+  name: string;
+  status: string;
+  productions: any[];
+};
+
+export type EditModalProps = {
+  isOpen: boolean;
+  "data-production": Contribute_Production[];
+  data: Contribution[];
+  onClose: () => void;
+};
+
+export type Production = {
+  id: string;
+  treated: boolean;
+};

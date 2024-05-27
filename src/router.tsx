@@ -15,7 +15,7 @@ export default function Router() {
           element={<ContributionPage url={""} />}
         />
         <Route path="/contact" element={<ContributionPage url={""} />} />
-        <Route path="/apioperations" element={<ApiOperationPage />} />
+        <Route path="/apioperations" element={<ApiOperationPage url={""} />} />
       </Route>
     </Routes>
   );
