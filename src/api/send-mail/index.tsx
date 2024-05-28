@@ -15,7 +15,7 @@ function EmailSender({
   const [userResponse, setUserResponse] = useState("");
   let basePath = "contact";
 
-  if (window.location.pathname.includes("contribute")) {
+  if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";
   } else if (window.location.pathname.includes("apioperations")) {
     basePath = "contribute_productions";
@@ -33,7 +33,7 @@ function EmailSender({
     const dataForBrevo = {
       sender: {
         email: "mihoub.debache@enseignementsup.gouv.fr",
-        name: "Debache ",
+        name: `${selectedProfile} de l'équipe scanR`,
       },
       to: [
         {
@@ -41,7 +41,7 @@ function EmailSender({
           name: "Mihoub mihoub",
         },
       ],
-      subject: `${selectedProfile} de l'équipe scanR`,
+      subject: `Réponse à votre contribution`,
       htmlContent: userResponse,
     };
 
@@ -59,7 +59,8 @@ function EmailSender({
     }
 
     const dataForScanR = {
-      comment: userResponse,
+      mailSent: userResponse,
+      mailSentDate: new Date(),
       responseFrom: selectedProfile,
     };
 
@@ -99,7 +100,7 @@ function EmailSender({
             onClick={sendEmail}
             size="sm"
           >
-            {contribution.comment ? "Renvoyer un mail" : "Répondre"}
+            {contribution.mailSent ? "Renvoyer un mail" : "Répondre"}
           </Button>
         </Col>
       </Row>

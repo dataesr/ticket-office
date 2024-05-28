@@ -26,6 +26,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
     status: data.status,
     tag: "",
     idRef: "",
+    comment: "",
   });
 
   useEffect(() => {
@@ -34,6 +35,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
       status: "treated",
       tag: "",
       idRef: "",
+      comment: "",
     });
   }, [data, user]);
 
@@ -48,6 +50,10 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
     const newTag = event.target.value;
     setInputs((prevInputs) => ({ ...prevInputs, tag: newTag }));
   };
+  const handleCommentChange = (event) => {
+    const newComment = event.target.value;
+    setInputs((prevInputs) => ({ ...prevInputs, comment: newComment }));
+  };
 
   const handleIdRefChange = (event) => {
     const newIdref = event.target.value;
@@ -56,7 +62,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
 
   let basePath = "contact";
 
-  if (window.location.pathname.includes("contribute")) {
+  if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";
   } else if (window.location.pathname.includes("apioperations")) {
     basePath = "contribute_productions";
@@ -73,6 +79,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
             status: inputs.status,
             tag: inputs.tag,
             idref: inputs.idRef,
+            comment: inputs.comment,
           }),
         }
       );
@@ -137,6 +144,21 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
               value={inputs.idRef}
               onChange={handleIdRefChange}
               hint="Ajoutez un identifiant"
+            />
+          </Col>
+        </Row>
+        <Row gutters>
+          <Col>
+            <TextArea
+              label={
+                data.comment
+                  ? "Mettre à jour le commentaire pour l'équipe"
+                  : "Ajouter un commentaire pour l'équipe"
+              }
+              maxLength={6}
+              hint="Ce commentaire ne sera lu que par les membres de l'équipe"
+              value={inputs.comment}
+              onChange={handleCommentChange}
             />
           </Col>
         </Row>

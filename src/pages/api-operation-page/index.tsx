@@ -22,6 +22,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [status, setStatus] = useState("new");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
+  const [data, setData] = useState(null);
 
   const location = useLocation();
 
@@ -49,16 +50,21 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     }
   }, [location.pathname]);
 
-  const { data, isLoading, isError } = useGetContributionData(
-    buildURL(sort, status, query, page),
-    reload
-  );
+  const {
+    isLoading,
+    isError,
+    data: fetchedData,
+  } = useGetContributionData(buildURL(sort, status, query, page), reload);
 
-  const meta = (data as { meta: any }).meta;
+  useEffect(() => {
+    setData(fetchedData);
+  }, [fetchedData]);
+
+  const meta = (data as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
   const contrib: Contribute_Production[] = (
     data as { data: Contribute_Production[] }
-  ).data;
+  )?.data;
 
   const handleSearch = (value: string) => {
     setQuery(value.trim());

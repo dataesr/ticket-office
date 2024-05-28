@@ -57,3 +57,10 @@
   width: 100%;
   text-align: right;
 }
+.comment {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: var(--background-alt-blue-cumulus);
+  margin-bottom: 20px;
+}
