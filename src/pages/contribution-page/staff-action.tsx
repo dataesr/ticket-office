@@ -12,13 +12,16 @@ const StaffActions = ({ data }: { data: Contribution }) => {
     : "staffSideContact";
   return (
     <>
-      {data?.comment && (
+      {data?.mailSent && (
         <Col className={contributorClassName}>
           <Text size="sm">
-            Réponse apportée par {responseScanR?.responseFrom || data.team[0]}{" "}
-            le {new Date(data?.modified_at).toLocaleDateString()}{" "}
+            Réponse apportée par{" "}
+            {responseScanR?.responseFrom || data.responseFrom} le{" "}
+            {new Date(
+              responseScanR?.mailSentData || data?.mailSentDate
+            ).toLocaleDateString()}{" "}
           </Text>
-          <Text>{responseScanR?.comment || data.comment}</Text>
+          <Text>{responseScanR?.mailSent || data.mailSent}</Text>
         </Col>
       )}
       <EmailSender contribution={data} setResponseScanR={setResponseScanR} />

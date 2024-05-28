@@ -25,6 +25,14 @@ const MessagePreview = ({ data }: { data: Contribute_Production }) => {
   };
   return (
     <Container fluid>
+      {data.comment && (
+        <Row className="fr-grid-row--center">
+          <Col md="8" className="comment">
+            <Text size="sm">Commentaire de l'équipe ({data.team[0]}) </Text>
+            <Text size="sm">{data.comment}</Text>
+          </Col>
+        </Row>
+      )}
       <EditModal isOpen={showModal} onClose={handleCloseModal} data={data} />
       <Row className="contributorProductionSideInfo">
         {data.id && (

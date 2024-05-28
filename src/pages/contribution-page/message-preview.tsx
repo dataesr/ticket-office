@@ -44,6 +44,14 @@ const MessagePreview = ({
   return (
     <>
       <EditModal isOpen={showModal} onClose={handleCloseModal} data={data} />
+      {data.comment && (
+        <Row className="fr-grid-row--center">
+          <Col md="8" className="test">
+            <Text size="sm">Commentaire de l'équipe ({data.team[0]}) </Text>
+            <Text size="sm">{data.comment}</Text>
+          </Col>
+        </Row>
+      )}
       <Row className={contributorInfoClassName}>
         {data.id && (
           <Col

@@ -1,4 +1,6 @@
 export type Contribution = {
+  mailSentDate: string | number | Date;
+  mailSent: any;
   responseByMail: string;
   responseFrom: string;
   modified_at: string;
@@ -54,6 +56,10 @@ export type MessagePreviewProps = {
 };
 
 export type Contribute_Production = {
+  mailSentDate: string | number | Date;
+  mailSent: any;
+  responseByMail: string;
+  responseFrom: string;
   tag: string;
   _id: string;
   team: any;
