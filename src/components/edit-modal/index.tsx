@@ -9,7 +9,7 @@ import {
   Button,
   Row,
 } from "@dataesr/dsfr-plus";
-import { Contribute_Production, Contribution } from "../../types";
+import { Contribute_Production, Contribution, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
 import Select from "react-select";
 
@@ -17,23 +17,28 @@ type EditModalProps = {
   isOpen: boolean;
   data: Contribution | Contribute_Production;
   onClose: () => void;
+  refetch;
 };
 
-const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
+const EditModal: React.FC<EditModalProps> = ({
+  isOpen,
+  data,
+  onClose,
+  refetch,
+}) => {
   const user = sessionStorage.getItem("selectedProfile");
-  const [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useState<Inputs>({
     team: [user],
-    status: data.status,
-    tag: "",
+    status: "treated",
+    tag: [],
     idRef: "",
     comment: "",
   });
-
   useEffect(() => {
     setInputs({
       team: [user],
       status: "treated",
-      tag: "",
+      tag: [],
       idRef: "",
       comment: "",
     });
@@ -48,7 +53,10 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
 
   const handleTagChange = (event) => {
     const newTag = event.target.value;
-    setInputs((prevInputs) => ({ ...prevInputs, tag: newTag }));
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      tag: [...prevInputs.tag, newTag],
+    }));
   };
   const handleCommentChange = (event) => {
     const newComment = event.target.value;
@@ -70,8 +78,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        // `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`,
-        `${window.location.origin}/api/${basePath}/${data._id}`,
+        `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`,
+        // `${window.location.origin}/api/${basePath}/${data._id}`,
         {
           method: "PATCH",
           headers: postHeaders,
@@ -88,6 +96,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
       } else {
         const responseData = await response.json();
         console.log("Données de réponse", responseData);
+        refetch();
         onClose();
       }
     } catch (error) {
@@ -155,7 +164,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
                   ? "Mettre à jour le commentaire pour l'équipe"
                   : "Ajouter un commentaire pour l'équipe"
               }
-              maxLength={6}
               hint="Ce commentaire ne sera lu que par les membres de l'équipe"
               value={inputs.comment}
               onChange={handleCommentChange}
@@ -164,7 +172,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, data, onClose }) => {
         </Row>
         <Col className="fr-mt-5w">
           <Button onClick={handleSubmit} variant="secondary" size="sm">
-            <Title as="h3">Enregistrer</Title>
+            <Title as="h4">Enregistrer</Title>
           </Button>
         </Col>
       </ModalContent>

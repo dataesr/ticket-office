@@ -1,10 +1,10 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { ContributionData } from "../../types";
 import { contactUrl, contributionUrl } from "../../config/api";
 import { Button, Col } from "@dataesr/dsfr-plus";
 import { useState } from "react";
+import { ContributionDataType } from "../../types";
 
 const ContributionsGraphByStatus = () => {
   const [filter, setFilter] = useState("contributions");
@@ -24,7 +24,7 @@ const ContributionsGraphByStatus = () => {
   }
 
   const contributionsByStatus = contributions.reduce(
-    (acc: Record<string, number>, contribution: ContributionData) => {
+    (acc: Record<string, number>, contribution: ContributionDataType) => {
       const { status } = contribution;
       if (!acc[status]) {
         acc[status] = 1;

@@ -9,6 +9,7 @@ import AdminTreatmentGraph from "../../components/graphs/treatment-by-admin";
 import AdminResponseGraph from "../../components/graphs/response-by-admin";
 import ContributionsGraphByProductions from "../../components/graphs/by-missing-productions";
 import CommentsGraphByTeamMember from "../../components/graphs/comment-by-team";
+import ContributionsGraphByYearAndType from "../../components/graphs/contribution-by-type";
 
 const Home = () => {
   return (
@@ -52,6 +53,11 @@ const Home = () => {
         </Col>
         <Col md="6">
           <CommentsGraphByTeamMember />
+        </Col>
+      </Row>
+      <Row gutters className="fr-grid-row--center fr-mt-5w">
+        <Col md="6">
+          <ContributionsGraphByYearAndType />
         </Col>
       </Row>
     </Container>

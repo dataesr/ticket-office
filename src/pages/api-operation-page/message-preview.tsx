@@ -5,7 +5,13 @@ import { useState, useCallback } from "react";
 import ContributorRequests from "./contributor-requests";
 import "./styles.scss";
 
-const MessagePreview = ({ data }: { data: Contribute_Production }) => {
+const MessagePreview = ({
+  data,
+  refetch,
+}: {
+  data: Contribute_Production;
+  refetch;
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [copySuccess, setCopySuccess] = useState("");
 
@@ -28,19 +34,26 @@ const MessagePreview = ({ data }: { data: Contribute_Production }) => {
       {data.comment && (
         <Row className="fr-grid-row--center">
           <Col md="8" className="comment">
-            <Text size="sm">Commentaire de l'équipe ({data.team[0]}) </Text>
+            <Text size="sm">
+              Commentaire ({data?.team ? data.team[0] : ""})
+            </Text>{" "}
             <Text size="sm">{data.comment}</Text>
           </Col>
         </Row>
       )}
-      <EditModal isOpen={showModal} onClose={handleCloseModal} data={data} />
+      <EditModal
+        refetch={refetch}
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        data={data}
+      />
       <Row className="contributorProductionSideInfo">
         {data.id && (
           <Text
-            className="fr-mr-2w"
             size="sm"
             style={{ cursor: "pointer" }}
             onClick={() => copyToClipboard(data.id, "ID copié")}
+            className={"fr-icon-user-line"}
           >
             ID de l'objet concerné: {data.id}
             {copySuccess === "ID copié" && (

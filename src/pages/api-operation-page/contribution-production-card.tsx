@@ -14,8 +14,10 @@ import StaffProductionActions from "./staff-production-action";
 
 const ContributionProductionItem = ({
   data,
+  refetch,
 }: {
   data: Contribute_Production;
+  refetch;
 }) => {
   const renderAccordion = () => (
     <Container fluid className="accordion">
@@ -37,7 +39,6 @@ const ContributionProductionItem = ({
               {data.tag}
             </Badge>
           )}
-
           <Badge
             size="sm"
             color="green-emeraude"
@@ -65,8 +66,8 @@ const ContributionProductionItem = ({
   return (
     <AccordionGroup>
       <Accordion title={renderAccordion}>
-        <ContributorProductionInfo data={data} />
-        <StaffProductionActions data={data} />
+        <ContributorProductionInfo data={data} refetch={refetch} />
+        <StaffProductionActions data={data} refetch={refetch} />
       </Accordion>
     </AccordionGroup>
   );

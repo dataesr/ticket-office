@@ -1,16 +1,23 @@
 import React, { ReactNode } from "react";
-import ReactDOM from "react-dom/client";
+import ReactDOM from "react-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 import { BrowserRouter, Link } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
 
 import Router from "./router";
-import "./styles.scss";
 import { DSFRConfig } from "@dataesr/dsfr-plus";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+      staleTime: Infinity,
+    },
+  },
+});
 
 type RouterLinkProps = {
   href: string;
@@ -24,19 +31,23 @@ const RouterLink = ({ href, replace, target, ...props }: RouterLinkProps) => {
   return <Link to={href} replace={replace} {...props} />;
 };
 
-const rootElement = document.getElementById("root");
-if (rootElement) {
-  ReactDOM.createRoot(rootElement).render(
-    <React.StrictMode>
+ReactDOM.render(
+  <React.StrictMode>
+    <BrowserRouter>
       <DSFRConfig routerComponent={RouterLink}>
-        <BrowserRouter>
-          <ToastContainer />
-          <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools />
-            <Router />
-          </QueryClientProvider>
-        </BrowserRouter>
+        <ToastContainer
+          toastStyle={{
+            backgroundColor: "#dffee6",
+            color: "#0078f3",
+            fontSize: "20px",
+          }}
+        />
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools />
+          <Router />
+        </QueryClientProvider>
       </DSFRConfig>
-    </React.StrictMode>
-  );
-}
+    </BrowserRouter>
+  </React.StrictMode>,
+  document.getElementById("root")
+);
