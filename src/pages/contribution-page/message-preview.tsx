@@ -1,4 +1,4 @@
-import { Button, Col, Row, Text } from "@dataesr/dsfr-plus";
+import { Button, Col, Link, Row, Text } from "@dataesr/dsfr-plus";
 import type { Contribution } from "../../types";
 import HighlightedMessage from "../../components/highlighted-message";
 import { useLocation } from "react-router-dom";
@@ -8,9 +8,11 @@ import { useState, useCallback } from "react";
 const MessagePreview = ({
   data,
   highlightedQuery,
+  refetch,
 }: {
   data: Contribution;
   highlightedQuery: string;
+  refetch;
 }) => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
@@ -28,6 +30,7 @@ const MessagePreview = ({
   )
     ? "contributorSideInfo"
     : "contributorSideContactInfo";
+
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -43,29 +46,37 @@ const MessagePreview = ({
 
   return (
     <>
-      <EditModal isOpen={showModal} onClose={handleCloseModal} data={data} />
-      {data.comment && (
+      <EditModal
+        refetch={refetch}
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        data={data}
+      />
+      <Row className="fr-mb-2w">
+        <Button onClick={handleOpenModal}>Editer la contribution</Button>
+      </Row>
+      {data?.comment && (
         <Row className="fr-grid-row--center">
-          <Col md="8" className="test">
-            <Text size="sm">Commentaire de l'équipe ({data.team[0]}) </Text>
-            <Text size="sm">{data.comment}</Text>
+          <Col md="8" className="comment">
+            <Text size="sm">
+              Commentaire ({data?.team ? data.team[0] : ""}){" "}
+            </Text>
+            <Text size="sm">{data?.comment}</Text>
           </Col>
         </Row>
       )}
       <Row className={contributorInfoClassName}>
         {data.id && (
-          <Col
-            md="4"
-            className={
-              data.type === "structure"
-                ? "fr-icon-building-line"
-                : "fr-icon-user-line"
-            }
-          >
+          <Col md="4">
             <Text
               size="sm"
               style={{ cursor: "pointer" }}
               onClick={() => copyToClipboard(data.id, "ID copié")}
+              className={
+                data.type === "structure"
+                  ? "fr-icon-building-line"
+                  : "fr-icon-user-line"
+              }
             >
               ID de l'objet concerné: {data.id}
               {copySuccess === "ID copié" && (
@@ -88,6 +99,69 @@ const MessagePreview = ({
                 Traité par : {data?.team[0]} le{" "}
                 {new Date(data.modified_at).toLocaleDateString()}
               </Text>
+            )}
+            {data.type === "structures" && (
+              <>
+                <Link
+                  size="sm"
+                  target="_blank"
+                  className="fr-footer__top-link"
+                  href={`https://scanr.enseignementsup-recherche.gouv.fr/entite/${data.id}`}
+                >
+                  Sur scanR
+                </Link>
+                <br />
+                <Link
+                  size="sm"
+                  target="_blank"
+                  className="fr-footer__top-link"
+                  href={`http://185.161.45.213/ui/organizations/${data.id}`}
+                >
+                  Sur dataESR
+                </Link>
+              </>
+            )}
+            {data.type === "publications" && (
+              <>
+                <Link
+                  size="sm"
+                  target="_blank"
+                  className="fr-footer__top-link"
+                  href={`https://scanr.enseignementsup-recherche.gouv.fr/publication/${data.id}`}
+                >
+                  Sur scanR
+                </Link>
+                <br />
+                <Link
+                  size="sm"
+                  target="_blank"
+                  className="fr-footer__top-link"
+                  href={`http://185.161.45.213/ui/publications/${data.id}`}
+                >
+                  Sur dataESR
+                </Link>
+              </>
+            )}
+            {data.type === "persons" && (
+              <div>
+                <Link
+                  size="sm"
+                  target="_blank"
+                  className="fr-footer__top-link"
+                  href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${data.id}`}
+                >
+                  Sur scanR
+                </Link>
+                <br />
+                <Link
+                  size="sm"
+                  target="_blank"
+                  className="fr-footer__top-link"
+                  href={`http://185.161.45.213/ui/persons/${data.id}`}
+                >
+                  Sur dataEsr
+                </Link>
+              </div>
             )}
           </Col>
         )}
@@ -128,7 +202,7 @@ const MessagePreview = ({
           {data.fonction ? (
             <Text size="sm">Fonction: {data.fonction}</Text>
           ) : (
-            <Text>Fonction non renseignée</Text>
+            <Text size="sm">Fonction non renseignée</Text>
           )}
         </Col>
       </Row>
@@ -139,9 +213,6 @@ const MessagePreview = ({
             highlightedQuery={highlightedQuery}
           />
         </Text>
-      </Row>
-      <Row className="fr-mb-2w">
-        <Button onClick={handleOpenModal}>Editer la contribution</Button>
       </Row>
     </>
   );

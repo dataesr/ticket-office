@@ -7,7 +7,7 @@ export type Contribution = {
   team: any;
   _id: any;
   status: string;
-  tags: any;
+  tags: Array<string>;
   message: string;
   created_at: string | number | Date;
   fonction: any;
@@ -17,14 +17,14 @@ export type Contribution = {
   type: string;
   id: string;
   comment: string;
-  data: ContributionData[];
+  data: ContributionDataType[];
   meta: {
     total: number;
   };
   highlightedQuery: string;
 };
 
-export type ContributionData = {
+export type ContributionDataType = {
   responseFrom: string;
   idref: any;
   tags: any;
@@ -85,4 +85,12 @@ export type EditModalProps = {
 export type Production = {
   id: string;
   treated: boolean;
+};
+
+export type Inputs = {
+  team: string[];
+  status: string;
+  tag: string[];
+  idRef: string;
+  comment: string;
 };

@@ -7,14 +7,13 @@ import {
   Text,
   Title,
 } from "@dataesr/dsfr-plus";
-import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
 import { Contribute_Production, ContributionPageProps } from "../../types";
 import { useLocation } from "react-router-dom";
-import { buildURL } from "../../api/utils/buildURL";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import Selectors from "../../components/selectors";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import ContributionProductionItem from "./contribution-production-card";
+import ContributionData from "../../api/contribution-api/getData";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -22,7 +21,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [status, setStatus] = useState("new");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
-  const [data, setData] = useState(null);
+  const [, setData] = useState(null);
 
   const location = useLocation();
 
@@ -51,19 +50,27 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   }, [location.pathname]);
 
   const {
+    data: fetchedData,
     isLoading,
     isError,
-    data: fetchedData,
-  } = useGetContributionData(buildURL(sort, status, query, page), reload);
+    refetch,
+  } = ContributionData({
+    location: location,
+    sort,
+    status,
+    query,
+    page,
+    searchInMessage: reload,
+  });
 
   useEffect(() => {
     setData(fetchedData);
   }, [fetchedData]);
 
-  const meta = (data as { meta: any })?.meta;
+  const meta = (fetchedData as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
   const contrib: Contribute_Production[] = (
-    data as { data: Contribute_Production[] }
+    fetchedData as { data: Contribute_Production[] }
   )?.data;
 
   const handleSearch = (value: string) => {
@@ -123,6 +130,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       {filteredContributions?.map((contribution) => (
         <ContributionProductionItem
           data={contribution as Contribute_Production}
+          refetch={refetch}
         />
       ))}
       <BottomPaginationButtons

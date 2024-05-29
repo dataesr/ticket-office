@@ -2,17 +2,17 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
 import { useState } from "react";
-import { ContributionData } from "../../types";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
 import { contactUrl, contributionUrl } from "../../config/api";
 import { Button, Col } from "@dataesr/dsfr-plus";
+import { ContributionDataType } from "../../types";
 
 const AdminTreatmentGraph = () => {
   const [filter, setFilter] = useState("contributions");
   const url = filter === "object" ? contributionUrl : contactUrl;
   const { data, isLoading, isError } = useGetContributionData(url, 0);
 
-  const contributions = (data as { data: ContributionData[] })?.data;
+  const contributions = (data as { data: ContributionDataType[] })?.data;
 
   if (isLoading) {
     return <div>Chargement...</div>;
@@ -27,7 +27,7 @@ const AdminTreatmentGraph = () => {
   }
 
   const responsesByAdmin = contributions.reduce(
-    (acc: Record<string, number>, contribution: ContributionData) => {
+    (acc: Record<string, number>, contribution: ContributionDataType) => {
       if (contribution.team) {
         contribution.team.forEach((admin: string) => {
           if (!acc[admin]) {

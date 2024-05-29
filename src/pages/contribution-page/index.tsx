@@ -1,4 +1,11 @@
 import { useState, useEffect } from "react";
+
+import { Contribution, ContributionPageProps } from "../../types";
+import { useLocation } from "react-router-dom";
+import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
+import Selectors from "../../components/selectors";
+
+import TopPaginationButtons from "../../components/pagination/top-buttons";
 import {
   Col,
   Container,
@@ -8,13 +15,7 @@ import {
   Title,
 } from "@dataesr/dsfr-plus";
 import ContributionItem from "./contribution-card";
-import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { Contribution, ContributionPageProps } from "../../types";
-import { useLocation } from "react-router-dom";
-import { buildURL } from "../../api/utils/buildURL";
-import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import Selectors from "../../components/selectors";
-import TopPaginationButtons from "../../components/pagination/top-buttons";
+import ContributionData from "../../api/contribution-api/getData";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -56,15 +57,18 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       setSearchInMessage(false);
     }
   }, [location.pathname]);
+  const { data, isLoading, isError, refetch } = ContributionData({
+    location: location,
+    sort,
+    status,
+    query,
+    page,
+    searchInMessage,
+  });
 
-  const { data, isLoading, isError } = useGetContributionData(
-    buildURL(sort, status, query, page, searchInMessage),
-    reload
-  );
-
-  const meta = (data as { meta: any }).meta;
+  const meta = (data as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
-  const contrib: Contribution[] = (data as { data: Contribution[] }).data;
+  const contrib: Contribution[] = (data as { data: Contribution[] })?.data;
 
   const handleSearch = (value: string) => {
     setQuery(value.trim());
@@ -100,7 +104,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   return (
     <Container className="fr-my-5w">
       <Row gutters className="fr-mb-3w">
-        {location.pathname.includes("contributionPage") ? (
+        {location.pathname.includes("contributionpage") ? (
           <Title as="h1">Contribution par objets</Title>
         ) : (
           <Title as="h1">Contribution via formulaire</Title>
@@ -132,6 +136,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       {filteredContributions?.map((contribution) => (
         <ContributionItem
           data={contribution}
+          refetch={refetch}
           highlightedQuery={highlightedQuery}
         />
       ))}

@@ -6,10 +6,10 @@ import { toast } from "react-toastify";
 
 function EmailSender({
   contribution,
-  setResponseScanR,
+  refetch,
 }: {
   contribution: Contribution | Contribute_Production;
-  setResponseScanR: any;
+  refetch;
 }) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
@@ -38,15 +38,22 @@ function EmailSender({
       to: [
         {
           email: "mihoub.debache@enseignementsup.gouv.fr",
-          name: "Mihoub mihoub",
+          name: "Mihoub Debache",
         },
       ],
       subject: `Réponse à votre contribution`,
-      htmlContent: userResponse,
+      htmlContent: `
+  <h1>Réponse à votre contribution</h1>
+  <p>Bonjour,</p>
+  <p>En réponse à votre contribution :</p>
+  <blockquote>${contribution.message}</blockquote>
+  <p>Voici notre réponse :</p>
+  <p>${userResponse}</p>
+`,
     };
-
-    const responseBrevo = await fetch("/email/", {
-      // const responseBrevo = await fetch("https://api.brevo.com/v3/smtp/email", {
+    console.log(contribution);
+    // const responseBrevo = await fetch("/email/", {
+    const responseBrevo = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
         "api-key": import.meta.env.VITE_BREVO_API_AUTHORIZATION,
@@ -64,22 +71,23 @@ function EmailSender({
       responseFrom: selectedProfile,
     };
 
-    const responseScanR = await fetch(`/api/${basePath}/${contribution._id}`, {
-      // const responseScanR = await fetch(
-      //   `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`,
-      //   {
-      method: "PATCH",
-      headers: postHeaders,
-      body: JSON.stringify(dataForScanR),
-    });
+    // const responseScanR = await fetch(`/api/${basePath}/${contribution._id}`, {
+    const responseScanR = await fetch(
+      `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`,
+      {
+        method: "PATCH",
+        headers: postHeaders,
+        body: JSON.stringify(dataForScanR),
+      }
+    );
 
     if (!responseScanR.ok) {
       throw new Error(`HTTP error! status: ${responseScanR.status}`);
     }
-    setResponseScanR(dataForScanR);
     setEmailSent(true);
-    toast.success("Mail envoyé!");
+    refetch();
     setUserResponse("");
+    toast.success("Mail envoyé!");
   };
 
   return (

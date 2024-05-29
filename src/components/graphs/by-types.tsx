@@ -1,8 +1,8 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { ContributionData } from "../../types";
 import { contributionUrl } from "../../config/api";
+import { ContributionDataType } from "../../types";
 
 const ContributionsGraphByTypes = () => {
   const { data, isLoading, isError } = useGetContributionData(
@@ -23,7 +23,7 @@ const ContributionsGraphByTypes = () => {
   }
 
   const contributionsByType = contributions.reduce(
-    (acc: Record<string, number>, contribution: ContributionData) => {
+    (acc: Record<string, number>, contribution: ContributionDataType) => {
       const { type } = contribution;
       if (type) {
         if (!acc[type]) {

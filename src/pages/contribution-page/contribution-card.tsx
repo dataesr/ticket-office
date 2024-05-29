@@ -18,9 +18,11 @@ import { BadgeColor } from "./utils";
 const ContributionItem = ({
   data,
   highlightedQuery,
+  refetch,
 }: {
   data: Contribution;
   highlightedQuery: string;
+  refetch: any;
 }) => {
   const renderAccordion = () => (
     <Container fluid className="accordion">
@@ -42,6 +44,24 @@ const ContributionItem = ({
           >
             {data.status}
           </Badge>
+          {data.responseFrom && (
+            <Badge
+              size="sm"
+              color="blue-ecume"
+              className="fr-mr-1w fr-mb-1w status"
+            >
+              {`Réponse envoyé par ${data.responseFrom}`}
+            </Badge>
+          )}
+          {data.comment && data?.team && data.team.length > 0 && (
+            <Badge
+              size="sm"
+              color="green-emeraude"
+              className="fr-mr-1w fr-mb-1w status"
+            >
+              {`commenté par ${data.team[0]}`}
+            </Badge>
+          )}
           {data.type && (
             <Badge
               size="sm"
@@ -88,8 +108,12 @@ const ContributionItem = ({
             Aucune réponse apportée à ce message pour l'instant
           </Notice>
         )}
-        <ContributorInfo data={data} highlightedQuery={highlightedQuery} />
-        <StaffActions data={data} />
+        <ContributorInfo
+          data={data}
+          highlightedQuery={highlightedQuery}
+          refetch={refetch}
+        />
+        <StaffActions refetch={refetch} data={data} />
       </Accordion>
     </AccordionGroup>
   );
