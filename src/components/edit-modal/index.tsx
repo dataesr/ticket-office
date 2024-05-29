@@ -78,8 +78,8 @@ const EditModal: React.FC<EditModalProps> = ({
   const handleSubmit = async () => {
     try {
       const response = await fetch(
-        `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`,
-        // `${window.location.origin}/api/${basePath}/${data._id}`,
+        // `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`,
+        `${window.location.origin}/api/${basePath}/${data._id}`,
         {
           method: "PATCH",
           headers: postHeaders,
