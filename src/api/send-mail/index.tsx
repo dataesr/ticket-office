@@ -13,7 +13,14 @@ function EmailSender({
 }) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
+  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   let basePath = "contact";
+  const brevoUrl = isDevelopment
+    ? "https://api.brevo.com/v3/smtp/email"
+    : "/email/";
+  const scanRUrl = isDevelopment
+    ? `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`
+    : `/api/${basePath}/${contribution._id}`;
 
   if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";
@@ -51,8 +58,7 @@ function EmailSender({
   <p>${userResponse}</p>
 `,
     };
-    const responseBrevo = await fetch("/email/", {
-      // const responseBrevo = await fetch("https://api.brevo.com/v3/smtp/email", {
+    const responseBrevo = await fetch(brevoUrl, {
       method: "POST",
       headers: {
         "api-key": import.meta.env.VITE_BREVO_API_AUTHORIZATION,
@@ -70,10 +76,7 @@ function EmailSender({
       responseFrom: selectedProfile,
     };
 
-    const responseScanR = await fetch(`/api/${basePath}/${contribution._id}`, {
-      // const responseScanR = await fetch(
-      //   `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`,
-      //   {
+    const responseScanR = await fetch(scanRUrl, {
       method: "PATCH",
       headers: postHeaders,
       body: JSON.stringify(dataForScanR),

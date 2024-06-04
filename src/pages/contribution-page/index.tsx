@@ -16,6 +16,7 @@ import {
 } from "@dataesr/dsfr-plus";
 import ContributionItem from "./contribution-card";
 import ContributionData from "../../api/contribution-api/getData";
+import { buildURL } from "../../api/utils/buildURL";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -57,14 +58,8 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       setSearchInMessage(false);
     }
   }, [location.pathname]);
-  const { data, isLoading, isError, refetch } = ContributionData({
-    location: location,
-    sort,
-    status,
-    query,
-    page,
-    searchInMessage,
-  });
+  const url = buildURL(location, sort, status, query, page, searchInMessage);
+  const { data, isLoading, isError, refetch } = ContributionData(url);
 
   const meta = (data as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;

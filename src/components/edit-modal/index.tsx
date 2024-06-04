@@ -27,6 +27,18 @@ const EditModal: React.FC<EditModalProps> = ({
   refetch,
 }) => {
   const user = sessionStorage.getItem("selectedProfile");
+  let basePath = "contact";
+
+  if (window.location.pathname.includes("contributionpage")) {
+    basePath = "contribute";
+  } else if (window.location.pathname.includes("apioperations")) {
+    basePath = "contribute_productions";
+  }
+  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const url = isDevelopment
+    ? `${window.location.origin}/api/${basePath}/${data._id}`
+    : `https://your-production-url/api/${basePath}/${data._id}`;
+
   const [inputs, setInputs] = useState<Inputs>({
     team: [user],
     status: "treated",
@@ -68,29 +80,18 @@ const EditModal: React.FC<EditModalProps> = ({
     setInputs((prevInputs) => ({ ...prevInputs, idRef: newIdref }));
   };
 
-  let basePath = "contact";
-
-  if (window.location.pathname.includes("contributionpage")) {
-    basePath = "contribute";
-  } else if (window.location.pathname.includes("apioperations")) {
-    basePath = "contribute_productions";
-  }
   const handleSubmit = async () => {
     try {
-      const response = await fetch(
-        // `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`,
-        `${window.location.origin}/api/${basePath}/${data._id}`,
-        {
-          method: "PATCH",
-          headers: postHeaders,
-          body: JSON.stringify({
-            status: inputs.status,
-            tag: inputs.tag,
-            idref: inputs.idRef,
-            comment: inputs.comment,
-          }),
-        }
-      );
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: postHeaders,
+        body: JSON.stringify({
+          status: inputs.status,
+          tag: inputs.tag,
+          idref: inputs.idRef,
+          comment: inputs.comment,
+        }),
+      });
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
