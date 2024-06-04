@@ -1,17 +1,19 @@
+import { Col } from "@dataesr/dsfr-plus";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { contributionUrl } from "../../config/api";
-import { Contribution } from "../../types";
-import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
+import { ClipLoader } from "react-spinners";
 
-const ContributionsGraphByYearAndType = () => {
-  const url = contributionUrl;
-  const { data, isLoading, isError } = useGetContributionData(url, 0);
-
-  const contributions = (data as { data: Contribution[] })?.data;
-
+const ContributionsGraphByYearAndType = ({
+  contributions,
+  isLoading,
+  isError,
+}) => {
   if (isLoading) {
-    return <div>Chargement...</div>;
+    return (
+      <Col className="comment">
+        <ClipLoader color="#123abc" size={50} />
+      </Col>
+    );
   }
 
   if (isError) {

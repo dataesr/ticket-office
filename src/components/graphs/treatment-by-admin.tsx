@@ -1,21 +1,23 @@
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
-import { useState } from "react";
-import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { contactUrl, contributionUrl } from "../../config/api";
-import { Button, Col } from "@dataesr/dsfr-plus";
+import { Col, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus";
 import { ContributionDataType } from "../../types";
+import { ClipLoader } from "react-spinners";
 
-const AdminTreatmentGraph = () => {
-  const [filter, setFilter] = useState("contributions");
-  const url = filter === "object" ? contributionUrl : contactUrl;
-  const { data, isLoading, isError } = useGetContributionData(url, 0);
-
-  const contributions = (data as { data: ContributionDataType[] })?.data;
-
+const AdminTreatmentGraph = ({
+  contributions,
+  isLoading,
+  isError,
+  filter,
+  setFilter,
+}) => {
   if (isLoading) {
-    return <div>Chargement...</div>;
+    return (
+      <Col className="comment">
+        <ClipLoader color="#123abc" size={50} />
+      </Col>
+    );
   }
 
   if (isError) {
@@ -45,7 +47,7 @@ const AdminTreatmentGraph = () => {
 
   const chartData = Object.entries(responsesByAdmin)
     .map(([name, y]) => ({ name, y }))
-    .sort((a, b) => b.y - a.y);
+    .sort((a: any, b: any) => b.y - a.y);
 
   const options = {
     chart: {
@@ -94,23 +96,23 @@ const AdminTreatmentGraph = () => {
 
   return (
     <>
-      <Col className="fr-mb-3w">
-        <Button
-          className="fr-mr-1w"
-          size="sm"
-          variant={filter === "object" ? "primary" : "secondary"}
+      <SegmentedControl name={""} className="fr-mb-5w">
+        <SegmentedElement
           onClick={() => setFilter("object")}
-        >
-          Par objet
-        </Button>
-        <Button
-          size="sm"
-          variant={filter === "contact" ? "primary" : "secondary"}
+          name="Par Objet"
+          label={"Par Objet"}
+          value={""}
+          icon="fr-fi-eye-line"
+          checked={filter === "object"}
+        />
+        <SegmentedElement
           onClick={() => setFilter("contact")}
-        >
-          Via formulaire contact
-        </Button>
-      </Col>
+          name="Par Objet"
+          label={"Via formulaire contact"}
+          value={""}
+          checked={filter === "contact"}
+        />
+      </SegmentedControl>
       <HighchartsReact highcharts={Highcharts} options={options} />
     </>
   );

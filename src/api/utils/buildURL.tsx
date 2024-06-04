@@ -6,6 +6,9 @@ export const buildURL = (
   page: number,
   searchInMessages: boolean = false
 ): string => {
+  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const baseApiUrl = isDevelopment ? "https://scanr-api.dataesr.ovh" : "/api";
+
   let baseUrl = "contact";
 
   if (location?.pathname?.includes("contributionpage")) {
@@ -29,6 +32,5 @@ export const buildURL = (
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
-  return `/api/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
-  // return `https://scanr-api.dataesr.ovh/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
+  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
 };

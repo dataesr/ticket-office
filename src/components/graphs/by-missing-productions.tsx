@@ -1,15 +1,15 @@
+import { Col } from "@dataesr/dsfr-plus";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { Contribute_Production } from "../../types";
-import { productionUrl } from "../../config/api";
+import { ClipLoader } from "react-spinners";
 
-const ContributionsGraphByStatus = () => {
-  const { data, isLoading, isError } = useGetContributionData(productionUrl, 0);
-  const contributions = (data as { data: Contribute_Production[] })?.data;
-
+const ContributionsGraphByStatus = ({ contributions, isLoading, isError }) => {
   if (isLoading) {
-    return <div>Chargement...</div>;
+    return (
+      <Col className="comment">
+        <ClipLoader color="#123abc" size={50} />
+      </Col>
+    );
   }
 
   if (isError) {

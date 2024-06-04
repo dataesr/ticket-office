@@ -1,17 +1,16 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import useGetContributionData from "../../api/contribution-api/useGetObjectContributeData";
-import { contributionUrl } from "../../config/api";
 import { ContributionDataType } from "../../types";
+import { ClipLoader } from "react-spinners";
+import { Col } from "@dataesr/dsfr-plus";
 
-const ContributionsGraphByTypes = () => {
-  const { data, isLoading, isError } = useGetContributionData(
-    contributionUrl,
-    0
-  );
-  const contributions = (data as { data: [] })?.data;
+const ContributionsGraphByTypes = ({ contributions, isLoading, isError }) => {
   if (isLoading) {
-    return <div>Chargement...</div>;
+    return (
+      <Col className="comment">
+        <ClipLoader color="#123abc" size={50} />
+      </Col>
+    );
   }
 
   if (isError) {

@@ -14,6 +14,7 @@ import Selectors from "../../components/selectors";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import ContributionProductionItem from "./contribution-production-card";
 import ContributionData from "../../api/contribution-api/getData";
+import { buildURL } from "../../api/utils/buildURL";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -49,19 +50,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     }
   }, [location.pathname]);
 
+  const url = buildURL(location, sort, status, query, page);
   const {
     data: fetchedData,
     isLoading,
     isError,
     refetch,
-  } = ContributionData({
-    location: location,
-    sort,
-    status,
-    query,
-    page,
-    searchInMessage: reload,
-  });
+  } = ContributionData(url);
 
   useEffect(() => {
     setData(fetchedData);
