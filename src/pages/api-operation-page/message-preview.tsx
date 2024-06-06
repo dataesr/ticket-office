@@ -4,8 +4,6 @@ import EditModal from "../../components/edit-modal";
 import { useState, useCallback } from "react";
 import ContributorRequests from "./contributor-requests";
 import "./styles.scss";
-import { FaExclamationTriangle } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa";
 import NameFromIdref from "../../api/contribution-api/getNamesFromIdref";
 
 const MessagePreview = ({
@@ -89,10 +87,16 @@ const MessagePreview = ({
         </Link>
         <Text
           size="sm"
-          style={{ cursor: "pointer" }}
+          bold
+          style={{
+            cursor: "pointer",
+            color: fetchedData ? "inherit" : "#f95c5e",
+          }}
           onClick={() => copyToClipboard(fetchedData, "Nom copié")}
         >
-          {fetchedData ? `${fetchedData}` : "Nom inéxistant sur scanR"}
+          {fetchedData
+            ? `${fetchedData} ${data.name}`
+            : "Nom non-inéxistant sur scanR"}
           {copySuccess === "Nom copié" && (
             <span
               style={{
@@ -104,10 +108,15 @@ const MessagePreview = ({
                 fontSize: "0.8em",
               }}
             >
-              {copySuccess}
+              Copié !
             </span>
           )}
         </Text>
+        <Text size="sm">
+          {"Nom lié à l'idref "}
+          <span style={{ fontWeight: "bold" }}>{data.name}</span>
+        </Text>
+
         {data.email && (
           <Text
             size="sm"
@@ -134,7 +143,11 @@ const MessagePreview = ({
       </Row>
       <Row>
         <Col className="contributorProductionSide">
-          <ContributorRequests data={data} setDataList={setDataList} />
+          <ContributorRequests
+            data={data}
+            setDataList={setDataList}
+            coloredName={data.name}
+          />
         </Col>
       </Row>
       <Row className="fr-mb-2w">

@@ -11,7 +11,8 @@ const ContributorRequests: React.FC<{
     productions: Production[];
   };
   setDataList;
-}> = ({ data, setDataList }) => {
+  coloredName;
+}> = ({ data, setDataList, coloredName }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const copyToClipboard = (text: string) => {
@@ -57,13 +58,14 @@ const ContributorRequests: React.FC<{
               productionId={production.id}
               setDataList={setDataList}
               idRef={data.id}
+              coloredName={coloredName}
             />
+            <Row className="fr-grid-row--center fr-mt-2w">
+              <Text size="sm">
+                <ExternalLinks productionId={production.id} name={data.name} />
+              </Text>
+            </Row>
           </Text>
-          <Row className="fr-grid-row--center fr-mt-2w">
-            <Text size="sm">
-              <ExternalLinks productionId={production.id} name={data.name} />
-            </Text>
-          </Row>
         </Col>
       ))}
     </>
