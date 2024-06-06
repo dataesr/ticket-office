@@ -22,37 +22,39 @@ const ExcelExportButton = ({ dataList, setDataList }) => {
 
   return (
     <div className="basket">
-      <Title look="h6" className="basket-title">
-        Liste des publications à exporter
-      </Title>
-      <ul style={{ listStyleType: "none", padding: 0 }}>
-        {Array.isArray(dataList) &&
-          dataList.map((item, index) => (
-            <li
-              key={index}
-              style={{
-                listStyleType: "none",
-                padding: 0,
-                borderBottom: "1px solid #000",
-              }}
-            >
-              <br />
-              <div className="basket-item">
-                <Text size="sm" bold>
-                  {item.publi_id}
-                </Text>
-                <i>à lier à</i>
-                <Text size="sm" bold>
-                  {item.fullName}
-                  <button onClick={() => handleRemoveClick(index)}>
-                    <AiOutlineDelete color="red" />
-                  </button>
-                </Text>
-              </div>
-            </li>
-          ))}
-      </ul>
-      <Button onClick={handleExportClick}>Exporter</Button>
+      <div className="basket-content">
+        <Title look="h6" className="basket-title">
+          Liste des publications à exporter
+        </Title>
+        <ul style={{ listStyleType: "none", padding: 0 }}>
+          {Array.isArray(dataList) &&
+            dataList.map((item, index) => (
+              <li
+                key={index}
+                style={{
+                  listStyleType: "none",
+                  padding: 0,
+                  borderBottom: "1px solid #000",
+                }}
+              >
+                <br />
+                <div className="basket-item">
+                  <Text size="sm" bold>
+                    {item.publi_id}
+                  </Text>
+                  <i>à lier à</i>
+                  <Text size="sm" bold>
+                    {item.fullName}
+                    <button onClick={() => handleRemoveClick(index)}>
+                      <AiOutlineDelete color="red" />
+                    </button>
+                  </Text>
+                </div>
+              </li>
+            ))}
+        </ul>
+        <Button onClick={handleExportClick}>Exporter</Button>
+      </div>
     </div>
   );
 };
