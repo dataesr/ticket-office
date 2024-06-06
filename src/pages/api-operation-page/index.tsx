@@ -15,6 +15,7 @@ import TopPaginationButtons from "../../components/pagination/top-buttons";
 import ContributionProductionItem from "./contribution-production-card";
 import ContributionData from "../../api/contribution-api/getData";
 import { buildURL } from "../../api/utils/buildURL";
+import ExcelExportButton from "./export-to-xlsx";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -23,7 +24,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [, setData] = useState(null);
-
   const location = useLocation();
 
   useEffect(() => {
@@ -61,7 +61,8 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   useEffect(() => {
     setData(fetchedData);
   }, [fetchedData]);
-
+  const [dataList, setDataList] = useState([]);
+  console.log(dataList);
   const meta = (fetchedData as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
   const contrib: Contribute_Production[] = (
@@ -126,8 +127,10 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         <ContributionProductionItem
           data={contribution as Contribute_Production}
           refetch={refetch}
+          setDataList={setDataList}
         />
       ))}
+      <ExcelExportButton dataList={dataList} setDataList={setDataList} />
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}

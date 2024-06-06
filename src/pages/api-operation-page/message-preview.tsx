@@ -1,19 +1,26 @@
-import { Button, Col, Container, Row, Text } from "@dataesr/dsfr-plus";
+import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import type { Contribute_Production } from "../../types";
 import EditModal from "../../components/edit-modal";
 import { useState, useCallback } from "react";
 import ContributorRequests from "./contributor-requests";
 import "./styles.scss";
+import { FaExclamationTriangle } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import NameFromIdref from "../../api/contribution-api/getNamesFromIdref";
 
 const MessagePreview = ({
   data,
   refetch,
+  setDataList,
 }: {
   data: Contribute_Production;
   refetch;
+  setDataList: any;
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [copySuccess, setCopySuccess] = useState("");
+
+  const { fullNameFromIdref: fetchedData } = NameFromIdref(data.id);
 
   const copyToClipboard = useCallback((text, successMessage) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -55,7 +62,7 @@ const MessagePreview = ({
             onClick={() => copyToClipboard(data.id, "ID copié")}
             className={"fr-icon-user-line"}
           >
-            ID de l'objet concerné: {data.id}
+            ID de la personne concerné: {data.id}{" "}
             {copySuccess === "ID copié" && (
               <span
                 style={{
@@ -72,8 +79,34 @@ const MessagePreview = ({
             )}
           </Text>
         )}
-        <Text className="fr-mr-2w" size="sm">
-          {data.name ? `Nom: ${data.name}` : "Nom non renseigné"}
+        <Link
+          className="fr-footer__content-link"
+          target="_blank"
+          rel="noreferrer noopener external"
+          href={`https://www.idref.fr/${data.id.replace("idref", "")}`}
+        >
+          IdRef
+        </Link>
+        <Text
+          size="sm"
+          style={{ cursor: "pointer" }}
+          onClick={() => copyToClipboard(fetchedData, "Nom copié")}
+        >
+          {fetchedData ? `${fetchedData}` : "Nom inéxistant sur scanR"}
+          {copySuccess === "Nom copié" && (
+            <span
+              style={{
+                color: "white",
+                backgroundColor: "#efcb3a",
+                marginLeft: "10px",
+                padding: "2px 5px",
+                borderRadius: "5px",
+                fontSize: "0.8em",
+              }}
+            >
+              {copySuccess}
+            </span>
+          )}
         </Text>
         {data.email && (
           <Text
@@ -101,7 +134,7 @@ const MessagePreview = ({
       </Row>
       <Row>
         <Col className="contributorProductionSide">
-          <ContributorRequests data={data} />
+          <ContributorRequests data={data} setDataList={setDataList} />
         </Col>
       </Row>
       <Row className="fr-mb-2w">

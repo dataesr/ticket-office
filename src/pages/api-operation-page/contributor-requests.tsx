@@ -1,10 +1,17 @@
-import { Col, Link, Text } from "@dataesr/dsfr-plus";
-import React, { useState } from "react";
+import { Col, Row, Text } from "@dataesr/dsfr-plus";
+import React, { ReactNode, useState } from "react";
 import { Production } from "../../types";
+import { ExternalLinks } from "./external-links";
+import SelectWithNames from "./name-selector";
 
 const ContributorRequests: React.FC<{
-  data: { productions: Production[] };
-}> = ({ data }) => {
+  data: {
+    id: any;
+    name: ReactNode;
+    productions: Production[];
+  };
+  setDataList;
+}> = ({ data, setDataList }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const copyToClipboard = (text: string) => {
@@ -46,32 +53,17 @@ const ContributorRequests: React.FC<{
                 </span>
               )}
             </Text>
-            <Text className="textInCard" size="sm">
-              <Link
-                className="fr-mr-1w"
-                target="_blank"
-                rel="noreferrer noopener external"
-                href={`https://scanr.enseignementsup-recherche.gouv.fr/publication/${production.id}`}
-              >
-                scanR
-              </Link>
-              <Link
-                className="fr-mr-1w"
-                target="_blank"
-                rel="noreferrer noopener external"
-                href={`https://paysage.enseignementsup-recherche.gouv.fr/`}
-              >
-                Paysage
-              </Link>
-              <Link
-                target="_blank"
-                rel="noreferrer noopener external"
-                href={`https://paysage.enseignementsup-recherche.gouv.fr/`}
-              >
-                dataESR
-              </Link>
-            </Text>
+            <SelectWithNames
+              productionId={production.id}
+              setDataList={setDataList}
+              idRef={data.id}
+            />
           </Text>
+          <Row className="fr-grid-row--center fr-mt-2w">
+            <Text size="sm">
+              <ExternalLinks productionId={production.id} name={data.name} />
+            </Text>
+          </Row>
         </Col>
       ))}
     </>

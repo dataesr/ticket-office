@@ -15,9 +15,11 @@ import StaffProductionActions from "./staff-production-action";
 const ContributionProductionItem = ({
   data,
   refetch,
+  setDataList,
 }: {
   data: Contribute_Production;
   refetch;
+  setDataList;
 }) => {
   const renderAccordion = () => (
     <Container fluid className="accordion">
@@ -66,7 +68,11 @@ const ContributionProductionItem = ({
   return (
     <AccordionGroup>
       <Accordion title={renderAccordion}>
-        <ContributorProductionInfo data={data} refetch={refetch} />
+        <ContributorProductionInfo
+          data={data}
+          refetch={refetch}
+          setDataList={setDataList}
+        />
         <StaffProductionActions data={data} refetch={refetch} />
       </Accordion>
     </AccordionGroup>
