@@ -33,6 +33,8 @@
   background-color: white;
   border-radius: 20px;
   border: 2px solid black;
+  max-height: 500px;
+  overflow-y: auto;
 }
 .basket-item {
   display: flex;
