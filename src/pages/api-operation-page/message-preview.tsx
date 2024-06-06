@@ -94,9 +94,7 @@ const MessagePreview = ({
           }}
           onClick={() => copyToClipboard(fetchedData, "Nom copié")}
         >
-          {fetchedData
-            ? `${fetchedData} ${data.name}`
-            : "Nom non-inéxistant sur scanR"}
+          {fetchedData ? `${fetchedData}` : "Nom non-inéxistant sur scanR"}
           {copySuccess === "Nom copié" && (
             <span
               style={{
