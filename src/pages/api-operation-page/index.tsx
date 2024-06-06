@@ -62,7 +62,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     setData(fetchedData);
   }, [fetchedData]);
   const [dataList, setDataList] = useState([]);
-  console.log(dataList);
   const meta = (fetchedData as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
   const contrib: Contribute_Production[] = (
@@ -130,7 +129,9 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           setDataList={setDataList}
         />
       ))}
-      <ExcelExportButton dataList={dataList} setDataList={setDataList} />
+      {dataList.length > 0 && (
+        <ExcelExportButton dataList={dataList} setDataList={setDataList} />
+      )}
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}

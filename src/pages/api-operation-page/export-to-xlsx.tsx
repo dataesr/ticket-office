@@ -1,4 +1,4 @@
-import { Button, Text } from "@dataesr/dsfr-plus";
+import { Button, Col, Row, Text, Title } from "@dataesr/dsfr-plus";
 import * as XLSX from "xlsx";
 import { AiOutlineDelete } from "react-icons/ai";
 
@@ -22,16 +22,33 @@ const ExcelExportButton = ({ dataList, setDataList }) => {
 
   return (
     <div className="basket">
+      <Title look="h6" className="basket-title">
+        Liste des publications à exporter
+      </Title>
       <ul style={{ listStyleType: "none", padding: 0 }}>
         {Array.isArray(dataList) &&
           dataList.map((item, index) => (
-            <li key={index} style={{ listStyleType: "none", padding: 0 }}>
-              <Text size="sm">
-                <button onClick={() => handleRemoveClick(index)}>
-                  <AiOutlineDelete color="red" />
-                </button>
-                Publication: {item.publi_id} - Nom validé: {item.fullName}
-              </Text>
+            <li
+              key={index}
+              style={{
+                listStyleType: "none",
+                padding: 0,
+                borderBottom: "1px solid #000",
+              }}
+            >
+              <br />
+              <div className="basket-item">
+                <Text size="sm" bold>
+                  {item.publi_id}
+                </Text>
+                <i>à lier à</i>
+                <Text size="sm" bold>
+                  {item.fullName}
+                  <button onClick={() => handleRemoveClick(index)}>
+                    <AiOutlineDelete color="red" />
+                  </button>
+                </Text>
+              </div>
             </li>
           ))}
       </ul>
