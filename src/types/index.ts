@@ -5,15 +5,15 @@ export type Contribution = {
   responseFrom: string;
   modified_at: string;
   team: any;
-  _id: any;
+  _id: string;
   status: string;
   tags: Array<string>;
   message: string;
   created_at: string | number | Date;
-  fonction: any;
-  organisation: any;
-  email: any;
-  name: any;
+  fonction: string;
+  organisation: string;
+  email: string;
+  name: string;
   type: string;
   id: string;
   comment: string;
@@ -83,6 +83,7 @@ export type EditModalProps = {
 };
 
 export type Production = {
+  name: string;
   id: string;
   treated: boolean;
 };
