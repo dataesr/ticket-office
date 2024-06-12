@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import Router from "./router";
 import { DSFRConfig } from "@dataesr/dsfr-plus";
+import { DataListProvider } from "./pages/api-operation-page/link-publications/data-list-context";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,21 +34,23 @@ const RouterLink = ({ href, replace, target, ...props }: RouterLinkProps) => {
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <DSFRConfig routerComponent={RouterLink}>
-        <ToastContainer
-          toastStyle={{
-            backgroundColor: "#dffee6",
-            color: "#0078f3",
-            fontSize: "20px",
-          }}
-        />
-        <QueryClientProvider client={queryClient}>
-          <ReactQueryDevtools />
-          <Router />
-        </QueryClientProvider>
-      </DSFRConfig>
-    </BrowserRouter>
+    <DataListProvider>
+      <BrowserRouter>
+        <DSFRConfig routerComponent={RouterLink}>
+          <ToastContainer
+            toastStyle={{
+              backgroundColor: "#dffee6",
+              color: "#0078f3",
+              fontSize: "20px",
+            }}
+          />
+          <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools />
+            <Router />
+          </QueryClientProvider>
+        </DSFRConfig>
+      </BrowserRouter>
+    </DataListProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

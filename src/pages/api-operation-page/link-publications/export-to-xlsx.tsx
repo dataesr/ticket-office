@@ -2,8 +2,10 @@ import { Badge, Button, ButtonGroup, Text, Title } from "@dataesr/dsfr-plus";
 import * as XLSX from "xlsx";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
+import { useDataList } from "./data-list-context";
 
-const ExcelExportButton = ({ dataList, setDataList }) => {
+const ExcelExportButton = () => {
+  const { dataList, setDataList } = useDataList();
   const handleExportClick = () => {
     const dataToExport = dataList.map((item) => ({
       person_id: item.person_id || "",
