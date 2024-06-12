@@ -1,19 +1,21 @@
 import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
-import type { Contribute_Production } from "../../types";
-import EditModal from "../../components/edit-modal";
+import type { Contribute_Production } from "../../../types";
+import EditModal from "../../../components/edit-modal";
 import { useState, useCallback } from "react";
 import ContributorRequests from "./contributor-requests";
 import "./styles.scss";
-import NameFromIdref from "../../api/contribution-api/getNamesFromIdref";
+import NameFromIdref from "../../../api/contribution-api/getNamesFromIdref";
 
 const MessagePreview = ({
   data,
   refetch,
   setDataList,
+  dataList,
 }: {
   data: Contribute_Production;
   refetch;
   setDataList: any;
+  dataList;
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [copySuccess, setCopySuccess] = useState("");
@@ -145,6 +147,7 @@ const MessagePreview = ({
             data={data}
             setDataList={setDataList}
             coloredName={data.name}
+            dataList={dataList}
           />
         </Col>
       </Row>

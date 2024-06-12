@@ -1,6 +1,7 @@
-import { Button, Col, Row, Text, Title } from "@dataesr/dsfr-plus";
+import { Badge, Button, ButtonGroup, Text, Title } from "@dataesr/dsfr-plus";
 import * as XLSX from "xlsx";
 import { AiOutlineDelete } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const ExcelExportButton = ({ dataList, setDataList }) => {
   const handleExportClick = () => {
@@ -17,7 +18,25 @@ const ExcelExportButton = ({ dataList, setDataList }) => {
     XLSX.writeFile(workbook, "export.xlsx");
   };
   const handleRemoveClick = (index: number) => {
-    setDataList((prevDataList) => prevDataList.filter((_, i) => i !== index));
+    setDataList((prevState) => {
+      const newList = prevState.filter((_, i) => i !== index);
+      toast(`Element retiré ! : ${prevState[index].fullName}`, {
+        style: {
+          backgroundColor: "#d64d00",
+          color: "#fff",
+        },
+      });
+      return newList;
+    });
+  };
+
+  const handleClearClick = () => {
+    setDataList([]);
+    toast("Panier vidé !", {
+      style: {
+        backgroundColor: "#c3fad5",
+      },
+    });
   };
 
   return (
@@ -27,6 +46,17 @@ const ExcelExportButton = ({ dataList, setDataList }) => {
           Liste des publications à exporter
         </Title>
         <ul style={{ listStyleType: "none", padding: 0 }}>
+          <div className="fr-grid-row fr-grid-row--center">
+            <Badge
+              size="sm"
+              color="blue-ecume"
+              className="fr-mr-1w fr-mb-1w status"
+            >
+              {`${dataList.length} publication${
+                dataList.length > 1 ? "s" : ""
+              }`}
+            </Badge>
+          </div>
           {Array.isArray(dataList) &&
             dataList.map((item, index) => (
               <li
@@ -53,7 +83,18 @@ const ExcelExportButton = ({ dataList, setDataList }) => {
               </li>
             ))}
         </ul>
-        <Button onClick={handleExportClick}>Exporter</Button>
+        <div className="fr-grid-row fr-grid-row--center">
+          <ButtonGroup isInlineFrom="xs">
+            <Button onClick={handleExportClick}>Exporter</Button>
+            <Button
+              color="green-emeraude"
+              variant="primary"
+              onClick={handleClearClick}
+            >
+              Vider le panier
+            </Button>
+          </ButtonGroup>
+        </div>
       </div>
     </div>
   );

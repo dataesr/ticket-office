@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import {
   Modal,
   ModalTitle,
@@ -12,6 +13,7 @@ import {
 import { Contribute_Production, Contribution, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
 import Select from "react-select";
+import { toast } from "react-toastify";
 
 type EditModalProps = {
   isOpen: boolean;
@@ -19,6 +21,8 @@ type EditModalProps = {
   onClose: () => void;
   refetch;
 };
+
+// const queryClient = useQueryClient();
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -41,7 +45,7 @@ const EditModal: React.FC<EditModalProps> = ({
   const [inputs, setInputs] = useState<Inputs>({
     team: [user],
     status: "treated",
-    tag: [],
+    tags: [],
     idRef: "",
     comment: "",
   });
@@ -49,25 +53,29 @@ const EditModal: React.FC<EditModalProps> = ({
     setInputs({
       team: [user],
       status: "treated",
-      tag: [],
+      tags: [],
       idRef: "",
       comment: "",
     });
   }, [data, user]);
-
   const handleStatusChange = (selectedOption) => {
     setInputs((prevInputs) => ({
       ...prevInputs,
       status: selectedOption.value,
     }));
   };
-
   const handleTagChange = (event) => {
     const newTag = event.target.value;
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      tag: [...prevInputs.tag, newTag],
-    }));
+    setInputs((prevInputs) => {
+      const { tags } = prevInputs;
+      if (tags.length > 0) {
+        tags.pop();
+      }
+      return {
+        ...prevInputs,
+        tags: [...tags, newTag],
+      };
+    });
   };
   const handleCommentChange = (event) => {
     const newComment = event.target.value;
@@ -81,16 +89,39 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const handleSubmit = async () => {
     try {
+      const body: {
+        status?: string;
+        tags?: string[];
+        team?: string[];
+        idref?: string;
+        comment?: string;
+      } = {};
+
+      if (inputs.status) {
+        body.status = inputs.status;
+      }
+
+      if (inputs.tags) {
+        body.tags = inputs.tags;
+      }
+      if (inputs.team) {
+        body.team = inputs.team;
+      }
+
+      if (inputs.idRef) {
+        body.idref = inputs.idRef;
+      }
+
+      if (inputs.comment) {
+        body.comment = inputs.comment;
+      }
+
       const response = await fetch(url, {
         method: "PATCH",
         headers: postHeaders,
-        body: JSON.stringify({
-          status: inputs.status,
-          tag: inputs.tag,
-          idref: inputs.idRef,
-          comment: inputs.comment,
-        }),
+        body: JSON.stringify(body),
       });
+
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
@@ -98,9 +129,17 @@ const EditModal: React.FC<EditModalProps> = ({
         console.log("Données de réponse", responseData);
         refetch();
         onClose();
+
+        if (inputs.tags) {
+          toast.success("Nouveau tag ajouté!");
+        } else if (inputs.comment) {
+          toast.success("Nouveau commentaire ajouté!");
+        } else if (inputs.idRef) {
+          toast.success("Nouvelle référence ajoutée!");
+        }
       }
     } catch (error) {
-      console.error(error);
+      console.error("Erreur lors de la soumission du formulaire", error);
     }
   };
 
@@ -143,7 +182,7 @@ const EditModal: React.FC<EditModalProps> = ({
               label="Ajouter un tag"
               maxLength={6}
               hint="Décrivez en un mot la contribution"
-              value={inputs.tag}
+              value={inputs.tags}
               onChange={handleTagChange}
             />
           </Col>

@@ -7,14 +7,14 @@ import {
   Text,
   Title,
 } from "@dataesr/dsfr-plus";
-import { Contribute_Production, ContributionPageProps } from "../../types";
+import { Contribute_Production, ContributionPageProps } from "../../../types";
 import { useLocation } from "react-router-dom";
-import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import Selectors from "../../components/selectors";
-import TopPaginationButtons from "../../components/pagination/top-buttons";
+import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
+import Selectors from "../../../components/selectors";
+import TopPaginationButtons from "../../../components/pagination/top-buttons";
 import ContributionProductionItem from "./contribution-production-card";
-import ContributionData from "../../api/contribution-api/getData";
-import { buildURL } from "../../api/utils/buildURL";
+import ContributionData from "../../../api/contribution-api/getData";
+import { buildURL } from "../../../api/utils/buildURL";
 import ExcelExportButton from "./export-to-xlsx";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
@@ -96,7 +96,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     <Container className="fr-my-5w">
       <Row gutters className="fr-mb-3w">
         <Col md="12">
-          <Title as="h1">Opérations sur l'API</Title>
+          <Title as="h1">Lier des publications</Title>
         </Col>
         <Col md="8" xs="12">
           <SearchBar
@@ -127,6 +127,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           data={contribution as Contribute_Production}
           refetch={refetch}
           setDataList={setDataList}
+          dataList={dataList}
         />
       ))}
       {dataList.length > 0 && (
