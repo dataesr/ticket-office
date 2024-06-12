@@ -3,7 +3,6 @@ import "react-toastify/dist/ReactToastify.css";
 import NameFromScanr from "../../../api/contribution-api/getNames";
 import { levenshteinDistance } from "../utils/compare";
 import { Col, Row } from "@dataesr/dsfr-plus";
-import { useEffect, useState } from "react";
 
 export default function SelectWithNames({
   productionId,
@@ -11,10 +10,9 @@ export default function SelectWithNames({
   idRef,
   coloredName,
   setSelectedId,
-  setIsSelected,
 }) {
   const { fullName, firstName, lastName } = NameFromScanr(productionId);
-  const [selectedOption, setSelectedOption] = useState(null);
+
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -24,30 +22,22 @@ export default function SelectWithNames({
 
   const threshold = 7;
 
-  const handleChange = (option) => {
-    setSelectedOption(option);
+  const handleChange = (option: { value: any }) => {
+    const selectedIndex = fullName.indexOf(option.value);
+
+    setDataList((prevState) => [
+      ...prevState,
+      {
+        fullName: option.value,
+        person_id: idRef,
+        publi_id: productionId,
+        first_name: firstName[selectedIndex],
+        last_name: lastName[selectedIndex],
+      },
+    ]);
+
+    setSelectedId((prevIds) => [...prevIds, productionId]);
   };
-
-  useEffect(() => {
-    const optionToValidate =
-      selectedOption || options.find((option) => option.label === coloredName);
-
-    if (optionToValidate) {
-      const selectedIndex = fullName.indexOf(optionToValidate.value);
-      setDataList((prevState) => [
-        ...prevState,
-        {
-          fullName: optionToValidate.value,
-          person_id: idRef,
-          publi_id: productionId,
-          first_name: firstName[selectedIndex],
-          last_name: lastName[selectedIndex],
-        },
-      ]);
-      setSelectedId((prevIds) => [...prevIds, productionId]);
-      setIsSelected(true);
-    }
-  }, [selectedOption]);
 
   const options = fullName.map((name, index) => ({
     value: name,

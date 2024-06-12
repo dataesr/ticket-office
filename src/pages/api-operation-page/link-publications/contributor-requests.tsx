@@ -17,7 +17,6 @@ const ContributorRequests: React.FC<{
 }> = ({ data, setDataList, coloredName, dataList }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [, setIsSelected] = useState(false);
 
   useEffect(() => {
     setSelectedIds(dataList.map((item) => item.publi_id));
@@ -72,7 +71,6 @@ const ContributorRequests: React.FC<{
                 idRef={data.id}
                 coloredName={coloredName}
                 setSelectedId={setSelectedIds}
-                setIsSelected={setIsSelected}
               />
             </Col>
             <Col style={{ flex: 1 }}>
