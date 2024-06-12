@@ -3,23 +3,23 @@ import "react-toastify/dist/ReactToastify.css";
 import NameFromScanr from "../../../api/contribution-api/getNames";
 import { levenshteinDistance } from "../utils/compare";
 import { Col, Row } from "@dataesr/dsfr-plus";
+import { useDataList } from "./data-list-context";
 
 export default function SelectWithNames({
   productionId,
-  setDataList,
   idRef,
   coloredName,
   setSelectedId,
 }) {
   const { fullName, firstName, lastName } = NameFromScanr(productionId);
-
+  const { dataList, setDataList } = useDataList();
+  console.log(dataList);
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
       color: state.data.isColored ? "#1f8d49" : "black",
     }),
   };
-
   const threshold = 7;
 
   const handleChange = (option: { value: any }) => {

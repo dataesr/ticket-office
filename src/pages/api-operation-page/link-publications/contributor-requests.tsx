@@ -4,6 +4,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { Production } from "../../../types";
 import SelectWithNames from "./name-selector";
 import { ExternalLinks } from "./external-links";
+import { useDataList } from "./data-list-context";
 
 const ContributorRequests: React.FC<{
   data: {
@@ -11,12 +12,11 @@ const ContributorRequests: React.FC<{
     name: ReactNode;
     productions: Production[];
   };
-  setDataList;
   coloredName;
-  dataList;
-}> = ({ data, setDataList, coloredName, dataList }) => {
+}> = ({ data, coloredName }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const { dataList, setDataList } = useDataList();
 
   useEffect(() => {
     setSelectedIds(dataList.map((item) => item.publi_id));

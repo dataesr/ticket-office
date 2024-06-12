@@ -9,13 +9,9 @@ import NameFromIdref from "../../../api/contribution-api/getNamesFromIdref";
 const MessagePreview = ({
   data,
   refetch,
-  setDataList,
-  dataList,
 }: {
   data: Contribute_Production;
   refetch;
-  setDataList: any;
-  dataList;
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [copySuccess, setCopySuccess] = useState("");
@@ -143,12 +139,7 @@ const MessagePreview = ({
       </Row>
       <Row>
         <Col className="contributorProductionSide">
-          <ContributorRequests
-            data={data}
-            setDataList={setDataList}
-            coloredName={data.name}
-            dataList={dataList}
-          />
+          <ContributorRequests data={data} coloredName={data.name} />
         </Col>
       </Row>
       <Row className="fr-mb-2w">
