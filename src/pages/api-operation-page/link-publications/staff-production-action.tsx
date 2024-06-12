@@ -1,7 +1,7 @@
 import { Col, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import EmailSender from "../../api/send-mail";
-import { Contribute_Production } from "../../types";
+import { Contribute_Production } from "../../../types";
+import EmailSender from "../../../api/send-mail";
 
 const StaffProductionActions = ({
   data,

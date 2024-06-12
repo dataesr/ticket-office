@@ -83,6 +83,10 @@ export type EditModalProps = {
 };
 
 export type Production = {
+  lastName: any;
+  firstName: any;
+  productionId: any;
+  fullName: any;
   name: string;
   id: string;
   treated: boolean;
@@ -91,7 +95,7 @@ export type Production = {
 export type Inputs = {
   team: string[];
   status: string;
-  tag: string[];
+  tags: string[];
   idRef: string;
   comment: string;
 };

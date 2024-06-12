@@ -8,6 +8,7 @@ import {
   Nav,
   FastAccess,
   Button,
+  NavItem,
 } from "@dataesr/dsfr-plus";
 import ProfileModal from "../components/profil-modal";
 
@@ -91,12 +92,23 @@ const Header: React.FC = () => {
         <Link current={pathname.startsWith("/contact")} href="/contact">
           Contributions via formulaire de contact
         </Link>
-        <Link
-          current={pathname.startsWith("/apioperations")}
-          href="/apioperations"
+        <NavItem
+          current={pathname.split("/").includes("search")}
+          title={"Opérations sur l'API"}
         >
-          Opérations sur l'API
-        </Link>
+          <Link
+            current={pathname.startsWith("/apioperations")}
+            href="/apioperations"
+          >
+            Lier des publications
+          </Link>
+          <Link current={pathname.startsWith("/delete")} href="/delete">
+            Supprimer des personnes de la base de donnée
+          </Link>
+          <Link current={pathname.startsWith("/namechange")} href="/namechange">
+            Changer le nom d'une personne
+          </Link>
+        </NavItem>
       </Nav>
     </HeaderWrapper>
   );

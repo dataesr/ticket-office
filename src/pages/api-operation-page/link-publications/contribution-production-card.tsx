@@ -8,7 +8,7 @@ import {
   Text,
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { Contribute_Production } from "../../types";
+import { Contribute_Production } from "../../../types";
 import ContributorProductionInfo from "./contributor-production-info";
 import StaffProductionActions from "./staff-production-action";
 
@@ -16,10 +16,12 @@ const ContributionProductionItem = ({
   data,
   refetch,
   setDataList,
+  dataList,
 }: {
   data: Contribute_Production;
   refetch;
   setDataList;
+  dataList;
 }) => {
   const renderAccordion = () => (
     <Container fluid className="accordion">
@@ -72,6 +74,7 @@ const ContributionProductionItem = ({
           data={data}
           refetch={refetch}
           setDataList={setDataList}
+          dataList={dataList}
         />
         <StaffProductionActions data={data} refetch={refetch} />
       </Accordion>

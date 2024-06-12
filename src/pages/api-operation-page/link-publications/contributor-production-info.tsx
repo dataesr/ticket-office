@@ -1,17 +1,24 @@
-import { Contribute_Production } from "../../types";
+import { Contribute_Production } from "../../../types";
 import MessagePreview from "./message-preview";
 
 const ContributorProductionInfo = ({
   data,
   refetch,
   setDataList,
+  dataList,
 }: {
   data: Contribute_Production;
   refetch;
   setDataList;
+  dataList;
 }) => {
   return (
-    <MessagePreview data={data} refetch={refetch} setDataList={setDataList} />
+    <MessagePreview
+      dataList={dataList}
+      data={data}
+      refetch={refetch}
+      setDataList={setDataList}
+    />
   );
 };
 

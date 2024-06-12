@@ -28,13 +28,13 @@ const ContributionItem = ({
     <Container fluid className="accordion">
       <Row className="top-accordion">
         <Col>
-          {data.tags && (
+          {data?.tags?.length > 0 && (
             <Badge
               size="sm"
               color="purple-glycine"
               className="fr-mr-1w fr-mb-1w tag"
             >
-              {data.tags.join(", ")}
+              {data?.tags.join(", ")}
             </Badge>
           )}
           <Badge
