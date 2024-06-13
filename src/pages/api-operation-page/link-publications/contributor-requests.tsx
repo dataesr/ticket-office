@@ -1,5 +1,5 @@
 import { Col } from "@dataesr/dsfr-plus";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { Production } from "../../../types";
 import SelectWithNames from "./name-selector";
@@ -15,12 +15,7 @@ const ContributorRequests: React.FC<{
   coloredName;
 }> = ({ data, coloredName }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const { dataList, setDataList } = useDataList();
-
-  useEffect(() => {
-    setSelectedIds(dataList.map((item) => item.publi_id));
-  }, [dataList]);
+  const { dataList } = useDataList();
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -31,7 +26,6 @@ const ContributorRequests: React.FC<{
   return (
     <>
       {data.productions.map((production) => {
-        const isSelected = selectedIds.includes(production.id);
         return (
           <Col
             md="12"
@@ -45,7 +39,8 @@ const ContributorRequests: React.FC<{
               style={{ flex: 2, marginRight: "10px" }}
             >
               ID de la publication : {production.id}
-              {isSelected && (
+              {dataList.find((item) => item.publi_id === production.id)
+                ?.export && (
                 <FaShoppingCart className="fr-ml-2w" color="#21AB8E" />
               )}
             </div>
@@ -67,10 +62,8 @@ const ContributorRequests: React.FC<{
             <Col style={{ flex: 1 }}>
               <SelectWithNames
                 productionId={production.id}
-                setDataList={setDataList}
                 idRef={data.id}
                 coloredName={coloredName}
-                setSelectedId={setSelectedIds}
               />
             </Col>
             <Col style={{ flex: 1 }}>
