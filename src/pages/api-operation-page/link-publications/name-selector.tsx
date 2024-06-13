@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 export default function SelectWithNames({ productionId, idRef, coloredName }) {
   const { fullName, firstName, lastName } = NameFromScanr(productionId);
-  const { setDataList } = useDataList();
+  const { dataList, setDataList } = useDataList();
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -16,7 +16,7 @@ export default function SelectWithNames({ productionId, idRef, coloredName }) {
     }),
   };
   const threshold = 7;
-
+  console.log(dataList);
   const options = fullName.map((name, index) => ({
     value: name,
     label: name,
