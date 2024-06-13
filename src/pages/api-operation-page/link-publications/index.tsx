@@ -63,6 +63,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   useEffect(() => {
     setData(fetchedData);
   }, [fetchedData]);
+
   const meta = (fetchedData as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
   const contrib: Contribute_Production[] = (
@@ -129,7 +130,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           refetch={refetch}
         />
       ))}
-      {dataList.length > 0 && <ExcelExportButton />}
+      {dataList.some((item) => item.export === true) && <ExcelExportButton />}{" "}
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}
