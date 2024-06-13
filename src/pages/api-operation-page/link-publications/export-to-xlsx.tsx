@@ -19,10 +19,21 @@ const ExcelExportButton = () => {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
     XLSX.writeFile(workbook, "export.xlsx");
   };
+
   const handleRemoveClick = (index: number) => {
     setDataList((prevState) => {
-      const newList = prevState.filter((_, i) => i !== index);
-      toast(`Element retiré ! : ${prevState[index].fullName}`, {
+      const newList = prevState.map((item) => {
+        if (
+          item.export === true &&
+          item.publi_id === dataList[index].publi_id
+        ) {
+          return { ...item, export: false };
+        } else {
+          return item;
+        }
+      });
+
+      toast(`Element retiré ! : ${newList[index].fullName}`, {
         style: {
           backgroundColor: "#d64d00",
           color: "#fff",
@@ -31,9 +42,10 @@ const ExcelExportButton = () => {
       return newList;
     });
   };
-
   const handleClearClick = () => {
-    setDataList([]);
+    setDataList((prevState) =>
+      prevState.map((item) => ({ ...item, export: false }))
+    );
     toast("Panier vidé !", {
       style: {
         backgroundColor: "#c3fad5",
@@ -54,36 +66,70 @@ const ExcelExportButton = () => {
               color="blue-ecume"
               className="fr-mr-1w fr-mb-1w status"
             >
-              {`${dataList.length} publication${
-                dataList.length > 1 ? "s" : ""
+              {`${
+                dataList
+                  .filter((item) => item.export === true)
+                  .reduce(
+                    (unique, item) =>
+                      unique.findIndex(
+                        (obj) => obj.publi_id === item.publi_id
+                      ) > -1
+                        ? unique
+                        : [...unique, item],
+                    []
+                  ).length
+              } publication${
+                dataList
+                  .filter((item) => item.export === true)
+                  .reduce(
+                    (unique, item) =>
+                      unique.findIndex(
+                        (obj) => obj.publi_id === item.publi_id
+                      ) > -1
+                        ? unique
+                        : [...unique, item],
+                    []
+                  ).length > 1
+                  ? "s"
+                  : ""
               }`}
             </Badge>
           </div>
+
           {Array.isArray(dataList) &&
-            dataList.map((item, index) => (
-              <li
-                key={index}
-                style={{
-                  listStyleType: "none",
-                  padding: 0,
-                  borderBottom: "1px solid #000",
-                }}
-              >
-                <br />
-                <div className="basket-item">
-                  <Text size="sm" bold>
-                    {item.publi_id}
-                  </Text>
-                  <i>à lier à</i>
-                  <Text size="sm" bold>
-                    {item.fullName}
-                    <button onClick={() => handleRemoveClick(index)}>
-                      <AiOutlineDelete color="red" />
-                    </button>
-                  </Text>
-                </div>
-              </li>
-            ))}
+            dataList
+              .filter((item) => item.export === true)
+              .reduce(
+                (unique, item) =>
+                  unique.findIndex((obj) => obj.publi_id === item.publi_id) > -1
+                    ? unique
+                    : [...unique, item],
+                []
+              )
+              .map((item, index) => (
+                <li
+                  key={index}
+                  style={{
+                    listStyleType: "none",
+                    padding: 0,
+                    borderBottom: "1px solid #000",
+                  }}
+                >
+                  <br />
+                  <div className="basket-item">
+                    <Text size="sm" bold>
+                      {item.publi_id}
+                    </Text>
+                    <i>à lier à</i>
+                    <Text size="sm" bold>
+                      {item.fullName}
+                      <button onClick={() => handleRemoveClick(index)}>
+                        <AiOutlineDelete color="red" />
+                      </button>
+                    </Text>
+                  </div>
+                </li>
+              ))}
         </ul>
         <div className="fr-grid-row fr-grid-row--center">
           <ButtonGroup isInlineFrom="xs">

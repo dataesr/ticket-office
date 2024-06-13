@@ -5,6 +5,7 @@ import { useState, useCallback } from "react";
 import ContributorRequests from "./contributor-requests";
 import "./styles.scss";
 import NameFromIdref from "../../../api/contribution-api/getNamesFromIdref";
+import { useDataList } from "./data-list-context";
 
 const MessagePreview = ({
   data,
@@ -15,6 +16,7 @@ const MessagePreview = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [copySuccess, setCopySuccess] = useState("");
+  const { setDataList } = useDataList();
 
   const { fullNameFromIdref: fetchedData } = NameFromIdref(data.id);
 
@@ -32,6 +34,7 @@ const MessagePreview = ({
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
   return (
     <Container fluid>
       {data.comment && (
@@ -112,7 +115,6 @@ const MessagePreview = ({
           {"Nom lié à l'idref "}
           <span style={{ fontWeight: "bold" }}>{data.name}</span>
         </Text>
-
         {data.email && (
           <Text
             size="sm"
@@ -136,6 +138,21 @@ const MessagePreview = ({
             )}
           </Text>
         )}
+        <Button
+          onClick={() => {
+            setDataList((prevState) => {
+              return prevState.map((item) => {
+                if (item.person_id === data.id) {
+                  return { ...item, export: true };
+                } else {
+                  return item;
+                }
+              });
+            });
+          }}
+        >
+          Tout exporter
+        </Button>
       </Row>
       <Row>
         <Col className="contributorProductionSide">
