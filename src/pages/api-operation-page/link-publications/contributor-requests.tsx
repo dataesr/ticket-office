@@ -1,11 +1,11 @@
-import { Col } from "@dataesr/dsfr-plus";
 import React, { useState } from "react";
 import { FaShoppingCart, FaCopy } from "react-icons/fa";
 import { Production } from "../../../types";
 import SelectWithNames from "./name-selector";
 import { ExternalLinks } from "./external-links";
 import { useDataList } from "./data-list-context";
-import "./styles.scss"; // Importez vos styles CSS ou SCSS
+import { Col } from "@dataesr/dsfr-plus";
+import "./styles.scss";
 
 const ContributorRequests: React.FC<{
   data: {
@@ -23,7 +23,7 @@ const ContributorRequests: React.FC<{
       setCopiedId(text);
       setTimeout(() => {
         setCopiedId(null);
-      }, 2000); // Efface l'ID copié après 2 secondes
+      }, 2000);
     });
   };
 
@@ -31,6 +31,9 @@ const ContributorRequests: React.FC<{
     <>
       {data.productions.map((production) => {
         const isCopied = copiedId === production.id;
+        const hasExport = dataList.find(
+          (item) => item.publi_id === production.id
+        )?.export;
 
         return (
           <Col
@@ -50,8 +53,13 @@ const ContributorRequests: React.FC<{
                 {isCopied && <span className="copied-text">Copié</span>}
                 <FaCopy size={14} color="#2196f3" className="copy-icon" />
               </button>
-              {dataList.find((item) => item.publi_id === production.id)
-                ?.export && (
+              {hasExport === false && (
+                <FaShoppingCart
+                  className="fr-ml-2w cart-icon red-cart"
+                  color="red"
+                />
+              )}
+              {hasExport && (
                 <FaShoppingCart
                   className="fr-ml-2w cart-icon"
                   color="#21AB8E"
