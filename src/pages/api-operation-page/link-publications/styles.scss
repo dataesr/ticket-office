@@ -22,30 +22,52 @@
 }
 .basket {
   position: fixed;
-  right: 0;
+  right: 20px;
   top: 50px;
   padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: 0 20px 20px 20px;
   z-index: 1000;
   background-color: white;
   border-radius: 20px;
   border: 2px solid black;
-}
-
-.basket-content {
-  max-height: 500px;
+  max-height: 90vh;
   overflow-y: auto;
-  width: 100%;
 }
 .basket-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-bottom: 1px solid black;
 }
+
+.basket-content {
+  width: 100%;
+  overflow-y: auto;
+  max-height: calc(100% - 40px);
+}
+
+.basket-controls {
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+  background-color: white;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge-count {
+  margin-right: 10px;
+}
+
+.btn-minimize {
+  margin-left: 10px;
+}
+
 @keyframes flash {
   0% {
     background-color: transparent;
@@ -60,4 +82,48 @@
 
 .basket.item-added {
   animation: flash 0.5s;
+}
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+  position: relative;
+  outline: none;
+}
+
+.copy-icon {
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.copied .copy-icon {
+  color: #2196f3;
+}
+
+.copied-text {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  background-color: #3a4cef;
+  color: #fff;
+  padding: 4px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  margin-left: 4px;
+  animation: fadeInOut 2s ease-in-out;
+}
+
+@keyframes fadeInOut {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
