@@ -1,3 +1,5 @@
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import type { Contribute_Production } from "../../../types";
 import EditModal from "../../../components/edit-modal";
@@ -12,7 +14,7 @@ const MessagePreview = ({
   refetch,
 }: {
   data: Contribute_Production;
-  refetch;
+  refetch: () => void;
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [copySuccess, setCopySuccess] = useState("");
@@ -33,6 +35,48 @@ const MessagePreview = ({
 
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleExportAllClick = () => {
+    setDataList((prevState) => {
+      let addedToCart = false;
+      const updatedList = prevState.map((item) => {
+        if (item.person_id === data.id && !item.export) {
+          addedToCart = true;
+          return { ...item, export: true };
+        } else {
+          return item;
+        }
+      });
+
+      if (addedToCart) {
+        const count = updatedList.filter(
+          (item) => item.person_id === data.id && item.export === true
+        ).length;
+
+        toast(
+          `${count} publications de "${data.name}" ont été ajoutées au panier`,
+          {
+            style: {
+              backgroundColor: "#4caf50",
+              color: "#fff",
+            },
+          }
+        );
+      } else {
+        toast.warn(
+          `Les publications de "${data.name}" sont déjà dans le panier !`,
+          {
+            style: {
+              backgroundColor: "#f57c00",
+              color: "#fff",
+            },
+          }
+        );
+      }
+
+      return updatedList;
+    });
   };
 
   return (
@@ -61,7 +105,7 @@ const MessagePreview = ({
             onClick={() => copyToClipboard(data.id, "ID copié")}
             className={"fr-icon-user-line"}
           >
-            ID de la personne concerné: {data.id}{" "}
+            ID de la personne concernée : {data.id}{" "}
             {copySuccess === "ID copié" && (
               <span
                 style={{
@@ -95,7 +139,7 @@ const MessagePreview = ({
           }}
           onClick={() => copyToClipboard(fetchedData, "Nom copié")}
         >
-          {fetchedData ? `${fetchedData}` : "Nom non-inéxistant sur scanR"}
+          {fetchedData ? `${fetchedData}` : "Nom non existant sur scanR"}
           {copySuccess === "Nom copié" && (
             <span
               style={{
@@ -121,7 +165,7 @@ const MessagePreview = ({
             style={{ cursor: "pointer" }}
             onClick={() => copyToClipboard(data.email, "Email copié")}
           >
-            Email: {data.email}
+            Email : {data.email}
             {copySuccess === "Email copié" && (
               <span
                 style={{
@@ -138,22 +182,8 @@ const MessagePreview = ({
             )}
           </Text>
         )}
-        <Button
-          onClick={() => {
-            setDataList((prevState) => {
-              return prevState.map((item) => {
-                if (item.person_id === data.id) {
-                  return { ...item, export: true };
-                } else {
-                  return item;
-                }
-              });
-            });
-          }}
-        >
-          Tout exporter
-        </Button>
       </Row>
+      <Button onClick={handleExportAllClick}>Tout exporter</Button>
       <Row>
         <Col className="contributorProductionSide">
           <ContributorRequests data={data} coloredName={data.name} />
