@@ -15,19 +15,18 @@ function EmailSender({
   const [userResponse, setUserResponse] = useState("");
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   let basePath = "contact";
+  if (window.location.pathname.includes("contributionpage")) {
+    basePath = "contribute";
+  } else if (window.location.pathname.includes("apioperations")) {
+    basePath = "contribute_productions";
+  }
   const brevoUrl = isDevelopment
     ? "https://api.brevo.com/v3/smtp/email"
     : "/email/";
   const scanRUrl = isDevelopment
     ? `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`
     : `/api/${basePath}/${contribution._id}`;
-
-  if (window.location.pathname.includes("contributionpage")) {
-    basePath = "contribute";
-  } else if (window.location.pathname.includes("apioperations")) {
-    basePath = "contribute_productions";
-  }
-
+  console.log(scanRUrl);
   const [selectedProfile, setSelectedProfile] = useState("");
 
   useEffect(() => {
