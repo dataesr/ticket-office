@@ -37,14 +37,14 @@ const NameFromScanr = (id) => {
     fetchContributions
   );
   const fullName =
-    data?.hits?.hits[0]?._source?.authors.map((author) => author.fullName) ||
+    data?.hits?.hits[0]?._source?.authors?.map((author) => author?.fullName) ||
     [];
   const firstName =
-    data?.hits?.hits[0]?._source?.authors.map((author) => author.firstName) ||
+    data?.hits?.hits[0]?._source?.authors?.map((author) => author?.firstName) ||
     [];
 
   const lastName =
-    data?.hits?.hits[0]?._source?.authors.map((author) => author.lastName) ||
+    data?.hits?.hits[0]?._source?.authors?.map((author) => author?.lastName) ||
     [];
 
   return { fullName, firstName, lastName, isLoading, isError, refetch };

@@ -184,7 +184,7 @@ const MessagePreview = ({
         )}
       </Row>
       <Button onClick={handleExportAllClick}>Tout exporter</Button>
-      <Row>
+      <Row className="fr-mb-2w">
         <Col className="contributorProductionSide">
           <ContributorRequests data={data} coloredName={data.name} />
         </Col>
