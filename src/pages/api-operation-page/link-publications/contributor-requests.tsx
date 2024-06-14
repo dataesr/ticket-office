@@ -29,17 +29,17 @@ const ContributorRequests: React.FC<{
 
   return (
     <>
-      {data.productions.map((production) => {
-        const isCopied = copiedId === production.id;
+      {data?.productions.map((production) => {
+        const isCopied = copiedId === production?.id;
         const hasExport = dataList.find(
-          (item) => item.publi_id === production.id
+          (item) => item?.publi_id === production?.id
         )?.export;
 
         return (
           <Col
             md="12"
             className="contributorProductionContent fr-mr-1v"
-            key={production.id}
+            key={production?.id}
             style={{ position: "relative" }}
           >
             <div style={{ flex: 2, display: "flex", alignItems: "center" }}>

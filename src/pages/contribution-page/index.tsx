@@ -55,7 +55,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
 
   useEffect(() => {
     if (contributions && contributions.length > 0) {
-      setSelectedContribution(contributions[0]._id);
+      setSelectedContribution(contributions[0]?._id);
     }
   }, [contributions]);
 
@@ -139,7 +139,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
             <ContributionItem
               key={selectedContribution}
               data={filteredContributions.find(
-                (contribution) => contribution._id === selectedContribution
+                (contribution) => contribution?._id === selectedContribution
               )}
               refetch={refetch}
               highlightedQuery={highlightedQuery}

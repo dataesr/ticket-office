@@ -48,7 +48,7 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
             </div>
           }
           defaultExpanded={false}
-          onClick={() => handleClick(contribution._id)}
+          onClick={() => handleClick(contribution?._id)}
         />
       ))}
     </SideMenu>
