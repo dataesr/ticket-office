@@ -1,29 +1,23 @@
-export type Contribution = {
-  mailSentDate: string | number | Date;
-  mailSent: any;
-  responseByMail: string;
-  responseFrom: string;
-  modified_at: string;
-  team: any;
+export interface Contribution {
   _id: string;
-  status: string;
-  tags: Array<string>;
-  message: string;
-  created_at: string | number | Date;
-  fonction: string;
-  organisation: string;
-  email: string;
-  name: string;
-  type: string;
   id: string;
-  comment: string;
-  data: ContributionDataType[];
-  meta: {
-    total: number;
-  };
-  highlightedQuery: string;
-};
-
+  name: string;
+  email: string;
+  phone: string;
+  tags: string[];
+  status: string;
+  responseFrom?: string;
+  comment?: string;
+  team?: string[];
+  type: string;
+  created_at: string;
+  message: string;
+  organisation?: string;
+  fonction?: string;
+  modified_at?: string;
+  mailSentDate?: string;
+  mailSent?: string;
+}
 export type ContributionDataType = {
   responseFrom: string;
   idref: any;
@@ -57,7 +51,7 @@ export type MessagePreviewProps = {
 
 export type Contribute_Production = {
   mailSentDate: string | number | Date;
-  mailSent: any;
+  mailSent: string;
   responseByMail: string;
   responseFrom: string;
   tag: string;
@@ -99,3 +93,8 @@ export type Inputs = {
   idRef: string;
   comment: string;
 };
+export interface PersonInfo {
+  name: string;
+  email: string;
+  phone: string;
+}

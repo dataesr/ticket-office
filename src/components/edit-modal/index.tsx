@@ -40,8 +40,8 @@ const EditModal: React.FC<EditModalProps> = ({
   }
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = isDevelopment
-    ? `https://scanr-api.dataesr.ovh/${basePath}/${data._id}`
-    : `${window.location.origin}/api/${basePath}/${data._id}`;
+    ? `https://scanr-api.dataesr.ovh/${basePath}/${data?._id}`
+    : `${window.location.origin}/api/${basePath}/${data?._id}`;
   const [inputs, setInputs] = useState<Inputs>({
     team: [user],
     status: "treated",
@@ -199,7 +199,7 @@ const EditModal: React.FC<EditModalProps> = ({
           <Col>
             <TextArea
               label={
-                data.comment
+                data?.comment
                   ? "Mettre à jour le commentaire pour l'équipe"
                   : "Ajouter un commentaire pour l'équipe"
               }
