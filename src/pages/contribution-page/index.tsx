@@ -1,31 +1,30 @@
-import { useState, useEffect } from "react";
-
-import { Contribution, ContributionPageProps } from "../../types";
+import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import Selectors from "../../components/selectors";
-
-import TopPaginationButtons from "../../components/pagination/top-buttons";
 import {
   Col,
   Container,
   Row,
-  SearchBar,
   Text,
   Title,
+  SearchBar,
 } from "@dataesr/dsfr-plus";
-import ContributionItem from "./contribution-card";
 import ContributionData from "../../api/contribution-api/getData";
 import { buildURL } from "../../api/utils/buildURL";
+import { Contribution, ContributionPageProps } from "../../types";
+import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
+import TopPaginationButtons from "../../components/pagination/top-buttons";
+import Selectors from "../../components/selectors";
+import ContributionItem from "./contribution-item";
+import ContributorSummary from "./contributor-summary";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
-  const [reload] = useState(0);
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("new");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [searchInMessage, setSearchInMessage] = useState(false);
   const [highlightedQuery, setHighlightedQuery] = useState("");
+  const [selectedContribution, setSelectedContribution] = useState<string>("");
 
   const location = useLocation();
 
@@ -46,31 +45,30 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     window.history.pushState({}, "", newURL);
   }, [page, query, searchInMessage]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [reload, location.pathname]);
-
-  useEffect(() => {
-    if (
-      location.pathname.includes("contributionPage") ||
-      location.pathname.includes("contact")
-    ) {
-      setSearchInMessage(false);
-    }
-  }, [location.pathname]);
   const url = buildURL(location, sort, status, query, page, searchInMessage);
   const { data, isLoading, isError, refetch } = ContributionData(url);
 
   const meta = (data as { meta: any })?.meta;
-  const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
-  const contrib: Contribution[] = (data as { data: Contribution[] })?.data;
+  const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
+  const contributions: Contribution[] = (data as { data: Contribution[] })
+    ?.data;
+
+  useEffect(() => {
+    if (contributions && contributions.length > 0) {
+      setSelectedContribution(contributions[0]._id);
+    }
+  }, [contributions]);
 
   const handleSearch = (value: string) => {
     setQuery(value.trim());
     setHighlightedQuery(value.trim());
   };
 
-  const filteredContributions = contrib?.filter((contribution) => {
+  const onSelectContribution = (id: string) => {
+    setSelectedContribution(id);
+  };
+
+  const filteredContributions = contributions?.filter((contribution) => {
     const nameMatches = contribution.name
       .toLowerCase()
       .includes(query.toLowerCase());
@@ -86,24 +84,25 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   if (isLoading)
     return (
       <Container className="fr-my-5w">
-        <Text>Chargement</Text>
+        <Text>Chargement...</Text>
       </Container>
     );
+
   if (isError)
     return (
       <Container className="fr-my-5w">
-        <Text>Erreur</Text>
+        <Text>Erreur lors du chargement des données.</Text>
       </Container>
     );
 
   return (
     <Container className="fr-my-5w">
+      <Title as="h1">
+        {location.pathname.includes("contributionpage")
+          ? "Contribution par objets"
+          : "Contribution via formulaire"}
+      </Title>
       <Row gutters className="fr-mb-3w">
-        {location.pathname.includes("contributionpage") ? (
-          <Title as="h1">Contribution par objets</Title>
-        ) : (
-          <Title as="h1">Contribution via formulaire</Title>
-        )}
         <Col md="8" xs="12">
           <SearchBar
             className="fr-mb-1w"
@@ -128,13 +127,26 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           />
         </Col>
       </Row>
-      {filteredContributions?.map((contribution) => (
-        <ContributionItem
-          data={contribution}
-          refetch={refetch}
-          highlightedQuery={highlightedQuery}
-        />
-      ))}
+      <Row>
+        <Col md="4">
+          <ContributorSummary
+            contributions={filteredContributions}
+            onSelectContribution={onSelectContribution}
+          />
+        </Col>
+        <Col>
+          {filteredContributions && filteredContributions.length > 0 && (
+            <ContributionItem
+              key={selectedContribution}
+              data={filteredContributions.find(
+                (contribution) => contribution._id === selectedContribution
+              )}
+              refetch={refetch}
+              highlightedQuery={highlightedQuery}
+            />
+          )}
+        </Col>
+      </Row>
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}

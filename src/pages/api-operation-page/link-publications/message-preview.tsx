@@ -98,7 +98,7 @@ const MessagePreview = ({
         data={data}
       />
       <Row className="contributorProductionSideInfo">
-        {data.id && (
+        {data?.id && (
           <Text
             size="sm"
             style={{ cursor: "pointer" }}

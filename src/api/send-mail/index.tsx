@@ -24,7 +24,7 @@ function EmailSender({
     ? "https://api.brevo.com/v3/smtp/email"
     : "/email/";
   const scanRUrl = isDevelopment
-    ? `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`
+    ? `https://scanr-api.dataesr.ovh/${basePath}/${contribution?._id}`
     : `/api/${basePath}/${contribution._id}`;
   const [selectedProfile, setSelectedProfile] = useState("");
 
@@ -107,7 +107,7 @@ function EmailSender({
             onClick={sendEmail}
             size="sm"
           >
-            {contribution.mailSent ? "Renvoyer un mail" : "Répondre"}
+            {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
           </Button>
         </Col>
       </Row>
