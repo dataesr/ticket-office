@@ -26,7 +26,6 @@ function EmailSender({
   const scanRUrl = isDevelopment
     ? `https://scanr-api.dataesr.ovh/${basePath}/${contribution._id}`
     : `/api/${basePath}/${contribution._id}`;
-  console.log(scanRUrl);
   const [selectedProfile, setSelectedProfile] = useState("");
 
   useEffect(() => {
