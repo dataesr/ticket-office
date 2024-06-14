@@ -122,7 +122,7 @@ export default function SelectWithNames({ productionId, idRef, coloredName }) {
 
   return (
     <Row>
-      <Col className="fr-mr-2w">
+      <Col>
         <ReactSelect
           options={fullName.map((name, index) => ({
             value: name,
@@ -134,6 +134,8 @@ export default function SelectWithNames({ productionId, idRef, coloredName }) {
           onChange={handleChange}
           styles={customStyles}
           placeholder={coloredName}
+          menuPortalTarget={document.body}
+          menuPosition="fixed"
         />
       </Col>
     </Row>
