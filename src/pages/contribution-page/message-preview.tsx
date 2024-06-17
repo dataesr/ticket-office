@@ -4,6 +4,7 @@ import HighlightedMessage from "../../components/highlighted-message";
 import { useLocation } from "react-router-dom";
 import EditModal from "../../components/edit-modal";
 import { useState, useCallback } from "react";
+import { FaCopy } from "react-icons/fa";
 
 const MessagePreview = ({
   data,
@@ -16,12 +17,12 @@ const MessagePreview = ({
 }) => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
-  const [copySuccess, setCopySuccess] = useState("");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
-  const copyToClipboard = useCallback((text, successMessage) => {
+  const copyToClipboard = useCallback((text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      setCopySuccess(successMessage);
-      setTimeout(() => setCopySuccess(""), 2000);
+      setCopiedId(text);
+      setTimeout(() => setCopiedId(null), 2000);
     });
   }, []);
 
@@ -45,63 +46,57 @@ const MessagePreview = ({
         <Row>
           {data?.id && (
             <Col>
-              <Text
-                size="sm"
-                style={{ cursor: "pointer" }}
-                onClick={() => copyToClipboard(data.id, "ID copié")}
-                className={
-                  data.type === "structure"
-                    ? "fr-icon-building-line"
-                    : "fr-icon-user-line"
-                }
-              >
+              <Text size="sm">
                 ID de l'objet concerné: <strong>{data.id}</strong>
-                {copySuccess === "ID copié" && (
-                  <span
-                    style={{
-                      color: "white",
-                      backgroundColor: "#efcb3a",
-                      marginLeft: "10px",
-                      padding: "2px 5px",
-                      borderRadius: "5px",
-                      fontSize: "0.8em",
-                    }}
-                  >
-                    {copySuccess}
-                  </span>
-                )}
+                <button
+                  className={`copy-button ${
+                    copiedId === data.id ? "copied" : ""
+                  }`}
+                  onClick={() => copyToClipboard(data.id)}
+                >
+                  {copiedId === data.id && (
+                    <span className="copied-text">Copié</span>
+                  )}
+                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
+                </button>
               </Text>
             </Col>
           )}
           <Col>
             <Text size="sm">
               Nom: {data?.name ? <strong>{data.name}</strong> : "non renseigné"}
+              {data?.name && (
+                <button
+                  className={`copy-button ${
+                    copiedId === data.name ? "copied" : ""
+                  }`}
+                  onClick={() => copyToClipboard(data.name)}
+                >
+                  {copiedId === data.name && (
+                    <span className="copied-text">Copié</span>
+                  )}
+                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
+                </button>
+              )}
             </Text>
           </Col>
         </Row>
         {data?.email && (
           <Row>
             <Col>
-              <Text
-                size="sm"
-                style={{ cursor: "pointer" }}
-                onClick={() => copyToClipboard(data.email, "Email copié")}
-              >
+              <Text size="sm">
                 Email: <strong>{data.email}</strong>
-                {copySuccess === "Email copié" && (
-                  <span
-                    style={{
-                      color: "white",
-                      backgroundColor: "#efcb3a",
-                      marginLeft: "10px",
-                      padding: "2px 5px",
-                      borderRadius: "5px",
-                      fontSize: "0.8em",
-                    }}
-                  >
-                    {copySuccess}
-                  </span>
-                )}
+                <button
+                  className={`copy-button ${
+                    copiedId === data.email ? "copied" : ""
+                  }`}
+                  onClick={() => copyToClipboard(data.email)}
+                >
+                  {copiedId === data.email && (
+                    <span className="copied-text">Copié</span>
+                  )}
+                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
+                </button>
               </Text>
             </Col>
           </Row>
@@ -111,6 +106,17 @@ const MessagePreview = ({
             {data?.organisation ? (
               <Text size="sm">
                 Organisation: <strong>{data.organisation}</strong>
+                <button
+                  className={`copy-button ${
+                    copiedId === data.organisation ? "copied" : ""
+                  }`}
+                  onClick={() => copyToClipboard(data.organisation)}
+                >
+                  {copiedId === data.organisation && (
+                    <span className="copied-text">Copié</span>
+                  )}
+                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
+                </button>
               </Text>
             ) : (
               <Text size="sm" bold>
@@ -122,6 +128,17 @@ const MessagePreview = ({
             {data?.fonction ? (
               <Text size="sm">
                 Fonction: <strong>{data.fonction}</strong>
+                <button
+                  className={`copy-button ${
+                    copiedId === data.fonction ? "copied" : ""
+                  }`}
+                  onClick={() => copyToClipboard(data.fonction)}
+                >
+                  {copiedId === data.fonction && (
+                    <span className="copied-text">Copié</span>
+                  )}
+                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
+                </button>
               </Text>
             ) : (
               <Text size="sm" bold>

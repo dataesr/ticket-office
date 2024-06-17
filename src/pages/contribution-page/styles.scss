@@ -32,22 +32,6 @@
   margin-left: 140px;
 }
 
-.contributionItem {
-  border-bottom: 10px solid #ccc;
-  padding-bottom: 20px;
-  padding-top: 10px;
-  margin-bottom: 20px;
-}
-
-.accordion {
-  width: 100%;
-}
-
-.contributorInfo {
-  width: 100%;
-  text-align: right;
-}
-
 .comment {
   display: flex;
   align-items: center;
@@ -61,8 +45,4 @@
 }
 .fr-sidemenu__btn[aria-expanded="false"]:after {
   display: none;
-}
-.fr-sidemenu {
-  display: flex;
-  justify-self: center;
 }

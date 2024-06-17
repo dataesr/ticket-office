@@ -1,6 +1,7 @@
 import React from "react";
 import { Badge, SideMenu, SideMenuItem, Text } from "@dataesr/dsfr-plus";
 import { Contribution } from "../../types";
+import { BadgeColor } from "./utils";
 
 interface ContributorSummaryProps {
   contributions: Contribution[];
@@ -32,6 +33,15 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
                   {contribution.status}
                 </Badge>
               )}
+              {contribution?.type && (
+                <Badge
+                  size="sm"
+                  color={BadgeColor({ type: contribution.type })}
+                  className="fr-mr-1w fr-mb-1w"
+                >
+                  {contribution.type}
+                </Badge>
+              )}
               {contribution?.tags?.length > 0 && (
                 <Badge
                   size="sm"
@@ -41,10 +51,12 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
                   {contribution.tags.join(", ")}
                 </Badge>
               )}
-              <Text size="sm">{contribution.name}</Text>
-              <Text size="sm" className="fr-text--italic">
-                {new Date(contribution.created_at).toLocaleDateString()}
-              </Text>
+              <div>
+                <Text size="sm">{contribution.name}</Text>
+                <Text size="sm" className="fr-text--italic">
+                  {new Date(contribution.created_at).toLocaleDateString()}
+                </Text>
+              </div>
             </div>
           }
           defaultExpanded={false}

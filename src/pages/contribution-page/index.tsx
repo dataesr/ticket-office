@@ -134,7 +134,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
             onSelectContribution={onSelectContribution}
           />
         </Col>
-        <Col>
+        <Col md="9">
           {filteredContributions && filteredContributions.length > 0 && (
             <ContributionItem
               key={selectedContribution}
