@@ -12,7 +12,7 @@ const MessagePreview = ({
 }: {
   data: Contribution;
   highlightedQuery: string;
-  refetch;
+  refetch: () => void;
 }) => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
@@ -25,138 +25,132 @@ const MessagePreview = ({
     });
   }, []);
 
-  const contributorInfoClassName = location.pathname.includes(
-    "contributionpage"
-  )
-    ? "contributorSideInfo"
-    : "contributorSideContactInfo";
-
   const handleOpenModal = () => {
     setShowModal(true);
   };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const contributorMessageClassName = location.pathname.includes(
     "contributionpage"
   )
     ? "contributorSideMessage"
     : "contributorSideContactMessage";
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
   return (
     <>
-      <Container fluid className={contributorInfoClassName}>
-        <div>
-          <Row gutters>
-            {data?.id && (
-              <Col>
-                <Text
-                  bold
-                  size="sm"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => copyToClipboard(data.id, "ID copié")}
-                  className={
-                    data.type === "structure"
-                      ? "fr-icon-building-line"
-                      : "fr-icon-user-line"
-                  }
-                >
-                  ID de l'objet concerné: {data.id}
-                  {copySuccess === "ID copié" && (
-                    <span
-                      style={{
-                        color: "white",
-                        backgroundColor: "#efcb3a",
-                        marginLeft: "10px",
-                        padding: "2px 5px",
-                        borderRadius: "5px",
-                        fontSize: "0.8em",
-                      }}
-                    >
-                      {copySuccess}
-                    </span>
-                  )}
-                </Text>
-              </Col>
-            )}
+      <Container fluid className="fr-mb-4w">
+        <Row>
+          {data?.id && (
             <Col>
-              <Text size="sm" bold>
-                {data?.name ? `Nom: ${data.name}` : "Nom non renseigné"}
+              <Text
+                size="sm"
+                style={{ cursor: "pointer" }}
+                onClick={() => copyToClipboard(data.id, "ID copié")}
+                className={
+                  data.type === "structure"
+                    ? "fr-icon-building-line"
+                    : "fr-icon-user-line"
+                }
+              >
+                ID de l'objet concerné: <strong>{data.id}</strong>
+                {copySuccess === "ID copié" && (
+                  <span
+                    style={{
+                      color: "white",
+                      backgroundColor: "#efcb3a",
+                      marginLeft: "10px",
+                      padding: "2px 5px",
+                      borderRadius: "5px",
+                      fontSize: "0.8em",
+                    }}
+                  >
+                    {copySuccess}
+                  </span>
+                )}
               </Text>
             </Col>
-          </Row>
-          {data?.email && (
-            <Row>
-              <Col>
-                <Text
-                  bold
-                  size="sm"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => copyToClipboard(data.email, "Email copié")}
-                >
-                  Email: {data.email}
-                  {copySuccess === "Email copié" && (
-                    <span
-                      style={{
-                        color: "white",
-                        backgroundColor: "#efcb3a",
-                        marginLeft: "10px",
-                        padding: "2px 5px",
-                        borderRadius: "5px",
-                        fontSize: "0.8em",
-                      }}
-                    >
-                      {copySuccess}
-                    </span>
-                  )}
-                </Text>
-              </Col>
-            </Row>
           )}
+          <Col>
+            <Text size="sm">
+              Nom: {data?.name ? <strong>{data.name}</strong> : "non renseigné"}
+            </Text>
+          </Col>
+        </Row>
+        {data?.email && (
           <Row>
             <Col>
-              {data?.organisation ? (
-                <Text size="sm" bold>
-                  Organisation: {data.organisation}
-                </Text>
-              ) : (
-                <Text size="sm" bold>
-                  Organisation non renseignée
-                </Text>
-              )}
-            </Col>
-            <Col>
-              {data?.fonction ? (
-                <Text size="sm" bold>
-                  Fonction: {data.fonction}
-                </Text>
-              ) : (
-                <Text size="sm" bold>
-                  Fonction non renseignée
-                </Text>
-              )}
+              <Text
+                size="sm"
+                style={{ cursor: "pointer" }}
+                onClick={() => copyToClipboard(data.email, "Email copié")}
+              >
+                Email: <strong>{data.email}</strong>
+                {copySuccess === "Email copié" && (
+                  <span
+                    style={{
+                      color: "white",
+                      backgroundColor: "#efcb3a",
+                      marginLeft: "10px",
+                      padding: "2px 5px",
+                      borderRadius: "5px",
+                      fontSize: "0.8em",
+                    }}
+                  >
+                    {copySuccess}
+                  </span>
+                )}
+              </Text>
             </Col>
           </Row>
+        )}
+        <Row>
           <Col>
-            {data?.team && data?.team?.length > 0 && (
+            {data?.organisation ? (
+              <Text size="sm">
+                Organisation: <strong>{data.organisation}</strong>
+              </Text>
+            ) : (
               <Text size="sm" bold>
-                Traité par : {data?.team[0]} le{" "}
-                {new Date(data.modified_at).toLocaleDateString()}
+                Organisation non renseignée
               </Text>
             )}
           </Col>
           <Col>
-            {data?.comment && (
-              <>
-                <Text size="sm" bold>
-                  Commentaire ({data?.team ? data.team[0] : ""}){" "}
-                </Text>
-                <Text size="sm">{data?.comment}</Text>
-              </>
+            {data?.fonction ? (
+              <Text size="sm">
+                Fonction: <strong>{data.fonction}</strong>
+              </Text>
+            ) : (
+              <Text size="sm" bold>
+                Fonction non renseignée
+              </Text>
             )}
           </Col>
-          {data?.type === "structures" && (
+        </Row>
+        <Col>
+          {data?.team && data?.team?.length > 0 && (
+            <Text size="sm" bold>
+              Traité par : {data?.team[0]} le{" "}
+              {new Date(data.modified_at).toLocaleDateString()}
+            </Text>
+          )}
+        </Col>
+        <Col>
+          {data?.comment && (
             <>
+              <Text size="sm" bold>
+                Commentaire ({data?.team ? data.team[0] : ""}){" "}
+              </Text>
+              <Text size="sm">{data?.comment}</Text>
+            </>
+          )}
+        </Col>
+        {data?.type === "structures" && (
+          <Row>
+            <Col>
               <Link
                 size="sm"
                 target="_blank"
@@ -165,7 +159,8 @@ const MessagePreview = ({
               >
                 Sur scanR
               </Link>
-              <br />
+            </Col>
+            <Col>
               <Link
                 size="sm"
                 target="_blank"
@@ -174,54 +169,54 @@ const MessagePreview = ({
               >
                 Sur dataESR
               </Link>
-            </>
-          )}
-          {data?.type === "publications" && (
-            <>
-              <Link
-                size="sm"
-                target="_blank"
-                className="fr-footer__top-link"
-                href={`https://scanr.enseignementsup-recherche.gouv.fr/publication/${data.id}`}
-              >
-                Sur scanR
-              </Link>
-              <br />
-              <Link
-                size="sm"
-                target="_blank"
-                className="fr-footer__top-link"
-                href={`http://185.161.45.213/ui/publications/${data.id}`}
-              >
-                Sur dataESR
-              </Link>
-            </>
-          )}
-          {data?.type === "persons" && (
-            <div>
-              <Link
-                size="sm"
-                target="_blank"
-                className="fr-footer__top-link"
-                href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${data.id}`}
-              >
-                Sur scanR
-              </Link>
-              <br />
-              <Link
-                size="sm"
-                target="_blank"
-                className="fr-footer__top-link"
-                href={`http://185.161.45.213/ui/persons/${data.id}`}
-              >
-                Sur dataEsr
-              </Link>
-            </div>
-          )}
-        </div>
+            </Col>
+          </Row>
+        )}
+        {data?.type === "publications" && (
+          <Row>
+            <Link
+              size="sm"
+              target="_blank"
+              className="fr-footer__top-link"
+              href={`https://scanr.enseignementsup-recherche.gouv.fr/publication/${data.id}`}
+            >
+              Sur scanR
+            </Link>
+            <br />
+            <Link
+              size="sm"
+              target="_blank"
+              className="fr-footer__top-link"
+              href={`http://185.161.45.213/ui/publications/${data.id}`}
+            >
+              Sur dataESR
+            </Link>
+          </Row>
+        )}
+        {data?.type === "persons" && (
+          <Row>
+            <Link
+              size="sm"
+              target="_blank"
+              className="fr-footer__top-link"
+              href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${data.id}`}
+            >
+              Sur scanR
+            </Link>
+            <br />
+            <Link
+              size="sm"
+              target="_blank"
+              className="fr-footer__top-link"
+              href={`http://185.161.45.213/ui/persons/${data.id}`}
+            >
+              Sur dataEsr
+            </Link>
+          </Row>
+        )}
       </Container>
       <Row className={contributorMessageClassName}>
-        <Text size="sm">
+        <Text className="fr-mt-3w">
           <HighlightedMessage
             message={data?.message}
             highlightedQuery={highlightedQuery}
@@ -234,7 +229,7 @@ const MessagePreview = ({
           data={data}
         />
       </Row>
-      <Row className="fr-mb-2w">
+      <Row className="fr-mb-5w fr-mt-3w">
         <Button onClick={handleOpenModal}>Editer la contribution</Button>
       </Row>
     </>

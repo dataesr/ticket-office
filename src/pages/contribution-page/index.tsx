@@ -128,7 +128,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         </Col>
       </Row>
       <Row>
-        <Col md="4">
+        <Col md="3">
           <ContributorSummary
             contributions={filteredContributions}
             onSelectContribution={onSelectContribution}
