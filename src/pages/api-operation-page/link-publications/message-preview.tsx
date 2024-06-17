@@ -1,5 +1,5 @@
 import "react-toastify/dist/ReactToastify.css";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import type { Contribute_Production } from "../../../types";
 import EditModal from "../../../components/edit-modal";
@@ -83,7 +83,6 @@ const MessagePreview = ({
 
   return (
     <Container fluid>
-      <ToastContainer />
       {data.comment && (
         <Row className="fr-grid-row--center">
           <Col md="8" className="comment">
