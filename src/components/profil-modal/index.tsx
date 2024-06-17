@@ -11,13 +11,12 @@ type ProfileModalProps = {
 
 const ProfileModal: React.FC<ProfileModalProps> = ({
   isOpen,
-  selectedProfile,
   onClose,
   onSelectProfile,
 }) => {
   return (
     <Modal isOpen={isOpen} hide={onClose}>
-      <ModalTitle>Hello {selectedProfile}!</ModalTitle>
+      <ModalTitle>Hello ! Selectionne ton profil</ModalTitle>
       <ModalContent className="profile-modal-content">
         <div className="profile-buttons">
           {profiles.map((profile, index) => (

@@ -56,7 +56,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
         )}
       </div>
       <Row>
-        <Col md="12">
+        <Col>
           <Title look="h5">{data?.name}</Title>
           {!data?.comment && (
             <Notice type="info" closeMode="disallow" className="fr-mb-2w">
@@ -68,16 +68,14 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
           <i>Reçu le {new Date(data?.created_at).toLocaleDateString()}</i>
         </Text>
       </Row>
-      <Row>
-        <Col>
-          <ContributorInfo
-            data={data}
-            highlightedQuery={highlightedQuery}
-            refetch={refetch}
-          />
-          <StaffActions refetch={refetch} data={data} />
-        </Col>
-      </Row>
+      <Col>
+        <ContributorInfo
+          data={data}
+          highlightedQuery={highlightedQuery}
+          refetch={refetch}
+        />
+        <StaffActions refetch={refetch} data={data} />
+      </Col>
     </Container>
   );
 };

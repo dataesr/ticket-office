@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import {
   Modal,
   ModalTitle,
@@ -14,15 +13,14 @@ import { Contribute_Production, Contribution, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
 import Select from "react-select";
 import { toast } from "react-toastify";
+import ProfileModal from "../profil-modal";
 
 type EditModalProps = {
   isOpen: boolean;
   data: Contribution | Contribute_Production;
   onClose: () => void;
-  refetch;
+  refetch: () => void;
 };
-
-// const queryClient = useQueryClient();
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -30,7 +28,11 @@ const EditModal: React.FC<EditModalProps> = ({
   onClose,
   refetch,
 }) => {
-  const user = sessionStorage.getItem("selectedProfile");
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedProfile, setSelectedProfile] = useState(
+    sessionStorage.getItem("selectedProfile")
+  );
+
   let basePath = "contact";
 
   if (window.location.pathname.includes("contributionpage")) {
@@ -38,34 +40,38 @@ const EditModal: React.FC<EditModalProps> = ({
   } else if (window.location.pathname.includes("apioperations")) {
     basePath = "contribute_productions";
   }
+
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = isDevelopment
     ? `https://scanr-api.dataesr.ovh/${basePath}/${data?._id}`
     : `${window.location.origin}/api/${basePath}/${data?._id}`;
   const [inputs, setInputs] = useState<Inputs>({
-    team: [user],
+    team: [selectedProfile],
     status: "treated",
     tags: [],
     idRef: "",
     comment: "",
   });
+
   useEffect(() => {
     setInputs({
-      team: [user],
+      team: [selectedProfile],
       status: "treated",
       tags: [],
       idRef: "",
       comment: "",
     });
-  }, [data, user]);
+  }, [data, selectedProfile]);
+
   const handleStatusChange = (selectedOption) => {
     setInputs((prevInputs) => ({
       ...prevInputs,
       status: selectedOption.value,
     }));
   };
+
   const handleTagChange = (event) => {
-    const newTag = event.target.value;
+    const newTag = event.target.value.trim();
     setInputs((prevInputs) => {
       const { tags } = prevInputs;
       if (tags.length > 0) {
@@ -77,6 +83,7 @@ const EditModal: React.FC<EditModalProps> = ({
       };
     });
   };
+
   const handleCommentChange = (event) => {
     const newComment = event.target.value;
     setInputs((prevInputs) => ({ ...prevInputs, comment: newComment }));
@@ -88,6 +95,15 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   const handleSubmit = async () => {
+    if (
+      !selectedProfile ||
+      selectedProfile === "null" ||
+      selectedProfile === ""
+    ) {
+      setShowProfileModal(true);
+      return;
+    }
+
     try {
       const body: {
         status?: string;
@@ -101,7 +117,7 @@ const EditModal: React.FC<EditModalProps> = ({
         body.status = inputs.status;
       }
 
-      if (inputs.tags) {
+      if (inputs.tags && inputs.tags.length > 0) {
         body.tags = inputs.tags;
       }
       if (inputs.team) {
@@ -121,7 +137,7 @@ const EditModal: React.FC<EditModalProps> = ({
         headers: postHeaders,
         body: JSON.stringify(body),
       });
-
+      console.log(response);
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
@@ -130,7 +146,7 @@ const EditModal: React.FC<EditModalProps> = ({
         refetch();
         onClose();
 
-        if (inputs.tags) {
+        if (inputs.tags.length > 0) {
           toast.success("Nouveau tag ajouté!");
         } else if (inputs.comment) {
           toast.success("Nouveau commentaire ajouté!");
@@ -160,62 +176,76 @@ const EditModal: React.FC<EditModalProps> = ({
     }),
   };
 
+  const handleProfileSelect = (profile) => {
+    setSelectedProfile(profile);
+    sessionStorage.setItem("selectedProfile", profile);
+    setShowProfileModal(false);
+  };
+
   return (
-    <Modal isOpen={isOpen} hide={onClose}>
-      <ModalTitle>Modifier la contribution </ModalTitle>
-      <ModalContent className="profile-modal-content">
-        <Col className="fr-mb-1w">
-          <Select
-            id="statusInput"
-            name="status"
-            options={statusOptions}
-            value={statusOptions.find(
-              (option) => option.value === inputs.status
-            )}
-            onChange={handleStatusChange}
-            styles={customStyles}
-          />
-        </Col>
-        <Row gutters>
-          <Col>
-            <TextArea
-              label="Ajouter un tag"
-              maxLength={6}
-              hint="Décrivez en un mot la contribution"
-              value={inputs.tags}
-              onChange={handleTagChange}
+    <>
+      <Modal isOpen={isOpen} hide={onClose}>
+        <ModalTitle>Modifier la contribution</ModalTitle>
+        <ModalContent className="profile-modal-content">
+          <Col className="fr-mb-1w">
+            <Select
+              id="statusInput"
+              name="status"
+              options={statusOptions}
+              value={statusOptions.find(
+                (option) => option.value === inputs.status
+              )}
+              onChange={handleStatusChange}
+              styles={customStyles}
             />
           </Col>
-          <Col>
-            <TextArea
-              label="Ajouter un idref"
-              value={inputs.idRef}
-              onChange={handleIdRefChange}
-              hint="Ajoutez un identifiant"
-            />
+          <Row gutters>
+            <Col>
+              <TextArea
+                label="Ajouter un tag"
+                maxLength={6}
+                hint="Décrivez en un mot la contribution"
+                value={inputs.tags.join(", ")}
+                onChange={handleTagChange}
+              />
+            </Col>
+            <Col>
+              <TextArea
+                label="Ajouter un idref"
+                value={inputs.idRef}
+                onChange={handleIdRefChange}
+                hint="Ajoutez un identifiant"
+              />
+            </Col>
+          </Row>
+          <Row gutters>
+            <Col>
+              <TextArea
+                label={
+                  data?.comment
+                    ? "Mettre à jour le commentaire pour l'équipe"
+                    : "Ajouter un commentaire pour l'équipe"
+                }
+                hint="Ce commentaire ne sera lu que par les membres de l'équipe"
+                value={inputs.comment}
+                onChange={handleCommentChange}
+              />
+            </Col>
+          </Row>
+          <Col className="fr-mt-5w">
+            <Button onClick={handleSubmit} variant="secondary" size="sm">
+              <Title as="h4">Enregistrer</Title>
+            </Button>
           </Col>
-        </Row>
-        <Row gutters>
-          <Col>
-            <TextArea
-              label={
-                data?.comment
-                  ? "Mettre à jour le commentaire pour l'équipe"
-                  : "Ajouter un commentaire pour l'équipe"
-              }
-              hint="Ce commentaire ne sera lu que par les membres de l'équipe"
-              value={inputs.comment}
-              onChange={handleCommentChange}
-            />
-          </Col>
-        </Row>
-        <Col className="fr-mt-5w">
-          <Button onClick={handleSubmit} variant="secondary" size="sm">
-            <Title as="h4">Enregistrer</Title>
-          </Button>
-        </Col>
-      </ModalContent>
-    </Modal>
+        </ModalContent>
+      </Modal>
+      <ProfileModal
+        isOpen={showProfileModal}
+        selectedProfile={selectedProfile}
+        onClose={() => setShowProfileModal(false)}
+        onSelectProfile={handleProfileSelect}
+      />
+    </>
   );
 };
 
