@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Badge,
-  Col,
-  Container,
-  Row,
-  Text,
-  Notice,
-  Title,
-} from "@dataesr/dsfr-plus";
+import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
 import ContributorInfo from "./contributor-info";
 import StaffActions from "./staff-action";
 import { Contribution } from "../../types";
@@ -25,7 +17,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
   refetch,
 }) => {
   return (
-    <Container fluid>
+    <>
       <div>
         {data?.tags?.length > 0 && (
           <Badge size="sm" color="purple-glycine" className="fr-mr-1w fr-mb-1w">
@@ -76,7 +68,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
         />
         <StaffActions refetch={refetch} data={data} />
       </Col>
-    </Container>
+    </>
   );
 };
 
