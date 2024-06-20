@@ -98,3 +98,11 @@ export interface PersonInfo {
   email: string;
   phone: string;
 }
+export type Publication = {
+  hits: any;
+  // id: string;
+  // isOa: boolean;
+  // type: string;
+  // year: number;
+  landingPage?: string;
+};
