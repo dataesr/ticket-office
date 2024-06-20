@@ -80,6 +80,7 @@ const MessagePreview = ({
       return updatedList;
     });
   };
+  const formattedProductionId = data.id.replace(/\//g, "%2f");
 
   return (
     <Container fluid>
@@ -118,14 +119,26 @@ const MessagePreview = ({
             </button>
           </Text>
         )}
-        <Link
-          className="fr-footer__content-link"
-          target="_blank"
-          rel="noreferrer noopener external"
-          href={`https://www.idref.fr/${data.id.replace("idref", "")}`}
-        >
-          IdRef
-        </Link>
+        {data?.id && (
+          <Link
+            className="fr-footer__content-link"
+            target="_blank"
+            rel="noreferrer noopener external"
+            href={`https://www.idref.fr/${data.id.replace("idref", "")}`}
+          >
+            IdRef
+          </Link>
+        )}
+        {data?.id && (
+          <Link
+            className="fr-footer__content-link"
+            target="_blank"
+            rel="noreferrer noopener external"
+            href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${formattedProductionId}`}
+          >
+            scanR
+          </Link>
+        )}
         <Text
           size="sm"
           bold
