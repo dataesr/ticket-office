@@ -19,6 +19,8 @@ const MessagePreview = ({
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [idRefClicked, setIdRefClicked] = useState(false);
+  const [scanRClicked, setScanRClicked] = useState(false);
 
   const { setDataList } = useDataList();
 
@@ -121,20 +123,26 @@ const MessagePreview = ({
         )}
         {data?.id && (
           <Link
-            className="fr-footer__content-link"
+            className={`fr-footer__content-link ${
+              idRefClicked ? "clicked-link" : ""
+            }`}
             target="_blank"
             rel="noreferrer noopener external"
             href={`https://www.idref.fr/${data.id.replace("idref", "")}`}
+            onClick={() => setIdRefClicked(true)}
           >
             IdRef
           </Link>
         )}
         {data?.id && (
           <Link
-            className="fr-footer__content-link"
+            className={`fr-footer__content-link ${
+              scanRClicked ? "clicked-link" : ""
+            }`}
             target="_blank"
             rel="noreferrer noopener external"
             href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${formattedProductionId}`}
+            onClick={() => setScanRClicked(true)}
           >
             scanR
           </Link>
