@@ -19,7 +19,7 @@ import ContributorSummary from "./contributor-summary";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [sort, setSort] = useState("DESC");
-  const [status, setStatus] = useState("new");
+  const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [searchInMessage, setSearchInMessage] = useState(false);
@@ -33,6 +33,8 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     setPage(parseInt(params.get("page") || "1"));
     setSearchInMessage(params.get("searchInMessage") === "true");
     setQuery(params.get("query") || "");
+    setSort(params.get("sort") || "DESC");
+    setStatus(params.get("status") || "choose");
   }, [location.search]);
 
   useEffect(() => {
@@ -40,10 +42,12 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     newSearchParams.set("page", page.toString());
     newSearchParams.set("query", query);
     newSearchParams.set("searchInMessage", searchInMessage.toString());
+    newSearchParams.set("sort", sort);
+    newSearchParams.set("status", status);
 
     const newURL = `${window.location.pathname}?${newSearchParams.toString()}`;
     window.history.pushState({}, "", newURL);
-  }, [page, query, searchInMessage]);
+  }, [page, query, searchInMessage, sort, status]);
 
   const url = buildURL(location, sort, status, query, page, searchInMessage);
   const { data, isLoading, isError, refetch } = ContributionData(url);
@@ -120,6 +124,8 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         </Col>
         <Col offsetLg="1">
           <Selectors
+            sort={sort}
+            status={status}
             setSort={setSort}
             setStatus={setStatus}
             searchInMessage={searchInMessage}

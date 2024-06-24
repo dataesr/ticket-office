@@ -9,6 +9,7 @@ import "./styles.scss";
 
 const ContributorRequests: React.FC<{
   data: {
+    _id: any;
     id: any;
     name: string;
     productions: Production[];
@@ -71,6 +72,7 @@ const ContributorRequests: React.FC<{
                 productionId={production.id}
                 idRef={data.id}
                 coloredName={coloredName}
+                contributionId={data._id}
               />
             </div>
             <div style={{ flex: 1 }}>

@@ -1,6 +1,14 @@
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
+import {
+  Button,
+  ButtonGroup,
+  Col,
+  Container,
+  Link,
+  Row,
+  Text,
+} from "@dataesr/dsfr-plus";
 import type { Contribute_Production } from "../../../types";
 import EditModal from "../../../components/edit-modal";
 import { useState, useCallback } from "react";
@@ -189,14 +197,14 @@ const MessagePreview = ({
           </Text>
         )}
       </Row>
-      <Button onClick={handleExportAllClick}>Tout exporter</Button>
+      <ButtonGroup isInlineFrom="xs" size="sm">
+        <Button onClick={handleOpenModal}>Editer la contribution</Button>
+        <Button onClick={handleExportAllClick}>Tout exporter</Button>
+      </ButtonGroup>
       <Row className="fr-mb-2w">
         <Col className="contributorProductionSide">
           <ContributorRequests data={data} coloredName={data.name} />
         </Col>
-      </Row>
-      <Row className="fr-mb-2w">
-        <Button onClick={handleOpenModal}>Editer la contribution</Button>
       </Row>
     </Container>
   );

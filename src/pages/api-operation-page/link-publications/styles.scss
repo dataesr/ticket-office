@@ -131,3 +131,18 @@
   color: #4a90e2;
   font-weight: bold;
 }
+.fr-select {
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  appearance: none;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
