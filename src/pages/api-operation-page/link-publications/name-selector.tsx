@@ -7,7 +7,12 @@ import { Col, Row } from "@dataesr/dsfr-plus";
 import { useDataList } from "./data-list-context";
 import ReactSelect from "react-select";
 
-export default function SelectWithNames({ productionId, idRef, coloredName }) {
+export default function SelectWithNames({
+  contributionId,
+  productionId,
+  idRef,
+  coloredName,
+}) {
   const { fullName, firstName, lastName } = NameFromScanr(productionId);
   const { setDataList } = useDataList();
   const customStyles = {
@@ -42,6 +47,7 @@ export default function SelectWithNames({ productionId, idRef, coloredName }) {
         fullName: closestName,
         person_id: idRef,
         publi_id: productionId,
+        contribution_id: contributionId,
         first_name: selectedOption.firstName,
         last_name: selectedOption.lastName,
         export: false,
@@ -53,6 +59,7 @@ export default function SelectWithNames({ productionId, idRef, coloredName }) {
             (e) =>
               e.person_id === newElement.person_id &&
               e.publi_id === newElement.publi_id &&
+              e.contribution_id === newElement.contribution_id &&
               e.export === false
           )
         ) {
@@ -69,6 +76,7 @@ export default function SelectWithNames({ productionId, idRef, coloredName }) {
     lastName,
     idRef,
     productionId,
+    contributionId,
     setDataList,
   ]);
 
@@ -80,6 +88,7 @@ export default function SelectWithNames({ productionId, idRef, coloredName }) {
         (e) =>
           e.person_id === idRef &&
           e.publi_id === productionId &&
+          e.contribution_id === contributionId &&
           e.export === true
       );
 
@@ -90,6 +99,7 @@ export default function SelectWithNames({ productionId, idRef, coloredName }) {
             fullName: option.value,
             person_id: idRef,
             publi_id: productionId,
+            contribution_id: contributionId,
             first_name: firstName[selectedIndex],
             last_name: lastName[selectedIndex],
             export: true,

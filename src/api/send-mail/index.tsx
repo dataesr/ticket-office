@@ -119,28 +119,31 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
   return (
     <>
-      <Container>
-        <Row gutters>
-          <Col offsetMd="2" md="8">
-            <TextArea
-              value={userResponse}
-              onChange={(e) => setUserResponse(e.target.value)}
-              placeholder="Votre réponse..."
-              rows={2}
-            />
-          </Col>
-          <Col>
-            <Button
-              className="fr-mt-1w"
-              variant="secondary"
-              onClick={sendEmail}
-              size="sm"
-            >
-              {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
-            </Button>
-          </Col>
-        </Row>
-      </Container>
+      {contribution?.email && (
+        <Container>
+          <Row gutters>
+            <Col offsetMd="2" md="8">
+              <TextArea
+                value={userResponse}
+                onChange={(e) => setUserResponse(e.target.value)}
+                placeholder="Votre réponse..."
+                rows={2}
+              />
+            </Col>
+            <Col>
+              <Button
+                className="fr-mt-1w"
+                variant="secondary"
+                onClick={sendEmail}
+                size="sm"
+              >
+                {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+      )}
+
       <ProfileModal
         isOpen={showProfileModal}
         selectedProfile={selectedProfile}

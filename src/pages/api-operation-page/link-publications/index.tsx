@@ -117,6 +117,8 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         </Col>
         <Col offsetLg="1">
           <Selectors
+            sort={sort}
+            status={status}
             setSort={setSort}
             setStatus={setStatus}
             searchInMessage={""}
@@ -126,11 +128,14 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       </Row>
       {filteredContributions?.map((contribution) => (
         <ContributionProductionItem
+          key={contribution._id}
           data={contribution as Contribute_Production}
           refetch={refetch}
         />
       ))}
-      {dataList.some((item) => item.export === true) && <ExcelExportButton />}{" "}
+      {dataList.some((item) => item.export === true) && (
+        <ExcelExportButton refetch={refetch} />
+      )}{" "}
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}

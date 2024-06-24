@@ -11,7 +11,6 @@ import {
 } from "@dataesr/dsfr-plus";
 import { Contribute_Production, Contribution, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
-import Select from "react-select";
 import { toast } from "react-toastify";
 import ProfileModal from "../profil-modal";
 
@@ -63,10 +62,10 @@ const EditModal: React.FC<EditModalProps> = ({
     });
   }, [data, selectedProfile]);
 
-  const handleStatusChange = (selectedOption) => {
+  const handleStatusChange = (event) => {
     setInputs((prevInputs) => ({
       ...prevInputs,
-      status: selectedOption.value,
+      status: event.target.value,
     }));
   };
 
@@ -137,7 +136,6 @@ const EditModal: React.FC<EditModalProps> = ({
         headers: postHeaders,
         body: JSON.stringify(body),
       });
-      console.log(response);
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
@@ -165,17 +163,6 @@ const EditModal: React.FC<EditModalProps> = ({
     { value: "treated", label: "Traité" },
   ];
 
-  const customStyles = {
-    control: (provided, state) => ({
-      ...provided,
-      borderRadius: 8,
-      borderColor: state.isFocused ? "#2684FF" : "#CED4DA",
-      boxShadow: state.isFocused
-        ? "0 0 0 0.2rem rgba(38, 132, 255, 0.25)"
-        : null,
-    }),
-  };
-
   const handleProfileSelect = (profile) => {
     setSelectedProfile(profile);
     sessionStorage.setItem("selectedProfile", profile);
@@ -188,16 +175,20 @@ const EditModal: React.FC<EditModalProps> = ({
         <ModalTitle>Modifier la contribution</ModalTitle>
         <ModalContent className="profile-modal-content">
           <Col className="fr-mb-1w">
-            <Select
+            <label htmlFor="statusInput">Statut</label>
+            <select
               id="statusInput"
               name="status"
-              options={statusOptions}
-              value={statusOptions.find(
-                (option) => option.value === inputs.status
-              )}
+              value={inputs.status}
               onChange={handleStatusChange}
-              styles={customStyles}
-            />
+              className="fr-select"
+            >
+              {statusOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
           </Col>
           <Row gutters>
             <Col>
