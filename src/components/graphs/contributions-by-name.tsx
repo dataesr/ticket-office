@@ -42,12 +42,33 @@ const ContributionsGraphByName = ({
     {}
   );
 
+  const newContributionsByName = contributions.reduce(
+    (acc: Record<string, number>, contribution: Contribution) => {
+      if (contribution.status === "new") {
+        const name = contribution.name;
+
+        if (!acc[name]) {
+          acc[name] = 0;
+        }
+
+        acc[name]++;
+      }
+
+      return acc;
+    },
+    {}
+  );
+
   let names: string[] = Object.keys(contributionsByName);
   let contributionCounts: number[] = Object.values(contributionsByName);
+  let newContributionCounts: number[] = names.map(
+    (name) => newContributionsByName[name] || 0
+  );
 
-  let pairs: [string, number][] = names.map((name, index) => [
+  let pairs: [string, number, number][] = names.map((name, index) => [
     name,
     contributionCounts[index],
+    newContributionCounts[index],
   ]);
 
   pairs.sort((a, b) => b[1] - a[1]);
@@ -55,6 +76,7 @@ const ContributionsGraphByName = ({
 
   names = pairs.map((pair) => pair[0]);
   contributionCounts = pairs.map((pair) => pair[1]);
+  newContributionCounts = pairs.map((pair) => pair[2]);
 
   const options = {
     chart: {
@@ -72,14 +94,51 @@ const ContributionsGraphByName = ({
       },
     },
     yAxis: {
+      min: 0,
       title: {
         text: "Nombre de contributions",
+      },
+      stackLabels: {
+        enabled: true,
+        style: {
+          fontWeight: "bold",
+        },
+      },
+    },
+    legend: {
+      align: "right",
+      x: -30,
+      verticalAlign: "middle",
+      layout: "vertical",
+      floating: false,
+      backgroundColor:
+        Highcharts.defaultOptions.legend.backgroundColor || "white",
+      borderColor: "#CCC",
+      borderWidth: 1,
+      shadow: false,
+    },
+    tooltip: {
+      headerFormat: "<b>{point.x}</b><br/>",
+      pointFormat: "{series.name}: {point.y}<br/>Total: {point.stackTotal}",
+    },
+    plotOptions: {
+      series: {
+        stacking: "normal",
+        dataLabels: {
+          enabled: true,
+        },
       },
     },
     series: [
       {
-        name: "Contributions",
+        name: "Toutes Contributions",
         data: contributionCounts,
+        color: "#007bff",
+      },
+      {
+        name: "Contributions non traitées",
+        data: newContributionCounts,
+        color: "#ff4d4d",
       },
     ],
   };

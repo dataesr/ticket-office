@@ -77,7 +77,7 @@ const MessagePreview = ({
         );
       } else {
         toast.warn(
-          `Les publications de "${data.name}" sont déjà dans le panier !`,
+          `Les publications de "${data.name}" sont déjà dans le panier ! Ou bien, le nom est différent de celui de la contribution. Veuillez vérifier, puis les entrer à la main`,
           {
             style: {
               backgroundColor: "#f57c00",

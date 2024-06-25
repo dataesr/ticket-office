@@ -21,7 +21,7 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
     <SideMenu title="Contributeurs" sticky fullHeight>
       {contributions.map((contribution) => (
         <SideMenuItem
-          key={contribution.id}
+          key={contribution._id}
           title={
             <div>
               {contribution?.status && (
