@@ -50,7 +50,7 @@ const ContributionsGraphByStatus = ({
       type: "column",
     },
     title: {
-      text: "Contributions par statut",
+      text: "Les status des contributions",
     },
     xAxis: {
       type: "category",

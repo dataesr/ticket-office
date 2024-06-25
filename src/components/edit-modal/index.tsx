@@ -168,7 +168,6 @@ const EditModal: React.FC<EditModalProps> = ({
     sessionStorage.setItem("selectedProfile", profile);
     setShowProfileModal(false);
   };
-
   return (
     <>
       <Modal isOpen={isOpen} hide={onClose}>

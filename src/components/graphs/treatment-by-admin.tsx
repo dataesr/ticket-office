@@ -61,7 +61,7 @@ const AdminTreatmentGraph = ({
       },
     },
     title: {
-      text: "Traitements par admin",
+      text: "Les admins ayant changé le status d'une contribution",
     },
     plotOptions: {
       column: {
