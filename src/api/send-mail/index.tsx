@@ -56,21 +56,19 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       },
       to: [
         {
-          email: "mihoub.debache@enseignementsup.gouv.fr",
-          name: "Mihoub Debache",
+          email: `${contribution.email}`,
+          name: `${contribution.name}`,
         },
       ],
       subject: `Réponse à votre contribution`,
-      htmlContent: `
-        <h1>Réponse à votre contribution</h1>
-        <p>Bonjour,</p>
-        <p>En réponse à votre contribution :</p>
-        <blockquote>${contribution.message}</blockquote>
-        <p>Voici notre réponse :</p>
-        <p>${userResponse}</p>
-      `,
+      templateId: 262,
+      params: {
+        date: new Date().toLocaleDateString(),
+        userResponse,
+        message: contribution.message,
+        selectedProfile: selectedProfile,
+      },
     };
-
     try {
       const responseBrevo = await fetch(brevoUrl, {
         method: "POST",

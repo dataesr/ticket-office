@@ -182,21 +182,7 @@ const ExcelExportButton = ({ refetch }) => {
             {isMinimized ? "Maximiser" : "Minimiser"}
           </Button>
         </div>
-        <div className="fr-grid-row fr-grid-row--center fr-mt-3w">
-          <ButtonGroup isInlineFrom="xs">
-            <Button onClick={handleExportClick}>Exporter</Button>
-            <Button
-              color="green-emeraude"
-              variant="primary"
-              onClick={handleClearClick}
-            >
-              Vider le panier
-            </Button>
-            <Button onClick={handleCopyToClipboardClick}>
-              Copier et marquer comme traité
-            </Button>
-          </ButtonGroup>
-        </div>
+
         {!isMinimized && (
           <ul style={{ listStyleType: "none", padding: 0 }}>
             {Array.isArray(dataList) &&
@@ -238,6 +224,24 @@ const ExcelExportButton = ({ refetch }) => {
                 ))}
           </ul>
         )}
+
+        <div className="fr-grid-row fr-grid-row--center fr-mt-3w">
+          <ButtonGroup isInlineFrom="xs">
+            <Button onClick={handleExportClick}>Exporter</Button>
+            <Button
+              color="green-emeraude"
+              variant="primary"
+              onClick={handleClearClick}
+            >
+              Vider le panier
+            </Button>
+          </ButtonGroup>
+        </div>
+        <div className="fr-grid-row fr-grid-row--center">
+          <Button onClick={handleCopyToClipboardClick}>
+            Copier et marquer comme traité
+          </Button>
+        </div>
       </div>
     </div>
   );
