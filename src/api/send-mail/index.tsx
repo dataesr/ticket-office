@@ -60,6 +60,10 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
           name: `${contribution.name}`,
         },
       ],
+      replyTo: {
+        email: "scanr@recherche.gouv.fr",
+        name: "L'équipe scanR",
+      },
       subject: `Réponse à votre contribution`,
       templateId: 262,
       params: {
