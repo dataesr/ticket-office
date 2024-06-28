@@ -56,6 +56,14 @@ const AdminResponseGraph = ({
     title: {
       text: "Nombre de mail envoyé",
     },
+    plotOptions: {
+      pie: {
+        dataLabels: {
+          enabled: true,
+          format: "{point.name}: {point.y}",
+        },
+      },
+    },
     series: [
       {
         name: "Mail de réponse depuis le guichet",
