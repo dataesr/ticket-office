@@ -50,7 +50,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
       <Row>
         <Col>
           <Title look="h5">{data?.name}</Title>
-          {!data?.comment && (
+          {!data?.mailSent && (
             <Notice type="info" closeMode="disallow" className="fr-mb-2w">
               Aucune réponse apportée à ce message pour l'instant
             </Notice>
