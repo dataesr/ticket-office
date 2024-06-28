@@ -51,7 +51,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
     const dataForBrevo = {
       sender: {
-        email: "mihoub.debache@enseignementsup.gouv.fr",
+        email: "scanr@recherche.gouv.fr",
         name: `${selectedProfile} de l'équipe scanR`,
       },
       to: [
