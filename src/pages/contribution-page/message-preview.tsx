@@ -149,19 +149,22 @@ const MessagePreview = ({
         </Row>
         <Col>
           {data?.team && data?.team?.length > 0 && (
-            <Text size="sm" bold>
-              Traité par : {data?.team[0]} le{" "}
-              {new Date(data.modified_at).toLocaleDateString()}
+            <Text size="sm">
+              Traité par :{" "}
+              <strong>
+                {data?.team[0]} le{" "}
+                {new Date(data.modified_at).toLocaleDateString()}
+              </strong>
             </Text>
           )}
         </Col>
         <Col>
           {data?.comment && (
             <>
-              <Text size="sm" bold>
+              <Text size="sm">
                 Commentaire ({data?.team ? data.team[0] : ""}){" "}
+                <strong> : {data.comment}</strong>
               </Text>
-              <Text size="sm">{data?.comment}</Text>
             </>
           )}
         </Col>

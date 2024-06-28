@@ -98,9 +98,9 @@ const MessagePreview = ({
         <Row className="fr-grid-row--center">
           <Col md="8" className="comment">
             <Text size="sm">
-              Commentaire ({data?.team ? data.team[0] : ""})
-            </Text>{" "}
-            <Text size="sm">{data.comment}</Text>
+              Commentaire ({data?.team ? data.team[0] : ""}){" "}
+              <strong> : {data.comment}</strong>
+            </Text>
           </Col>
         </Row>
       )}
