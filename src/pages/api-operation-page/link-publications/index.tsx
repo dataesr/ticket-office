@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import {
   Col,
   Container,
+  DismissibleTag,
   Row,
   SearchBar,
   Text,
@@ -22,7 +23,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("new");
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const [, setData] = useState(null);
   const location = useLocation();
@@ -31,13 +32,14 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     setPage(parseInt(params.get("page") || "1"));
-    setQuery(params.get("query") || "");
+    const queryParam = params.get("query") || "";
+    setQuery(queryParam ? queryParam.split(",") : []);
   }, [location.search]);
 
   useEffect(() => {
     const newSearchParams = new URLSearchParams();
     newSearchParams.set("page", page.toString());
-    newSearchParams.set("query", query);
+    newSearchParams.set("query", query.join(","));
 
     const newURL = `${window.location.pathname}?${newSearchParams.toString()}`;
     window.history.pushState({}, "", newURL);
@@ -52,7 +54,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     }
   }, [location.pathname]);
 
-  const url = buildURL(location, sort, status, query, page);
+  const url = buildURL(location, sort, status, query.join(" "), page);
   const {
     data: fetchedData,
     isLoading,
@@ -71,14 +73,28 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   )?.data;
 
   const handleSearch = (value: string) => {
-    setQuery(value.trim());
+    const trimmedValue = value.trim();
+    if (trimmedValue !== "" && !query.includes(trimmedValue)) {
+      setQuery([...query, trimmedValue]);
+    }
+  };
+
+  const handleRemoveQueryItem = (item: string) => {
+    setQuery(query.filter((q) => q !== item));
   };
 
   const filteredContributions = contrib?.filter((contribution) => {
-    const nameMatches = contribution.name
-      .toLowerCase()
-      .includes(query.toLowerCase());
-    return nameMatches;
+    if (query.length === 0) {
+      return true;
+    }
+    const queryLower = query.map((q) => q.toLowerCase());
+    const nameMatches = queryLower.some((q) =>
+      contribution.name.toLowerCase().includes(q)
+    );
+    const idMatches = queryLower.some((q) =>
+      contribution._id.toLowerCase().includes(q)
+    );
+    return nameMatches || idMatches;
   });
 
   if (isLoading)
@@ -106,8 +122,22 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
             onSearch={(value) => handleSearch(value || "")}
             isLarge
             buttonLabel="Rechercher"
-            placeholder="Rechercher par nom"
+            placeholder="Rechercher par nom ou ID"
           />
+          <div className="fr-mb-1w">
+            {query
+              .filter((item) => item.trim() !== "")
+              .map((item, index) => (
+                <DismissibleTag
+                  key={index}
+                  color="purple-glycine"
+                  className="fr-mr-1w"
+                  onClick={() => handleRemoveQueryItem(item)}
+                >
+                  {item}
+                </DismissibleTag>
+              ))}
+          </div>
           <TopPaginationButtons
             meta={meta}
             page={page}
@@ -135,7 +165,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       ))}
       {dataList.some((item) => item.export === true) && (
         <ExcelExportButton refetch={refetch} />
-      )}{" "}
+      )}
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}
