@@ -64,7 +64,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
         email: "scanr@recherche.gouv.fr",
         name: "L'équipe scanR",
       },
-      subject: `Réponse à votre contribution`,
+      subject: `Réponse à votre contribution, référence ${contribution._id}`,
       templateId: 262,
       params: {
         date: new Date().toLocaleDateString(),
