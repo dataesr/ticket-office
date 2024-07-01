@@ -1,5 +1,16 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, Row, TextArea } from "@dataesr/dsfr-plus";
+import {
+  Button,
+  Col,
+  Container,
+  Row,
+  TextArea,
+  Modal,
+  ModalTitle,
+  ModalContent,
+  ButtonGroup,
+  Alert,
+} from "@dataesr/dsfr-plus";
 import { Contribution, Contribute_Production } from "../../types";
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
@@ -14,6 +25,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(
     sessionStorage.getItem("selectedProfile") || ""
   );
@@ -38,6 +50,10 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       setSelectedProfile(profileFromLocalStorage);
     }
   }, []);
+
+  const convertNewlinesToBreaks = (text) => {
+    return text.replace(/\n/g, "<br>");
+  };
 
   const sendEmail = async () => {
     if (
@@ -68,8 +84,8 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       templateId: 262,
       params: {
         date: new Date().toLocaleDateString(),
-        userResponse,
-        message: contribution.message,
+        userResponse: convertNewlinesToBreaks(userResponse),
+        message: convertNewlinesToBreaks(contribution.message),
         selectedProfile: selectedProfile,
       },
     };
@@ -119,6 +135,10 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     setShowProfileModal(false);
   };
 
+  const handlePreview = () => {
+    setShowPreviewModal(true);
+  };
+
   return (
     <>
       {contribution?.email && (
@@ -133,14 +153,22 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
               />
             </Col>
             <Col offsetMd="12">
-              <Button
-                className="fr-mt-1w"
-                variant="secondary"
-                onClick={sendEmail}
-                size="sm"
-              >
-                {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
-              </Button>
+              <ButtonGroup size="sm">
+                <Button
+                  className="fr-mt-1w"
+                  variant="secondary"
+                  onClick={handlePreview}
+                >
+                  Prévisualiser le mail
+                </Button>
+                <Button
+                  className="fr-mt-1w"
+                  variant="primary"
+                  onClick={sendEmail}
+                >
+                  {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
+                </Button>
+              </ButtonGroup>
             </Col>
           </Row>
         </Container>
@@ -152,6 +180,41 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
         onClose={() => setShowProfileModal(false)}
         onSelectProfile={handleProfileSelect}
       />
+
+      <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>
+        <ModalTitle>Prévisualisation du mail</ModalTitle>
+        <ModalContent>
+          <Row gutters>
+            <Col>
+              <p>
+                De:{" "}
+                {`${selectedProfile} de l'équipe scanR <scanr@recherche.gouv.fr>`}
+              </p>
+              <p>À: {`${contribution?.name} <${contribution?.email}>`}</p>
+              <p>
+                Objet: Réponse à votre contribution, référence{" "}
+                {contribution?._id}
+              </p>
+              <div>
+                <h4>Message:</h4>
+                {userResponse ? (
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: convertNewlinesToBreaks(userResponse),
+                    }}
+                  ></p>
+                ) : (
+                  <Alert
+                    variant="warning"
+                    title="Alerte"
+                    description="Attention ! Vous n'avez pas encore rédigé de réponse."
+                  />
+                )}
+              </div>
+            </Col>
+          </Row>
+        </ModalContent>
+      </Modal>
     </>
   );
 }
