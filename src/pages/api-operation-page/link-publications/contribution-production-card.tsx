@@ -56,7 +56,7 @@ const ContributionProductionItem = ({
       <Row>
         <Col>
           <Text size="sm" bold className="name">
-            {data.name}
+            {data.name} ({data?._id})
           </Text>
         </Col>
       </Row>

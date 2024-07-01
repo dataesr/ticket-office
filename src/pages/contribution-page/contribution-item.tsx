@@ -49,7 +49,9 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
       </div>
       <Row>
         <Col>
-          <Title look="h5">{data?.name}</Title>
+          <Title look="h5">
+            {data?.name} ({data?._id})
+          </Title>
           {!data?.mailSent && (
             <Notice type="info" closeMode="disallow" className="fr-mb-2w">
               Aucune réponse apportée à ce message pour l'instant
