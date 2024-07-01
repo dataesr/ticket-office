@@ -11,6 +11,7 @@ import "./styles.scss";
 import { Contribute_Production } from "../../../types";
 import ContributorProductionInfo from "./contributor-production-info";
 import StaffProductionActions from "./staff-production-action";
+import { BadgeStatus, StatusLabel } from "../../contribution-page/utils";
 
 const ContributionProductionItem = ({
   data,
@@ -23,13 +24,15 @@ const ContributionProductionItem = ({
     <Container fluid className="accordion">
       <Row>
         <Col>
-          <Badge
-            size="sm"
-            color="purple-glycine"
-            className="fr-mr-1w fr-mb-1w status"
-          >
-            {data.status}
-          </Badge>
+          {data?.status && (
+            <Badge
+              size="sm"
+              color={BadgeStatus({ status: data?.status })}
+              className="fr-mr-1w fr-mb-1w"
+            >
+              {StatusLabel({ status: data.status })}
+            </Badge>
+          )}
           {data.tag && (
             <Badge
               size="sm"
