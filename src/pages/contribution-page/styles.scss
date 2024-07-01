@@ -46,3 +46,10 @@
 .fr-sidemenu__btn[aria-expanded="false"]:after {
   display: none;
 }
+.contribution-message {
+  font-style: italic;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

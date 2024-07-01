@@ -1,7 +1,13 @@
 import React from "react";
-import { Badge, SideMenu, SideMenuItem, Text } from "@dataesr/dsfr-plus";
+import { Badge, Row, SideMenu, SideMenuItem, Text } from "@dataesr/dsfr-plus";
 import { Contribution } from "../../types";
-import { BadgeColor } from "./utils";
+import {
+  BadgeColor,
+  BadgeStatus,
+  StatusLabel,
+  TypeLabel,
+  typeIcon,
+} from "./utils";
 
 interface ContributorSummaryProps {
   contributions: Contribution[];
@@ -22,42 +28,49 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
       {contributions.map((contribution) => (
         <SideMenuItem
           key={contribution._id}
+          className="contribution-message"
           title={
-            <div>
-              {contribution?.status && (
-                <Badge
-                  size="sm"
-                  color="purple-glycine"
-                  className="fr-mr-1w fr-mb-1w"
-                >
-                  {contribution.status}
-                </Badge>
-              )}
+            <Row>
               {contribution?.type && (
                 <Badge
                   size="sm"
+                  icon={typeIcon({ icon: contribution.type })}
                   color={BadgeColor({ type: contribution.type })}
                   className="fr-mr-1w fr-mb-1w"
                 >
-                  {contribution.type}
+                  {TypeLabel({ type: contribution.type })}
                 </Badge>
               )}
-              {contribution?.tags?.length > 0 && (
+              {contribution?.status && (
                 <Badge
                   size="sm"
-                  color="purple-glycine"
+                  color={BadgeStatus({ status: contribution?.status })}
                   className="fr-mr-1w fr-mb-1w"
                 >
-                  {contribution.tags.join(", ")}
+                  {StatusLabel({ status: contribution.status })}
                 </Badge>
               )}
+              {contribution?.tags?.length > 0 &&
+                contribution.tags
+                  .filter((tag) => tag !== "")
+                  .map((tag) => (
+                    <Badge
+                      key={tag}
+                      size="sm"
+                      color="purple-glycine"
+                      className="fr-mr-1w fr-mb-1w"
+                    >
+                      {tag}
+                    </Badge>
+                  ))}
               <div>
-                <Text size="sm">{contribution.name}</Text>
-                <Text size="sm" className="fr-text--italic">
+                <Text size="sm">
+                  {contribution.name}{" "}
                   {new Date(contribution.created_at).toLocaleDateString()}
                 </Text>
+                <p className="contribution-message">{contribution.message}</p>
               </div>
-            </div>
+            </Row>
           }
           defaultExpanded={false}
           onClick={() => handleClick(contribution?._id)}

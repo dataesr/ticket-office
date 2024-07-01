@@ -171,13 +171,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         </Col>
       </Row>
       <Row>
-        <Col md="3">
+        <Col md="4">
           <ContributorSummary
             contributions={filteredContributions}
             onSelectContribution={onSelectContribution}
           />
         </Col>
-        <Col md="9">
+        <Col md="7">
           {filteredContributions && filteredContributions.length > 0 && (
             <ContributionItem
               key={selectedContribution}
