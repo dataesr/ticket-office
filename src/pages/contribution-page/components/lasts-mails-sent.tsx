@@ -63,9 +63,8 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
   return (
     <div
       style={{
-        padding: "5px",
+        padding: "15px",
         backgroundColor: "#dde5ff",
-        overflow: "hidden",
         whiteSpace: "nowrap",
         position: "relative",
       }}
