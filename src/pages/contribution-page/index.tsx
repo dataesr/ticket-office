@@ -127,7 +127,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       <Title as="h1">
         {location.pathname.includes("contributionpage")
           ? "Contribution par objets"
-          : "Contribution via formulaire"}
+          : "Contribution via formulaire de contact"}
       </Title>
       <Row gutters className="fr-mb-3w">
         <Col md="8" xs="12">

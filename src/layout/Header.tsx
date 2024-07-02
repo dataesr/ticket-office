@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Header as HeaderWrapper,
@@ -9,13 +9,24 @@ import {
   FastAccess,
   Button,
   NavItem,
+  Text,
+  Col,
 } from "@dataesr/dsfr-plus";
 import ProfileModal from "../components/profil-modal";
+import LatestMails from "../pages/contribution-page/components/lasts-mails-sent";
+import { buildURL } from "../api/utils/buildURL";
+import ContributionData from "../api/contribution-api/getData";
 
 const Header: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const { pathname } = useLocation();
+  const [location] = useState(pathname);
+  const [sort] = useState("");
+  const [status] = useState("");
+  const [query] = useState([]);
+  const [page] = useState(1);
+  const [searchInMessage] = useState(false);
 
   useEffect(() => {
     const savedProfile = sessionStorage.getItem("selectedProfile");
@@ -30,6 +41,15 @@ const Header: React.FC = () => {
     }
   }, [selectedProfile]);
 
+  const url = buildURL(
+    location,
+    sort,
+    status,
+    query.join(" "),
+    page,
+    searchInMessage
+  );
+  const { data, isLoading, isError, refetch } = ContributionData(url);
   const handleButtonClick = () => {
     setShowModal(true);
   };
@@ -44,73 +64,85 @@ const Header: React.FC = () => {
   };
 
   return (
-    <HeaderWrapper>
-      <Logo
-        splitCharacter="|"
-        text="Ministère|de l'enseignement|supérieur|et de la recherche"
-      />
-      <Service
-        name="Le Guichet numérique"
-        tagline={import.meta.env.VITE_HEADER_TAG}
-      />
-      <FastAccess>
-        <Button
-          data-fr-opened="false"
-          aria-controls="modal-4"
-          onClick={handleButtonClick}
-          style={
-            selectedProfile
-              ? {}
-              : {
-                  animation: "blink 2s steps(5, start) infinite",
-                  backgroundColor: "#000091",
-                  color: "#e1000f",
-                }
-          }
-        >
-          {selectedProfile
-            ? `Salut ${selectedProfile} !`
-            : "Selectionnez un profil"}
-        </Button>
-        <ProfileModal
-          isOpen={showModal}
-          selectedProfile={selectedProfile}
-          onClose={handleCloseModal}
-          onSelectProfile={handleProfileSelect}
+    <>
+      <HeaderWrapper>
+        <Logo
+          splitCharacter="|"
+          text="Ministère|de l'enseignement|supérieur|et de la recherche"
         />
-      </FastAccess>
-      <Nav>
-        <Link current={pathname === "/"} href="/">
-          Accueil
-        </Link>
-        <Link
-          current={pathname.startsWith("/contributionpage")}
-          href="/contributionpage"
-        >
-          Contributions par objets
-        </Link>
-        <Link current={pathname.startsWith("/contact")} href="/contact">
-          Contributions via formulaire de contact
-        </Link>
-        <NavItem
-          current={pathname.split("/").includes("search")}
-          title={"Opérations sur l'API"}
-        >
-          <Link
-            current={pathname.startsWith("/apioperations")}
-            href="/apioperations"
+        <Service
+          name="Le Guichet numérique"
+          tagline={import.meta.env.VITE_HEADER_TAG}
+        />
+        <FastAccess>
+          <Button
+            data-fr-opened="false"
+            aria-controls="modal-4"
+            onClick={handleButtonClick}
+            style={
+              selectedProfile
+                ? {}
+                : {
+                    animation: "blink 2s steps(5, start) infinite",
+                    backgroundColor: "#000091",
+                    color: "#e1000f",
+                  }
+            }
           >
-            Lier des publications
+            {selectedProfile
+              ? `Salut ${selectedProfile} !`
+              : "Sélectionnez un profil"}
+          </Button>
+          <ProfileModal
+            isOpen={showModal}
+            selectedProfile={selectedProfile}
+            onClose={handleCloseModal}
+            onSelectProfile={handleProfileSelect}
+          />
+        </FastAccess>
+        <Nav>
+          <Link current={pathname === "/"} href="/">
+            Accueil
           </Link>
-          <Link current={pathname.startsWith("/delete")} href="/delete">
-            Supprimer des personnes de la base de donnée
+          <Link
+            current={pathname.startsWith("/contributionpage")}
+            href="/contributionpage"
+          >
+            Contributions par objets
           </Link>
-          <Link current={pathname.startsWith("/namechange")} href="/namechange">
-            Changer le nom d'une personne
+          <Link current={pathname.startsWith("/contact")} href="/contact">
+            Contributions via formulaire de contact
           </Link>
-        </NavItem>
-      </Nav>
-    </HeaderWrapper>
+          <NavItem
+            current={pathname.split("/").includes("search")}
+            title={"Opérations sur l'API"}
+          >
+            <Link
+              current={pathname.startsWith("/apioperations")}
+              href="/apioperations"
+            >
+              Lier des publications
+            </Link>
+            <Link current={pathname.startsWith("/delete")} href="/delete">
+              Supprimer des personnes de la base de données
+            </Link>
+            <Link
+              current={pathname.startsWith("/namechange")}
+              href="/namechange"
+            >
+              Changer le nom d'une personne
+            </Link>
+          </NavItem>
+        </Nav>
+      </HeaderWrapper>
+      {!isLoading && !isError && data ? (
+        <Col>
+          <LatestMails data={data} refetch={refetch} />
+        </Col>
+      ) : (
+        <Text>Chargement des mails...</Text>
+      )}
+    </>
   );
 };
 
