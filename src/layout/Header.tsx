@@ -14,19 +14,13 @@ import {
 } from "@dataesr/dsfr-plus";
 import ProfileModal from "../components/profil-modal";
 import LatestMails from "../pages/contribution-page/components/lasts-mails-sent";
-import { buildURL } from "../api/utils/buildURL";
 import ContributionData from "../api/contribution-api/getData";
+import { contactUrl } from "../config/api";
 
 const Header: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const { pathname } = useLocation();
-  const [location] = useState(pathname);
-  const [sort] = useState("");
-  const [status] = useState("");
-  const [query] = useState([]);
-  const [page] = useState(1);
-  const [searchInMessage] = useState(false);
 
   useEffect(() => {
     const savedProfile = sessionStorage.getItem("selectedProfile");
@@ -41,14 +35,8 @@ const Header: React.FC = () => {
     }
   }, [selectedProfile]);
 
-  const url = buildURL(
-    location,
-    sort,
-    status,
-    query.join(" "),
-    page,
-    searchInMessage
-  );
+  const url = contactUrl;
+
   const { data, isLoading, isError, refetch } = ContributionData(url);
   const handleButtonClick = () => {
     setShowModal(true);
