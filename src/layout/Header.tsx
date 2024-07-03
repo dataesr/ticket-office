@@ -23,7 +23,7 @@ const Header: React.FC = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    const savedProfile = sessionStorage.getItem("selectedProfile");
+    const savedProfile = localStorage.getItem("selectedProfile");
     if (savedProfile) {
       setSelectedProfile(savedProfile);
     }
@@ -31,7 +31,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     if (selectedProfile) {
-      sessionStorage.setItem("selectedProfile", selectedProfile);
+      localStorage.setItem("selectedProfile", selectedProfile);
     }
   }, [selectedProfile]);
 
@@ -77,9 +77,7 @@ const Header: React.FC = () => {
                   }
             }
           >
-            {selectedProfile
-              ? `Salut ${selectedProfile} !`
-              : "Sélectionnez un profil"}
+            {selectedProfile ? `Salut ${selectedProfile} !` : "Mon profil"}
           </Button>
           <ProfileModal
             isOpen={showModal}

@@ -27,7 +27,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(
-    sessionStorage.getItem("selectedProfile") || ""
+    localStorage.getItem("selectedProfile") || ""
   );
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
@@ -45,7 +45,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     : `/api/${basePath}/${contribution?._id}`;
 
   useEffect(() => {
-    const profileFromLocalStorage = sessionStorage.getItem("selectedProfile");
+    const profileFromLocalStorage = localStorage.getItem("selectedProfile");
     if (profileFromLocalStorage) {
       setSelectedProfile(profileFromLocalStorage);
     }
@@ -131,7 +131,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
   const handleProfileSelect = (profile) => {
     setSelectedProfile(profile);
-    sessionStorage.setItem("selectedProfile", profile);
+    localStorage.setItem("selectedProfile", profile);
     setShowProfileModal(false);
   };
 
