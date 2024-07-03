@@ -29,7 +29,7 @@ const EditModal: React.FC<EditModalProps> = ({
 }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(
-    sessionStorage.getItem("selectedProfile")
+    localStorage.getItem("selectedProfile")
   );
 
   let basePath = "contact";
@@ -53,6 +53,9 @@ const EditModal: React.FC<EditModalProps> = ({
   });
 
   useEffect(() => {
+    if (!selectedProfile) {
+      setShowProfileModal(true);
+    }
     setInputs({
       team: [selectedProfile],
       status: "treated",
@@ -165,7 +168,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const handleProfileSelect = (profile) => {
     setSelectedProfile(profile);
-    sessionStorage.setItem("selectedProfile", profile);
+    localStorage.setItem("selectedProfile", profile);
     setShowProfileModal(false);
   };
 
