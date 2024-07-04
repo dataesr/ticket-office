@@ -97,7 +97,7 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
               {mail.mailSent && (
                 <>
                   {mail.mailSent.length > 100
-                    ? mail.mailSent.substring(0, 200) + "..."
+                    ? mail.mailSent.substring(0, 150) + "..."
                     : mail.mailSent}{" "}
                   <Link
                     key={mail._id}
