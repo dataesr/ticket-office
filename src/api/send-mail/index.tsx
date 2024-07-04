@@ -144,7 +144,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       {contribution?.email && (
         <Container>
           <Row gutters>
-            <Col offsetMd="2" md="12">
+            <Col offsetMd="2" md="10">
               <TextArea
                 value={userResponse}
                 onChange={(e) => setUserResponse(e.target.value)}
@@ -152,7 +152,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
                 rows={2}
               />
             </Col>
-            <Col offsetMd="12">
+            <Col offsetMd="10" md="2">
               <ButtonGroup size="sm">
                 <Button
                   className="fr-mt-1w"
