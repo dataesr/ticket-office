@@ -19,7 +19,13 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
   const [scrollIndex, setScrollIndex] = useState(0);
   const [isMouseOver, setIsMouseOver] = useState(false);
 
-  const filteredMails = data.data.filter((mail) => mail.mailSent);
+  const filteredMails = data.data
+    .filter((mail) => mail.mailSent)
+    .sort((a, b) => {
+      const dateA = new Date(a.mailSentDate || "").getTime();
+      const dateB = new Date(b.mailSentDate || "").getTime();
+      return dateB - dateA;
+    });
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
@@ -67,6 +73,7 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
         backgroundColor: "#dde5ff",
         whiteSpace: "nowrap",
         position: "relative",
+        overflow: "hidden",
       }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
