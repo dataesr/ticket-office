@@ -8,6 +8,8 @@ import {
   Title,
   Button,
   Row,
+  DismissibleTag,
+  Text,
 } from "@dataesr/dsfr-plus";
 import { Contribute_Production, Contribution, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
@@ -31,6 +33,7 @@ const EditModal: React.FC<EditModalProps> = ({
   const [selectedProfile, setSelectedProfile] = useState(
     localStorage.getItem("selectedProfile")
   );
+  const [existingTags, setExistingTags] = useState<string[]>([]);
 
   let basePath = "contact";
 
@@ -63,6 +66,28 @@ const EditModal: React.FC<EditModalProps> = ({
       idRef: "",
       comment: "",
     });
+
+    const fetchExistingTags = async () => {
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: postHeaders,
+        });
+        if (response.ok) {
+          const currentData = await response.json();
+          setExistingTags(currentData.tags || []);
+        } else {
+          console.error("Erreur lors de la récupération des tags existants");
+        }
+      } catch (error) {
+        console.error(
+          "Erreur lors de la récupération des tags existants",
+          error
+        );
+      }
+    };
+
+    fetchExistingTags();
   }, [data, selectedProfile]);
 
   const handleStatusChange = (event) => {
@@ -96,6 +121,32 @@ const EditModal: React.FC<EditModalProps> = ({
     setInputs((prevInputs) => ({ ...prevInputs, idRef: newIdref }));
   };
 
+  const handleTagDelete = async (tag) => {
+    try {
+      const updatedTags = existingTags.filter(
+        (existingTag) => existingTag !== tag
+      );
+      const body = { tags: updatedTags };
+
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: postHeaders,
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        setExistingTags(updatedTags);
+        toast.success(
+          "Tag supprimé avec succès! Cliquez sur enregistrer pour valider"
+        );
+      } else {
+        console.error("Erreur lors de la suppression du tag", response);
+      }
+    } catch (error) {
+      console.error("Erreur lors de la suppression du tag", error);
+    }
+  };
+
   const handleSubmit = async () => {
     if (
       !selectedProfile ||
@@ -107,38 +158,39 @@ const EditModal: React.FC<EditModalProps> = ({
     }
 
     try {
-      const body: {
-        status?: string;
-        tags?: string[];
-        team?: string[];
-        idref?: string;
-        comment?: string;
-      } = {};
+      const currentDataResponse = await fetch(url, {
+        method: "GET",
+        headers: postHeaders,
+      });
 
-      if (inputs.status) {
-        body.status = inputs.status;
-      }
-
-      if (inputs.tags && inputs.tags.length > 0) {
-        body.tags = inputs.tags;
-      }
-      if (inputs.team) {
-        body.team = inputs.team;
+      if (!currentDataResponse.ok) {
+        console.log(
+          "Erreur de réponse lors de la récupération des données actuelles",
+          currentDataResponse
+        );
+        return;
       }
 
-      if (inputs.idRef) {
-        body.idref = inputs.idRef;
-      }
+      const currentData = await currentDataResponse.json();
 
-      if (inputs.comment) {
-        body.comment = inputs.comment;
-      }
+      const updatedTags = currentData.tags
+        ? [...currentData.tags, ...inputs.tags]
+        : inputs.tags;
+
+      const body = {
+        status: inputs.status,
+        tags: updatedTags,
+        team: inputs.team,
+        idref: inputs.idRef,
+        comment: inputs.comment,
+      };
 
       const response = await fetch(url, {
         method: "PATCH",
         headers: postHeaders,
         body: JSON.stringify(body),
       });
+
       if (!response.ok) {
         console.log("Erreur de réponse", response);
       } else {
@@ -152,7 +204,7 @@ const EditModal: React.FC<EditModalProps> = ({
         } else if (inputs.comment) {
           toast.success("Nouveau commentaire ajouté!");
         } else if (inputs.idRef) {
-          toast.success("Nouvelle référence ajoutée!");
+          toast.success("Nouvel idRef ajouté!");
         }
       }
     } catch (error) {
@@ -197,11 +249,19 @@ const EditModal: React.FC<EditModalProps> = ({
             <Col>
               <TextArea
                 label="Ajouter un tag"
-                maxLength={6}
                 hint="Décrivez en un mot la contribution"
                 value={inputs.tags.join(", ")}
                 onChange={handleTagChange}
               />
+              {existingTags.map((tag, index) => (
+                <span key={index}>
+                  <DismissibleTag onClick={() => handleTagDelete(tag)}>
+                    <Text size="sm" className="fr-ml-1w">
+                      {tag.toUpperCase()}
+                    </Text>
+                  </DismissibleTag>
+                </span>
+              ))}
             </Col>
             <Col>
               <TextArea
@@ -226,6 +286,7 @@ const EditModal: React.FC<EditModalProps> = ({
               />
             </Col>
           </Row>
+
           <Col className="fr-mt-5w">
             <Button onClick={handleSubmit} variant="secondary" size="sm">
               <Title as="h4">Enregistrer</Title>
