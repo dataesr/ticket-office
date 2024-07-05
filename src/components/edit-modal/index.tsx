@@ -21,6 +21,7 @@ type EditModalProps = {
   data: Contribution | Contribute_Production;
   onClose: () => void;
   refetch: () => void;
+  allTags: string[];
 };
 
 const EditModal: React.FC<EditModalProps> = ({
@@ -28,12 +29,14 @@ const EditModal: React.FC<EditModalProps> = ({
   data,
   onClose,
   refetch,
+  allTags,
 }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(
     localStorage.getItem("selectedProfile")
   );
   const [existingTags, setExistingTags] = useState<string[]>([]);
+  const [filteredTags, setFilteredTags] = useState<string[]>([]);
 
   let basePath = "contact";
 
@@ -88,7 +91,19 @@ const EditModal: React.FC<EditModalProps> = ({
     };
 
     fetchExistingTags();
-  }, [data, selectedProfile]);
+
+    const formattedTags = Array.isArray(allTags)
+      ? Array.from(
+          new Set(
+            allTags
+              .flat()
+              .filter((tag) => typeof tag === "string" && tag.trim() !== "")
+              .map((tag) => tag.toUpperCase())
+          )
+        ).sort()
+      : [];
+    setFilteredTags(formattedTags);
+  }, [data, selectedProfile, allTags]);
 
   const handleStatusChange = (event) => {
     setInputs((prevInputs) => ({
@@ -253,6 +268,14 @@ const EditModal: React.FC<EditModalProps> = ({
                 value={inputs.tags.join(", ")}
                 onChange={handleTagChange}
               />
+              <select onChange={handleTagChange} className="fr-select fr-mb-1w">
+                <option value="">Sélectionner un tag</option>
+                {filteredTags.map((tag) => (
+                  <option key={tag} value={tag}>
+                    {tag}
+                  </option>
+                ))}
+              </select>
               {existingTags.map((tag, index) => (
                 <span key={index}>
                   <DismissibleTag onClick={() => handleTagDelete(tag)}>
@@ -286,7 +309,6 @@ const EditModal: React.FC<EditModalProps> = ({
               />
             </Col>
           </Row>
-
           <Col className="fr-mt-5w">
             <Button onClick={handleSubmit} variant="secondary" size="sm">
               <Title as="h4">Enregistrer</Title>

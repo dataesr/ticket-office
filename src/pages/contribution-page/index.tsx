@@ -17,6 +17,7 @@ import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import ContributionItem from "./contribution-item";
 import ContributorSummary from "./contributor-summary";
+import { contactUrl, contributionUrl } from "../../config/api";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [sort, setSort] = useState("DESC");
@@ -26,7 +27,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [searchInMessage, setSearchInMessage] = useState(false);
   const [highlightedQuery, setHighlightedQuery] = useState("");
   const [selectedContribution, setSelectedContribution] = useState<string>("");
-
   const location = useLocation();
 
   useEffect(() => {
@@ -60,7 +60,18 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     searchInMessage
   );
   const { data, isLoading, isError, refetch } = ContributionData(url);
+  let urlToSend;
 
+  if (location.pathname.includes("contributionpage")) {
+    urlToSend = contributionUrl;
+  } else if (location.pathname.includes("contact")) {
+    urlToSend = contactUrl;
+  } else {
+    urlToSend = "";
+  }
+
+  const getTags = ContributionData(urlToSend);
+  const allTags = getTags?.data?.data?.map((tag) => tag?.tags);
   const meta = (data as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
   const contributions: Contribution[] = (data as { data: Contribution[] })
@@ -180,6 +191,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         <Col md="7">
           {filteredContributions && filteredContributions.length > 0 && (
             <ContributionItem
+              allTags={allTags}
               key={selectedContribution}
               data={filteredContributions.find(
                 (contribution) => contribution?._id === selectedContribution

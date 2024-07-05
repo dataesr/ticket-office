@@ -21,9 +21,11 @@ import { FaCopy } from "react-icons/fa";
 const MessagePreview = ({
   data,
   refetch,
+  allTags,
 }: {
   data: Contribute_Production;
   refetch: () => void;
+  allTags: string[];
 }) => {
   const [showModal, setShowModal] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -109,6 +111,7 @@ const MessagePreview = ({
         isOpen={showModal}
         onClose={handleCloseModal}
         data={data}
+        allTags={allTags}
       />
       <Row className="contributorProductionSideInfo">
         {data?.id && (

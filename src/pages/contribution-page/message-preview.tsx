@@ -10,10 +10,12 @@ const MessagePreview = ({
   data,
   highlightedQuery,
   refetch,
+  allTags,
 }: {
   data: Contribution;
   highlightedQuery: string;
   refetch: () => void;
+  allTags: string[];
 }) => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
@@ -25,7 +27,6 @@ const MessagePreview = ({
       setTimeout(() => setCopiedId(null), 2000);
     });
   }, []);
-
   const handleOpenModal = () => {
     setShowModal(true);
   };
@@ -247,6 +248,7 @@ const MessagePreview = ({
           isOpen={showModal}
           onClose={handleCloseModal}
           data={data}
+          allTags={allTags}
         />
       </Row>
       <Row className="fr-mb-5w fr-mt-3w">

@@ -16,11 +16,13 @@ interface ContributionItemProps {
   data: Contribution & { type: string };
   highlightedQuery: string;
   refetch: () => void;
+  allTags: string[];
 }
 const ContributionItem: React.FC<ContributionItemProps> = ({
   data,
   highlightedQuery,
   refetch,
+  allTags,
 }) => {
   return (
     <>
@@ -80,6 +82,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
           data={data}
           highlightedQuery={highlightedQuery}
           refetch={refetch}
+          allTags={allTags}
         />
         <StaffActions refetch={refetch} data={data} />
       </Col>
