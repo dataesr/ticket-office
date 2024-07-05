@@ -16,9 +16,11 @@ import { BadgeStatus, StatusLabel } from "../../contribution-page/utils";
 const ContributionProductionItem = ({
   data,
   refetch,
+  allTags,
 }: {
   data: Contribute_Production;
   refetch;
+  allTags: string[];
 }) => {
   const renderAccordion = () => (
     <Container fluid className="accordion">
@@ -69,7 +71,11 @@ const ContributionProductionItem = ({
   return (
     <AccordionGroup>
       <Accordion title={renderAccordion}>
-        <ContributorProductionInfo data={data} refetch={refetch} />
+        <ContributorProductionInfo
+          data={data}
+          refetch={refetch}
+          allTags={allTags}
+        />
         <StaffProductionActions data={data} refetch={refetch} />
       </Accordion>
     </AccordionGroup>

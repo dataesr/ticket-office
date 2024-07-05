@@ -18,6 +18,7 @@ import ContributionData from "../../../api/contribution-api/getData";
 import { buildURL } from "../../../api/utils/buildURL";
 import ExcelExportButton from "./export-to-xlsx";
 import { useDataList } from "./data-list-context";
+import { productionUrl } from "../../../config/api";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -61,6 +62,9 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     isError,
     refetch,
   } = ContributionData(url);
+
+  const getTags = ContributionData(productionUrl);
+  const allTags = getTags?.data?.data?.map((tag) => tag?.tags);
 
   useEffect(() => {
     setData(fetchedData);
@@ -161,6 +165,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           key={contribution._id}
           data={contribution as Contribute_Production}
           refetch={refetch}
+          allTags={allTags}
         />
       ))}
       {dataList.some((item) => item.export === true) && (

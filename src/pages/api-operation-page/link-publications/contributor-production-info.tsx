@@ -4,11 +4,13 @@ import MessagePreview from "./message-preview";
 const ContributorProductionInfo = ({
   data,
   refetch,
+  allTags,
 }: {
   data: Contribute_Production;
   refetch;
+  allTags;
 }) => {
-  return <MessagePreview data={data} refetch={refetch} />;
+  return <MessagePreview allTags={allTags} data={data} refetch={refetch} />;
 };
 
 export default ContributorProductionInfo;
