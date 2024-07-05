@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Modal,
   ModalTitle,
   ModalContent,
   Col,
   TextArea,
-  Title,
   Button,
   Row,
   DismissibleTag,
@@ -15,6 +14,7 @@ import { Contribute_Production, Contribution, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 import ProfileModal from "../profil-modal";
+import TagSelectionModal from "./modal-select-tags";
 
 type EditModalProps = {
   isOpen: boolean;
@@ -37,6 +37,8 @@ const EditModal: React.FC<EditModalProps> = ({
   );
   const [existingTags, setExistingTags] = useState<string[]>([]);
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState("");
+  const [showTagModal, setShowTagModal] = useState(false);
 
   let basePath = "contact";
 
@@ -79,8 +81,6 @@ const EditModal: React.FC<EditModalProps> = ({
         if (response.ok) {
           const currentData = await response.json();
           setExistingTags(currentData.tags || []);
-        } else {
-          console.error("Erreur lors de la récupération des tags existants");
         }
       } catch (error) {
         console.error(
@@ -112,18 +112,19 @@ const EditModal: React.FC<EditModalProps> = ({
     }));
   };
 
-  const handleTagChange = (event) => {
-    const newTag = event.target.value.trim();
-    setInputs((prevInputs) => {
-      const { tags } = prevInputs;
-      if (tags.length > 0) {
-        tags.pop();
-      }
-      return {
+  const handleTagInputChange = () => {
+    const tagsArray = tagInput
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag !== "");
+
+    if (tagsArray.length > 0) {
+      setInputs((prevInputs) => ({
         ...prevInputs,
-        tags: [...tags, newTag],
-      };
-    });
+        tags: [...prevInputs.tags, ...tagsArray],
+      }));
+      setTagInput("");
+    }
   };
 
   const handleCommentChange = (event) => {
@@ -160,6 +161,14 @@ const EditModal: React.FC<EditModalProps> = ({
     } catch (error) {
       console.error("Erreur lors de la suppression du tag", error);
     }
+  };
+
+  const handleTagRemove = (tagToRemove) => {
+    const updatedTags = inputs.tags.filter((tag) => tag !== tagToRemove);
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      tags: updatedTags,
+    }));
   };
 
   const handleSubmit = async () => {
@@ -215,7 +224,7 @@ const EditModal: React.FC<EditModalProps> = ({
         onClose();
 
         if (inputs.tags.length > 0) {
-          toast.success("Nouveau tag ajouté!");
+          toast.success("Nouveau(x) tag(s) ajouté(s)!");
         } else if (inputs.comment) {
           toast.success("Nouveau commentaire ajouté!");
         } else if (inputs.idRef) {
@@ -237,6 +246,20 @@ const EditModal: React.FC<EditModalProps> = ({
     setSelectedProfile(profile);
     localStorage.setItem("selectedProfile", profile);
     setShowProfileModal(false);
+  };
+
+  const handleTagAdd = () => {
+    setShowTagModal(true);
+  };
+
+  const handleTagModalClose = (selectedTags: string[]) => {
+    setShowTagModal(false);
+    if (selectedTags.length > 0) {
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        tags: [...prevInputs.tags, ...selectedTags],
+      }));
+    }
   };
 
   return (
@@ -261,32 +284,54 @@ const EditModal: React.FC<EditModalProps> = ({
             </select>
           </Col>
           <Row gutters>
-            <Col>
+            <Col md="6">
               <TextArea
-                label="Ajouter un tag"
-                hint="Décrivez en un mot la contribution"
-                value={inputs.tags.join(", ")}
-                onChange={handleTagChange}
+                label="Ajouter des tags"
+                hint="Séparez les tags par des virgules"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
               />
-              <select onChange={handleTagChange} className="fr-select fr-mb-1w">
-                <option value="">Sélectionner un tag</option>
-                {filteredTags.map((tag) => (
-                  <option key={tag} value={tag}>
-                    {tag}
-                  </option>
-                ))}
-              </select>
+              {tagInput && (
+                <Button
+                  onClick={handleTagInputChange}
+                  variant="secondary"
+                  size="sm"
+                >
+                  Valider
+                </Button>
+              )}
+            </Col>
+            <Col md="6">
+              <Button onClick={handleTagAdd} variant="secondary" size="sm">
+                Sélectionner des tags
+              </Button>
+              <br />
+              {inputs.tags.map((tag, index) => (
+                <span key={index}>
+                  <DismissibleTag
+                    size="sm"
+                    className="fr-mt-1w"
+                    onClick={() => handleTagRemove(tag)}
+                  >
+                    <Text size="sm">{tag.toUpperCase()}</Text>
+                  </DismissibleTag>
+                </span>
+              ))}
               {existingTags.map((tag, index) => (
                 <span key={index}>
-                  <DismissibleTag onClick={() => handleTagDelete(tag)}>
-                    <Text size="sm" className="fr-ml-1w">
-                      {tag.toUpperCase()}
-                    </Text>
+                  <DismissibleTag
+                    className="fr-ml-1w fr-mr-1v fr-mt-1w"
+                    size="sm"
+                    onClick={() => handleTagDelete(tag)}
+                  >
+                    <Text size="sm">{tag.toUpperCase()}</Text>
                   </DismissibleTag>
                 </span>
               ))}
             </Col>
-            <Col>
+          </Row>
+          <Row gutters>
+            <Col md="6">
               <TextArea
                 label="Ajouter un idref"
                 value={inputs.idRef}
@@ -294,33 +339,37 @@ const EditModal: React.FC<EditModalProps> = ({
                 hint="Ajoutez un identifiant"
               />
             </Col>
-          </Row>
-          <Row gutters>
-            <Col>
+            <Col md="6">
               <TextArea
-                label={
-                  data?.comment
-                    ? "Mettre à jour le commentaire pour l'équipe"
-                    : "Ajouter un commentaire pour l'équipe"
-                }
-                hint="Ce commentaire ne sera lu que par les membres de l'équipe"
+                label="Commentaire"
                 value={inputs.comment}
                 onChange={handleCommentChange}
+                hint="Ajouter un commentaire"
               />
             </Col>
           </Row>
-          <Col className="fr-mt-5w">
-            <Button onClick={handleSubmit} variant="secondary" size="sm">
-              <Title as="h4">Enregistrer</Title>
+          <Row className="fr-btn-group fr-btn-group--right fr-mt-4w">
+            <Button variant="secondary" onClick={onClose}>
+              Annuler
             </Button>
-          </Col>
+            <Button variant="primary" onClick={handleSubmit}>
+              Enregistrer
+            </Button>
+          </Row>
         </ModalContent>
       </Modal>
-      <ProfileModal
-        isOpen={showProfileModal}
-        selectedProfile={selectedProfile}
-        onClose={() => setShowProfileModal(false)}
-        onSelectProfile={handleProfileSelect}
+      {showProfileModal && (
+        <ProfileModal
+          isOpen={showProfileModal}
+          selectedProfile={selectedProfile}
+          onClose={() => setShowProfileModal(false)}
+          onSelectProfile={handleProfileSelect}
+        />
+      )}
+      <TagSelectionModal
+        isOpen={showTagModal}
+        allTags={filteredTags}
+        onClose={handleTagModalClose}
       />
     </>
   );
