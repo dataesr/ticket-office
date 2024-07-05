@@ -13,7 +13,7 @@ import {
   Col,
 } from "@dataesr/dsfr-plus";
 import ProfileModal from "../components/profil-modal";
-import LatestMails from "../pages/contribution-page/components/lasts-mails-sent";
+import LatestMails from "../components/last-mail/lasts-mails-sent";
 import ContributionData from "../api/contribution-api/getData";
 import { contactUrl } from "../config/api";
 
