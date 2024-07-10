@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 
-import Layout from "./layout";
 import Home from "./pages/home";
 import ApiOperationPage from "./pages/api-operation-page/link-publications";
 import ContributionPage from "./pages/contribution-page";
 import DeletePage from "./pages/delete-persons";
 import ChangeNamePage from "./pages/change-name";
+import Layout from "./layout";
 
 export default function Router() {
   return (
