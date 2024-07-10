@@ -18,10 +18,11 @@ export interface Contribution {
   mailSentDate?: string;
   mailSent?: string;
 }
+
 export type ContributionDataType = {
   responseFrom: string;
-  idref: any;
-  tags: any;
+  idref: string | number;
+  tags: string[];
   id: string;
   type: string;
   section: string;
@@ -31,10 +32,10 @@ export type ContributionDataType = {
   email: string;
   fonction: string;
   message: string;
-  modifier_at: string;
+  modified_at: string;
   created_at: string;
   status: string;
-  team: any[];
+  team: string[];
 };
 
 export type ContributionPageProps = {
@@ -42,11 +43,11 @@ export type ContributionPageProps = {
 };
 
 export type StaffActionsProps = {
-  data: [];
+  data: any[];
 };
 
 export type MessagePreviewProps = {
-  renderMessage: any;
+  renderMessage: (message: string) => JSX.Element;
 };
 
 export type Contribute_Production = {
@@ -56,9 +57,9 @@ export type Contribute_Production = {
   responseFrom: string;
   tag: string;
   _id: string;
-  team: any;
+  team: string[];
   modified_at: string | number | Date;
-  comment: any;
+  comment: string;
   id: string;
   treated_at: Date;
   created_at: Date;
@@ -71,16 +72,24 @@ export type Contribute_Production = {
 
 export type EditModalProps = {
   isOpen: boolean;
-  "data-production": Contribute_Production[];
-  data: Contribution[];
+  dataProduction: Contribute_Production[];
   onClose: () => void;
+  data: Contribution | Contribute_Production;
+  refetch: () => void;
+  allTags: string[];
+};
+
+export type TagSelectionModalProps = {
+  isOpen: boolean;
+  allTags: string[];
+  onClose: (selectedTags: string[]) => void;
 };
 
 export type Production = {
-  lastName: any;
-  firstName: any;
-  productionId: any;
-  fullName: any;
+  lastName: string;
+  firstName: string;
+  productionId: string;
+  fullName: string;
   name: string;
   id: string;
   treated: boolean;
@@ -93,16 +102,44 @@ export type Inputs = {
   idRef: string;
   comment: string;
 };
+
 export interface PersonInfo {
   name: string;
   email: string;
   phone: string;
 }
+
 export type Publication = {
-  hits: any;
+  hits: number;
+  landingPage?: string;
   // id: string;
   // isOa: boolean;
   // type: string;
   // year: number;
-  landingPage?: string;
+};
+
+export type MailData = {
+  _id: string;
+  mailSent?: string;
+  mailSentDate?: string;
+  responseFrom?: string;
+  name?: string;
+  refetch?: () => void;
+};
+
+export type LatestMailsProps = {
+  data: { data: MailData[] };
+  refetch?: () => void;
+};
+
+export type ProfileModalProps = {
+  isOpen: boolean;
+  selectedProfile: string | null;
+  onClose: () => void;
+  onSelectProfile: (profile: string) => void;
+};
+
+export type EmailSenderProps = {
+  contribution: Contribution | Contribute_Production;
+  refetch: () => void;
 };

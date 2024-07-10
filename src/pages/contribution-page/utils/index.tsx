@@ -72,7 +72,7 @@ export const TypeLabel = ({ type }) => {
     case "publications":
       typeLabel = "Publications";
       break;
-    case "production":
+    case "productions":
       typeLabel = "Production";
       break;
     case "projects":

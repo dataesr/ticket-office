@@ -1,19 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Text, Title, Link } from "@dataesr/dsfr-plus";
+import { LatestMailsProps } from "../../types";
 
-interface MailData {
-  _id: string;
-  mailSent?: string;
-  mailSentDate?: string;
-  responseFrom?: string;
-  name?: string;
-  refetch?: () => void;
-}
-
-interface LatestMailsProps {
-  data: { data: MailData[] };
-  refetch?: () => void;
-}
 const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
   const scrollIndexRef = useRef(0);
   const [scrollIndex, setScrollIndex] = useState(0);

@@ -1,13 +1,7 @@
 import { Modal, ModalTitle, ModalContent } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import profiles from "../../config/profil-config.json";
-
-type ProfileModalProps = {
-  isOpen: boolean;
-  selectedProfile: string | null;
-  onClose: () => void;
-  onSelectProfile: (profile: string) => void;
-};
+import { ProfileModalProps } from "../../types";
 
 const ProfileModal: React.FC<ProfileModalProps> = ({
   isOpen,
