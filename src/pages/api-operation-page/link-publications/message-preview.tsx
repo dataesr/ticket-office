@@ -112,6 +112,7 @@ const MessagePreview = ({
         onClose={handleCloseModal}
         data={data}
         allTags={allTags}
+        dataProduction={[]}
       />
       <Row className="contributorProductionSideInfo">
         {data?.id && (

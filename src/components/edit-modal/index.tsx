@@ -10,19 +10,11 @@ import {
   DismissibleTag,
   Text,
 } from "@dataesr/dsfr-plus";
-import { Contribute_Production, Contribution, Inputs } from "../../types";
+import { EditModalProps, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 import ProfileModal from "../profil-modal";
 import TagSelectionModal from "./modal-select-tags";
-
-type EditModalProps = {
-  isOpen: boolean;
-  data: Contribution | Contribute_Production;
-  onClose: () => void;
-  refetch: () => void;
-  allTags: string[];
-};
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -73,6 +65,7 @@ const EditModal: React.FC<EditModalProps> = ({
     });
 
     const fetchExistingTags = async () => {
+      if (!data?._id) return;
       try {
         const response = await fetch(url, {
           method: "GET",
@@ -81,6 +74,8 @@ const EditModal: React.FC<EditModalProps> = ({
         if (response.ok) {
           const currentData = await response.json();
           setExistingTags(currentData.tags || []);
+        } else if (response.status === 404) {
+          console.warn("Aucun tag existant trouvé");
         }
       } catch (error) {
         console.error(
@@ -118,6 +113,13 @@ const EditModal: React.FC<EditModalProps> = ({
       .map((tag) => tag.trim())
       .filter((tag) => tag !== "");
 
+    const duplicateTags = tagsArray.filter((tag) => existingTags.includes(tag));
+
+    if (duplicateTags.length > 0) {
+      toast.warn(`Le tag ${duplicateTags.join(", ")} existe déjà!`);
+      setTagInput("");
+      return;
+    }
     if (tagsArray.length > 0) {
       setInputs((prevInputs) => ({
         ...prevInputs,

@@ -249,6 +249,7 @@ const MessagePreview = ({
           onClose={handleCloseModal}
           data={data}
           allTags={allTags}
+          dataProduction={[]}
         />
       </Row>
       <Row className="fr-mb-5w fr-mt-3w">

@@ -7,12 +7,7 @@ import {
   Button,
   SelectableTag,
 } from "@dataesr/dsfr-plus";
-
-type TagSelectionModalProps = {
-  isOpen: boolean;
-  allTags: string[];
-  onClose: (selectedTags: string[]) => void;
-};
+import { TagSelectionModalProps } from "../../types";
 
 const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
   isOpen,

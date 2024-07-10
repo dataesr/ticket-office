@@ -1,25 +1,18 @@
 import { useEffect, useState } from "react";
 import {
-  Button,
-  Col,
   Container,
-  Row,
-  TextArea,
   Modal,
   ModalTitle,
   ModalContent,
-  ButtonGroup,
   Alert,
+  Row,
+  Col,
 } from "@dataesr/dsfr-plus";
-import { Contribution, Contribute_Production } from "../../types";
+import { EmailSenderProps } from "../../types";
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 import ProfileModal from "../../components/profil-modal";
-
-type EmailSenderProps = {
-  contribution: Contribution | Contribute_Production;
-  refetch: () => void;
-};
+import EmailForm from "../../components/mail-form";
 
 function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);
@@ -51,10 +44,6 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     }
   }, []);
 
-  const convertNewlinesToBreaks = (text) => {
-    return text.replace(/\n/g, "<br>");
-  };
-
   const sendEmail = async () => {
     if (
       !selectedProfile ||
@@ -84,8 +73,8 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       templateId: 262,
       params: {
         date: new Date().toLocaleDateString(),
-        userResponse: convertNewlinesToBreaks(userResponse),
-        message: convertNewlinesToBreaks(contribution.message),
+        userResponse: userResponse,
+        message: contribution.message,
         selectedProfile: selectedProfile,
       },
     };
@@ -141,46 +130,21 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
   return (
     <>
-      {contribution?.email && (
-        <Container>
-          <Row gutters>
-            <Col offsetMd="2" md="10">
-              <TextArea
-                value={userResponse}
-                onChange={(e) => setUserResponse(e.target.value)}
-                placeholder="Votre réponse..."
-                rows={2}
-              />
-            </Col>
-            <Col offsetMd="10" md="2">
-              <ButtonGroup size="sm">
-                <Button
-                  className="fr-mt-1w"
-                  variant="secondary"
-                  onClick={handlePreview}
-                >
-                  Prévisualiser le mail
-                </Button>
-                <Button
-                  className="fr-mt-1w"
-                  variant="primary"
-                  onClick={sendEmail}
-                >
-                  {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
-                </Button>
-              </ButtonGroup>
-            </Col>
-          </Row>
-        </Container>
-      )}
-
+      <Container>
+        <EmailForm
+          userResponse={userResponse}
+          setUserResponse={setUserResponse}
+          handlePreview={handlePreview}
+          sendEmail={sendEmail}
+          contribution={contribution}
+        />
+      </Container>
       <ProfileModal
         isOpen={showProfileModal}
         selectedProfile={selectedProfile}
         onClose={() => setShowProfileModal(false)}
         onSelectProfile={handleProfileSelect}
       />
-
       <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>
         <ModalTitle>Prévisualisation du mail</ModalTitle>
         <ModalContent>
@@ -198,11 +162,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
               <div>
                 <h4>Message:</h4>
                 {userResponse ? (
-                  <p
-                    dangerouslySetInnerHTML={{
-                      __html: convertNewlinesToBreaks(userResponse),
-                    }}
-                  ></p>
+                  <p>{userResponse}</p>
                 ) : (
                   <Alert
                     variant="warning"

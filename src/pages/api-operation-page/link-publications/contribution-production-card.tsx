@@ -12,6 +12,8 @@ import { Contribute_Production } from "../../../types";
 import ContributorProductionInfo from "./contributor-production-info";
 import StaffProductionActions from "./staff-production-action";
 import { BadgeStatus, StatusLabel } from "../../contribution-page/utils";
+import { useState } from "react";
+import { FaCopy } from "react-icons/fa";
 
 const ContributionProductionItem = ({
   data,
@@ -22,6 +24,16 @@ const ContributionProductionItem = ({
   refetch;
   allTags: string[];
 }) => {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedId(text);
+      setTimeout(() => {
+        setCopiedId(null);
+      }, 2000);
+    });
+  };
   const renderAccordion = () => (
     <Container fluid className="accordion">
       <Row>
@@ -61,7 +73,18 @@ const ContributionProductionItem = ({
       <Row>
         <Col>
           <Text size="sm" bold className="name">
-            {data.name} ({data?._id})
+            {data?.name} ({data?._id})
+            <button
+              className={`copy-button ${
+                copiedId === data?._id ? "copied" : ""
+              }`}
+              onClick={() => copyToClipboard(data?._id)}
+            >
+              {copiedId === data?._id && (
+                <span className="copied-text">Copié</span>
+              )}
+              <FaCopy size={14} color="#2196f3" className="copy-icon" />
+            </button>
           </Text>
         </Col>
       </Row>
