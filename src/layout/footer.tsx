@@ -1,8 +1,12 @@
 import { Container, Link, Logo } from "@dataesr/dsfr-plus";
 
-
 import SwitchTheme from "./switch-theme";
-import { Footer, FooterBody, FooterBottom, FooterTop } from "../components/footer";
+import {
+  Footer,
+  FooterBody,
+  FooterBottom,
+  FooterTop,
+} from "../components/footer";
 
 export default function MainFooter() {
   return (
