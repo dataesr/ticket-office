@@ -31,6 +31,7 @@ const EditModal: React.FC<EditModalProps> = ({
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [showTagModal, setShowTagModal] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState("treated"); // Ajouter l'état pour le statut actuel
 
   let basePath = "contact";
 
@@ -56,9 +57,12 @@ const EditModal: React.FC<EditModalProps> = ({
     if (!selectedProfile) {
       setShowProfileModal(true);
     }
+    if (data && data.status) {
+      setCurrentStatus(data.status);
+    }
     setInputs({
       team: [selectedProfile],
-      status: "treated",
+      status: data ? data.status : "treated",
       tags: [],
       idRef: "",
       comment: "",
@@ -278,6 +282,9 @@ const EditModal: React.FC<EditModalProps> = ({
               onChange={handleStatusChange}
               className="fr-select"
             >
+              <option value="" disabled hidden>
+                {currentStatus}
+              </option>
               {statusOptions.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}

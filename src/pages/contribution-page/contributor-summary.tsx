@@ -26,7 +26,7 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
 }) => {
   const handleClick = (id: string) => {
     onSelectContribution(id);
-    window.scrollTo({ top: 200, behavior: "smooth" });
+    window.scrollTo({ top: 300, behavior: "smooth" });
   };
 
   return (
