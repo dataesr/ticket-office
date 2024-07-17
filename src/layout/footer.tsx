@@ -8,8 +8,6 @@ import {
   FooterTop,
 } from "../components/footer";
 
-console.log("Hi Anne, Hi Fred, it's green, isn't it ?!");
-
 export default function MainFooter() {
   return (
     <Footer fluid={true}>
