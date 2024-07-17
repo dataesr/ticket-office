@@ -79,7 +79,15 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
 
   useEffect(() => {
     if (contributions && contributions.length > 0) {
-      setSelectedContribution(contributions[0]?._id);
+      setSelectedContribution((prevSelectedContribution) => {
+        // Le .some itère sur chaque element [contributions]!!
+        // Ca retourne true dès qu'un élément valid la condition, sinon false!!
+        // Si prevSelectedContribution (donc l'id) est dans contributions, on le garde, sinon on prend le premier élément
+        const isValid = contributions.some(
+          (contribution) => contribution._id === prevSelectedContribution
+        );
+        return isValid ? prevSelectedContribution : contributions[0]?._id;
+      });
     }
   }, [contributions]);
 
