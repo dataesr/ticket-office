@@ -54,6 +54,8 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       return;
     }
 
+    const formattedResponse = userResponse.replace(/\n/g, "<br/>");
+
     const dataForBrevo = {
       sender: {
         email: "scanr@recherche.gouv.fr",
@@ -73,11 +75,12 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       templateId: 262,
       params: {
         date: new Date().toLocaleDateString(),
-        userResponse: userResponse,
+        userResponse: formattedResponse,
         message: contribution.message,
         selectedProfile: selectedProfile,
       },
     };
+
     try {
       const responseBrevo = await fetch(brevoUrl, {
         method: "POST",
@@ -162,7 +165,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
               <div>
                 <h4>Message:</h4>
                 {userResponse ? (
-                  <p>{userResponse}</p>
+                  <pre style={{ whiteSpace: "pre-wrap" }}>{userResponse}</pre>
                 ) : (
                   <Alert
                     variant="warning"
