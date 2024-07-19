@@ -40,7 +40,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
     <>
       <Row>
         {data?.tags?.length > 0 && (
-          <Badge size="sm" color="purple-glycine" className="fr-mr-1w fr-mb-1w">
+          <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
             {data.tags.join(", ")}
           </Badge>
         )}

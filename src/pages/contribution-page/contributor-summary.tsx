@@ -64,7 +64,7 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
                       <Badge
                         key={tag}
                         size="sm"
-                        color="purple-glycine"
+                        color="green-menthe"
                         className="fr-mr-1w fr-mb-1w"
                       >
                         {tag}
