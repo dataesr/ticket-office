@@ -9,10 +9,9 @@ import { postHeaders } from "../../../config/api";
 
 const ExcelExportButton = ({ refetch }) => {
   const { dataList, setDataList } = useDataList();
-
   const [isMinimized, setIsMinimized] = useState(false);
 
-  const markAsTreated = async (contributionId) => {
+  const markAsTreated = async (contributionIds) => {
     const basePath = window.location.pathname.includes("contributionpage")
       ? "contribute"
       : window.location.pathname.includes("apioperations")
@@ -20,25 +19,34 @@ const ExcelExportButton = ({ refetch }) => {
       : "contact";
 
     const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-    const url = isDevelopment
-      ? `https://scanr-api.dataesr.ovh/${basePath}/${contributionId}`
-      : `${window.location.origin}/api/${basePath}/${contributionId}`;
+    const urlBase = isDevelopment
+      ? `https://scanr-api.dataesr.ovh/${basePath}`
+      : `${window.location.origin}/api/${basePath}`;
 
     const body = { status: "treated" };
 
     try {
-      const response = await fetch(url, {
-        method: "PATCH",
-        headers: postHeaders,
-        body: JSON.stringify(body),
+      const uniqueContributionIds = [...new Set(contributionIds)];
+      const uniqueContributionPromises = uniqueContributionIds.map((id) =>
+        fetch(`${urlBase}/${id}`, {
+          method: "PATCH",
+          headers: postHeaders,
+          body: JSON.stringify(body),
+        })
+      );
+
+      const responses = await Promise.all(uniqueContributionPromises);
+
+      responses.forEach(async (response) => {
+        if (!response.ok) {
+          console.error("Erreur de réponse", response);
+        } else {
+          const responseData = await response.json();
+          console.log("Données de réponse", responseData);
+        }
       });
-      if (!response.ok) {
-        console.error("Erreur de réponse", response);
-      } else {
-        const responseData = await response.json();
-        refetch();
-        console.log("Données de réponse", responseData);
-      }
+
+      refetch();
     } catch (error) {
       console.error("Erreur lors de la soumission du formulaire", error);
     }
@@ -55,14 +63,17 @@ const ExcelExportButton = ({ refetch }) => {
         first_name: item.first_name || "",
         last_name: item.last_name || "",
       }));
+
     if (dataToExport.length === 0) {
       toast.error("Aucune publication à exporter !");
       return;
     }
 
-    for (const item of dataToExport) {
-      await markAsTreated(item.contribution_id);
-    }
+    const uniqueContributionIds = [
+      ...new Set(dataToExport.map((item) => item.contribution_id)),
+    ];
+
+    await markAsTreated(uniqueContributionIds);
 
     const worksheet = XLSX.utils.json_to_sheet(dataToExport);
     const workbook = XLSX.utils.book_new();
@@ -90,13 +101,15 @@ const ExcelExportButton = ({ refetch }) => {
         first_name: item.first_name || "",
         last_name: item.last_name || "",
       }));
+
     if (dataToCopy.length === 0) {
       toast.error("Aucune publication à copier !");
       return;
     }
-    for (const item of dataToCopy) {
-      await markAsTreated(item.contribution_id);
-    }
+
+    const uniqueContributionIds = [
+      ...new Set(dataToCopy.map((item) => item.contribution_id)),
+    ];
 
     const formattedData = dataToCopy
       .map(
@@ -111,6 +124,8 @@ const ExcelExportButton = ({ refetch }) => {
     } catch (err) {
       toast.error("Erreur lors de la copie des données !");
     }
+
+    await markAsTreated(uniqueContributionIds);
 
     setDataList((prevState) =>
       prevState.map((item) => ({ ...item, export: false }))
@@ -155,6 +170,15 @@ const ExcelExportButton = ({ refetch }) => {
     });
   };
 
+  const uniqueExportCount = dataList
+    .filter((item) => item.export === true)
+    .reduce((unique, item) => {
+      if (!unique.some((uniqueItem) => uniqueItem.publi_id === item.publi_id)) {
+        unique.push(item);
+      }
+      return unique;
+    }, []).length;
+
   return (
     <div className="basket">
       <div className="basket-content">
@@ -165,12 +189,8 @@ const ExcelExportButton = ({ refetch }) => {
         </div>
         <div className="basket-controls">
           <Badge size="sm" color="blue-ecume" className="badge-count">
-            {`${
-              dataList.filter((item) => item.export === true).length
-            } publication${
-              dataList.filter((item) => item.export === true).length > 1
-                ? "s"
-                : ""
+            {`${uniqueExportCount} publication${
+              uniqueExportCount > 1 ? "s" : ""
             }`}
           </Badge>
           <Button

@@ -32,7 +32,7 @@ const MessagePreview = ({
   const [idRefClicked, setIdRefClicked] = useState(false);
   const [scanRClicked, setScanRClicked] = useState(false);
 
-  const { setDataList } = useDataList();
+  const { dataList, setDataList } = useDataList();
 
   const { fullNameFromIdref: fetchedData } = NameFromIdref(data.id);
 
@@ -64,19 +64,19 @@ const MessagePreview = ({
       });
 
       if (addedToCart) {
-        const count = updatedList.filter(
-          (item) => item.person_id === data.id && item.export === true
-        ).length;
+        const count = dataList.filter((item) => item.export === true).length;
 
-        toast(
-          `${count} publications de "${data.name}" ont été ajoutées au panier`,
-          {
-            style: {
-              backgroundColor: "#4caf50",
-              color: "#fff",
-            },
-          }
-        );
+        const message =
+          count === 1
+            ? `La publication de "${data.name}" a été ajoutée au panier`
+            : `Les publications de "${data.name}" ont été ajoutées au panier`;
+
+        toast(message, {
+          style: {
+            backgroundColor: "#4caf50",
+            color: "#fff",
+          },
+        });
       } else {
         toast.warn(
           `Les publications de "${data.name}" sont déjà dans le panier ! Ou bien, le nom est différent de celui de la contribution. Veuillez vérifier, puis les entrer à la main`,
