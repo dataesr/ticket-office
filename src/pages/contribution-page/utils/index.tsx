@@ -2,19 +2,19 @@ export const BadgeColor = ({ type }) => {
   let badgeColor;
   switch (type) {
     case "structures":
-      badgeColor = "yellow-tournesol";
+      badgeColor = "blue-cumulus";
       break;
     case "persons":
-      badgeColor = "orange-terre-battue";
+      badgeColor = "purple-glycine";
       break;
     case "publications":
-      badgeColor = "pink-macaron";
+      badgeColor = "pink-tuile";
       break;
     case "project":
       badgeColor = "green-emeraude";
       break;
     case "patent":
-      badgeColor = "blue-ecume";
+      badgeColor = "green-tilleul-verveine";
       break;
     default:
       badgeColor = "purple-glycine";
@@ -26,13 +26,13 @@ export const BadgeStatus = ({ status }) => {
   let badgeStatus;
   switch (status) {
     case "new":
-      badgeStatus = "blue-ecume";
+      badgeStatus = "pink-tuile";
       break;
     case "treated":
-      badgeStatus = "orange-terre-battue";
+      badgeStatus = "green-bourgeon";
       break;
     case "ongoing":
-      badgeStatus = "yellow-tournesol";
+      badgeStatus = "brown-cafe-creme";
       break;
 
     default:

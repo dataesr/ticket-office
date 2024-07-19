@@ -50,7 +50,7 @@ const ContributionProductionItem = ({
           {data.tag && (
             <Badge
               size="sm"
-              color="pink-tuile"
+              color="green-menthe"
               className="fr-mr-1w fr-mb-1w status"
             >
               {data.tag}

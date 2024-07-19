@@ -19,6 +19,50 @@ export interface Contribution {
   mailSent?: string;
 }
 
+// {
+//   "thread": [
+//     {
+//       "messages": [
+//         {
+//           "message_id": "1",
+//           "from": "contributor@example.com",
+//           "to": ["scanr@recherche.......com"],
+//           "date": "2024-07-18",
+//           "body": "je veux avoir accés à l'api",
+//           "subject" : "demande d'acces à l'api"
+//         },
+//         {
+//           "message_id": "2",
+//           "from": "scanr@example.com",
+//           "to": ["contributor@example.com"],
+//           "date": "2024-07-18",
+//           "team": "mihoub",
+//           "subject" : "RE - demande d'acces à l'api"
+//           "body": "Voici vos ids pour acces à scanr API",
+//           "repliesTo": message_id = 1
+//         },
+//         {
+//           "message_id": "3",
+//           "from": "contributor@example.com",
+//           "to": ["scanr@example.com"],
+//           "date": "2024-07-18",
+//           "subject" : "RE RE - demande d'acces à l'api"
+//           "body": "Merci  !! ",
+//         },
+//         {
+//           "message_id": "4",
+//           "from": "scanr@exemple.com",
+//           "to": ["contributor@example.com",],
+//           "date": "2024-07-18",
+//           "team": "mihoub",
+//           "body": "De rien!",
+//           "subject" : "RE RE RE - demande d'acces à l'api"
+//           "repliesTo": message_id = 3
+//         }
+//       ]
+//   ]
+// }
+
 export type ContributionDataType = {
   responseFrom: string;
   idref: string | number;
@@ -51,6 +95,9 @@ export type MessagePreviewProps = {
 };
 
 export type Contribute_Production = {
+  fullName: any;
+  firstName: any;
+  lastName: any;
   mailSentDate: string | number | Date;
   mailSent: string;
   responseByMail: string;
