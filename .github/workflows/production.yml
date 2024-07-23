@@ -23,7 +23,6 @@ jobs:
 
       - name: 🪚 Build app
         run: |
-          cd client
           npm ci
           npm run build -- --mode production
 
