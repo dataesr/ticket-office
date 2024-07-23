@@ -78,7 +78,7 @@ jobs:
   deploy:
     name: 💭 Update production deployment
     runs-on: ubuntu-latest
-    needs: publish-ghcr
+    needs: release-ghcr
     steps:
       - name: Deploy to Cluster
         id: kubectl-deploy
