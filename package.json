@@ -8,7 +8,8 @@
     "dev": "vite",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "npm run dev"
+    "start": "npm run dev",
+    "deploy": "git switch main && git pull origin main --rebase --tags && git merge origin staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
   },
   "dependencies": {
     "@dataesr/dsfr-plus": "^0.4.1",
