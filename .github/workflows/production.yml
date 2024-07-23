@@ -64,7 +64,7 @@ jobs:
         uses: loopwerk/tag-changelog@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          config_file: .github/config/changelog.cjs
+          config_file: .github/config/changelog.js
 
       - name: 📦 Create release
         uses: actions/create-release@latest
