@@ -8,13 +8,12 @@ import {
   Row,
   Col,
 } from "@dataesr/dsfr-plus";
-import { EmailSenderProps } from "../../types";
-import { postHeaders } from "../../config/api";
+import { Contribution, EmailSenderProps } from "../../types";
 import { toast } from "react-toastify";
 import ProfileModal from "../../components/profil-modal";
 import EmailForm from "../../components/mail-form";
 
-function EmailSender({ contribution, refetch }: EmailSenderProps) {
+function EmailSender({ contribution, refetch, objectType }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
   const [showProfileModal, setShowProfileModal] = useState(false);
@@ -22,20 +21,6 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [selectedProfile, setSelectedProfile] = useState(
     localStorage.getItem("selectedProfile") || ""
   );
-
-  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  let basePath = "contact";
-  if (window.location.pathname.includes("contributionpage")) {
-    basePath = "contribute";
-  } else if (window.location.pathname.includes("apioperations")) {
-    basePath = "contribute_productions";
-  }
-  const brevoUrl = isDevelopment
-    ? "https://api.brevo.com/v3/smtp/email"
-    : "/email/";
-  const scanRUrl = isDevelopment
-    ? `https://scanr-api.dataesr.ovh/${basePath}/${contribution?._id}`
-    : `/api/${basePath}/${contribution?._id}`;
 
   useEffect(() => {
     const profileFromLocalStorage = localStorage.getItem("selectedProfile");
@@ -54,58 +39,27 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       return;
     }
 
-    const dataForBrevo = {
-      sender: {
-        email: "scanr@recherche.gouv.fr",
-        name: `${selectedProfile} de l'équipe scanR`,
-      },
-      to: [
-        {
-          email: `${contribution.email}`,
-          name: `${contribution.name}`,
-        },
-      ],
-      replyTo: {
-        email: "scanr@recherche.gouv.fr",
-        name: "L'équipe scanR",
-      },
-      subject: `Réponse à votre contribution, référence ${contribution._id}`,
-      templateId: 262,
-      params: {
-        date: new Date().toLocaleDateString(),
-        userResponse: userResponse,
-        message: contribution.message,
-        selectedProfile: selectedProfile,
-      },
+    const requestData = {
+      contactId: contribution._id,
+      threadId: (contribution as Contribution).threadId || "",
+      responseText: userResponse,
+      objectType: objectType,
     };
+
     try {
-      const responseBrevo = await fetch(brevoUrl, {
+      const response = await fetch(`/reply-to-contribution/${objectType}`, {
         method: "POST",
         headers: {
-          "api-key": import.meta.env.VITE_BREVO_API_AUTHORIZATION,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(dataForBrevo),
+        body: JSON.stringify(requestData),
       });
 
-      if (!responseBrevo.ok) {
-        throw new Error(`HTTP error! status: ${responseBrevo.status}`);
-      }
-
-      const dataForScanR = {
-        mailSent: userResponse,
-        mailSentDate: new Date(),
-        responseFrom: selectedProfile,
-      };
-
-      const responseScanR = await fetch(scanRUrl, {
-        method: "PATCH",
-        headers: postHeaders,
-        body: JSON.stringify(dataForScanR),
-      });
-
-      if (!responseScanR.ok) {
-        throw new Error(`HTTP error! status: ${responseScanR.status}`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || `HTTP error! status: ${response.status}`
+        );
       }
 
       setEmailSent(true);

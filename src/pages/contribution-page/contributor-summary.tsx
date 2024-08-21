@@ -28,10 +28,9 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
     onSelectContribution(id);
     window.scrollTo({ top: 200, behavior: "smooth" });
   };
-
   return (
     <SideMenu title="Contributeurs" sticky fullHeight>
-      {contributions.map((contribution) => (
+      {contributions?.map((contribution) => (
         <SideMenuItem
           key={contribution._id}
           className="contribution-message"
@@ -81,7 +80,7 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
             </Row>
           }
           defaultExpanded={false}
-          onClick={() => handleClick(contribution?._id)}
+          onClick={() => handleClick(contribution._id)}
         />
       ))}
     </SideMenu>

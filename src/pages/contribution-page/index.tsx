@@ -59,8 +59,9 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     page,
     searchInMessage
   );
+
   const { data, isLoading, isError, refetch } = ContributionData(url);
-  let urlToSend;
+  let urlToSend = "";
 
   if (location.pathname.includes("contributionpage")) {
     urlToSend = contributionUrl;
@@ -71,14 +72,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   }
 
   const getTags = ContributionData(urlToSend);
-  const allTags = getTags?.data?.data?.map((tag) => tag?.tags);
-  const meta = (data as { meta: any })?.meta;
-  const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
-  const contributions: Contribution[] = (data as { data: Contribution[] })
-    ?.data;
+  const allTags = getTags?.data?.map((item) => item?.tags).flat();
+  const meta = data?.meta;
+  const maxPage = meta ? Math.ceil(meta.total / 20) : 1;
+  const contributions: Contribution[] = data || [];
 
   useEffect(() => {
-    if (contributions && contributions.length > 0) {
+    if (contributions.length > 0) {
       setSelectedContribution(contributions[0]?._id);
     }
   }, [contributions]);
@@ -95,8 +95,8 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     setQuery(query.filter((q) => q !== item));
   };
 
-  const onSelectContribution = (id: string) => {
-    setSelectedContribution(id);
+  const onSelectContribution = (_id: string) => {
+    setSelectedContribution(_id);
   };
 
   const filteredContributions = contributions?.filter((contribution) => {
@@ -194,7 +194,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
               allTags={allTags}
               key={selectedContribution}
               data={filteredContributions.find(
-                (contribution) => contribution?._id === selectedContribution
+                (contribution) => contribution._id === selectedContribution
               )}
               refetch={refetch}
               highlightedQuery={highlightedQuery}

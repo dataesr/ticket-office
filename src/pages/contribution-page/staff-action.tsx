@@ -19,7 +19,7 @@ const StaffActions = ({ data, refetch }: { data: Contribution; refetch }) => {
           <Text>{data.mailSent}</Text>
         </Col>
       )}
-      <EmailSender contribution={data} refetch={refetch} />
+      <EmailSender contribution={data} refetch={refetch} objectType="contact" />
     </>
   );
 };

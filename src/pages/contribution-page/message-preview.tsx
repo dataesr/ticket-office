@@ -126,14 +126,16 @@ const MessagePreview = ({
             )}
           </Col>
           <Col>
-            {data?.fonction ? (
+            {data?.fonction || data?.function ? (
               <Text size="sm">
-                Fonction: <strong>{data.fonction}</strong>
+                Fonction: <strong>{data.fonction || data.function}</strong>
                 <button
                   className={`copy-button ${
-                    copiedId === data.fonction ? "copied" : ""
+                    copiedId === data.fonction || data.function ? "copied" : ""
                   }`}
-                  onClick={() => copyToClipboard(data.fonction)}
+                  onClick={() =>
+                    copyToClipboard(data.fonction || data.function)
+                  }
                 >
                   {copiedId === data.fonction && (
                     <span className="copied-text">Copié</span>

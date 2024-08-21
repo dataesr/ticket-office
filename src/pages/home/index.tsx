@@ -18,8 +18,7 @@ const Home = () => {
   const [filter, setFilter] = useState("contributions");
   const url = filter === "object" ? contributionUrl : contactUrl;
   const { data, isLoading, isError } = ContributionData(url);
-  const contributions = (data as { data: [] })?.data;
-
+  const contributions = data as { data: [] };
   return (
     <Container className="fr-mt-10v">
       <Title>Bienvenue sur le Guichet numérique du DISD</Title>

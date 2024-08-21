@@ -123,7 +123,7 @@ const Header: React.FC = () => {
       </HeaderWrapper>
       {!isLoading && !isError && data ? (
         <Col>
-          <LatestMails data={data} refetch={refetch} />
+          <LatestMails data={data} refetch={refetch} mailSent={""} />
         </Col>
       ) : (
         <Text>Chargement des mails...</Text>

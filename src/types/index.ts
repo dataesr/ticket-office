@@ -1,4 +1,6 @@
 export interface Contribution {
+  function: string;
+  threadId: string;
   _id: string;
   id: string;
   name: string;
@@ -127,9 +129,18 @@ export type MailData = {
   refetch?: () => void;
 };
 
+interface Mail {
+  _id: string;
+  mailSent: string;
+  mailSentDate: string;
+  responseFrom: string;
+  name: string;
+}
+
 export type LatestMailsProps = {
-  data: { data: MailData[] };
+  data: Mail[];
   refetch?: () => void;
+  mailSent: string;
 };
 
 export type ProfileModalProps = {
@@ -141,5 +152,6 @@ export type ProfileModalProps = {
 
 export type EmailSenderProps = {
   contribution: Contribution | Contribute_Production;
+  objectType: string;
   refetch: () => void;
 };

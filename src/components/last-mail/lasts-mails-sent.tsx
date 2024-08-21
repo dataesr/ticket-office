@@ -7,7 +7,7 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
   const [scrollIndex, setScrollIndex] = useState(0);
   const [isMouseOver, setIsMouseOver] = useState(false);
 
-  const filteredMails = data.data
+  const filteredMails = data
     .filter((mail) => mail.mailSent)
     .sort((a, b) => {
       const dateA = new Date(a.mailSentDate || "").getTime();

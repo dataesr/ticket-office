@@ -35,7 +35,7 @@ const EditModal: React.FC<EditModalProps> = ({
   let basePath = "contact";
 
   if (window.location.pathname.includes("contributionpage")) {
-    basePath = "contribute";
+    basePath = "contribution";
   } else if (window.location.pathname.includes("apioperations")) {
     basePath = "contribute_productions";
   }

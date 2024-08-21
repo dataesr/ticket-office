@@ -14,7 +14,7 @@ const ExcelExportButton = ({ refetch }) => {
 
   const markAsTreated = async (contributionId) => {
     const basePath = window.location.pathname.includes("contributionpage")
-      ? "contribute"
+      ? "contribution"
       : window.location.pathname.includes("apioperations")
       ? "contribute_productions"
       : "contact";
