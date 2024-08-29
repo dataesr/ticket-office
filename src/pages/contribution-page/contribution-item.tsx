@@ -96,8 +96,10 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
             </Notice>
           )}
         </Col>
-        <Text size="sm" bold>
-          <i>Reçu le {new Date(data?.created_at).toLocaleDateString()}</i>
+        <Text size="sm">
+          <i className="date">
+            Reçu le {new Date(data?.created_at)?.toLocaleDateString()}
+          </i>
         </Text>
       </Row>
       <Col>
