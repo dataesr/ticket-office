@@ -14,7 +14,9 @@ const StaffActions = ({ data, refetch }: { data: Contribution; refetch }) => {
         <Col className={contributorClassName}>
           <Text size="sm">
             Réponse apportée par {data.responseFrom} le{" "}
-            {new Date(data?.mailSentDate).toLocaleDateString()}{" "}
+            {new Date(data?.mailSentDate).toLocaleDateString()}
+            {" à "}
+            {new Date(data?.mailSentDate).toLocaleTimeString()}{" "}
           </Text>
           <Text>{data.mailSent}</Text>
         </Col>

@@ -155,6 +155,8 @@ const MessagePreview = ({
               <strong>
                 {data?.team[0]} le{" "}
                 {new Date(data.modified_at).toLocaleDateString()}
+                {" à "}
+                {new Date(data.modified_at).toLocaleTimeString()}
               </strong>
             </Text>
           )}
