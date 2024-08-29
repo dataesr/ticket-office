@@ -11,15 +11,13 @@ export const buildURL = (
 
   let baseUrl = "contact";
   if (location?.pathname?.includes("contributionpage")) {
-    baseUrl = "contribution";
+    baseUrl = "contribute";
   } else if (location?.pathname?.includes("apioperations")) {
     baseUrl = "production";
   }
 
-  // Construire les paramètres de tri
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
 
-  // Initialiser l'objet des filtres
   const where: any = {};
 
   // Ajouter le filtre de recherche par texte

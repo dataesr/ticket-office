@@ -4,7 +4,7 @@ export const postHeaders = { ...headers, "Content-Type": "application/json" };
 
 const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 export const contributionUrl = isDevelopment
-  ? "http://localhost:3000/contribution"
+  ? "http://localhost:3000/contribute"
   : "/api/contribution?max_results=2000";
 
 export const contactUrl = isDevelopment
