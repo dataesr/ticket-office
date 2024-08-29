@@ -18,7 +18,9 @@ const StaffProductionActions = ({
             {data.responseFrom !== "" ? "Réponse apportée par " : ""}
             {data.responseFrom}
             {" le "}
-            {new Date(data?.mailSentDate).toLocaleDateString()}{" "}
+            {new Date(data?.mailSentDate).toLocaleDateString()}
+            {" à "}
+            {new Date(data?.mailSentDate).toLocaleTimeString()}
           </Text>
           <Text>{data.mailSent}</Text>
         </Col>
