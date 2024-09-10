@@ -12,17 +12,21 @@ const StaffProductionActions = ({
 }) => {
   return (
     <>
-      {data?.mailSent && (
+      {data?.threads?.[0] && (
         <Col className="staffSide">
           <Text size="sm">
             {data.responseFrom !== "" ? "Réponse apportée par " : ""}
             {data.responseFrom}
             {" le "}
-            {new Date(data?.mailSentDate).toLocaleDateString()}
+            {new Date(
+              data?.threads?.[0]?.responses?.[0].timestamp
+            ).toLocaleDateString()}
             {" à "}
-            {new Date(data?.mailSentDate).toLocaleTimeString()}
+            {new Date(
+              data?.threads?.[0]?.responses?.[0].timestamp
+            ).toLocaleTimeString()}
           </Text>
-          <Text>{data.mailSent}</Text>
+          <Text>{data?.threads?.[0]?.toString()}</Text>
         </Col>
       )}
       <EmailSender contribution={data} refetch={refetch} />
