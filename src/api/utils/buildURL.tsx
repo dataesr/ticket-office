@@ -9,7 +9,7 @@ export const buildURL = (
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const baseApiUrl = isDevelopment
     ? "http://localhost:3000/api"
-    : "https://ticket-office-api.staging.dataesr.ovh/";
+    : "https://ticket-office-api.staging.dataesr.ovh";
 
   let baseUrl = "contact";
   if (location?.pathname?.includes("contributionpage")) {
