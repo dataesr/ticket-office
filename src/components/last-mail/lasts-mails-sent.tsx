@@ -7,11 +7,15 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
   const [scrollIndex, setScrollIndex] = useState(0);
   const [isMouseOver, setIsMouseOver] = useState(false);
 
-  const filteredMails = data.data
-    .filter((mail) => mail.mailSent)
+  if (data.length === 0) {
+    return <Text>Aucun email trouvé.</Text>;
+  }
+
+  const filteredMails = data
+    .filter((mail) => mail?.threads?.[0]?.responseMessage)
     .sort((a, b) => {
-      const dateA = new Date(a.mailSentDate || "").getTime();
-      const dateB = new Date(b.mailSentDate || "").getTime();
+      const dateA = new Date(a?.threads?.[0]?.timestamp || "").getTime();
+      const dateB = new Date(b?.threads?.[0]?.timestamp || "").getTime();
       return dateB - dateA;
     });
 
@@ -86,14 +90,19 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
             }}
           >
             <Text size="xs">
-              <strong>{mail.responseFrom}</strong> le{" "}
-              <i>{new Date(mail.mailSentDate || "").toLocaleDateString()}</i> à{" "}
-              <strong>{mail.name}</strong>{" "}
-              {mail.mailSent && (
+              <strong>{mail.threads?.[0]?.team?.join(", ") || "Équipe"}</strong>{" "}
+              le{" "}
+              <i>
+                {new Date(
+                  mail.threads?.[0]?.timestamp || ""
+                ).toLocaleDateString()}
+              </i>{" "}
+              à <strong>{mail.name}</strong>{" "}
+              {mail.threads?.[0]?.responseMessage && (
                 <>
-                  {mail.mailSent.length > 100
-                    ? mail.mailSent.substring(0, 150) + "..."
-                    : mail.mailSent}{" "}
+                  {(mail.threads[0].responseMessage as string).length > 100
+                    ? mail.threads[0].responseMessage.substring(0, 150) + "..."
+                    : mail.threads[0].responseMessage}{" "}
                   <Link
                     key={mail._id}
                     href={`/contact?query=${mail._id}`}
