@@ -6,7 +6,6 @@ export interface Contribution {
   phone: string;
   tags: string[];
   status: string;
-  responseFrom?: string;
   comment?: string;
   team?: string[];
   type: string;
@@ -15,53 +14,22 @@ export interface Contribution {
   organisation?: string;
   fonction?: string;
   modified_at?: string;
-  mailSentDate?: string;
-  mailSent?: string;
+  threads?: Thread[];
 }
 
-// {
-//   "thread": [
-//     {
-//       "messages": [
-//         {
-//           "message_id": "1",
-//           "from": "contributor@example.com",
-//           "to": ["scanr@recherche.......com"],
-//           "date": "2024-07-18",
-//           "body": "je veux avoir accés à l'api",
-//           "subject" : "demande d'acces à l'api"
-//         },
-//         {
-//           "message_id": "2",
-//           "from": "scanr@example.com",
-//           "to": ["contributor@example.com"],
-//           "date": "2024-07-18",
-//           "team": "mihoub",
-//           "subject" : "RE - demande d'acces à l'api"
-//           "body": "Voici vos ids pour acces à scanr API",
-//           "repliesTo": message_id = 1
-//         },
-//         {
-//           "message_id": "3",
-//           "from": "contributor@example.com",
-//           "to": ["scanr@example.com"],
-//           "date": "2024-07-18",
-//           "subject" : "RE RE - demande d'acces à l'api"
-//           "body": "Merci  !! ",
-//         },
-//         {
-//           "message_id": "4",
-//           "from": "scanr@exemple.com",
-//           "to": ["contributor@example.com",],
-//           "date": "2024-07-18",
-//           "team": "mihoub",
-//           "body": "De rien!",
-//           "subject" : "RE RE RE - demande d'acces à l'api"
-//           "repliesTo": message_id = 3
-//         }
-//       ]
-//   ]
-// }
+export interface Thread {
+  team: [string];
+  responseMessage: string;
+  threadId: string;
+  responses?: Response[];
+  timestamp: string;
+}
+
+export interface Response {
+  responseMessage: string;
+  timestamp: string;
+  team?: string[];
+}
 
 export type ContributionDataType = {
   responseFrom: string;
@@ -80,6 +48,7 @@ export type ContributionDataType = {
   created_at: string;
   status: string;
   team: string[];
+  threads?: Thread[];
 };
 
 export type ContributionPageProps = {
@@ -95,11 +64,9 @@ export type MessagePreviewProps = {
 };
 
 export type Contribute_Production = {
-  fullName: any;
-  firstName: any;
-  lastName: any;
-  mailSentDate: string | number | Date;
-  mailSent: string;
+  fullName: string;
+  firstName: string;
+  lastName: string;
   responseByMail: string;
   responseFrom: string;
   tag: string;
@@ -115,6 +82,7 @@ export type Contribute_Production = {
   name: string;
   status: string;
   productions: any[];
+  threads?: Thread[];
 };
 
 export type EditModalProps = {
@@ -159,23 +127,16 @@ export interface PersonInfo {
 export type Publication = {
   hits: number;
   landingPage?: string;
-  // id: string;
-  // isOa: boolean;
-  // type: string;
-  // year: number;
 };
 
 export type MailData = {
+  name: string;
   _id: string;
-  mailSent?: string;
-  mailSentDate?: string;
-  responseFrom?: string;
-  name?: string;
-  refetch?: () => void;
+  threads?: Thread[];
 };
 
 export type LatestMailsProps = {
-  data: { data: MailData[] };
+  data: MailData[];
   refetch?: () => void;
 };
 

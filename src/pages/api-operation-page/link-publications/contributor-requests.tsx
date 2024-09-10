@@ -9,8 +9,8 @@ import "./styles.scss";
 
 const ContributorRequests: React.FC<{
   data: {
-    _id: any;
-    id: any;
+    _id: string;
+    id: string;
     name: string;
     productions: Production[];
   };
