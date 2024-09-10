@@ -68,4 +68,4 @@ jobs:
       - name: 🎉 Celebrate Success in Mattermost
         if: success()
         run: |
-          curl -X POST -H 'Content-Type: application/json' -d '{"text": "🎉 Woohoo! Le déploiement est *green* et tout fonctionne bien! C\'est l\'heure de faire la fête! 🥳🍾"}' ${{ secrets.MATTERMOST_WEBHOOK_URL }}
+          curl -X POST -H 'Content-Type: application/json' -d '{"text": "🎉 Woohoo! Le déploiement est *green* et tout fonctionne bien! C'est l'heure de faire la fête! 🥳🍾"}' ${{ secrets.MATTERMOST_WEBHOOK_URL }}
