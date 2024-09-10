@@ -4,8 +4,8 @@ export const postHeaders = {
   ...headers,
   "Content-Type": "application/json",
 };
-
 const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+
 export const contributionUrl = isDevelopment
   ? "http://localhost:3000/api/contribute?max_results=2000"
   : "https://ticket-office-api.staging.dataesr.ovh/api/contribute?max_results=2000";
