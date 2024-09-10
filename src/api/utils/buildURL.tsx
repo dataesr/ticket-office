@@ -7,13 +7,15 @@ export const buildURL = (
   searchInMessages: boolean = false
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const baseApiUrl = isDevelopment ? "https://scanr-api.dataesr.ovh" : "/api";
+  const baseApiUrl = isDevelopment
+    ? "http://localhost:3000/api"
+    : "https://ticket-office-api.staging.dataesr.ovh/";
 
   let baseUrl = "contact";
   if (location?.pathname?.includes("contributionpage")) {
     baseUrl = "contribute";
   } else if (location?.pathname?.includes("apioperations")) {
-    baseUrl = "contribute_productions";
+    baseUrl = "production";
   }
 
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
