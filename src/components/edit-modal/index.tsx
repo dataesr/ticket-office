@@ -31,20 +31,20 @@ const EditModal: React.FC<EditModalProps> = ({
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
   const [showTagModal, setShowTagModal] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState("treated"); // Ajouter l'état pour le statut actuel
+  const [currentStatus, setCurrentStatus] = useState("treated");
 
   let basePath = "contact";
 
   if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";
   } else if (window.location.pathname.includes("apioperations")) {
-    basePath = "contribute_productions";
+    basePath = "production";
   }
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = isDevelopment
-    ? `https://scanr-api.dataesr.ovh/${basePath}/${data?._id}`
-    : `${window.location.origin}/api/${basePath}/${data?._id}`;
+    ? `http://localhost:3000/api/${basePath}/${data?._id}`
+    : `https://ticket-office-api.staging.dataesr.ovh/api/${basePath}/${data?._id}`;
   const [inputs, setInputs] = useState<Inputs>({
     team: [selectedProfile],
     status: "treated",
@@ -70,6 +70,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
     const fetchExistingTags = async () => {
       if (!data?._id) return;
+      console.log(url);
       try {
         const response = await fetch(url, {
           method: "GET",

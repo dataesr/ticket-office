@@ -19,6 +19,7 @@ interface ContributionItemProps {
   refetch: () => void;
   allTags: string[];
 }
+
 const ContributionItem: React.FC<ContributionItemProps> = ({
   data,
   highlightedQuery,
@@ -35,6 +36,10 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
       }, 2000);
     });
   };
+
+  // Récupérer la première réponse dans les threads pour remplacer mailSent et responseFrom
+  const firstThread = data?.threads?.[0];
+  const firstResponse = firstThread?.responses?.[0];
 
   return (
     <>
@@ -53,9 +58,9 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
             {StatusLabel({ status: data?.status })}
           </Badge>
         )}
-        {data?.responseFrom && (
+        {firstResponse?.team && (
           <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
-            {`Réponse envoyée par ${data.responseFrom}`}
+            {`Réponse envoyée par ${firstResponse.team.join(", ")}`}
           </Badge>
         )}
         {data?.comment && data?.team?.length > 0 && (
@@ -90,7 +95,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
               <FaCopy size={14} color="#2196f3" className="copy-icon" />
             </button>
           </Title>
-          {!data?.mailSent && (
+          {!firstResponse && (
             <Notice type="info" closeMode="disallow" className="fr-mb-2w">
               Aucune réponse apportée à ce message pour l'instant
             </Notice>

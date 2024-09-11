@@ -59,9 +59,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     page,
     searchInMessage
   );
-  const { data, isLoading, isError, refetch } = ContributionData(url);
   let urlToSend;
-
   if (location.pathname.includes("contributionpage")) {
     urlToSend = contributionUrl;
   } else if (location.pathname.includes("contact")) {
@@ -69,14 +67,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   } else {
     urlToSend = "";
   }
+  const { data, isLoading, isError, refetch } = ContributionData(url);
 
   const getTags = ContributionData(urlToSend);
-  const allTags = getTags?.data?.data?.map((tag) => tag?.tags);
+  const allTags = getTags?.data?.map((tag) => tag?.tags);
   const meta = (data as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
-  const contributions: Contribution[] = (data as { data: Contribution[] })
-    ?.data;
-
+  const contributions: Contribution[] = data;
   useEffect(() => {
     if (contributions && contributions.length > 0) {
       setSelectedContribution((prevSelectedContribution) => {

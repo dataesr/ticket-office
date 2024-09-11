@@ -25,12 +25,12 @@ const LandingPage = (id: string) => {
     return response.json();
   };
 
-  const { data, error, isLoading } = useQuery(
+  const { data, error, isLoading } = useQuery<Publication>(
     ["contributions", id],
     fetchContributions
   );
 
-  const landingPage = data?.hits?.hits?.[0]?._source.landingPage;
+  const landingPage = (data as any)?.hits?.hits?.[0]?._source.landingPage;
 
   return { landingPage, isLoading, error };
 };

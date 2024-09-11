@@ -56,15 +56,15 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   }, [location.pathname]);
 
   const url = buildURL(location, sort, status, query.join(" "), page);
+
   const {
     data: fetchedData,
     isLoading,
     isError,
     refetch,
   } = ContributionData(url);
-
   const getTags = ContributionData(productionUrl);
-  const allTags = getTags?.data?.data?.map((tag) => tag?.tags);
+  const allTags = getTags?.data?.map((tag) => tag?.tags);
 
   useEffect(() => {
     setData(fetchedData);
@@ -72,10 +72,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
 
   const meta = (fetchedData as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
-  const contrib: Contribute_Production[] = (
-    fetchedData as { data: Contribute_Production[] }
-  )?.data;
-
+  const contrib: Contribute_Production[] = fetchedData;
   const handleSearch = (value: string) => {
     const trimmedValue = value.trim();
     if (trimmedValue !== "" && !query.includes(trimmedValue)) {
