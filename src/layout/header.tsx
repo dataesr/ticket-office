@@ -109,7 +109,10 @@ const Header: React.FC = () => {
             >
               Lier des publications
             </Link>
-            <Link current={pathname.startsWith("/delete")} href="/delete">
+            <Link
+              current={pathname.startsWith("/removeuser")}
+              href="/removeuser"
+            >
               Supprimer des personnes de la base de données
             </Link>
             <Link

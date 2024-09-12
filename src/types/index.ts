@@ -16,6 +16,61 @@ export interface Contribution {
   modified_at?: string;
   threads?: Thread[];
 }
+export interface ChangeNameProps {
+  _id: string;
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  tags: string[];
+  status: string;
+  comment?: string;
+  team?: string[];
+  type: string;
+  created_at: string;
+  message: string;
+  organisation?: string;
+  fonction?: string;
+  modified_at?: string;
+  threads?: Thread[];
+}
+
+export interface RemoveUserProps {
+  _id: string;
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  tags: string[];
+  status: string;
+  comment?: string;
+  team?: string[];
+  type: string;
+  created_at: string;
+  message: string;
+  organisation?: string;
+  fonction?: string;
+  modified_at?: string;
+  threads?: Thread[];
+}
+export interface ChangeNameContribution {
+  _id: string;
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  tags: string[];
+  status: string;
+  comment?: string;
+  team?: string[];
+  type: string;
+  created_at: string;
+  message: string;
+  organisation?: string;
+  fonction?: string;
+  modified_at?: string;
+  threads?: Thread[];
+}
 
 export interface Thread {
   team: [string];
@@ -52,6 +107,12 @@ export type ContributionDataType = {
 };
 
 export type ContributionPageProps = {
+  url: string;
+};
+export type ChangeNamePageProps = {
+  url: string;
+};
+export type RemoveUserPageProps = {
   url: string;
 };
 
