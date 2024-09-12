@@ -1,6 +1,5 @@
 const API_KEY = import.meta.env.VITE_SCANR_API_AUTHORIZATION;
 const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-console.log(`API_KEY: ${API_KEY}`);
 export const headers = API_KEY ? { Authorization: `Basic ${API_KEY}` } : {};
 export const postHeaders = {
   ...headers,
@@ -18,3 +17,11 @@ export const contactUrl = isDevelopment
 export const productionUrl = isDevelopment
   ? "http://localhost:3000/api/production?max_results=2000"
   : "https://ticket-office-api.staging.dataesr.ovh/api/productionsmax_results=2000";
+
+export const nameChangeUrl = isDevelopment
+  ? "http://localhost:3000/api/update-user-data?max_results=2000"
+  : "https://ticket-office-api.staging.dataesr.ovh/api/update-user-datamax_results=2000";
+
+export const removeUserUrl = isDevelopment
+  ? "http://localhost:3000/api/remove-user?max_results=2000"
+  : "https://ticket-office-api.staging.dataesr.ovh/api/remove-usermax_results=2000";

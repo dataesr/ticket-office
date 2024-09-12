@@ -7,13 +7,18 @@ export const buildURL = (
   searchInMessages: boolean = false
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const ticketOfficeApi = import.meta.env.BASE_API_URL;
   const baseApiUrl = isDevelopment
     ? "http://localhost:3000/api"
-    : "https://ticket-office-api.staging.dataesr.ovh/api";
+    : `${ticketOfficeApi}/api`;
 
   let baseUrl = "contact";
   if (location?.pathname?.includes("contributionpage")) {
     baseUrl = "contribute";
+  } else if (location?.pathname?.includes("removeuser")) {
+    baseUrl = "remove-user";
+  } else if (location?.pathname?.includes("namechange")) {
+    baseUrl = "update-user-data";
   } else if (location?.pathname?.includes("apioperations")) {
     baseUrl = "production";
   }
@@ -33,7 +38,9 @@ export const buildURL = (
       ];
 
       if (searchInMessages) {
-        where.$or.push({ message: { $regex: `.*${query}.*`, $options: "i" } });
+        where.$or.push({
+          message: { $regex: `.*${query}.*`, $options: "i" },
+        });
       }
     }
   }
