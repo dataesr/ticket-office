@@ -8,9 +8,14 @@ export const buildURL = (
   fromApplication?: string
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const ticketOfficeApi = import.meta.env.BASE_API_URL;
   const baseApiUrl = isDevelopment
     ? "http://localhost:3000/api"
+<<<<<<< HEAD:client/src/api/utils/buildURL.tsx
     : `https://ticket-office.staging.dataesr.ovh/api`;
+=======
+    : `${ticketOfficeApi}/api`;
+>>>>>>> 3b9b2fe (feat(remove-user and updatedata): add remove-user and updatedata pages):src/api/utils/buildURL.tsx
 
   let baseUrl = "contacts";
   if (location?.pathname?.includes("scanr-contributionPage")) {
