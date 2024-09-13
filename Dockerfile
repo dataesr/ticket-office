@@ -23,6 +23,7 @@ RUN npm ci --silent
 COPY . .
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Construire le projet si nécessaire
 RUN npm run build
 
@@ -45,3 +46,6 @@ EXPOSE 3000
 COPY nginx.conf /etc/nginx/templates/nginx.conf.template
 EXPOSE 5173
 >>>>>>> 5dc5b75 (fix(ci): deploiement)
+=======
+EXPOSE 5173
+>>>>>>> b5bd3e6 (fix(ci): delete nginx conf)
