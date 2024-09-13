@@ -1,4 +1,12 @@
-FROM nginx:stable
-COPY dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/templates/nginx.conf.template
-EXPOSE 5173
+FROM node:18-alpine
+WORKDIR /app
+
+COPY package*.json ./
+COPY . .  
+RUN npm ci --silent
+
+# Construire le projet si nécessaire
+RUN npm run build
+
+CMD ["npm", "start"]
+EXPOSE 3000
