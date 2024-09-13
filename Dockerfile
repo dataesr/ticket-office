@@ -9,4 +9,4 @@ RUN npm ci --silent
 RUN npm run build
 
 CMD ["npm", "start"]
-EXPOSE 3000
+EXPOSE 5173
