@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM oven/bun
 
 WORKDIR /app
@@ -13,12 +14,16 @@ CMD ["bun", "run", "index.ts"]
 EXPOSE 3000
 =======
 FROM node:18-alpine
+=======
+FROM node:18-alpine AS build
+>>>>>>> a4cac25 (fix(ci): deploiement)
 WORKDIR /app
-
 COPY package*.json ./
-COPY . .  
 RUN npm ci --silent
+COPY . .
+RUN npm run build:staging
 
+<<<<<<< HEAD
 # Construire le projet si nécessaire
 RUN npm run build
 
@@ -29,3 +34,10 @@ EXPOSE 3000
 =======
 EXPOSE 5173
 >>>>>>> 5ea7c01 (typo)
+=======
+# staging environment
+FROM nginx:stable
+COPY --from=build /app/build /usr/share/nginx/html
+COPY ./nginx/templates /etc/nginx/templates
+EXPOSE 3000
+>>>>>>> a4cac25 (fix(ci): deploiement)
