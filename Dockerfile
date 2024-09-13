@@ -4,7 +4,7 @@ COPY package*.json ./
 RUN npm ci --silent
 COPY . .
 RUN npm run build
+
+FROM nginx:stable
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 5173
-COPY docker-entrypoint.sh /usr/local/bin/
-ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["node", "dist/main.js"]
