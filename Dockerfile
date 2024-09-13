@@ -38,6 +38,11 @@ EXPOSE 5173
 # staging environment
 FROM nginx:stable
 COPY --from=build /app/build /usr/share/nginx/html
+<<<<<<< HEAD
 COPY ./nginx/templates /etc/nginx/templates
 EXPOSE 3000
 >>>>>>> a4cac25 (fix(ci): deploiement)
+=======
+COPY nginx.conf /etc/nginx/templates/nginx.conf.template
+EXPOSE 5173
+>>>>>>> 5dc5b75 (fix(ci): deploiement)
