@@ -52,8 +52,15 @@ EXPOSE 5173
 >>>>>>> b5bd3e6 (fix(ci): delete nginx conf)
 =======
 RUN npm run build
+<<<<<<< HEAD
 EXPOSE 5173
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["node", "dist/main.js"]
 >>>>>>> 508eb94 (fix(ci): update dockerfile)
+=======
+
+FROM nginx:stable
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 5173
+>>>>>>> 977fc39 (fix(ci): update dockerfile)
