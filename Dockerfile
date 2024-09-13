@@ -21,6 +21,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --silent
 COPY . .
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -49,3 +50,10 @@ EXPOSE 5173
 =======
 EXPOSE 5173
 >>>>>>> b5bd3e6 (fix(ci): delete nginx conf)
+=======
+RUN npm run build
+EXPOSE 5173
+COPY docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["node", "dist/main.js"]
+>>>>>>> 508eb94 (fix(ci): update dockerfile)
