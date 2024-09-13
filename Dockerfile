@@ -23,5 +23,9 @@ RUN npm ci --silent
 RUN npm run build
 
 CMD ["npm", "start"]
+<<<<<<< HEAD
 EXPOSE 3000
 >>>>>>> f695a6a (fix(ci): change nginx conf by traditional dockerfile)
+=======
+EXPOSE 5173
+>>>>>>> 5ea7c01 (typo)
