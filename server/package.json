@@ -3,9 +3,7 @@
   "version": "1.0.50",
   "scripts": {
     "dev": "bun run --watch index.ts",
-    "build": "bun build src/index.ts",
-    "start": "bun run index.ts",
-    "test": "bun test"
+    "start": "bun run index.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.1.0",
