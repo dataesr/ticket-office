@@ -5,9 +5,6 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-<<<<<<< HEAD
-  plugins: [react(), visualizer() as PluginOption],
-=======
   plugins: [react(), (visualizer as any).default() as PluginOption],
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
   resolve: {

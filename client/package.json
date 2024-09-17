@@ -5,11 +5,15 @@
     "type": "module",
     "scripts": {
 <<<<<<< HEAD
+<<<<<<< HEAD
         "dev": "bunx --bun vite",
         "build": "bunx --bun vite build --emptyOutDir --outDir '../server/public'",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
 =======
         "build": "vite build",
+=======
+        "build": "vite build --emptyOutDir",
+>>>>>>> f910f0e (fix(ci): add outdir in viteconfig)
         "dev": "vite",
         "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
         "preview": "vite preview",
