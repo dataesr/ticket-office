@@ -42,7 +42,7 @@ jobs:
           cp -r client/dist/* server/public/
 =======
           cd client
-          npm i
+          npm ci
           npm run build --emptyOutDir --outDir '../server/public'
 >>>>>>> e2c2906 (fix(ci): update workflow)
 
