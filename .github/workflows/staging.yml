@@ -23,9 +23,7 @@ jobs:
       - name: Build client (Vite.js)
         run: |
           bun i
-          cd client
           bunx --bun vite build client --emptyOutDir --outDir '../server/public'
-          cd ..
           docker build -t ${{ github.repository }} .
 
       - name: Get Tag
