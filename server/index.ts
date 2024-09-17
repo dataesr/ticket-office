@@ -1,4 +1,5 @@
 import { Elysia } from "elysia";
+import staticPlugin from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
@@ -27,8 +28,15 @@ app.group("/api", (app) => {
   app.use(removeUserRoutes);
   app.use(updateUserDataRoutes);
   app.use(replyRoutes);
-
   return app;
 });
+app.use(
+  staticPlugin({
+    assets: "public",
+    prefix: "",
+    alwaysStatic: true,
+  })
+);
+app.get("*", () => Bun.file("public/index.html"));
 
 export default app;
