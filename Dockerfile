@@ -2,7 +2,7 @@ FROM oven/bun AS builder
 
 WORKDIR /app
 
-COPY ./client/package.json ./client/package-lock.json ./client/
+COPY ./client/package.json ./client/
 RUN cd client && npm ci
 
 COPY ./client ./client
