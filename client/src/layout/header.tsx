@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { useState } from "react";
+=======
+import { useState, useEffect } from "react";
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 import { useLocation } from "react-router-dom";
 import {
   Header as HeaderWrapper,
@@ -9,6 +13,7 @@ import {
   FastAccess,
   Button,
   NavItem,
+<<<<<<< HEAD
 } from "@dataesr/dsfr-plus";
 import ProfileModal from "../components/profil-modal";
 import {
@@ -18,12 +23,22 @@ import {
   nameChangeUrl,
   removeUserUrl,
 } from "../config/api";
+=======
+  Text,
+  Col,
+} from "@dataesr/dsfr-plus";
+import ProfileModal from "../components/profil-modal";
+import LatestMails from "../components/last-mail/lasts-mails-sent";
+import ContributionData from "../api/contribution-api/getData";
+import { contactUrl } from "../config/api";
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 const Header: React.FC = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const { pathname } = useLocation();
 
+<<<<<<< HEAD
   const urls = [
     {
       url: contributionUrl,
@@ -53,13 +68,40 @@ const Header: React.FC = () => {
   ];
 
   const handleButtonClick = () => setShowModal(true);
+=======
+  useEffect(() => {
+    const savedProfile = localStorage.getItem("selectedProfile");
+    if (savedProfile) {
+      setSelectedProfile(savedProfile);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (selectedProfile) {
+      localStorage.setItem("selectedProfile", selectedProfile);
+    }
+  }, [selectedProfile]);
+
+  const url = contactUrl;
+
+  const { data, isLoading, isError, refetch } = ContributionData(url);
+  const handleButtonClick = () => {
+    setShowModal(true);
+  };
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
   const handleProfileSelect = (profile: string) => {
     setSelectedProfile(profile);
     setShowModal(false);
   };
 
+<<<<<<< HEAD
   const handleCloseModal = () => setShowModal(false);
+=======
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
   return (
     <>
@@ -100,6 +142,7 @@ const Header: React.FC = () => {
           <Link current={pathname === "/"} href="/">
             Accueil
           </Link>
+<<<<<<< HEAD
           <NavItem
             current={pathname.split("/").includes("scanr")}
             title={"scanR"}
@@ -150,6 +193,49 @@ const Header: React.FC = () => {
           </Link>
         </Nav>
       </HeaderWrapper>
+=======
+          <Link
+            current={pathname.startsWith("/contributionpage")}
+            href="/contributionpage"
+          >
+            Contributions par objets
+          </Link>
+          <Link current={pathname.startsWith("/contact")} href="/contact">
+            Contributions via formulaire de contact
+          </Link>
+          <NavItem
+            current={pathname.split("/").includes("search")}
+            title={"Opérations sur l'API"}
+          >
+            <Link
+              current={pathname.startsWith("/apioperations")}
+              href="/apioperations"
+            >
+              Lier des publications
+            </Link>
+            <Link
+              current={pathname.startsWith("/removeuser")}
+              href="/removeuser"
+            >
+              Supprimer des personnes de la base de données
+            </Link>
+            <Link
+              current={pathname.startsWith("/namechange")}
+              href="/namechange"
+            >
+              Changer le nom d'une personne
+            </Link>
+          </NavItem>
+        </Nav>
+      </HeaderWrapper>
+      {!isLoading && !isError && data ? (
+        <Col>
+          <LatestMails data={data} refetch={refetch} />
+        </Col>
+      ) : (
+        <Text>Chargement des mails...</Text>
+      )}
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     </>
   );
 };

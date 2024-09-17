@@ -4,9 +4,18 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
+<<<<<<< HEAD
         "dev": "bunx --bun vite",
         "build": "bunx --bun vite build --emptyOutDir --outDir '../server/public'",
         "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+=======
+        "build": "vite build",
+        "dev": "vite",
+        "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+        "preview": "vite preview",
+        "start": "npm run dev",
+        "deploy": "git switch main && git pull origin main --rebase --tags && git merge staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     },
     "dependencies": {
         "@dataesr/dsfr-plus": "^0.4.1",
@@ -14,6 +23,10 @@
         "@tanstack/react-query": "^4.36.1",
         "@tanstack/react-query-devtools": "^4.29.6",
         "@types/react-select": "^5.0.1",
+<<<<<<< HEAD
+=======
+        "classnames": "^2.3.2",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
         "highcharts": "^11.4.1",
         "highcharts-react-official": "^3.2.1",
         "prop-types": "^15.8.1",
@@ -25,6 +38,10 @@
         "react-select": "^5.8.0",
         "react-spinners": "^0.13.8",
         "react-toastify": "^10.0.5",
+<<<<<<< HEAD
+=======
+        "sib-api-v3-sdk": "^8.5.0",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
         "xlsx": "^0.18.5"
     },
     "devDependencies": {
@@ -44,4 +61,8 @@
         "typescript": "^5.2.2",
         "vite": "^5.0.4"
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)

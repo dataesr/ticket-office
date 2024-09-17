@@ -13,7 +13,11 @@ getUpdateUserDataByIdRoutes.get(
     const contribution = await db
       .collection("update-user-data")
       .findOne<updateUserDataType>({
+<<<<<<< HEAD
         id: new ObjectId(id),
+=======
+        _id: new ObjectId(id),
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       })
       .catch((error) =>
         error(500, "Failed to fetch contribution from update-user-data")
@@ -24,6 +28,10 @@ getUpdateUserDataByIdRoutes.get(
     return contribution;
   },
   {
+<<<<<<< HEAD
+=======
+    body: updateDatasSchema,
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     detail: {
       summary:
         "Obtenir une contribution via formulaire de mise à jour de donnée utilisateur par ID",

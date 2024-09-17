@@ -3,6 +3,7 @@
   "version": "1.0.50",
   "scripts": {
     "dev": "bun run --watch index.ts",
+<<<<<<< HEAD
     "start": "bun run index.ts"
   },
   "dependencies": {
@@ -20,10 +21,37 @@
     "imapflow": "^1.0.164",
     "mongodb": "^6.9.0",
     "uuid": "^10.0.0"
+=======
+    "build": "bun build src/index.ts",
+    "start": "bun run index.ts",
+    "test": "bun test"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.1.0",
+    "@elysiajs/swagger": "^1.0.5",
+    "@types/imap": "^0.8.40",
+    "@types/mongodb": "^4.0.7",
+    "@types/mongoose": "^5.11.97",
+    "dotenv": "^16.4.5",
+    "elysia": "^1.1.4",
+    "imap": "^0.8.19",
+    "imap-simple": "^5.1.0",
+    "imapflow": "^1.0.164",
+    "mailparser": "^3.7.1",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.6.0",
+    "nodemailer": "^6.9.14",
+    "ntlm-client": "^0.1.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^10.0.0",
+    "xml2js": "^0.6.2"
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
   },
   "devDependencies": {
     "@babel/preset-env": "^7.25.3",
     "@types/imap-simple": "^4.2.9",
+<<<<<<< HEAD
     "@types/node": "^22.4.1",
     "@types/imapflow": "^1.0.19",
     "@types/quoted-printable": "^1.0.2",
@@ -32,6 +60,22 @@
     "@types/uuid": "^10.0.0",
     "bun-types": "latest",
     "supertest": "^7.0.0",
+=======
+    "@types/imapflow": "^1.0.19",
+    "@types/jest": "^29.5.12",
+    "@types/mailparser": "^3.4.4",
+    "@types/node": "^22.4.1",
+    "@types/nodemailer": "^6.4.15",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.6",
+    "@types/uuid": "^10.0.0",
+    "@types/xml2js": "^0.4.14",
+    "babel-jest": "^29.7.0",
+    "bun-types": "latest",
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0",
+    "ts-jest": "^29.2.4",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
   },

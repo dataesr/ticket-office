@@ -1,8 +1,11 @@
 import Elysia from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+<<<<<<< HEAD
 import { responseSchema } from "../../../schemas/get/updateDatasSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
+=======
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 const getUpdateUserDataRoutes = new Elysia();
 
@@ -27,6 +30,7 @@ getUpdateUserDataRoutes.get(
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
+<<<<<<< HEAD
     const totalContacts = await db
       .collection("update-user-data")
       .countDocuments(filters)
@@ -34,6 +38,8 @@ getUpdateUserDataRoutes.get(
         return error(500, "Error fetching contacts count");
       });
 
+=======
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     const contribution = await db
       .collection("update-user-data")
       .find(filters)
@@ -46,7 +52,15 @@ getUpdateUserDataRoutes.get(
       );
 
     const formattedContribution = contribution.map((contrib: any) => ({
+<<<<<<< HEAD
       id: contrib.id.toString(),
+=======
+      _id: contrib._id.toString(),
+      organisation: contrib.organisation || "",
+      fonction: contrib.fonction || "",
+      collectionName: contrib.collectionName || "",
+      fromApp: contrib.fromApp || "",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       treated_at: contrib.treated_at || new Date(),
       email: contrib.email || "",
       name: contrib.name || "",
@@ -54,10 +68,15 @@ getUpdateUserDataRoutes.get(
       comment: contrib.comment || "",
       modified_at: contrib.modified_at || new Date(),
       created_at: contrib.created_at || new Date(),
+<<<<<<< HEAD
+=======
+      idref: contrib.idref || "",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       status: contrib.status || "",
       team: contrib.team || [],
       tags: contrib.tags || [],
       threads: contrib.threads || [],
+<<<<<<< HEAD
       extra: contrib.extra || {},
     }));
 
@@ -74,6 +93,13 @@ getUpdateUserDataRoutes.get(
       422: errorSchema,
       500: errorSchema,
     },
+=======
+    }));
+
+    return formattedContribution;
+  },
+  {
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de mise à jour de donnée utilisateur",

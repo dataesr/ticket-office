@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postUpdateUserDataSchema } from "../../../schemas/post/UpdateUserDataSchema";
@@ -7,11 +8,20 @@ import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 
 type postUpdateUserDataSchemaType = Static<typeof postUpdateUserDataSchema>;
+=======
+import Elysia, { Static, t } from "elysia";
+import db from "../../../libs/mongo";
+import { validateQueryParams } from "../../../utils/queryValidator";
+import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
+
+type postUpdateUserDataSchemaType = Static<typeof postRemoveUserSchema>;
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 const postUpdateUserDataRoutes = new Elysia();
 
 postUpdateUserDataRoutes.post(
   "/update-user-data",
+<<<<<<< HEAD
   async ({
     error,
     body,
@@ -34,6 +44,26 @@ postUpdateUserDataRoutes.post(
       extra: extraLowercase,
       id: _id.toHexString(),
       created_at: new Date(),
+=======
+  async ({ query, error, body }: { query: any; error: any; body: any }) => {
+    if (!validateQueryParams(query)) {
+      return error(422, "Invalid query parameters");
+    }
+
+    const updateUserData = {
+      ...body,
+    };
+
+    const newContribution: postUpdateUserDataSchemaType = {
+      email: updateUserData.email,
+      name: updateUserData.name,
+      message: updateUserData.message,
+      organisation: updateUserData.organisation || "",
+      collectionName: updateUserData.collectionName || "",
+      fonction: updateUserData.fonction || "",
+      created_at: new Date(),
+      idref: updateUserData.idref || "",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       status: "new",
     };
 
@@ -41,6 +71,7 @@ postUpdateUserDataRoutes.post(
       .collection("update-user-data")
       .insertOne(newContribution);
 
+<<<<<<< HEAD
     if (!result.insertedId) {
       return error(500, "Failed to create the contribution");
     }
@@ -106,6 +137,20 @@ postUpdateUserDataRoutes.post(
       200: updateDatasSchema,
       401: errorSchema,
       500: errorSchema,
+=======
+    if (!result.acknowledged) {
+      return error(500, "Failed to create contribution from update-user-data");
+    }
+
+    return newContribution;
+  },
+  {
+    body: postRemoveUserSchema,
+    response: {
+      200: t.Object({ message: t.String() }),
+      400: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     },
     detail: {
       summary:

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postContributionObjectSchema } from "../../../schemas/post/contributionByObject";
@@ -9,11 +10,20 @@ import { emailRecipients } from "../../contacts/post/emailRecipents";
 type postContributionObjectSchemaType = Static<
   typeof postContributionObjectSchema
 >;
+=======
+import Elysia, { Static, t } from "elysia";
+import { postContactSchema } from "../../../schemas/post/contactSchema";
+import db from "../../../libs/mongo";
+import { validateQueryParams } from "../../../utils/queryValidator";
+
+type postContributionObjectSchemaType = Static<typeof postContactSchema>;
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 const postContributionObjectRoutes = new Elysia();
 
 postContributionObjectRoutes.post(
   "/contribute",
+<<<<<<< HEAD
   async ({
     error,
     body,
@@ -35,10 +45,30 @@ postContributionObjectRoutes.post(
       _id,
       extra: extraLowercase,
       id: _id.toHexString(),
+=======
+  async ({ query, error, body }: { query: any; error: any; body: any }) => {
+    if (!validateQueryParams(query)) {
+      return error(422, "Invalid query parameters");
+    }
+
+    const contributionData = {
+      ...body,
+    };
+    const newContact: postContributionObjectSchemaType = {
+      email: contributionData.email,
+      name: contributionData.name,
+      message: contributionData.message,
+      organisation: contributionData.organisation || "",
+      fromApp: contributionData.fromApp || "",
+      collectionName: contributionData.collectionName || "",
+      fonction: contributionData.fonction || "",
+      idref: contributionData.idref || "",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       created_at: new Date(),
       status: "new",
     };
 
+<<<<<<< HEAD
     if (!body.objectId && !body.objectType) {
       return error(400, "objectId is required when objectType is provided");
     }
@@ -110,6 +140,22 @@ postContributionObjectRoutes.post(
       401: errorSchema,
       404: errorSchema,
       500: errorSchema,
+=======
+    const result = await db.collection("contribute").insertOne(newContact);
+
+    if (!result.acknowledged) {
+      return error(500, "Failed to create contribution");
+    }
+
+    return newContact;
+  },
+  {
+    body: postContactSchema,
+    response: {
+      200: t.Object({ message: t.String() }),
+      400: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     },
     detail: {
       summary:

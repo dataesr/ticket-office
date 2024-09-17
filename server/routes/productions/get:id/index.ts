@@ -13,7 +13,11 @@ getProductionByIdRoutes.get(
     const production = await db
       .collection("contribute_productions")
       .findOne<productionType>({
+<<<<<<< HEAD
         id: new ObjectId(id),
+=======
+        _id: new ObjectId(id),
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       })
       .catch((error) => error(500, "Failed to fetch production"));
 
@@ -22,6 +26,10 @@ getProductionByIdRoutes.get(
     return production;
   },
   {
+<<<<<<< HEAD
+=======
+    body: productionSchema,
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     detail: {
       summary: "Obtenir une contribution de liaison de productions par ID",
       description:

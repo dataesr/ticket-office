@@ -13,7 +13,11 @@ getRemoveUserByIdRoutes.get(
     const contribution = await db
       .collection("remove-user")
       .findOne<removeUserType>({
+<<<<<<< HEAD
         id: new ObjectId(id),
+=======
+        _id: new ObjectId(id),
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       })
       .catch((error) => error(500, "Failed to fetch remove-user"));
 
@@ -22,6 +26,10 @@ getRemoveUserByIdRoutes.get(
     return contribution;
   },
   {
+<<<<<<< HEAD
+=======
+    body: deleteSchema,
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     response: {
       200: t.Object({ message: t.String() }),
       400: t.Object({ message: t.String() }),

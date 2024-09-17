@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM oven/bun
 
 WORKDIR /app
@@ -64,3 +65,17 @@ FROM nginx:stable
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 5173
 >>>>>>> 977fc39 (fix(ci): update dockerfile)
+=======
+FROM oven/bun
+
+WORKDIR /app
+
+COPY ./server/package.json .
+RUN bun i --production
+COPY ./server .
+
+ENV NODE_ENV=production
+CMD ["bun", "run", "index.ts"]
+
+EXPOSE 3000
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
@@ -5,6 +6,12 @@ import { ObjectId } from "mongodb";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
+=======
+import Elysia, { Static, t } from "elysia";
+import db from "../../../libs/mongo";
+import { validateQueryParams } from "../../../utils/queryValidator";
+import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
@@ -12,6 +19,7 @@ const postRemoveUserRoutes = new Elysia();
 
 postRemoveUserRoutes.post(
   "/remove-user",
+<<<<<<< HEAD
   async ({ error, body }: { error: any; body: postRemoveUserSchemaType }) => {
     const extraLowercase = Object.keys(body.extra || {}).reduce(
       (acc, key) => ({
@@ -92,13 +100,48 @@ postRemoveUserRoutes.post(
     }
 
     return finalContribution;
+=======
+  async ({ query, error, body }: { query: any; error: any; body: any }) => {
+    if (!validateQueryParams(query)) {
+      return error(422, "Invalid query parameters");
+    }
+
+    const removeUserData = {
+      ...body,
+    };
+    const newDeletation: postRemoveUserSchemaType = {
+      email: removeUserData.email,
+      name: removeUserData.name,
+      message: removeUserData.message,
+      organisation: removeUserData.organisation || "",
+      collectionName: removeUserData.collectionName || "",
+      fonction: removeUserData.fonction || "",
+      created_at: new Date(),
+      idref: removeUserData.idref || "",
+      status: removeUserData.status || "new",
+    };
+
+    const result = await db.collection("remove-user").insertOne(newDeletation);
+
+    if (!result.acknowledged) {
+      return error(500, "Failed to create contribution");
+    }
+
+    return newDeletation;
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
   },
   {
     body: postRemoveUserSchema,
     response: {
+<<<<<<< HEAD
       200: deleteSchema,
       401: errorSchema,
       500: errorSchema,
+=======
+      200: t.Object({ message: t.String() }),
+      400: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     },
     detail: {
       summary: "Créer une nouvelle demande de suppression de profil",

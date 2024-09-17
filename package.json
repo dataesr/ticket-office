@@ -1,6 +1,7 @@
 {
   "name": "ticket-office",
   "private": true,
+<<<<<<< HEAD
   "version": "2.0.0",
   "type": "module",
   "scripts": {
@@ -18,5 +19,18 @@
     "rimraf": "^6.0.1",
     "superagent": "^10.1.0",
     "uuid": "^10.0.0"
+=======
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "scripts": {
+    "start:client": "cd client && npm run dev",
+    "start:server": "cd server && bun run server.ts",
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\""
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
   }
 }

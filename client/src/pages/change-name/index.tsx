@@ -9,15 +9,15 @@ import {
   SearchBar,
   DismissibleTag,
 } from "@dataesr/dsfr-plus";
+import ContributionItem from "../contribution-page/contribution-item";
+import ContributorSummary from "../contribution-page/contributor-summary";
 import ContributionData from "../../api/contribution-api/getData";
-import { ChangeNamePageProps, ChangeNameProps } from "../../types";
+import { buildURL } from "../../api/utils/buildURL";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import { nameChangeUrl } from "../../config/api";
-import ContributorSummary from "../contribution-page/contributor-summary";
-import ContributionItem from "../contribution-page/contribution-item";
-import { buildURL } from "../../api/utils/buildURL";
+import { ChangeNamePageProps, ChangeNameProps } from "../../types";
 
 const ChangeNamePage: React.FC<ChangeNamePageProps> = () => {
   const [sort, setSort] = useState("DESC");
@@ -55,7 +55,7 @@ const ChangeNamePage: React.FC<ChangeNamePageProps> = () => {
   let urlToSend = nameChangeUrl;
   const { data, isLoading, isError, refetch } = ContributionData(url);
   const getTags = ContributionData(urlToSend);
-  const allTags = getTags?.data?.map((tag) => tag?.tags);
+  const allTags = getTags?.data?.map((tag: { tags: any }) => tag?.tags);
   const meta = (data as { meta: any })?.meta;
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
   const contributions: ChangeNameProps[] = data;
@@ -128,7 +128,7 @@ const ChangeNamePage: React.FC<ChangeNamePageProps> = () => {
         <Col md="8" xs="12">
           <SearchBar
             className="fr-mb-1w"
-            onSearch={(value) => handleSearch(value || "")}
+            onSearch={(value: any) => handleSearch(value || "")}
             isLarge
             buttonLabel="Rechercher"
             placeholder="Rechercher par nom ou ID"

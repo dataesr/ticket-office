@@ -1,5 +1,6 @@
 export interface Contribution {
   [x: string]: any;
+<<<<<<< HEAD
   id: string;
   name: string;
   email: string;
@@ -64,6 +65,9 @@ export interface RemoveUserProps {
   threads?: Thread[];
 }
 export interface ChangeNameContribution {
+=======
+  _id: string;
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
   id: string;
   name: string;
   email: string;

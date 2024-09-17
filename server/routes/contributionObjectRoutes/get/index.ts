@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
 import { responseSchema } from "../../../schemas/get/contributionsObjectSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
+=======
+import Elysia from "elysia";
+import { validateQueryParams } from "../../../utils/queryValidator";
+import db from "../../../libs/mongo";
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 const getContributionObjectRoutes = new Elysia();
 
@@ -27,6 +33,7 @@ getContributionObjectRoutes.get(
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
+<<<<<<< HEAD
     const totalContacts = await db
       .collection("contribute")
       .countDocuments(filters)
@@ -34,6 +41,8 @@ getContributionObjectRoutes.get(
         return error(500, "Error fetching contacts count");
       });
 
+=======
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     const contributionObject = await db
       .collection("contribute")
       .find(filters)
@@ -45,20 +54,36 @@ getContributionObjectRoutes.get(
 
     const formattedContribution = contributionObject.map(
       (contributionObject: any) => ({
+<<<<<<< HEAD
         id: contributionObject.id.toString(),
         treated_at: contributionObject.treated_at || new Date(),
         email: contributionObject.email || "",
         name: contributionObject.name || "",
         objectId: contributionObject.objectId || "",
         objectType: contributionObject.objectType || "",
+=======
+        _id: contributionObject._id.toString(),
+        organisation: contributionObject.organisation || "",
+        fonction: contributionObject.fonction || "",
+        collectionName: contributionObject.collectionName || "",
+        fromApp: contributionObject.fromApp || "",
+        treated_at: contributionObject.treated_at || new Date(),
+        email: contributionObject.email || "",
+        name: contributionObject.name || "",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
         message: contributionObject.message || "",
         comment: contributionObject.comment || "",
         modified_at: contributionObject.modified_at || new Date(),
         created_at: contributionObject.created_at || new Date(),
+<<<<<<< HEAD
+=======
+        idref: contributionObject.idref || "",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
         status: contributionObject.status || "",
         team: contributionObject.team || [],
         tags: contributionObject.tags || [],
         threads: contributionObject.threads || [],
+<<<<<<< HEAD
         extra: contributionObject.extra || {},
       })
     );
@@ -82,6 +107,14 @@ getContributionObjectRoutes.get(
       401: errorSchema,
       500: errorSchema,
     },
+=======
+      })
+    );
+
+    return formattedContribution;
+  },
+  {
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de contribution par objets",

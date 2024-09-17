@@ -1,8 +1,11 @@
 import Elysia from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+<<<<<<< HEAD
 import { responseSchema } from "../../../schemas/get/deleteSchema.ts";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
+=======
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 const getRemoveUserRoutes = new Elysia();
 
@@ -27,6 +30,7 @@ getRemoveUserRoutes.get(
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
+<<<<<<< HEAD
     const totalContacts = await db
       .collection("remove-user")
       .countDocuments(filters)
@@ -34,6 +38,8 @@ getRemoveUserRoutes.get(
         return error(500, "Error fetching contacts count");
       });
 
+=======
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     const deletation = await db
       .collection("remove-user")
       .find(filters)
@@ -46,7 +52,15 @@ getRemoveUserRoutes.get(
       );
 
     const formattedDeletation = deletation.map((deletation: any) => ({
+<<<<<<< HEAD
       id: deletation.id.toString(),
+=======
+      _id: deletation._id.toString(),
+      organisation: deletation.organisation || "",
+      fonction: deletation.fonction || "",
+      collectionName: deletation.collectionName || "",
+      fromApp: deletation.fromApp || "",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       treated_at: deletation.treated_at || new Date(),
       email: deletation.email || "",
       name: deletation.name || "",
@@ -54,10 +68,15 @@ getRemoveUserRoutes.get(
       comment: deletation.comment || "",
       modified_at: deletation.modified_at || new Date(),
       created_at: deletation.created_at || new Date(),
+<<<<<<< HEAD
+=======
+      idref: deletation.idref || "",
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
       status: deletation.status || "",
       team: deletation.team || [],
       tags: deletation.tags || [],
       threads: deletation.threads || [],
+<<<<<<< HEAD
       extra: deletation.extra || {},
     }));
 
@@ -74,6 +93,13 @@ getRemoveUserRoutes.get(
       422: errorSchema,
       500: errorSchema,
     },
+=======
+    }));
+
+    return formattedDeletation;
+  },
+  {
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de supression de donnée",

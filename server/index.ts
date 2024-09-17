@@ -1,20 +1,33 @@
 import { Elysia } from "elysia";
+<<<<<<< HEAD
 import staticPlugin from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
 
+=======
+import { swagger } from "@elysiajs/swagger";
+import dotenv from "dotenv";
+import { cors } from "@elysiajs/cors";
+import contactRoutes from "./routes/contact";
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
 import productionsRoutes from "./routes/productions";
 import removeUserRoutes from "./routes/remove-user";
 import updateUserDataRoutes from "./routes/update-user-data";
+<<<<<<< HEAD
 import contactsRoutes from "./routes/contacts";
 import sendMail from "./routes/reply/replyRoutes";
 import { fetchEmails } from "./routes/receive-email";
+=======
+import replyRoutes from "./routes/reply/replyRoutes";
+// import connectToImapServer from "./routes/receive-email";
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 dotenv.config();
 
 const app = new Elysia();
+<<<<<<< HEAD
 fetchEmails();
 app
   .use(
@@ -72,5 +85,24 @@ app
     })
   )
   .get("*", () => Bun.file("public/index.html"));
+=======
+
+// Appelez la fonction pour récupérer les e-mails
+// connectToImapServer();
+
+app.use(cors());
+app.use(swagger());
+// api comme préfixe pour toutes les routes
+app.group("/api", (app) => {
+  app.use(contactRoutes);
+  app.use(contributionObjectRoutes);
+  app.use(productionsRoutes);
+  app.use(removeUserRoutes);
+  app.use(updateUserDataRoutes);
+  app.use(replyRoutes);
+
+  return app;
+});
+>>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
 export default app;
