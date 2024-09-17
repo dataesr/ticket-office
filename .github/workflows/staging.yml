@@ -28,7 +28,7 @@ jobs:
 =======
           cd client
           npm ci
-          npm run build --emptyOutDir --outDir '../server/public'
+          npm run build
 
       - name: Build server (Bun)
         run: |
