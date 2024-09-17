@@ -47,8 +47,12 @@ jobs:
 >>>>>>> 8e9399c (fix(ci): typo)
           npm ci
           cd client
+<<<<<<< HEAD
           npm run build --emptyOutDir --outDir '../server/public'
 >>>>>>> e2c2906 (fix(ci): update workflow)
+=======
+          npm run build --emptyOutDir --outDir './server/public'
+>>>>>>> 28047fa (fix(ci): workflow and update)
 
       - name: Build server (Bun)
         run: |

@@ -31,6 +31,18 @@
     "start:client": "cd client && npm run dev",
     "start:server": "cd server && bun run server.ts",
     "start": "concurrently \"npm run start:client\" \"npm run start:server\""
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+  },
+  "dependencies": {
+    "@eslint/config-array": "^0.18.0",
+    "@eslint/object-schema": "^2.1.4",
+    "formidable": "^3.5.1",
+    "glob": "^11.0.0",
+    "rimraf": "^6.0.1",
+    "superagent": "^10.1.0",
+    "uuid": "^10.0.0"
+>>>>>>> 28047fa (fix(ci): workflow and update)
   }
 }
