@@ -37,10 +37,7 @@ jobs:
           bunx --bun vite build client --emptyOutDir --outDir '../server/public'
 =======
           npm i --prefix client
-          npm run build --prefix client
-
-      - name: Move client build to server
-        run: mv client/dist/* server/public/
+          npm run build --prefix client --emptyOutDir --outDir '../server/public'
 
       - name: Build server (Bun)
         run: |
