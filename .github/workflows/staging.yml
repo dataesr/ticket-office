@@ -22,9 +22,12 @@ jobs:
 
       - name: Build client (Vite.js)
         run: |
-          npm ci
           cd client
-          npm run build --emptyOutDir --outDir '../server/public'
+          npm ci
+          npm run build --emptyOutDir --outDir '../../server/public'
+
+      - name: List files in public
+        run: ls -R server/public
 
       - name: Build server (Bun)
         run: |
