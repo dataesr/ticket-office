@@ -1,48 +1,24 @@
 {
   "name": "ticket-office",
   "private": true,
-<<<<<<< HEAD
-  "version": "2.0.0",
-  "type": "module",
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite",
-    "start:client": "cd client && npm run dev",
-    "start:server": "cd server && bun run server.ts",
-    "start": "concurrently \"npm run start:client\" \"npm run start:server\""
-  },
-  "dependencies": {
-    "@eslint/config-array": "^0.18.0",
-    "@eslint/object-schema": "^2.1.4",
-    "formidable": "^3.5.1",
-    "glob": "^11.0.0",
-    "rimraf": "^6.0.1",
-    "superagent": "^10.1.0",
-    "uuid": "^10.0.0"
-=======
   "workspaces": [
     "server",
     "client"
   ],
   "devDependencies": {
+    "@types/imapflow": "^1.0.19",
+    "@types/mailparser": "^3.4.4",
     "concurrently": "^8.2.2"
   },
   "scripts": {
     "start:client": "cd client && npm run dev",
-    "start:server": "cd server && bun run server.ts",
-    "start": "concurrently \"npm run start:client\" \"npm run start:server\""
-<<<<<<< HEAD
->>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
-=======
+    "start:server": "cd server && bun run --watch server.ts",
+    "start": "concurrently \"npm run start:client\" \"bun run start:server\"",
+    "deploy": "git switch main && git pull origin main --rebase --tags && git merge origin staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
   },
   "dependencies": {
-    "@eslint/config-array": "^0.18.0",
-    "@eslint/object-schema": "^2.1.4",
-    "formidable": "^3.5.1",
-    "glob": "^11.0.0",
-    "rimraf": "^6.0.1",
-    "superagent": "^10.1.0",
-    "uuid": "^10.0.0"
->>>>>>> 28047fa (fix(ci): workflow and update)
+    "@types/imapflow": "^1.0.19",
+    "imapflow": "^1.0.164",
+    "mailparser": "^3.7.1"
   }
 }

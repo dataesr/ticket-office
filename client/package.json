@@ -24,9 +24,12 @@
         "@tanstack/react-query-devtools": "^4.29.6",
         "@types/react-select": "^5.0.1",
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         "classnames": "^2.3.2",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 6de7a32 (fix(ci): update dockerfile)
         "highcharts": "^11.4.1",
         "highcharts-react-official": "^3.2.1",
         "prop-types": "^15.8.1",
@@ -39,9 +42,12 @@
         "react-spinners": "^0.13.8",
         "react-toastify": "^10.0.5",
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         "sib-api-v3-sdk": "^8.5.0",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 6de7a32 (fix(ci): update dockerfile)
         "xlsx": "^0.18.5"
     },
     "devDependencies": {
@@ -62,7 +68,11 @@
         "vite": "^5.0.4"
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 }
 =======
 }
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+}
+>>>>>>> 6de7a32 (fix(ci): update dockerfile)
