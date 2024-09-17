@@ -6,6 +6,10 @@ import path from "path";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), (visualizer as any).default() as PluginOption],
+  build: {
+    outDir: "../server/public",
+    emptyOutDir: true,
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname + "/src"),
