@@ -1,19 +1,12 @@
-FROM oven/bun AS builder
+FROM oven/bun
 
 WORKDIR /app
 
-COPY ./client/package.json ./client/
-RUN cd client && npm ci
-
-COPY ./client ./client
-RUN cd client && npm run build --emptyOutDir --outDir '../server/public'
-
-COPY ./server/package.json ./server/
+COPY ./server/package.json .
 RUN bun i --production
-COPY ./server ./server
+COPY ./server .
 
 ENV NODE_ENV=production
+CMD ["bun", "run", "index.ts"]
 
 EXPOSE 3000
-
-CMD ["bun", "run", "server/index.ts"]
