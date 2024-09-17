@@ -6,8 +6,12 @@
     "client"
   ],
   "devDependencies": {
+<<<<<<< HEAD
     "@types/imapflow": "^1.0.19",
     "@types/mailparser": "^3.4.4",
+=======
+    "@types/bun": "^1.1.9",
+>>>>>>> 824b180 (fix(ci): update workflow)
     "concurrently": "^8.2.2"
   },
   "scripts": {
@@ -24,6 +28,12 @@
 =======
     "start:server": "cd server && bun run server.ts",
     "start": "concurrently \"npm run start:client\" \"npm run start:server\""
+<<<<<<< HEAD
 >>>>>>> de4cfb7 (typo)
+=======
+  },
+  "dependencies": {
+    "@elysiajs/static": "^1.1.1"
+>>>>>>> 824b180 (fix(ci): update workflow)
   }
 }

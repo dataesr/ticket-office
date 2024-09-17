@@ -1,11 +1,15 @@
 import { Elysia } from "elysia";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import staticPlugin from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
 
 =======
+=======
+import staticPlugin from "@elysiajs/static";
+>>>>>>> 824b180 (fix(ci): update workflow)
 import { swagger } from "@elysiajs/swagger";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
@@ -100,9 +104,19 @@ app.group("/api", (app) => {
   app.use(removeUserRoutes);
   app.use(updateUserDataRoutes);
   app.use(replyRoutes);
-
   return app;
 });
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+app.use(
+  staticPlugin({
+    assets: "public",
+    prefix: "",
+    alwaysStatic: true,
+  })
+);
+app.get("*", () => Bun.file("public/index.html"));
+>>>>>>> 824b180 (fix(ci): update workflow)
 
 export default app;
