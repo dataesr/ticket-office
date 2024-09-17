@@ -1,50 +1,16 @@
 {
   "name": "ticket-office",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "build": "vite build",
-    "dev": "vite",
-    "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "start": "npm run dev",
-    "deploy": "git switch main && git pull origin main --rebase --tags && git merge staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
-  },
-  "dependencies": {
-    "@dataesr/dsfr-plus": "^0.4.1",
-    "@getbrevo/brevo": "^2.0.0-beta.4",
-    "@tanstack/react-query": "^4.36.1",
-    "@tanstack/react-query-devtools": "^4.29.6",
-    "@types/react-select": "^5.0.1",
-    "classnames": "^2.3.2",
-    "highcharts": "^11.4.1",
-    "highcharts-react-official": "^3.2.1",
-    "prop-types": "^15.8.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-icons": "^5.2.1",
-    "react-query": "^3.39.3",
-    "react-router-dom": "^6.24.1",
-    "react-select": "^5.8.0",
-    "react-spinners": "^0.13.8",
-    "react-toastify": "^10.0.5",
-    "sib-api-v3-sdk": "^8.5.0",
-    "xlsx": "^0.18.5"
-  },
+  "workspaces": [
+    "server",
+    "client"
+  ],
   "devDependencies": {
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
-    "@vitejs/plugin-react": "^4.2.0",
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
-    "sass": "^1.69.5",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.4"
+    "concurrently": "^8.2.2"
+  },
+  "scripts": {
+    "start:client": "cd client && npm run dev",
+    "start:server": "cd server && bun run server.ts",
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\""
   }
 }

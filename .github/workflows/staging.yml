@@ -15,23 +15,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 18
+      - uses: oven-sh/setup-bun@v2
 
       - name: 🔑 Login Docker
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐳 Build Docker image
+      - name: Build client (Vite.js)
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository }}
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker build -t $IMAGE_ID:staging .
+          npm i --prefix client
+          npm run build --prefix client
+
+      - name: Move client build to server
+        run: mv client/dist/* server/public/
+
+      - name: Build server (Bun)
+        run: |
+          cd server
+          bun install
+          docker build -t ${{ github.repository }} .
+
+      - name: Get Tag
+        id: version
+        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: 📦 Push Docker image
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          docker tag ${{ github.repository }} $IMAGE_ID:staging
           docker push $IMAGE_ID:staging
 
   deploy:
