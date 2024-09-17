@@ -34,6 +34,7 @@ jobs:
         run: |
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
           bun i
           bunx --bun vite build client --emptyOutDir --outDir '../server/public'
 =======
@@ -42,7 +43,10 @@ jobs:
           cp -r client/dist/* server/public/
 =======
           cd client
+=======
+>>>>>>> 8e9399c (fix(ci): typo)
           npm ci
+          cd client
           npm run build --emptyOutDir --outDir '../server/public'
 >>>>>>> e2c2906 (fix(ci): update workflow)
 
