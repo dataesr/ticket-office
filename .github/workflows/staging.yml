@@ -24,10 +24,7 @@ jobs:
         run: |
           cd client
           npm ci
-          npm run build --emptyOutDir --outDir '../../server/public'
-
-      - name: List files in public
-        run: ls -R server/public
+          npm run build --emptyOutDir --outDir '../server/public'
 
       - name: Build server (Bun)
         run: |
