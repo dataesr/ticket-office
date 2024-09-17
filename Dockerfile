@@ -1,10 +1,12 @@
-FROM node:18-alpine AS build
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --silent
-COPY . .
-RUN npm run build
+FROM oven/bun
 
-FROM nginx:stable
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 5173
+WORKDIR /app
+
+COPY ./server/package.json .
+RUN bun i --production
+COPY ./server .
+
+ENV NODE_ENV=production
+CMD ["bun", "run", "index.ts"]
+
+EXPOSE 3000

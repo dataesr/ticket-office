@@ -1,14 +1,16 @@
 {
   "name": "ticket-office",
   "private": true,
-  "version": "1.0.5",
+  "version": "2.0.0",
   "type": "module",
   "scripts": {
     "build": "vite build",
     "dev": "vite",
+    "start:client": "cd client && npm run dev",
+    "start:server": "cd server && bun run server.ts",
+    "start": "concurrently \"npm run start:client\" \"npm run start:server\"",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "start": "npm run dev",
     "deploy": "git switch main && git pull origin main --rebase --tags && git merge staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
   },
   "dependencies": {
@@ -33,18 +35,6 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.2.37",
-    "@types/react-dom": "^18.2.15",
-    "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
-    "@vitejs/plugin-react": "^4.2.0",
-    "eslint": "^8.53.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.4",
-    "sass": "^1.69.5",
-    "typescript": "^5.2.2",
-    "vite": "^5.0.4"
+    "concurrently": "^8.2.2"
   }
 }
