@@ -33,12 +33,18 @@ jobs:
       - name: Build client (Vite.js)
         run: |
 <<<<<<< HEAD
+<<<<<<< HEAD
           bun i
           bunx --bun vite build client --emptyOutDir --outDir '../server/public'
 =======
           npm i --prefix client
           npm run build --prefix client
           cp -r client/dist/* server/public/
+=======
+          cd client
+          npm i
+          npm run build --emptyOutDir --outDir '../server/public'
+>>>>>>> e2c2906 (fix(ci): update workflow)
 
       - name: Build server (Bun)
         run: |
