@@ -25,9 +25,6 @@ jobs:
           bun i
           cd client
           bunx --bun vite build client --emptyOutDir --outDir '../server/public'
-          docker build -t ${{ github.repository }} .
-
-
           cd ..
           docker build -t ${{ github.repository }} .
 
