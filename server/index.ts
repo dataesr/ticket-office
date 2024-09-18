@@ -6,6 +6,7 @@ import { swagger } from "@elysiajs/swagger";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
 
+<<<<<<< HEAD
 =======
 =======
 import staticPlugin from "@elysiajs/static";
@@ -13,6 +14,8 @@ import staticPlugin from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
+=======
+>>>>>>> c249e13 (fix(api): change url for request on staging)
 import contactRoutes from "./routes/contact";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
@@ -93,7 +96,6 @@ app
 
 // Appelez la fonction pour récupérer les e-mails
 // connectToImapServer();
-
 app.use(cors());
 app.use(swagger());
 // api comme préfixe pour toutes les routes
