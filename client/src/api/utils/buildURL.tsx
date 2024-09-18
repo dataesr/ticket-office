@@ -10,6 +10,7 @@ export const buildURL = (
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   const ticketOfficeApiBaseUrl = import.meta.env.BASE_API_URL;
   const baseApiUrl = isDevelopment
     ? "http://localhost:3000/api"
@@ -30,6 +31,11 @@ export const buildURL = (
 =======
   const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : "/api";
 >>>>>>> ac25ef2 (typo)
+=======
+  const baseApiUrl = isDevelopment
+    ? "http://localhost:3000/api"
+    : `https://ticket-office.staging.dataesr.ovh/api`;
+>>>>>>> d4acea1 (typo)
 
   let baseUrl = "scanr-contact";
   if (location?.pathname?.includes("scanr-contributionpage")) {
