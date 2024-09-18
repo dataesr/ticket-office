@@ -2,12 +2,12 @@ import { t } from "elysia";
 
 export const postContactSchema = t.Object(
   {
-    email: t.String(),
-    name: t.String(),
-    message: t.String(),
+    email: t.Required(t.String()),
+    name: t.Required(t.String()),
+    message: t.Required(t.String()),
     organisation: t.Optional(t.String()),
-    fromApp: t.String(),
-    collectionName: t.String(),
+    fromApp: t.Required(t.String()),
+    collectionName: t.Required(t.String()),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
