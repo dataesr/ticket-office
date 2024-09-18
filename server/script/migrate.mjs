@@ -9,7 +9,8 @@ async function migrateContacts() {
     console.log("Connecté à MongoDB");
 
     const db = client.db("ticket-office-api");
-    const collection = db.collection("contact");
+    // change collection with contact / contribute_production and contribute
+    const collection = db.collection("contribute_production");
 
     const contacts = await collection.find().toArray();
     console.log(contacts);

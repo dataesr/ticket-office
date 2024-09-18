@@ -14,13 +14,16 @@ export default function Router() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route
-          path="/contributionPage"
+          path="/scanr-contributionPage"
           element={<ContributionPage url={""} />}
         />
-        <Route path="/contact" element={<ContributionPage url={""} />} />
-        <Route path="/apioperations" element={<ApiOperationPage url={""} />} />
-        <Route path="/removeuser" element={<RemoveUserPage url="" />} />
-        <Route path="/namechange" element={<ChangeNamePage url="" />} />
+        <Route path="/scanr-contact" element={<ContributionPage url={""} />} />
+        <Route
+          path="/scanr-apioperations"
+          element={<ApiOperationPage url={""} />}
+        />
+        <Route path="/scanr-removeuser" element={<RemoveUserPage url="" />} />
+        <Route path="/scanr-namechange" element={<ChangeNamePage url="" />} />
       </Route>
     </Routes>
   );
