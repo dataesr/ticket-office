@@ -8,9 +8,10 @@ export const buildURL = (
   fromApplication?: string
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const ticketOfficeApi = import.meta.env.BASE_API_URL;
+  const ticketOfficeApiBaseUrl = import.meta.env.BASE_API_URL;
   const baseApiUrl = isDevelopment
     ? "http://localhost:3000/api"
+<<<<<<< HEAD
 <<<<<<< HEAD:client/src/api/utils/buildURL.tsx
     : `https://ticket-office.staging.dataesr.ovh/api`;
 =======
@@ -19,6 +20,12 @@ export const buildURL = (
 
   let baseUrl = "contacts";
   if (location?.pathname?.includes("scanr-contributionPage")) {
+=======
+    : `${ticketOfficeApiBaseUrl}/api`;
+
+  let baseUrl = "scanr-contact";
+  if (location?.pathname?.includes("scanr-contributionpage")) {
+>>>>>>> dfca0bc (chore(api): clean code)
     baseUrl = "contribute";
   } else if (location?.pathname?.includes("removeuser")) {
     baseUrl = "remove-user";

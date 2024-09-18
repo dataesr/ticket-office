@@ -24,9 +24,24 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   );
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+<<<<<<< HEAD
   const apiBaseUrl = isDevelopment
     ? "http://localhost:3000/api/send-email"
     : "https://ticket-office.staging.dataesr.ovh/api/send-email";
+=======
+  let basePath = "contact";
+  if (window.location.pathname.includes("contributionpage")) {
+    basePath = "contribute";
+  } else if (window.location.pathname.includes("apioperations")) {
+    basePath = "production";
+  }
+  const brevoUrl = isDevelopment
+    ? "http://localhost:3000/api/"
+    : "https://ticket-office.staging.dataesr.ovh/";
+  const scanRUrl = isDevelopment
+    ? `http://localhost:3000/api${basePath}/${contribution?._id}`
+    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${contribution?._id}`;
+>>>>>>> dfca0bc (chore(api): clean code)
 
   useEffect(() => {
     const profileFromLocalStorage = localStorage.getItem("selectedProfile");
