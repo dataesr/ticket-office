@@ -5,7 +5,11 @@ export const buildURL = (
   query: string,
   page: number,
   searchInMessages: boolean = false,
+<<<<<<< HEAD
   fromApplication?: string
+=======
+  fromApp?: string
+>>>>>>> 57156e2 (fix(navigation): contact navigation updated)
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 <<<<<<< HEAD
@@ -37,7 +41,7 @@ export const buildURL = (
     : `https://ticket-office.staging.dataesr.ovh/api`;
 >>>>>>> d4acea1 (typo)
 
-  let baseUrl = "scanr-contact";
+  let baseUrl = "contact";
   if (location?.pathname?.includes("scanr-contributionpage")) {
 >>>>>>> dfca0bc (chore(api): clean code)
     baseUrl = "contribute";
@@ -80,5 +84,10 @@ export const buildURL = (
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
+<<<<<<< HEAD
+=======
+  const fromAppQuery = fromApp ? `&fromApp=${fromApp.toLocaleLowerCase()}` : "";
+
+>>>>>>> 57156e2 (fix(navigation): contact navigation updated)
   return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}${fromAppQuery}`;
 };

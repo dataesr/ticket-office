@@ -84,6 +84,16 @@ export interface ChangeNameContribution {
   modified_at?: string;
   threads?: Thread[];
 }
+export interface ContributorSummaryProps {
+  contributions: Contribution[];
+  onSelectContribution: (id: string) => void;
+}
+export interface ContributionItemProps {
+  data: Contribution & { type: string };
+  highlightedQuery: string;
+  refetch: () => void;
+  allTags: string[];
+}
 export interface ChangeNameProps {
   _id: string;
   id: string;
@@ -176,6 +186,7 @@ export type ContributionDataType = {
 };
 
 export type ContributionPageProps = {
+<<<<<<< HEAD
   fromApplication?: string;
 };
 export type ChangeNamePageProps = {
@@ -183,6 +194,9 @@ export type ChangeNamePageProps = {
 };
 export type RemoveUserPageProps = {
   url: string;
+=======
+  fromApp?: string;
+>>>>>>> 57156e2 (fix(navigation): contact navigation updated)
 };
 
 export type StaffActionsProps = {

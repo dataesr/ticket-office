@@ -19,9 +19,13 @@ import ContributionItem from "../../components/items/contribution-item";
 import ContributorSummary from "../../components/items/contributor-summary";
 import { contactUrl, contributionUrl } from "../../config/api";
 
+<<<<<<< HEAD
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
 }) => {
+=======
+const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
+>>>>>>> 57156e2 (fix(navigation): contact navigation updated)
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);
@@ -59,7 +63,11 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     query.join(" "),
     page,
     searchInMessage,
+<<<<<<< HEAD
     fromApplication
+=======
+    fromApp
+>>>>>>> 57156e2 (fix(navigation): contact navigation updated)
   );
   let urlToSend;
   if (location.pathname.includes("contributionPage")) {

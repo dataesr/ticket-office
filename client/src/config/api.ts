@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 const API_KEY = import.meta.env.VITE_TICKET_OFFICE_API_AUTHORIZATION || "";
 =======
 const API_KEY = import.meta.env.VITE_SCANR_API_AUTHORIZATION || "";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+const API_KEY = import.meta.env.VITE_TICKET_OFFICE_API_AUTHORIZATION || "";
+>>>>>>> 57156e2 (fix(navigation): contact navigation updated)
 const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 export const headers = API_KEY ? { Authorization: `Basic ${API_KEY}` } : {};
 export const postHeaders = {
