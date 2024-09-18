@@ -44,7 +44,7 @@ const EditModal: React.FC<EditModalProps> = ({
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = isDevelopment
     ? `http://localhost:3000/api/${basePath}/${data?._id}`
-    : `https://ticket-office-api.staging.dataesr.ovh/api/${basePath}/${data?._id}`;
+    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?._id}`;
   const [inputs, setInputs] = useState<Inputs>({
     team: [selectedProfile],
     status: "treated",
@@ -70,7 +70,6 @@ const EditModal: React.FC<EditModalProps> = ({
 
     const fetchExistingTags = async () => {
       if (!data?._id) return;
-      console.log(url);
       try {
         const response = await fetch(url, {
           method: "GET",

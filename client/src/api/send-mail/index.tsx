@@ -32,10 +32,10 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   }
   const brevoUrl = isDevelopment
     ? "http://localhost:3000/api/"
-    : "https://ticket-office-api.staging.dataesr.ovh/";
+    : "https://ticket-office.staging.dataesr.ovh/";
   const scanRUrl = isDevelopment
     ? `http://localhost:3000/api${basePath}/${contribution?._id}`
-    : `https://ticket-office-api.staging.dataesr.ovh/api/${basePath}/${contribution?._id}`;
+    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${contribution?._id}`;
 
   useEffect(() => {
     const profileFromLocalStorage = localStorage.getItem("selectedProfile");
