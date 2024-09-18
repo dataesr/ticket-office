@@ -7,13 +7,13 @@ export const buildURL = (
   searchInMessages: boolean = false
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const ticketOfficeApi = import.meta.env.BASE_API_URL;
+  const ticketOfficeApiBaseUrl = import.meta.env.BASE_API_URL;
   const baseApiUrl = isDevelopment
     ? "http://localhost:3000/api"
-    : `${ticketOfficeApi}/api`;
+    : `${ticketOfficeApiBaseUrl}/api`;
 
-  let baseUrl = "contact";
-  if (location?.pathname?.includes("contributionpage")) {
+  let baseUrl = "scanr-contact";
+  if (location?.pathname?.includes("scanr-contributionpage")) {
     baseUrl = "contribute";
   } else if (location?.pathname?.includes("removeuser")) {
     baseUrl = "remove-user";

@@ -51,7 +51,6 @@ const ChangeNamePage: React.FC<ChangeNamePageProps> = () => {
   }, [page, query, searchInMessage, sort, status]);
 
   const url = buildURL(location, sort, status, query.join(" "), page);
-  console.log(url);
   let urlToSend = nameChangeUrl;
   const { data, isLoading, isError, refetch } = ContributionData(url);
   const getTags = ContributionData(urlToSend);
