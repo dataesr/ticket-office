@@ -7,7 +7,7 @@ export const buildURL = (
   searchInMessages: boolean = false
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : "";
+  const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : "/api";
 
   let baseUrl = "scanr-contact";
   if (location?.pathname?.includes("scanr-contributionpage")) {
