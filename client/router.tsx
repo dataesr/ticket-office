@@ -13,15 +13,28 @@ export default function Router() {
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/scanr-contributionPage" element={<ContributionPage />} />
         <Route
-          path="/scanr-contributionPage"
-          element={<ContributionPage url={""} />}
+          path="/scanr-contact"
+          element={<ContributionPage fromApp="scanr" />}
         />
-        <Route path="/scanr-contact" element={<ContributionPage url={""} />} />
         <Route
-          path="/scanr-apioperations"
-          element={<ApiOperationPage url={""} />}
+          path="/paysage-contact"
+          element={<ContributionPage fromApp="paysage" />}
         />
+        <Route
+          path="/bso-contact"
+          element={<ContributionPage fromApp="bso" />}
+        />
+        <Route
+          path="/curiexplore-contact"
+          element={<ContributionPage fromApp="curiexplore" />}
+        />
+        <Route
+          path="/datasupr-contact"
+          element={<ContributionPage fromApp="paysage" />}
+        />
+        <Route path="/scanr-apioperations" element={<ApiOperationPage />} />
         <Route path="/scanr-removeuser" element={<RemoveUserPage url="" />} />
         <Route path="/scanr-namechange" element={<ChangeNamePage url="" />} />
       </Route>

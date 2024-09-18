@@ -91,20 +91,20 @@ const Header: React.FC = () => {
             Accueil
           </Link>
           <NavItem
-            current={pathname.split("/").includes("scanR")}
+            current={pathname.split("/").includes("scanr")}
             title={"scanR"}
           >
             <Link
-              current={pathname.startsWith("/scanR")}
+              current={pathname.startsWith("/scanr")}
               href="/scanr-contributionpage"
             >
               Formulaire de contribution par objet
             </Link>
-            <Link current={pathname.startsWith("/scanR")} href="/scanr-contact">
+            <Link current={pathname.startsWith("/scanr")} href="/scanr-contact">
               Contributions via formulaire de contact
             </Link>
             <Link
-              current={pathname.startsWith("/scanR")}
+              current={pathname.startsWith("/scanr")}
               href="/scanr-apioperations"
             >
               Lier des publications
@@ -122,19 +122,25 @@ const Header: React.FC = () => {
               Changer le nom d'une personne
             </Link>
           </NavItem>
-          <Link current={pathname.startsWith("/paysage")} href="/paysage">
+          <Link
+            current={pathname.startsWith("/paysage")}
+            href="/paysage-contact"
+          >
             Paysage
           </Link>
           <Link
             current={pathname.startsWith("/curiexplore")}
-            href="/curiexplore"
+            href="/curiexplore-contact"
           >
             CurieXplore
           </Link>
-          <Link current={pathname.startsWith("/bso")} href="/bso">
+          <Link current={pathname.startsWith("/bso")} href="/bso-contact">
             BSO
           </Link>
-          <Link current={pathname.startsWith("/datasupR")} href="/datasupR">
+          <Link
+            current={pathname.startsWith("/datasupR")}
+            href="/datasupR-contact"
+          >
             datasupR
           </Link>
         </Nav>

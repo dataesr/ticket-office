@@ -19,7 +19,7 @@ import ContributionItem from "./contribution-item";
 import ContributorSummary from "./contributor-summary";
 import { contactUrl, contributionUrl } from "../../config/api";
 
-const ContributionPage: React.FC<ContributionPageProps> = () => {
+const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);
@@ -46,7 +46,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     newSearchParams.set("searchInMessage", searchInMessage.toString());
     newSearchParams.set("sort", sort);
     newSearchParams.set("status", status);
-
     const newURL = `${window.location.pathname}?${newSearchParams.toString()}`;
     window.history.pushState({}, "", newURL);
   }, [page, query, searchInMessage, sort, status]);
@@ -57,12 +56,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     status,
     query.join(" "),
     page,
-    searchInMessage
+    searchInMessage,
+    fromApp
   );
   let urlToSend;
   if (location.pathname.includes("contributionpage")) {
     urlToSend = contributionUrl;
-  } else if (location.pathname.includes("contact")) {
+  } else if (location.pathname.includes("-contact")) {
     urlToSend = contactUrl;
   } else {
     urlToSend = "";
