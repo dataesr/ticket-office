@@ -4,14 +4,15 @@ export const buildURL = (
   status: string,
   query: string,
   page: number,
-  searchInMessages: boolean = false
+  searchInMessages: boolean = false,
+  fromApp?: string
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const baseApiUrl = isDevelopment
     ? "http://localhost:3000/api"
     : `https://ticket-office.staging.dataesr.ovh/api`;
 
-  let baseUrl = "scanr-contact";
+  let baseUrl = "contact";
   if (location?.pathname?.includes("scanr-contributionpage")) {
     baseUrl = "contribute";
   } else if (location?.pathname?.includes("removeuser")) {
@@ -51,5 +52,7 @@ export const buildURL = (
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
-  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}`;
+  const fromAppQuery = fromApp ? `&fromApp=${fromApp.toLocaleLowerCase()}` : "";
+
+  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}${fromAppQuery}`;
 };

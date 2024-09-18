@@ -6,8 +6,7 @@ To ensure a more comfortable coding experience, it is advisable to use the Prett
 
 # created a .env.local
 
-add a var env of the scanr API KEY as : VITE_SCANR_API_AUTHORIZATION
-do the same for brevo API KEY as : VITE_BREVO_API_AUTHORIZATION
+add a var env of the ticket-office API KEY as : VITE_TICKET_OFFICE_API_AUTHORIZATION (in client)
 
 # run Ticket-office
 

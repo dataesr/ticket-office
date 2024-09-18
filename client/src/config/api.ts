@@ -1,4 +1,4 @@
-const API_KEY = import.meta.env.VITE_SCANR_API_AUTHORIZATION || "";
+const API_KEY = import.meta.env.VITE_TICKET_OFFICE_API_AUTHORIZATION || "";
 const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 export const headers = API_KEY ? { Authorization: `Basic ${API_KEY}` } : {};
 export const postHeaders = {

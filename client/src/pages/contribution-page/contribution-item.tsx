@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
 import ContributorInfo from "./contributor-info";
 import StaffActions from "./staff-action";
-import { Contribution } from "../../types";
+import { ContributionItemProps } from "../../types";
 import {
   BadgeColor,
   BadgeStatus,
@@ -12,13 +12,6 @@ import {
 } from "./utils";
 import "./styles.scss";
 import { FaCopy } from "react-icons/fa";
-
-interface ContributionItemProps {
-  data: Contribution & { type: string };
-  highlightedQuery: string;
-  refetch: () => void;
-  allTags: string[];
-}
 
 const ContributionItem: React.FC<ContributionItemProps> = ({
   data,

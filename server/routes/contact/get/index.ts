@@ -19,13 +19,13 @@ getContactRoutes.get(
       fromApp,
     } = query;
     const filters = JSON.parse(where as string);
-    filters.fromApp = fromApp;
+    if (fromApp) {
+      filters.fromApp = fromApp;
+    }
     const limit = parseInt(max_results as string, 10) || 20;
     const skip = (parseInt(page as string, 10) - 1) * limit;
-
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
-    console.log(filters);
     const contacts = await db
       .collection("contact")
       .find(filters)

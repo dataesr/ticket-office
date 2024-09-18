@@ -17,6 +17,16 @@ export interface Contribution {
   modified_at?: string;
   threads?: Thread[];
 }
+export interface ContributorSummaryProps {
+  contributions: Contribution[];
+  onSelectContribution: (id: string) => void;
+}
+export interface ContributionItemProps {
+  data: Contribution & { type: string };
+  highlightedQuery: string;
+  refetch: () => void;
+  allTags: string[];
+}
 export interface ChangeNameProps {
   _id: string;
   id: string;
@@ -108,13 +118,7 @@ export type ContributionDataType = {
 };
 
 export type ContributionPageProps = {
-  url: string;
-};
-export type ChangeNamePageProps = {
-  url: string;
-};
-export type RemoveUserPageProps = {
-  url: string;
+  fromApp?: string;
 };
 
 export type StaffActionsProps = {

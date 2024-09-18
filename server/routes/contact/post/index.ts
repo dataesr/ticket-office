@@ -58,7 +58,7 @@ postContactRoutes.post(
             name: "Debache Mihoub",
             message: "Ceci est un message de test.",
             organisation: "MESRI",
-            fromApp: "Paysage",
+            fromApp: "paysage",
             collectionName: "contact",
             fonction: "Développeur",
             idref: "12312321",
