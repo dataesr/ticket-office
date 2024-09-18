@@ -3,6 +3,7 @@ import staticPlugin from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
+
 import contactRoutes from "./routes/contact";
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
 import productionsRoutes from "./routes/productions";
@@ -17,7 +18,6 @@ const app = new Elysia();
 
 // Appelez la fonction pour récupérer les e-mails
 // connectToImapServer();
-
 app.use(cors());
 app.use(swagger());
 // api comme préfixe pour toutes les routes
