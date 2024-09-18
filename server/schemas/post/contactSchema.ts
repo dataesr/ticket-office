@@ -3,6 +3,7 @@ import { t } from "elysia";
 export const postContactSchema = t.Object(
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
     email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
     message: t.String(),
@@ -29,9 +30,14 @@ export const postContactSchema = t.Object(
     email: t.String(),
     name: t.String(),
     message: t.String(),
+=======
+    email: t.Required(t.String()),
+    name: t.Required(t.String()),
+    message: t.Required(t.String()),
+>>>>>>> 2b4b0b9 (feat(script): add new script to the scanr as fromApp and update nav in ui)
     organisation: t.Optional(t.String()),
-    fromApp: t.String(),
-    collectionName: t.String(),
+    fromApp: t.Required(t.String()),
+    collectionName: t.Required(t.String()),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),

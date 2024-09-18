@@ -22,6 +22,7 @@ export default function Router() {
         <Route path="/" element={<Home />} />
         <Route
 <<<<<<< HEAD
+<<<<<<< HEAD
           path="/scanr-contributionPage"
           element={<ContactAndContributionPage />}
         />
@@ -70,6 +71,18 @@ export default function Router() {
         <Route path="/removeuser" element={<RemoveUserPage url="" />} />
         <Route path="/namechange" element={<ChangeNamePage url="" />} />
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+          path="/scanr-contributionPage"
+          element={<ContributionPage url={""} />}
+        />
+        <Route path="/scanr-contact" element={<ContributionPage url={""} />} />
+        <Route
+          path="/scanr-apioperations"
+          element={<ApiOperationPage url={""} />}
+        />
+        <Route path="/scanr-removeuser" element={<RemoveUserPage url="" />} />
+        <Route path="/scanr-namechange" element={<ChangeNamePage url="" />} />
+>>>>>>> 2b4b0b9 (feat(script): add new script to the scanr as fromApp and update nav in ui)
       </Route>
     </Routes>
   );

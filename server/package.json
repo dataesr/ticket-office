@@ -49,13 +49,13 @@
     "@elysiajs/cors": "^1.1.0",
     "@elysiajs/static": "~1.0.3",
     "@elysiajs/swagger": "^1.0.5",
-    "elysia": "~1.0.27",
     "@types/imap": "^0.8.40",
     "@types/mongodb": "^4.0.7",
     "dotenv": "^16.4.5",
+    "elysia": "~1.0.27",
     "imap": "^0.8.19",
     "imap-simple": "^5.1.0",
-    "mongodb": "^6.8.0",
+    "mongodb": "^6.9.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "uuid": "^10.0.0"
@@ -74,5 +74,9 @@
   },
   "module": "src/index.js",
   "type": "module"
+<<<<<<< HEAD
 >>>>>>> 824b180 (fix(ci): update workflow)
 }
+=======
+}
+>>>>>>> 2b4b0b9 (feat(script): add new script to the scanr as fromApp and update nav in ui)
