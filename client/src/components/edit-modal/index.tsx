@@ -69,10 +69,14 @@ const EditModal: React.FC<EditModalProps> = ({
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = isDevelopment
 <<<<<<< HEAD
+<<<<<<< HEAD
     ? `http://localhost:3000/api/${basePath}/${data?.id}`
     : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?.id}`;
 =======
     ? `http://localhost:3000/api/${basePath}/${data?._id}`
+=======
+    ? `http://localhost:3000/api/${basePath}/:${data?._id}`
+>>>>>>> 73efe6f (fix(api): fix url)
     : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?._id}`;
   const [inputs, setInputs] = useState<Inputs>({
     team: [selectedProfile],
@@ -109,6 +113,7 @@ const EditModal: React.FC<EditModalProps> = ({
         });
         if (response.ok) {
           const currentData = await response.json();
+          console.log("Données reçues:", currentData);
           setExistingTags(currentData.tags || []);
         } else if (response.status === 404) {
           console.warn("Aucun tag existant trouvé");
@@ -299,7 +304,7 @@ const EditModal: React.FC<EditModalProps> = ({
         method: "GET",
         headers: postHeaders,
       });
-
+      console.log(url);
       if (!currentDataResponse.ok) {
         console.log(
           "Erreur de réponse lors de la récupération des données actuelles",
@@ -323,7 +328,7 @@ const EditModal: React.FC<EditModalProps> = ({
       };
 
       const response = await fetch(url, {
-        method: "PATCH",
+        method: "PUT",
         headers: postHeaders,
         body: JSON.stringify(body),
       });
