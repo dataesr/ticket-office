@@ -24,14 +24,17 @@ const EditModal: React.FC<EditModalProps> = ({
   allTags,
 }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState(
-    localStorage.getItem("selectedProfile")
-  );
-  const [existingTags, setExistingTags] = useState<string[]>([]);
+  const [selectedProfile] = useState(localStorage.getItem("selectedProfile"));
+  const [inputs, setInputs] = useState<Inputs>({
+    team: [selectedProfile],
+    status: "treated",
+    tags: [],
+    idref: "",
+    comment: "",
+  });
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
-  const [showTagModal, setShowTagModal] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState("treated");
+  const [showTagModal] = useState(false);
 
   let basePath = "contact";
 
@@ -43,54 +46,13 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = isDevelopment
-    ? `http://localhost:3000/api/${basePath}/:${data?._id}`
+    ? `http://localhost:3000/api/${basePath}/${data?._id}`
     : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?._id}`;
-  const [inputs, setInputs] = useState<Inputs>({
-    team: [selectedProfile],
-    status: "treated",
-    tags: [],
-    idRef: "",
-    comment: "",
-  });
 
   useEffect(() => {
     if (!selectedProfile) {
       setShowProfileModal(true);
     }
-    if (data && data.status) {
-      setCurrentStatus(data.status);
-    }
-    setInputs({
-      team: [selectedProfile],
-      status: data ? data.status : "treated",
-      tags: [],
-      idRef: "",
-      comment: "",
-    });
-
-    const fetchExistingTags = async () => {
-      if (!data?._id) return;
-      try {
-        const response = await fetch(url, {
-          method: "GET",
-          headers: postHeaders,
-        });
-        if (response.ok) {
-          const currentData = await response.json();
-          console.log("Données reçues:", currentData);
-          setExistingTags(currentData.tags || []);
-        } else if (response.status === 404) {
-          console.warn("Aucun tag existant trouvé");
-        }
-      } catch (error) {
-        console.error(
-          "Erreur lors de la récupération des tags existants",
-          error
-        );
-      }
-    };
-
-    fetchExistingTags();
 
     const formattedTags = Array.isArray(allTags)
       ? Array.from(
@@ -103,79 +65,29 @@ const EditModal: React.FC<EditModalProps> = ({
         ).sort()
       : [];
     setFilteredTags(formattedTags);
-  }, [data, selectedProfile, allTags]);
+  }, [allTags, selectedProfile]);
 
-  const handleStatusChange = (event) => {
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      status: event.target.value,
-    }));
+  const handleInputChange = (key: keyof Inputs, value: any) => {
+    setInputs((prevInputs) => ({ ...prevInputs, [key]: value }));
   };
 
   const handleTagInputChange = () => {
     const tagsArray = tagInput
       .split(",")
-      .map((tag) => tag.trim())
+      .map((tag) => tag.trim().toUpperCase())
       .filter((tag) => tag !== "");
 
-    const duplicateTags = tagsArray.filter((tag) => existingTags.includes(tag));
-
-    if (duplicateTags.length > 0) {
-      toast.warn(`Le tag ${duplicateTags.join(", ")} existe déjà!`);
-      setTagInput("");
-      return;
-    }
     if (tagsArray.length > 0) {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        tags: [...prevInputs.tags, ...tagsArray],
-      }));
+      handleInputChange("tags", [...inputs.tags, ...tagsArray]);
       setTagInput("");
     }
   };
 
-  const handleCommentChange = (event) => {
-    const newComment = event.target.value;
-    setInputs((prevInputs) => ({ ...prevInputs, comment: newComment }));
-  };
-
-  const handleIdRefChange = (event) => {
-    const newIdref = event.target.value;
-    setInputs((prevInputs) => ({ ...prevInputs, idRef: newIdref }));
-  };
-
-  const handleTagDelete = async (tag) => {
-    try {
-      const updatedTags = existingTags.filter(
-        (existingTag) => existingTag !== tag
-      );
-      const body = { tags: updatedTags };
-
-      const response = await fetch(url, {
-        method: "PATCH",
-        headers: postHeaders,
-        body: JSON.stringify(body),
-      });
-
-      if (response.ok) {
-        setExistingTags(updatedTags);
-        toast.success(
-          "Tag supprimé avec succès! Cliquez sur enregistrer pour valider"
-        );
-      } else {
-        console.error("Erreur lors de la suppression du tag", response);
-      }
-    } catch (error) {
-      console.error("Erreur lors de la suppression du tag", error);
-    }
-  };
-
-  const handleTagRemove = (tagToRemove) => {
-    const updatedTags = inputs.tags.filter((tag) => tag !== tagToRemove);
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      tags: updatedTags,
-    }));
+  const handleTagRemove = (tagToRemove: string) => {
+    handleInputChange(
+      "tags",
+      inputs.tags.filter((tag) => tag !== tagToRemove)
+    );
   };
 
   const handleSubmit = async () => {
@@ -189,83 +101,24 @@ const EditModal: React.FC<EditModalProps> = ({
     }
 
     try {
-      const currentDataResponse = await fetch(url, {
-        method: "GET",
-        headers: postHeaders,
-      });
-      console.log(url);
-      if (!currentDataResponse.ok) {
-        console.log(
-          "Erreur de réponse lors de la récupération des données actuelles",
-          currentDataResponse
-        );
-        return;
-      }
-
-      const currentData = await currentDataResponse.json();
-
-      const updatedTags = currentData.tags
-        ? [...currentData.tags, ...inputs.tags]
-        : inputs.tags;
-
-      const body = {
-        status: inputs.status,
-        tags: updatedTags,
-        team: inputs.team,
-        idref: inputs.idRef,
-        comment: inputs.comment,
-      };
+      const body = JSON.stringify({ ...inputs, team: [selectedProfile] });
 
       const response = await fetch(url, {
         method: "PUT",
         headers: postHeaders,
-        body: JSON.stringify(body),
+        body,
       });
 
-      if (!response.ok) {
-        console.log("Erreur de réponse", response);
-      } else {
-        const responseData = await response.json();
-        console.log("Données de réponse", responseData);
+      if (response.ok) {
         refetch();
         onClose();
-
-        if (inputs.tags.length > 0) {
-          toast.success("Nouveau(x) tag(s) ajouté(s)!");
-        } else if (inputs.comment) {
-          toast.success("Nouveau commentaire ajouté!");
-        } else if (inputs.idRef) {
-          toast.success("Nouvel idRef ajouté!");
-        }
+        toast.success("Les modifications ont été enregistrées avec succès !");
+      } else {
+        throw new Error("Erreur lors de la mise à jour");
       }
     } catch (error) {
-      console.error("Erreur lors de la soumission du formulaire", error);
-    }
-  };
-
-  const statusOptions = [
-    { value: "new", label: "Nouveau" },
-    { value: "ongoing", label: "En traitement" },
-    { value: "treated", label: "Traité" },
-  ];
-
-  const handleProfileSelect = (profile) => {
-    setSelectedProfile(profile);
-    localStorage.setItem("selectedProfile", profile);
-    setShowProfileModal(false);
-  };
-
-  const handleTagAdd = () => {
-    setShowTagModal(true);
-  };
-
-  const handleTagModalClose = (selectedTags: string[]) => {
-    setShowTagModal(false);
-    if (selectedTags.length > 0) {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        tags: [...prevInputs.tags, ...selectedTags],
-      }));
+      console.error("Erreur lors de la soumission:", error);
+      toast.error("Une erreur est survenue lors de l'enregistrement");
     }
   };
 
@@ -273,24 +126,19 @@ const EditModal: React.FC<EditModalProps> = ({
     <>
       <Modal isOpen={isOpen} hide={onClose}>
         <ModalTitle>Modifier la contribution</ModalTitle>
-        <ModalContent className="profile-modal-content">
+        <ModalContent>
           <Col className="fr-mb-1w">
             <label htmlFor="statusInput">Statut</label>
             <select
               id="statusInput"
               name="status"
               value={inputs.status}
-              onChange={handleStatusChange}
+              onChange={(e) => handleInputChange("status", e.target.value)}
               className="fr-select"
             >
-              <option value="" disabled hidden>
-                {currentStatus}
-              </option>
-              {statusOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
+              <option value="treated">Traité</option>
+              <option value="new">Nouveau</option>
+              <option value="ongoing">En traitement</option>
             </select>
           </Col>
           <Row gutters>
@@ -312,10 +160,6 @@ const EditModal: React.FC<EditModalProps> = ({
               )}
             </Col>
             <Col md="6">
-              <Button onClick={handleTagAdd} variant="secondary" size="sm">
-                Sélectionner des tags
-              </Button>
-              <br />
               {inputs.tags.map((tag, index) => (
                 <span key={index}>
                   <DismissibleTag
@@ -323,18 +167,7 @@ const EditModal: React.FC<EditModalProps> = ({
                     className="fr-mt-1w"
                     onClick={() => handleTagRemove(tag)}
                   >
-                    <Text size="sm">{tag.toUpperCase()}</Text>
-                  </DismissibleTag>
-                </span>
-              ))}
-              {existingTags.map((tag, index) => (
-                <span key={index}>
-                  <DismissibleTag
-                    className="fr-ml-1w fr-mr-1v fr-mt-1w"
-                    size="sm"
-                    onClick={() => handleTagDelete(tag)}
-                  >
-                    <Text size="sm">{tag.toUpperCase()}</Text>
+                    <Text size="sm">{tag}</Text>
                   </DismissibleTag>
                 </span>
               ))}
@@ -343,9 +176,9 @@ const EditModal: React.FC<EditModalProps> = ({
           <Row gutters>
             <Col md="6">
               <TextArea
-                label="Ajouter un idref"
-                value={inputs.idRef}
-                onChange={handleIdRefChange}
+                label="Ajouter un idRef"
+                value={inputs.idref}
+                onChange={(e) => handleInputChange("idref", e.target.value)}
                 hint="Ajoutez un identifiant"
               />
             </Col>
@@ -353,7 +186,7 @@ const EditModal: React.FC<EditModalProps> = ({
               <TextArea
                 label="Commentaire"
                 value={inputs.comment}
-                onChange={handleCommentChange}
+                onChange={(e) => handleInputChange("comment", e.target.value)}
                 hint="Ajouter un commentaire"
               />
             </Col>
@@ -373,13 +206,13 @@ const EditModal: React.FC<EditModalProps> = ({
           isOpen={showProfileModal}
           selectedProfile={selectedProfile}
           onClose={() => setShowProfileModal(false)}
-          onSelectProfile={handleProfileSelect}
+          onSelectProfile={(profile) => handleInputChange("team", [profile])}
         />
       )}
       <TagSelectionModal
         isOpen={showTagModal}
         allTags={filteredTags}
-        onClose={handleTagModalClose}
+        onClose={(selectedTags) => handleInputChange("tags", selectedTags)}
       />
     </>
   );

@@ -30,7 +30,6 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
     });
   };
 
-  // Récupérer la première réponse dans les threads pour remplacer mailSent et responseFrom
   const firstThread = data?.threads?.[0];
   const firstResponse = firstThread?.responses?.[0];
 
