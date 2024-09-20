@@ -1,6 +1,7 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+import { contactSchema } from "../../../schemas/get/contactSchema";
 
 const getContactRoutes = new Elysia();
 
@@ -58,10 +59,14 @@ getContactRoutes.get(
     return formattedContacts;
   },
   {
+    body: contactSchema,
+    response: {
+      400: t.Object({ message: t.String() }),
+      401: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
     detail: {
       summary: "Obtenir toutes les contributions via formulaire de contact",
-      description:
-        "Cette route retourne une liste de toutes les contributions soumises via le formulaire de contact.",
       tags: ["Contact"],
     },
   }

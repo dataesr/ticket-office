@@ -40,6 +40,12 @@ const EditModal: React.FC<EditModalProps> = ({
 
   if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";
+  }
+  if (window.location.pathname.includes("scanr-removeuser")) {
+    basePath = "remove-user";
+  }
+  if (window.location.pathname.includes("scanr-namechange")) {
+    basePath = "update-user-data";
   } else if (window.location.pathname.includes("apioperations")) {
     basePath = "production";
   }
