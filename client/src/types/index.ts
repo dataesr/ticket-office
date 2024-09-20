@@ -259,6 +259,10 @@ export type Inputs = {
   team: string[];
   status: string;
   tags: string[];
+<<<<<<< HEAD
+=======
+  idref: string;
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
   comment: string;
   extra: string;
 };

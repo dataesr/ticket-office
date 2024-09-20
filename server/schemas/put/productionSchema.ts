@@ -1,6 +1,6 @@
 import { t } from "elysia";
 
-export const putContactSchema = t.Object(
+export const putProductionSchema = t.Object(
   {
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),

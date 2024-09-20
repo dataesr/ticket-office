@@ -25,11 +25,15 @@ const EditModal: React.FC<EditModalProps> = ({
 }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
   const [selectedProfile] = useState(localStorage.getItem("selectedProfile"));
   const [inputs, setInputs] = useState<Inputs>({
     team: [selectedProfile],
     status: "treated",
     tags: [],
+<<<<<<< HEAD
     comment: "",
     extra: "",
   });
@@ -52,10 +56,14 @@ const EditModal: React.FC<EditModalProps> = ({
     localStorage.getItem("selectedProfile")
   );
   const [existingTags, setExistingTags] = useState<string[]>([]);
+=======
+    idref: "",
+    comment: "",
+  });
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
-  const [showTagModal, setShowTagModal] = useState(false);
-  const [currentStatus, setCurrentStatus] = useState("treated");
+  const [showTagModal] = useState(false);
 
   let basePath = "contact";
 
@@ -68,6 +76,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = isDevelopment
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     ? `http://localhost:3000/api/${basePath}/${data?.id}`
@@ -86,11 +95,16 @@ const EditModal: React.FC<EditModalProps> = ({
     comment: "",
   });
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    ? `http://localhost:3000/api/${basePath}/${data?._id}`
+    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?._id}`;
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
 
   useEffect(() => {
     if (!selectedProfile) {
       setShowProfileModal(true);
     }
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     if (data && data.status) {
@@ -128,6 +142,8 @@ const EditModal: React.FC<EditModalProps> = ({
 
     fetchExistingTags();
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
 
     const formattedTags = Array.isArray(allTags)
       ? Array.from(
@@ -140,6 +156,7 @@ const EditModal: React.FC<EditModalProps> = ({
         ).sort()
       : [];
     setFilteredTags(formattedTags);
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     if (data) {
@@ -163,36 +180,27 @@ const EditModal: React.FC<EditModalProps> = ({
       [key]: value,
 =======
   }, [data, selectedProfile, allTags]);
+=======
+  }, [allTags, selectedProfile]);
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
 
-  const handleStatusChange = (event) => {
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      status: event.target.value,
-    }));
+  const handleInputChange = (key: keyof Inputs, value: any) => {
+    setInputs((prevInputs) => ({ ...prevInputs, [key]: value }));
   };
 
   const handleTagInputChange = () => {
     const tagsArray = tagInput
       .split(",")
-      .map((tag) => tag.trim())
+      .map((tag) => tag.trim().toUpperCase())
       .filter((tag) => tag !== "");
 
-    const duplicateTags = tagsArray.filter((tag) => existingTags.includes(tag));
-
-    if (duplicateTags.length > 0) {
-      toast.warn(`Le tag ${duplicateTags.join(", ")} existe déjà!`);
-      setTagInput("");
-      return;
-    }
     if (tagsArray.length > 0) {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        tags: [...prevInputs.tags, ...tagsArray],
-      }));
+      handleInputChange("tags", [...inputs.tags, ...tagsArray]);
       setTagInput("");
     }
   };
 
+<<<<<<< HEAD
   const handleCommentChange = (event) => {
     const newComment = event.target.value;
     setInputs((prevInputs) => ({ ...prevInputs, comment: newComment }));
@@ -236,6 +244,13 @@ const EditModal: React.FC<EditModalProps> = ({
       tags: updatedTags,
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     }));
+=======
+  const handleTagRemove = (tagToRemove: string) => {
+    handleInputChange(
+      "tags",
+      inputs.tags.filter((tag) => tag !== tagToRemove)
+    );
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
   };
 
   const handleSubmit = async () => {
@@ -249,6 +264,7 @@ const EditModal: React.FC<EditModalProps> = ({
     }
 
     try {
+<<<<<<< HEAD
 <<<<<<< HEAD
       const extraEntries = inputs.extra.split("\n").reduce((acc, line) => {
         const [key, value] = line.split(":").map((part) => part.trim());
@@ -326,57 +342,26 @@ const EditModal: React.FC<EditModalProps> = ({
         idref: inputs.idRef,
         comment: inputs.comment,
       };
+=======
+      const body = JSON.stringify({ ...inputs, team: [selectedProfile] });
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
 
       const response = await fetch(url, {
         method: "PUT",
         headers: postHeaders,
-        body: JSON.stringify(body),
+        body,
       });
 
-      if (!response.ok) {
-        console.log("Erreur de réponse", response);
-      } else {
-        const responseData = await response.json();
-        console.log("Données de réponse", responseData);
+      if (response.ok) {
         refetch();
         onClose();
-
-        if (inputs.tags.length > 0) {
-          toast.success("Nouveau(x) tag(s) ajouté(s)!");
-        } else if (inputs.comment) {
-          toast.success("Nouveau commentaire ajouté!");
-        } else if (inputs.idRef) {
-          toast.success("Nouvel idRef ajouté!");
-        }
+        toast.success("Les modifications ont été enregistrées avec succès !");
+      } else {
+        throw new Error("Erreur lors de la mise à jour");
       }
     } catch (error) {
-      console.error("Erreur lors de la soumission du formulaire", error);
-    }
-  };
-
-  const statusOptions = [
-    { value: "new", label: "Nouveau" },
-    { value: "ongoing", label: "En traitement" },
-    { value: "treated", label: "Traité" },
-  ];
-
-  const handleProfileSelect = (profile) => {
-    setSelectedProfile(profile);
-    localStorage.setItem("selectedProfile", profile);
-    setShowProfileModal(false);
-  };
-
-  const handleTagAdd = () => {
-    setShowTagModal(true);
-  };
-
-  const handleTagModalClose = (selectedTags: string[]) => {
-    setShowTagModal(false);
-    if (selectedTags.length > 0) {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        tags: [...prevInputs.tags, ...selectedTags],
-      }));
+      console.error("Erreur lors de la soumission:", error);
+      toast.error("Une erreur est survenue lors de l'enregistrement");
     }
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
   };
@@ -386,16 +371,21 @@ const EditModal: React.FC<EditModalProps> = ({
       <Modal isOpen={isOpen} hide={onClose}>
         <ModalTitle>Modifier la contribution</ModalTitle>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <ModalContent>
 =======
         <ModalContent className="profile-modal-content">
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+        <ModalContent>
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
           <Col className="fr-mb-1w">
             <label htmlFor="statusInput">Statut</label>
             <select
               id="statusInput"
               name="status"
               value={inputs.status}
+<<<<<<< HEAD
 <<<<<<< HEAD
               onChange={(e) => handleInputChange("status", e.target.value)}
               className="fr-select"
@@ -416,6 +406,14 @@ const EditModal: React.FC<EditModalProps> = ({
                 </option>
               ))}
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+              onChange={(e) => handleInputChange("status", e.target.value)}
+              className="fr-select"
+            >
+              <option value="treated">Traité</option>
+              <option value="new">Nouveau</option>
+              <option value="ongoing">En traitement</option>
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
             </select>
           </Col>
           <Row gutters>
@@ -438,12 +436,15 @@ const EditModal: React.FC<EditModalProps> = ({
             </Col>
             <Col md="6">
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
               <Button onClick={handleTagAdd} variant="secondary" size="sm">
                 Sélectionner des tags
               </Button>
               <br />
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
               {inputs.tags.map((tag, index) => (
                 <span key={index}>
                   <DismissibleTag
@@ -451,6 +452,7 @@ const EditModal: React.FC<EditModalProps> = ({
                     className="fr-mt-1w"
                     onClick={() => handleTagRemove(tag)}
                   >
+<<<<<<< HEAD
 <<<<<<< HEAD
                     <Text size="sm">{tag}</Text>
 =======
@@ -467,6 +469,9 @@ const EditModal: React.FC<EditModalProps> = ({
                   >
                     <Text size="sm">{tag.toUpperCase()}</Text>
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+                    <Text size="sm">{tag}</Text>
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
                   </DismissibleTag>
                 </span>
               ))}
@@ -476,6 +481,7 @@ const EditModal: React.FC<EditModalProps> = ({
             <Col md="6">
               <TextArea
 <<<<<<< HEAD
+<<<<<<< HEAD
                 label="Ajouter des extra"
                 value={inputs.extra}
                 onChange={(e) => handleInputChange("extra", e.target.value)}
@@ -484,6 +490,11 @@ const EditModal: React.FC<EditModalProps> = ({
                 label="Ajouter un idref"
                 value={inputs.idRef}
                 onChange={handleIdRefChange}
+=======
+                label="Ajouter un idRef"
+                value={inputs.idref}
+                onChange={(e) => handleInputChange("idref", e.target.value)}
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
                 hint="Ajoutez un identifiant"
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
               />
@@ -493,10 +504,14 @@ const EditModal: React.FC<EditModalProps> = ({
                 label="Commentaire"
                 value={inputs.comment}
 <<<<<<< HEAD
+<<<<<<< HEAD
                 onChange={(e) => handleInputChange("comment", e.target.value)}
 =======
                 onChange={handleCommentChange}
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+                onChange={(e) => handleInputChange("comment", e.target.value)}
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
                 hint="Ajouter un commentaire"
               />
             </Col>
@@ -517,20 +532,28 @@ const EditModal: React.FC<EditModalProps> = ({
           selectedProfile={selectedProfile}
           onClose={() => setShowProfileModal(false)}
 <<<<<<< HEAD
+<<<<<<< HEAD
           onSelectProfile={(profile) => handleInputChange("team", [profile])}
 =======
           onSelectProfile={handleProfileSelect}
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+          onSelectProfile={(profile) => handleInputChange("team", [profile])}
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
         />
       )}
       <TagSelectionModal
         isOpen={showTagModal}
         allTags={filteredTags}
 <<<<<<< HEAD
+<<<<<<< HEAD
         onClose={(selectedTags) => handleInputChange("tags", selectedTags)}
 =======
         onClose={handleTagModalClose}
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+        onClose={(selectedTags) => handleInputChange("tags", selectedTags)}
+>>>>>>> 8758832 (fix(edit-contrib): fix bug)
       />
     </>
   );
