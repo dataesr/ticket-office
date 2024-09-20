@@ -1,9 +1,9 @@
 import Elysia, { Static } from "elysia";
 import { ObjectId } from "mongodb";
 import db from "../../../libs/mongo";
-import { putContactSchema } from "../../../schemas/put/contactSchema";
+import { editSchema } from "../../../schemas/put/editSchema";
 
-type contactType = Static<typeof putContactSchema>;
+type contactType = Static<typeof editSchema>;
 const contactPutRoutes = new Elysia();
 
 contactPutRoutes.put(
@@ -59,7 +59,6 @@ contactPutRoutes.put(
     return updatedContact;
   },
   {
-    body: putContactSchema,
     detail: {
       summary: "Modifier une contribution via formulaire de contact par ID",
       description:

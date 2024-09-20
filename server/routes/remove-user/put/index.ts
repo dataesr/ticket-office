@@ -1,9 +1,9 @@
 import Elysia, { Static } from "elysia";
 import { ObjectId } from "mongodb";
 import db from "../../../libs/mongo";
-import { putContactSchema } from "../../../schemas/put/contactSchema";
+import { editSchema } from "../../../schemas/put/editSchema";
 
-type removeUserType = Static<typeof putContactSchema>;
+type removeUserType = Static<typeof editSchema>;
 const removeUserPutRoutes = new Elysia();
 
 removeUserPutRoutes.put(
@@ -59,7 +59,6 @@ removeUserPutRoutes.put(
     }
   },
   {
-    body: putContactSchema,
     detail: {
       summary:
         "Modifier une contribution sur une demande de suppression de profil par ID",
