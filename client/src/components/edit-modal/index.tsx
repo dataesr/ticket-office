@@ -69,7 +69,16 @@ const EditModal: React.FC<EditModalProps> = ({
 
   if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+  }
+  if (window.location.pathname.includes("scanr-removeuser")) {
+    basePath = "remove-user";
+  }
+  if (window.location.pathname.includes("scanr-namechange")) {
+    basePath = "update-user-data";
+>>>>>>> 8372f23 (fix(edit): update package delete dep)
   } else if (window.location.pathname.includes("apioperations")) {
     basePath = "production";
   }

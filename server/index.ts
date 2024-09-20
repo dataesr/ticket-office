@@ -35,7 +35,10 @@ dotenv.config();
 
 const app = new Elysia();
 <<<<<<< HEAD
+<<<<<<< HEAD
 fetchEmails();
+=======
+>>>>>>> 8372f23 (fix(edit): update package delete dep)
 app
   .use(
     cors({
@@ -48,6 +51,7 @@ app
         info: {
           version: "1.0.0",
           title: "Mon API",
+<<<<<<< HEAD
           description: "API du bureau des plaintes",
           contact: {
             name: "Mihoub",
@@ -68,19 +72,37 @@ app
             description:
               "Gestion des demandes de mise à jour de données utilisateur",
           },
+=======
+          description: "API pour gérer les contributions et contacts",
+          contact: {
+            name: "Mon Équipe",
+            email: "contact@monapi.com",
+          },
+        },
+        tags: [
+          { name: "Contact", description: "Gestion des contacts" },
+          { name: "Contributions", description: "Gestion des contributions" },
+          { name: "Productions", description: "Gestion des productions" },
+>>>>>>> 8372f23 (fix(edit): update package delete dep)
         ],
       },
     })
   )
+<<<<<<< HEAD
   .onError(({ code, error }) => {
     return new Response(error.toString());
   })
   .group("/api", (app) => {
     app.use(contactsRoutes);
+=======
+  .group("/api", (app) => {
+    app.use(contactRoutes);
+>>>>>>> 8372f23 (fix(edit): update package delete dep)
     app.use(contributionObjectRoutes);
     app.use(productionsRoutes);
     app.use(removeUserRoutes);
     app.use(updateUserDataRoutes);
+<<<<<<< HEAD
     app.use(sendMail);
     return app;
   })
@@ -120,5 +142,18 @@ app.use(
 );
 app.get("*", () => Bun.file("public/index.html"));
 >>>>>>> 824b180 (fix(ci): update workflow)
+=======
+    app.use(replyRoutes);
+    return app;
+  })
+  .use(
+    staticPlugin({
+      assets: "public",
+      prefix: "",
+      alwaysStatic: true,
+    })
+  )
+  .get("*", () => Bun.file("public/index.html"));
+>>>>>>> 8372f23 (fix(edit): update package delete dep)
 
 export default app;
