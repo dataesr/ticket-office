@@ -180,7 +180,7 @@ export type Inputs = {
   team: string[];
   status: string;
   tags: string[];
-  idRef: string;
+  idref: string;
   comment: string;
 };
 

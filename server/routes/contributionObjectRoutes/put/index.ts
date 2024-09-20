@@ -3,50 +3,53 @@ import { ObjectId } from "mongodb";
 import db from "../../../libs/mongo";
 import { putContactSchema } from "../../../schemas/put/contactSchema";
 
-type contactType = Static<typeof putContactSchema>;
+type contributionType = Static<typeof putContactSchema>;
 const contributionObjectPutRoutes = new Elysia();
+
+const isValidData = (data: {
+  idref: string;
+  status: string;
+  team: Array<string>;
+  tags: Array<string>;
+  comment: string;
+}) => {
+  const { idref, status, team, tags, comment } = data;
+  if (idref && typeof idref !== "string") return false;
+  if (status && typeof status !== "string") return false;
+  if (team && !Array.isArray(team)) return false;
+  if (tags && !Array.isArray(tags)) return false;
+  if (comment && typeof comment !== "string") return false;
+  return true;
+};
 
 contributionObjectPutRoutes.put(
   "/contribute/:id",
   async ({ params: { id }, request, error }) => {
-    const updateData = await request.json();
+    const body = await request.json();
 
-    if (
-      updateData.status &&
-      ["ongoing", "treated"].includes(updateData.status)
-    ) {
-      updateData.treatedAt = new Date();
-    }
-
-    if (updateData.team && Array.isArray(updateData.team)) {
-      const userWhoModified = updateData.team[0];
-      if (!updateData.team.includes(userWhoModified)) {
-        updateData.team.push(userWhoModified);
-      }
+    if (!isValidData(body)) {
+      return error(400, "Invalid input data");
     }
 
     const result = await db
       .collection("contribute")
-      .updateOne({ _id: new ObjectId(id) }, { $set: updateData });
+      .updateOne({ _id: new ObjectId(id) }, { $set: body });
 
     if (result.matchedCount === 0) {
-      return error(400, "No contribution found with this ID");
+      return error(404, "No contribution found with this ID");
     }
 
-    const updatedContribution = await db
+    const updatedContact = await db
       .collection("contribute")
-      .findOne<contactType>({
-        _id: new ObjectId(id),
-      });
+      .findOne<contributionType>({ _id: new ObjectId(id) });
 
-    if (!updatedContribution) {
-      return error(500, "Failed to retrieve updated contribution");
+    if (!updatedContact) {
+      return error(500, "Failed to retrieve updated contact");
     }
 
-    return updatedContribution;
+    return updatedContact;
   },
   {
-    body: putContactSchema,
     detail: {
       summary: "Modifier une contribution via formulaire par objet et par ID",
       description:
