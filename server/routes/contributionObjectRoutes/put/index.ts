@@ -1,9 +1,9 @@
 import Elysia, { Static } from "elysia";
 import { ObjectId } from "mongodb";
 import db from "../../../libs/mongo";
-import { putContactSchema } from "../../../schemas/put/contactSchema";
+import { editSchema } from "../../../schemas/put/editSchema";
 
-type contributionType = Static<typeof putContactSchema>;
+type contributionType = Static<typeof editSchema>;
 const contributionObjectPutRoutes = new Elysia();
 
 const isValidData = (data: {
@@ -25,15 +25,15 @@ const isValidData = (data: {
 contributionObjectPutRoutes.put(
   "/contribute/:id",
   async ({ params: { id }, request, error }) => {
-    const body = await request.json();
+    const data = await request.json();
 
-    if (!isValidData(body)) {
+    if (!isValidData(data)) {
       return error(400, "Invalid input data");
     }
 
     const result = await db
       .collection("contribute")
-      .updateOne({ _id: new ObjectId(id) }, { $set: body });
+      .updateOne({ _id: new ObjectId(id) }, { $set: data });
 
     if (result.matchedCount === 0) {
       return error(404, "No contribution found with this ID");

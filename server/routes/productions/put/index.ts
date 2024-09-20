@@ -1,9 +1,9 @@
 import Elysia, { Static } from "elysia";
 import { ObjectId } from "mongodb";
 import db from "../../../libs/mongo";
-import { putProductionSchema } from "../../../schemas/put/productionSchema";
+import { editSchema } from "../../../schemas/put/editSchema";
 
-type productionType = Static<typeof putProductionSchema>;
+type productionType = Static<typeof editSchema>;
 const productionsPutRoutes = new Elysia();
 
 productionsPutRoutes.put(
@@ -46,7 +46,6 @@ productionsPutRoutes.put(
     return updatedContact;
   },
   {
-    body: putProductionSchema,
     detail: {
       summary:
         "Modifier une contribution via formulaire de liaison de productions par ID",
