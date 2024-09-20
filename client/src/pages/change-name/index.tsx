@@ -17,9 +17,9 @@ import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import { nameChangeUrl } from "../../config/api";
-import { ChangeNamePageProps, ChangeNameProps } from "../../types";
+import { ChangeNameProps } from "../../types";
 
-const ChangeNamePage: React.FC<ChangeNamePageProps> = () => {
+const ChangeNamePage: React.FC<ChangeNameProps> = () => {
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);

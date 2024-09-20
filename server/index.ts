@@ -15,28 +15,48 @@ import replyRoutes from "./routes/reply/replyRoutes";
 dotenv.config();
 
 const app = new Elysia();
-
-// Appelez la fonction pour récupérer les e-mails
-// connectToImapServer();
-app.use(cors());
-app.use(swagger());
-// api comme préfixe pour toutes les routes
-app.group("/api", (app) => {
-  app.use(contactRoutes);
-  app.use(contributionObjectRoutes);
-  app.use(productionsRoutes);
-  app.use(removeUserRoutes);
-  app.use(updateUserDataRoutes);
-  app.use(replyRoutes);
-  return app;
-});
-app.use(
-  staticPlugin({
-    assets: "public",
-    prefix: "",
-    alwaysStatic: true,
+app
+  .use(
+    cors({
+      origin: "*",
+    })
+  )
+  .use(
+    swagger({
+      documentation: {
+        info: {
+          version: "1.0.0",
+          title: "Mon API",
+          description: "API pour gérer les contributions et contacts",
+          contact: {
+            name: "Mon Équipe",
+            email: "contact@monapi.com",
+          },
+        },
+        tags: [
+          { name: "Contact", description: "Gestion des contacts" },
+          { name: "Contributions", description: "Gestion des contributions" },
+          { name: "Productions", description: "Gestion des productions" },
+        ],
+      },
+    })
+  )
+  .group("/api", (app) => {
+    app.use(contactRoutes);
+    app.use(contributionObjectRoutes);
+    app.use(productionsRoutes);
+    app.use(removeUserRoutes);
+    app.use(updateUserDataRoutes);
+    app.use(replyRoutes);
+    return app;
   })
-);
-app.get("*", () => Bun.file("public/index.html"));
+  .use(
+    staticPlugin({
+      assets: "public",
+      prefix: "",
+      alwaysStatic: true,
+    })
+  )
+  .get("*", () => Bun.file("public/index.html"));
 
 export default app;
