@@ -98,9 +98,14 @@ export default function Router() {
           element={<ContributionPage fromApp="paysage" />}
         />
         <Route path="/scanr-apioperations" element={<ApiOperationPage />} />
+<<<<<<< HEAD
         <Route path="/scanr-removeuser" element={<RemoveUserPage url="" />} />
         <Route path="/scanr-namechange" element={<ChangeNamePage url="" />} />
 >>>>>>> 2b4b0b9 (feat(script): add new script to the scanr as fromApp and update nav in ui)
+=======
+        <Route path="/scanr-removeuser" element={<RemoveUserPage />} />
+        <Route path="/scanr-namechange" element={<ChangeNamePage />} />
+>>>>>>> f850256 (fix(router): update router, clean types, and requier things in post schema)
       </Route>
     </Routes>
   );

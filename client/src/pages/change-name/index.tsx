@@ -19,7 +19,7 @@ import Selectors from "../../components/selectors";
 import { nameChangeUrl } from "../../config/api";
 import { ChangeNameProps } from "../../types";
 
-const ChangeNamePage: React.FC<ChangeNameProps> = () => {
+const ChangeNamePage: React.FC = () => {
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);

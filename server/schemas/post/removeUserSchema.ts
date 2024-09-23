@@ -12,11 +12,16 @@ export const postRemoveUserSchema = t.Object(
     email: t.String(),
 =======
     email: t.Required(t.String()),
+<<<<<<< HEAD
 >>>>>>> dc7be2b (fix(schema): clean schemas)
     name: t.String(),
     message: t.String(),
+=======
+    name: t.Required(t.String()),
+    message: t.Required(t.String()),
+>>>>>>> f850256 (fix(router): update router, clean types, and requier things in post schema)
     organisation: t.Optional(t.String()),
-    collectionName: t.String(),
+    collectionName: t.Required(t.String()),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),

@@ -34,11 +34,15 @@ export const postContactSchema = t.Object(
     email: t.Required(t.String()),
     name: t.Required(t.String()),
 <<<<<<< HEAD
+<<<<<<< HEAD
     message: t.Required(t.String()),
 >>>>>>> 2b4b0b9 (feat(script): add new script to the scanr as fromApp and update nav in ui)
 =======
     message: t.Optional(t.String()),
 >>>>>>> dc7be2b (fix(schema): clean schemas)
+=======
+    message: t.Required(t.String()),
+>>>>>>> f850256 (fix(router): update router, clean types, and requier things in post schema)
     organisation: t.Optional(t.String()),
     fromApp: t.Required(t.String()),
     collectionName: t.Required(t.String()),

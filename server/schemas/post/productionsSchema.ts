@@ -19,12 +19,15 @@ export const postProductionsSchema = t.Object(
 =======
     email: t.Required(t.String()),
     name: t.Required(t.String()),
+<<<<<<< HEAD
     message: t.Optional(t.Date()),
 >>>>>>> dc7be2b (fix(schema): clean schemas)
+=======
+    message: t.Required(t.String()),
+>>>>>>> f850256 (fix(router): update router, clean types, and requier things in post schema)
     created_at: t.Optional(t.Date()),
     organisation: t.Optional(t.String()),
-    fromApp: t.Optional(t.String()),
-    collectionName: t.Optional(t.String()),
+    collectionName: t.Required(t.String()),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
