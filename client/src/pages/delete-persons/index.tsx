@@ -10,7 +10,7 @@ import {
   DismissibleTag,
 } from "@dataesr/dsfr-plus";
 import ContributionData from "../../api/contribution-api/getData";
-import { RemoveUserPageProps, RemoveUserProps } from "../../types";
+import { RemoveUserProps } from "../../types";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
@@ -19,7 +19,7 @@ import ContributorSummary from "../contribution-page/contributor-summary";
 import ContributionItem from "../contribution-page/contribution-item";
 import { buildURL } from "../../api/utils/buildURL";
 
-const RemoveUserPage: React.FC<RemoveUserPageProps> = () => {
+const RemoveUserPage: React.FC = () => {
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);

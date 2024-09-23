@@ -35,8 +35,8 @@ export default function Router() {
           element={<ContributionPage fromApp="paysage" />}
         />
         <Route path="/scanr-apioperations" element={<ApiOperationPage />} />
-        <Route path="/scanr-removeuser" element={<RemoveUserPage url="" />} />
-        <Route path="/scanr-namechange" element={<ChangeNamePage url="" />} />
+        <Route path="/scanr-removeuser" element={<RemoveUserPage />} />
+        <Route path="/scanr-namechange" element={<ChangeNamePage />} />
       </Route>
     </Routes>
   );
