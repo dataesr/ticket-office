@@ -36,33 +36,34 @@ getContactRoutes.get(
       .toArray()
       .catch((err) => error(500, "Error fetching contacts"));
 
-    const formattedContacts = contacts.map((contact: any) => ({
-      _id: contact._id.toString(),
-      organisation: contact.organisation || "",
-      fonction: contact.fonction || "",
-      collectionName: contact.collectionName || "",
-      fromApp: contact.fromApp || "",
-      treated_at: contact.treated_at || new Date(),
-      email: contact.email || "",
-      name: contact.name || "",
-      message: contact.message,
-      comment: contact.comment || "",
-      modified_at: contact.modified_at || new Date(),
-      created_at: contact.created_at || new Date(),
-      idref: contact.idref || "",
-      status: contact.status || "",
-      team: contact.team || [],
-      tags: contact.tags || [],
-      threads: contact.threads || [],
-    }));
+    const formattedContacts = contacts.map((contact: any) => {
+      return {
+        _id: contact._id.toString(),
+        organisation: contact.organisation || "",
+        fonction: contact.fonction || "",
+        collectionName: contact.collectionName || "",
+        fromApp: contact.fromApp || "",
+        treated_at: contact.treated_at || new Date(),
+        email: contact.email || "",
+        name: contact.name || "",
+        message: contact.message,
+        comment: contact.comment || "",
+        modified_at: contact.modified_at || new Date(),
+        created_at: contact.created_at || new Date(),
+        idref: contact.idref || "",
+        status: contact.status || "",
+        team: contact.team || [],
+        tags: contact.tags || [],
+        threads: contact.threads || [],
+      };
+    });
 
     return formattedContacts;
   },
   {
-    body: contactSchema,
     response: {
-      400: t.Object({ message: t.String() }),
-      401: t.Object({ message: t.String() }),
+      200: t.Any(contactSchema),
+      401: t.Any({ message: t.String() }),
       500: t.Object({ message: t.String() }),
     },
     detail: {

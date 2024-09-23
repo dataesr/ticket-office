@@ -1,4 +1,4 @@
-import Elysia, { Static } from "elysia";
+import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
 import { ObjectId } from "mongodb";
 import { contactSchema } from "../../../schemas/get:id/contactSchema";
@@ -22,7 +22,11 @@ getContributionObjectByIdRoutes.get(
     return contact;
   },
   {
-    body: contactSchema,
+    response: {
+      400: t.Object({ message: t.String() }),
+      401: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
     detail: {
       summary:
         "Obtenir une contribution via formulaire de contribution par objet par ID",

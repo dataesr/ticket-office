@@ -1,6 +1,7 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+import { productionSchema } from "../../../schemas/get/productionSchema";
 
 const getProductionsRoutes = new Elysia();
 
@@ -57,6 +58,11 @@ getProductionsRoutes.get(
     return formattedProductions;
   },
   {
+    response: {
+      200: t.Any(productionSchema),
+      401: t.Any({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
     detail: {
       summary: "Obtenir toutes les Productions",
       description:

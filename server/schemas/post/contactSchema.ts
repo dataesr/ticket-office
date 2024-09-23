@@ -4,7 +4,7 @@ export const postContactSchema = t.Object(
   {
     email: t.Required(t.String()),
     name: t.Required(t.String()),
-    message: t.Required(t.String()),
+    message: t.Optional(t.String()),
     organisation: t.Optional(t.String()),
     fromApp: t.Required(t.String()),
     collectionName: t.Required(t.String()),

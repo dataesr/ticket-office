@@ -1,6 +1,7 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
 
 const getContributionObjectRoutes = new Elysia();
 
@@ -59,6 +60,11 @@ getContributionObjectRoutes.get(
     return formattedContribution;
   },
   {
+    response: {
+      200: t.Any(contributionObjectSchema),
+      401: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de contribution par objets",

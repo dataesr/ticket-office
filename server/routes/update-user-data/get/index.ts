@@ -1,6 +1,7 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
 
 const getUpdateUserDataRoutes = new Elysia();
 
@@ -59,6 +60,11 @@ getUpdateUserDataRoutes.get(
     return formattedContribution;
   },
   {
+    response: {
+      200: t.Any(updateDatasSchema),
+      401: t.Any({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de mise à jour de donnée utilisateur",

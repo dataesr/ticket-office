@@ -1,6 +1,7 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
 
 const getRemoveUserRoutes = new Elysia();
 
@@ -59,6 +60,11 @@ getRemoveUserRoutes.get(
     return formattedDeletation;
   },
   {
+    response: {
+      200: t.Any(deleteSchema),
+      401: t.Any({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de supression de donnée",
