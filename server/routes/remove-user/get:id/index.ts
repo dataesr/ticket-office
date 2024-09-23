@@ -22,7 +22,6 @@ getRemoveUserByIdRoutes.get(
     return contribution;
   },
   {
-    body: deleteSchema,
     response: {
       200: t.Object({ message: t.String() }),
       400: t.Object({ message: t.String() }),

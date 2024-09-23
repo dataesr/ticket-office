@@ -22,7 +22,6 @@ getProductionByIdRoutes.get(
     return production;
   },
   {
-    body: productionSchema,
     detail: {
       summary: "Obtenir une contribution de liaison de productions par ID",
       description:

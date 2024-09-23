@@ -52,6 +52,21 @@ postContributionObjectRoutes.post(
         "Cette route permet de créer une nouvelle contribution soumise via le formulaire de contact.",
       tags: ["Contribution par objet"],
     },
+    example: {
+      request: {
+        body: {
+          email: "debache.mihoub@example.com",
+          name: "Debache Mihoub",
+          message: "Ceci est un message de test.",
+          organisation: "MESRI",
+          fromApp: "paysage",
+          collectionName: "contribute",
+          fonction: "Développeur",
+          idref: "12312321",
+          status: "new",
+        },
+      },
+    },
   }
 );
 

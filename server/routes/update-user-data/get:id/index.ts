@@ -24,7 +24,6 @@ getUpdateUserDataByIdRoutes.get(
     return contribution;
   },
   {
-    body: updateDatasSchema,
     detail: {
       summary:
         "Obtenir une contribution via formulaire de mise à jour de donnée utilisateur par ID",

@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const postRemoveUserSchema = t.Object(
   {
-    email: t.String(),
+    email: t.Required(t.String()),
     name: t.String(),
     message: t.String(),
     organisation: t.Optional(t.String()),
