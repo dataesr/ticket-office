@@ -1,11 +1,15 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+<<<<<<< HEAD
 <<<<<<< HEAD
 import { responseSchema } from "../../../schemas/get/deleteSchema.ts";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 =======
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
+>>>>>>> dc7be2b (fix(schema): clean schemas)
 
 const getRemoveUserRoutes = new Elysia();
 
@@ -99,7 +103,15 @@ getRemoveUserRoutes.get(
     return formattedDeletation;
   },
   {
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    response: {
+      200: t.Any(deleteSchema),
+      401: t.Any({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de supression de donnée",

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
@@ -9,6 +10,12 @@ import Elysia from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import Elysia, { t } from "elysia";
+import { validateQueryParams } from "../../../utils/queryValidator";
+import db from "../../../libs/mongo";
+import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
+>>>>>>> dc7be2b (fix(schema): clean schemas)
 
 const getContributionObjectRoutes = new Elysia();
 
@@ -114,7 +121,15 @@ getContributionObjectRoutes.get(
     return formattedContribution;
   },
   {
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    response: {
+      200: t.Any(contributionObjectSchema),
+      401: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de contribution par objets",

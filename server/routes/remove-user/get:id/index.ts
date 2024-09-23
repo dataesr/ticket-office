@@ -27,9 +27,12 @@ getRemoveUserByIdRoutes.get(
   },
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     body: deleteSchema,
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     response: {
       200: t.Object({ message: t.String() }),
       400: t.Object({ message: t.String() }),

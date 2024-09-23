@@ -1,8 +1,12 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Elysia, { Static, t } from "elysia";
 =======
 import Elysia, { Static } from "elysia";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import Elysia, { Static, t } from "elysia";
+>>>>>>> dc7be2b (fix(schema): clean schemas)
 import db from "../../../libs/mongo";
 import { ObjectId } from "mongodb";
 import { contactSchema } from "../../../schemas/get:id/contactSchema";
@@ -45,8 +49,16 @@ getContributionObjectByIdRoutes.get(
     return contact;
   },
   {
+<<<<<<< HEAD
     body: contactSchema,
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    response: {
+      400: t.Object({ message: t.String() }),
+      401: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {
       summary:
         "Obtenir une contribution via formulaire de contribution par objet par ID",

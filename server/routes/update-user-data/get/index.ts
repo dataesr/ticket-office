@@ -1,11 +1,15 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+<<<<<<< HEAD
 <<<<<<< HEAD
 import { responseSchema } from "../../../schemas/get/updateDatasSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 =======
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
+>>>>>>> dc7be2b (fix(schema): clean schemas)
 
 const getUpdateUserDataRoutes = new Elysia();
 
@@ -99,7 +103,15 @@ getUpdateUserDataRoutes.get(
     return formattedContribution;
   },
   {
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    response: {
+      200: t.Any(updateDatasSchema),
+      401: t.Any({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {
       summary:
         "Obtenir toutes les contributions via formulaire de mise à jour de donnée utilisateur",

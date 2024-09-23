@@ -1,4 +1,4 @@
-import Elysia, { Static } from "elysia";
+import Elysia, { Static, t } from "elysia";
 import { ObjectId } from "mongodb";
 import db from "../../../libs/mongo";
 import { editSchema } from "../../../schemas/put/editSchema";
@@ -59,6 +59,21 @@ contactPutRoutes.put(
     return updatedContact;
   },
   {
+    params: t.Object({
+      id: t.String(),
+    }),
+    body: t.Object({
+      idref: t.String(),
+      status: t.String(),
+      team: t.Array(t.String()),
+      tags: t.Array(t.String()),
+      comment: t.String(),
+    }),
+    response: {
+      400: t.Object({ message: t.String() }),
+      404: t.Object({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
     detail: {
       summary: "Modifier une contribution via formulaire de contact par ID",
       description:

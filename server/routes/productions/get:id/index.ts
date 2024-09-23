@@ -27,9 +27,12 @@ getProductionByIdRoutes.get(
   },
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     body: productionSchema,
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {
       summary: "Obtenir une contribution de liaison de productions par ID",
       description:

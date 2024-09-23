@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
@@ -9,6 +10,12 @@ import Elysia from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import Elysia, { t } from "elysia";
+import { validateQueryParams } from "../../../utils/queryValidator";
+import db from "../../../libs/mongo";
+import { productionSchema } from "../../../schemas/get/productionSchema";
+>>>>>>> dc7be2b (fix(schema): clean schemas)
 
 const getProductionsRoutes = new Elysia();
 
@@ -107,7 +114,15 @@ getProductionsRoutes.get(
     return formattedProductions;
   },
   {
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    response: {
+      200: t.Any(productionSchema),
+      401: t.Any({ message: t.String() }),
+      500: t.Object({ message: t.String() }),
+    },
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {
       summary: "Obtenir toutes les Productions",
       description:

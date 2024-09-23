@@ -33,8 +33,12 @@ export const postContactSchema = t.Object(
 =======
     email: t.Required(t.String()),
     name: t.Required(t.String()),
+<<<<<<< HEAD
     message: t.Required(t.String()),
 >>>>>>> 2b4b0b9 (feat(script): add new script to the scanr as fromApp and update nav in ui)
+=======
+    message: t.Optional(t.String()),
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     organisation: t.Optional(t.String()),
     fromApp: t.Required(t.String()),
     collectionName: t.Required(t.String()),

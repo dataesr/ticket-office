@@ -3,6 +3,7 @@ import { t } from "elysia";
 export const contributionObjectSchema = t.Object(
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
     id: t.String(),
     message: t.Optional(t.String()),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
@@ -20,19 +21,22 @@ export const contributionObjectSchema = t.Object(
     extra: t.Optional(t.Record(t.String(), t.String())),
 =======
     _id: t.String(),
+=======
+    _id: t.Optional(t.String()),
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     organisation: t.Optional(t.String()),
     fromApp: t.Optional(t.String()),
     collectionName: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
     treated_at: t.Optional(t.Date()),
-    email: t.String(),
-    name: t.String(),
-    message: t.String(),
+    email: t.Optional(t.String()),
+    name: t.Optional(t.String()),
+    message: t.Optional(t.String()),
     comment: t.Optional(t.String()),
     modified_at: t.Date(),
     created_at: t.Date(),
     idref: t.Optional(t.String()),
-    status: t.String(),
+    status: t.Optional(t.String()),
     team: t.Optional(t.Array(t.String())),
     tags: t.Optional(t.Array(t.String())),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)

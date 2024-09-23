@@ -29,9 +29,12 @@ getUpdateUserDataByIdRoutes.get(
   },
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     body: updateDatasSchema,
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {
       summary:
         "Obtenir une contribution via formulaire de mise à jour de donnée utilisateur par ID",
