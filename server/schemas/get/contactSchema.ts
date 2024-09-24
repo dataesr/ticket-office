@@ -39,7 +39,7 @@ export const contactSchema = t.Object(
       )
     ),
   },
-  { additionalProperties: false }
+  { additionalProperties: true }
 );
 
 export const contactListSchema = t.Array(contactSchema);
