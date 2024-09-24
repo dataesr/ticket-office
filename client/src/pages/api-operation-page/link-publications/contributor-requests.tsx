@@ -5,11 +5,10 @@ import { ExternalLinks } from "./external-links";
 import { useDataList } from "./data-list-context";
 import { Col } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { Production } from "@/types";
+import { Production } from "../../../types";
 
 const ContributorRequests: React.FC<{
   data: {
-    _id: string;
     id: string;
     name: string;
     productions: Production[];
@@ -72,7 +71,7 @@ const ContributorRequests: React.FC<{
                 productionId={production.id}
                 idRef={data.id}
                 coloredName={coloredName}
-                contributionId={data._id}
+                contributionId={data.id}
               />
             </div>
             <div style={{ flex: 1 }}>

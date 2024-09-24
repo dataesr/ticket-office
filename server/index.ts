@@ -27,20 +27,32 @@ app
         info: {
           version: "1.0.0",
           title: "Mon API",
-          description: "API pour gérer les contributions et contacts",
+          description: "API du bureau des plaintes",
           contact: {
-            name: "Mon Équipe",
-            email: "contact@monapi.com",
+            name: "Mihoub",
+            email: "scanr@recherche.gouv.fr",
           },
         },
         tags: [
           { name: "Contact", description: "Gestion des contacts" },
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
+          {
+            name: "Supression de profil",
+            description: "Gestion des demandes supression de profil",
+          },
+          {
+            name: "Mise à jour de données utilisateur",
+            description:
+              "Gestion des demandes de mise à jour de données utilisateur",
+          },
         ],
       },
     })
   )
+  .onError(({ code, error }) => {
+    return new Response(error.toString());
+  })
   .group("/api", (app) => {
     app.use(contactRoutes);
     app.use(contributionObjectRoutes);

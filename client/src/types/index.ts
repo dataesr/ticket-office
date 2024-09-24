@@ -1,6 +1,5 @@
 export interface Contribution {
   [x: string]: any;
-  _id: string;
   id: string;
   name: string;
   email: string;
@@ -28,7 +27,6 @@ export interface ContributionItemProps {
   allTags: string[];
 }
 export interface ChangeNameProps {
-  _id: string;
   id: string;
   name: string;
   email: string;
@@ -47,7 +45,6 @@ export interface ChangeNameProps {
 }
 
 export interface RemoveUserProps {
-  _id: string;
   id: string;
   name: string;
   email: string;
@@ -65,7 +62,6 @@ export interface RemoveUserProps {
   threads?: Thread[];
 }
 export interface ChangeNameContribution {
-  _id: string;
   id: string;
   name: string;
   email: string;
@@ -136,11 +132,10 @@ export type Contribute_Production = {
   responseByMail: string;
   responseFrom: string;
   tag: string;
-  _id: string;
+  id: string;
   team: string[];
   modified_at: string | number | Date;
   comment: string;
-  id: string;
   treated_at: Date;
   created_at: Date;
   email: string;
@@ -197,7 +192,7 @@ export type Publication = {
 
 export type MailData = {
   name: string;
-  _id: string;
+  id: string;
   threads?: Thread[];
 };
 

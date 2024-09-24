@@ -1,7 +1,7 @@
 import getUpdateUserDataRoutes from "./get";
 import getUpdateUserDataByIdRoutes from "./get:id";
 import postUpdateUserDataRoutes from "./post";
-import updateUserDataPutRoutes from "./put";
+import updateUserDataPutRoutes from "./patch";
 
 import { Elysia } from "elysia";
 

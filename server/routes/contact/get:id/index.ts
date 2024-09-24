@@ -1,7 +1,8 @@
-import Elysia, { Static, t } from "elysia";
+import Elysia, { Static } from "elysia";
 import { contactSchema } from "../../../schemas/get:id/contactSchema";
 import db from "../../../libs/mongo";
 import { ObjectId } from "mongodb";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 type contactType = Static<typeof contactSchema>;
 
@@ -13,7 +14,7 @@ getContactByIdRoutes.get(
     const contact = await db
       .collection("contact")
       .findOne<contactType>({
-        _id: new ObjectId(id),
+        id: new ObjectId(id),
       })
       .catch((error) => error(500, "Failed to fetch contact"));
     if (!contact) return { message: "Une erreur s'est produite" };
@@ -21,9 +22,9 @@ getContactByIdRoutes.get(
   },
   {
     response: {
-      400: t.Object({ message: t.String() }),
-      401: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: contactSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary: "Obtenir une contribution via formulaire de contact par ID",

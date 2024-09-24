@@ -52,8 +52,8 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = isDevelopment
-    ? `http://localhost:3000/api/${basePath}/${data?._id}`
-    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?._id}`;
+    ? `http://localhost:3000/api/${basePath}/${data?.id}`
+    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?.id}`;
 
   useEffect(() => {
     if (!selectedProfile) {
@@ -110,7 +110,7 @@ const EditModal: React.FC<EditModalProps> = ({
       const body = JSON.stringify({ ...inputs, team: [selectedProfile] });
 
       const response = await fetch(url, {
-        method: "PUT",
+        method: "PATCH",
         headers: postHeaders,
         body,
       });

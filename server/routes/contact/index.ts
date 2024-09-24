@@ -1,7 +1,7 @@
 import getContactRoutes from "./get";
 import getContactByIdRoutes from "./get:id";
 import postContactRoutes from "./post";
-import contactPutRoutes from "./put";
+import contactPutRoutes from "./patch";
 
 import { Elysia } from "elysia";
 

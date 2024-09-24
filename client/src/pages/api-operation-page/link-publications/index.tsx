@@ -93,7 +93,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       contribution.name.toLowerCase().includes(q)
     );
     const idMatches = queryLower.some((q) =>
-      contribution._id.toLowerCase().includes(q)
+      contribution.id.toLowerCase().includes(q)
     );
     return nameMatches || idMatches;
   });
@@ -159,7 +159,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       </Row>
       {filteredContributions?.map((contribution) => (
         <ContributionProductionItem
-          key={contribution._id}
+          key={contribution.id}
           data={contribution as Contribute_Production}
           refetch={refetch}
           allTags={allTags}

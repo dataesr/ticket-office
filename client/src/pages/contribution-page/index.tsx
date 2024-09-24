@@ -81,9 +81,9 @@ const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
         // Ca retourne true dès qu'un élément valid la condition, sinon false!!
         // Si prevSelectedContribution (donc l'id) est dans contributions, on le garde, sinon on prend le premier élément
         const isValid = contributions.some(
-          (contribution) => contribution._id === prevSelectedContribution
+          (contribution) => contribution.id === prevSelectedContribution
         );
-        return isValid ? prevSelectedContribution : contributions[0]?._id;
+        return isValid ? prevSelectedContribution : contributions[0]?.id;
       });
     }
   }, [contributions]);
@@ -113,7 +113,7 @@ const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
       contribution.name.toLowerCase().includes(q)
     );
     const idMatches = queryLower.some((q) =>
-      contribution._id.toLowerCase().includes(q)
+      contribution.id.toLowerCase().includes(q)
     );
     if (searchInMessage) {
       const messageMatches = queryLower.some((q) =>
@@ -199,7 +199,7 @@ const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
               allTags={allTags}
               key={selectedContribution}
               data={filteredContributions.find(
-                (contribution) => contribution?._id === selectedContribution
+                (contribution) => contribution?.id === selectedContribution
               )}
               refetch={refetch}
               highlightedQuery={highlightedQuery}

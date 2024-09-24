@@ -1,7 +1,8 @@
-import Elysia, { Static, t } from "elysia";
+import Elysia, { Static } from "elysia";
 import { postContactSchema } from "../../../schemas/post/contactSchema";
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
+import { contactSchema } from "../../../schemas/get/contactSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 type postContactSchemaType = Static<typeof postContactSchema>;
 
@@ -9,11 +10,7 @@ const postContactRoutes = new Elysia();
 
 postContactRoutes.post(
   "/contact",
-  async ({ query, error, body }: { query: any; error: any; body: any }) => {
-    if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
-    }
-
+  async ({ error, body }: { error: any; body: any }) => {
     const contactData = {
       ...body,
     };
@@ -42,9 +39,9 @@ postContactRoutes.post(
   {
     body: postContactSchema,
     response: {
-      200: t.Object({ message: t.String() }),
-      400: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: contactSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary: "Créer une nouvelle contribution via formulaire de contact",

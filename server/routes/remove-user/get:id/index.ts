@@ -13,7 +13,7 @@ getRemoveUserByIdRoutes.get(
     const contribution = await db
       .collection("remove-user")
       .findOne<removeUserType>({
-        _id: new ObjectId(id),
+        id: new ObjectId(id),
       })
       .catch((error) => error(500, "Failed to fetch remove-user"));
 

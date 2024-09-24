@@ -1,7 +1,7 @@
 import getProductionsRoutes from "./get";
 import getProductionByIdRoutes from "./get:id";
 import postProductionRoutes from "./post";
-import productionsPutRoutes from "./put";
+import productionsPutRoutes from "./patch";
 
 import { Elysia } from "elysia";
 

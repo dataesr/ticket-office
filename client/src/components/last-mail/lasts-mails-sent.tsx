@@ -20,7 +20,7 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
     });
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    let interval = null;
 
     const startScrolling = () => {
       if (!isMouseOver && filteredMails.length > 1) {
@@ -104,8 +104,8 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
                     ? mail.threads[0].responseMessage.substring(0, 150) + "..."
                     : mail.threads[0].responseMessage}{" "}
                   <Link
-                    key={mail._id}
-                    href={`/contact?query=${mail._id}`}
+                    key={mail.id}
+                    href={`/contact?query=${mail.id}`}
                     style={{
                       textDecoration: "underline",
                       marginRight: "10px",

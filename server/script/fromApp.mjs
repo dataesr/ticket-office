@@ -10,7 +10,7 @@ async function addFromAppField() {
     console.log("Connecté à MongoDB");
 
     const db = client.db("ticket-office-api");
-    // change collection with contact / contribute_production and contribute
+    // change collection with contact / contribute_productions / remove-user / update-user-data
 
     const collection = db.collection("update-user-data");
 
@@ -21,6 +21,7 @@ async function addFromAppField() {
     for (const contact of contacts) {
       const updateData = {
         fromApp: "scanR",
+        id: contact._id.toString(),
       };
 
       console.log("Mise à jour pour le document :", contact._id);

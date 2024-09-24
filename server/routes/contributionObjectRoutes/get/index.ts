@@ -1,7 +1,8 @@
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
-import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
+import { contributionObjectListSchema } from "../../../schemas/get/contributionsObjectSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 const getContributionObjectRoutes = new Elysia();
 
@@ -25,7 +26,6 @@ getContributionObjectRoutes.get(
 
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
-
     const contributionObject = await db
       .collection("contribute")
       .find(filters)
@@ -37,7 +37,7 @@ getContributionObjectRoutes.get(
 
     const formattedContribution = contributionObject.map(
       (contributionObject: any) => ({
-        _id: contributionObject._id.toString(),
+        id: contributionObject.id.toString(),
         organisation: contributionObject.organisation || "",
         fonction: contributionObject.fonction || "",
         collectionName: contributionObject.collectionName || "",
@@ -60,10 +60,17 @@ getContributionObjectRoutes.get(
     return formattedContribution;
   },
   {
+    query: t.Object({
+      sort: t.Optional(t.String()),
+      page: t.Optional(t.Numeric()),
+      max_results: t.Optional(t.Numeric()),
+      where: t.Optional(t.String()),
+      fromApp: t.Optional(t.String()),
+    }),
     response: {
-      200: t.Any(contributionObjectSchema),
-      401: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: contributionObjectListSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary:

@@ -33,7 +33,7 @@ replyRoutes.post(
     for (const collection of collections) {
       const colName = collection.name;
       const col = db.collection(colName);
-      contribution = await col.findOne({ _id: new ObjectId(contributionId) });
+      contribution = await col.findOne({ id: new ObjectId(contributionId) });
       if (contribution) {
         collectionName = colName;
         break;
@@ -75,7 +75,7 @@ replyRoutes.post(
 
     const updatedThreads = [...(contribution.threads || []), threadUpdate];
     const updateResult = await targetCollection.updateOne(
-      { _id: new ObjectId(contributionId) },
+      { id: new ObjectId(contributionId) },
       {
         $set: { threads: updatedThreads },
       }

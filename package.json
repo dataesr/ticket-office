@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start:client": "cd client && npm run dev",
-    "start:server": "cd server && bun run server.ts",
-    "start": "concurrently \"npm run start:client\" \"npm run start:server\""
+    "start:server": "cd server && bun run --watch server.ts",
+    "start": "concurrently \"npm run start:client\" \"bun run start:server\""
   }
 }

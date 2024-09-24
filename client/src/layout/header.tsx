@@ -110,13 +110,13 @@ const Header: React.FC = () => {
               Lier des publications
             </Link>
             <Link
-              current={pathname.startsWith("/scanR")}
+              current={pathname.startsWith("/scanr")}
               href="/scanr-removeuser"
             >
               Supprimer des personnes de la base de données
             </Link>
             <Link
-              current={pathname.startsWith("/scanR")}
+              current={pathname.startsWith("/scanr")}
               href="/scanr-namechange"
             >
               Changer le nom d'une personne
@@ -138,8 +138,8 @@ const Header: React.FC = () => {
             BSO
           </Link>
           <Link
-            current={pathname.startsWith("/datasupR")}
-            href="/datasupR-contact"
+            current={pathname.startsWith("/datasupr")}
+            href="/datasupr-contact"
           >
             datasupR
           </Link>

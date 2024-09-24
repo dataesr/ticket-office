@@ -1,7 +1,7 @@
 import getRemoveUserRoutes from "./get";
 import getRemoveUserByIdRoutes from "./get:id";
 import postRemoveUserRoutes from "./post";
-import removeUserPutRoutes from "./put";
+import removeUserPutRoutes from "./patch";
 
 import { Elysia } from "elysia";
 
