@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Text, Title, Link } from "@dataesr/dsfr-plus";
 import { LatestMailsProps } from "../../types";
+import { getContactUrl } from "./utils";
 
 const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
   const scrollIndexRef = useRef(0);
@@ -12,10 +13,14 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
   }
 
   const filteredMails = data
-    .filter((mail) => mail?.threads?.[0]?.responseMessage)
+    .filter((mail) => mail?.threads?.[0]?.responses?.[0]?.responseMessage)
     .sort((a, b) => {
-      const dateA = new Date(a?.threads?.[0]?.timestamp || "").getTime();
-      const dateB = new Date(b?.threads?.[0]?.timestamp || "").getTime();
+      const dateA = new Date(
+        a?.threads?.[0]?.responses?.[0]?.timestamp || ""
+      ).getTime();
+      const dateB = new Date(
+        b?.threads?.[0]?.responses?.[0]?.timestamp || ""
+      ).getTime();
       return dateB - dateA;
     });
 
@@ -94,18 +99,22 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
               le{" "}
               <i>
                 {new Date(
-                  mail.threads?.[0]?.timestamp || ""
+                  mail.threads?.[0]?.responses?.[0]?.timestamp || ""
                 ).toLocaleDateString()}
               </i>{" "}
               à <strong>{mail.name}</strong>{" "}
-              {mail.threads?.[0]?.responseMessage && (
+              {mail.threads?.[0]?.responses?.[0]?.responseMessage && (
                 <>
-                  {(mail.threads[0].responseMessage as string).length > 100
-                    ? mail.threads[0].responseMessage.substring(0, 150) + "..."
-                    : mail.threads[0].responseMessage}{" "}
+                  {(mail.threads[0].responses[0].responseMessage as string)
+                    .length > 100
+                    ? mail.threads[0].responses[0].responseMessage.substring(
+                        0,
+                        150
+                      ) + "..."
+                    : mail.threads[0].responses[0].responseMessage}{" "}
                   <Link
                     key={mail.id}
-                    href={`/contact?query=${mail.id}`}
+                    href={getContactUrl(mail.fromApp, mail.id)}
                     style={{
                       textDecoration: "underline",
                       marginRight: "10px",
