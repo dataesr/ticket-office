@@ -1,8 +1,11 @@
 import { MongoClient, ObjectId } from "mongodb";
 
 const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017";
+<<<<<<< HEAD
 const mongoDataBase = process.env.MONGO_DATABASE || "ticket-office";
 
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
 const client = new MongoClient(mongoURI);
 
 async function migrateObjectContribution() {
@@ -10,7 +13,11 @@ async function migrateObjectContribution() {
     await client.connect();
     console.log("Connecté à MongoDB");
 
+<<<<<<< HEAD
     const db = client.db(mongoDataBase);
+=======
+    const db = client.db("ticket-office-api");
+>>>>>>> 2e9190f (fix(api): update schemas)
     const collection = db.collection("contribute");
 
     const contributions = await collection.find().toArray();
@@ -57,8 +64,13 @@ async function migrateObjectContribution() {
             mailSent: "",
             mailSentDate: "",
             responseFrom: "",
+<<<<<<< HEAD
             id: "",
             type: "",
+=======
+            id: "", // Supprime l'ancienne clé "id"
+            type: "", // Supprime l'ancienne clé "type"
+>>>>>>> 2e9190f (fix(api): update schemas)
           },
         }
       );

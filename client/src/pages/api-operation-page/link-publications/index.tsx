@@ -149,7 +149,11 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
       {filteredContributions.map((contribution) => (
         <ContributionProductionItem
           key={contribution.id}
+<<<<<<< HEAD
           data={contribution}
+=======
+          data={contribution as Contribute_Production}
+>>>>>>> 2e9190f (fix(api): update schemas)
           refetch={refetch}
           allTags={fetchedData?.tags || []} // Assurez-vous que le schéma a un champ tags
         />

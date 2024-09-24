@@ -39,9 +39,14 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     ? "http://localhost:3000/api/"
     : "https://ticket-office.staging.dataesr.ovh/";
   const scanRUrl = isDevelopment
+<<<<<<< HEAD
     ? `http://localhost:3000/api${basePath}/${contribution?._id}`
     : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${contribution?._id}`;
 >>>>>>> dfca0bc (chore(api): clean code)
+=======
+    ? `http://localhost:3000/api${basePath}/${contribution?.id}`
+    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${contribution?.id}`;
+>>>>>>> 2e9190f (fix(api): update schemas)
 
   useEffect(() => {
     const profileFromLocalStorage = localStorage.getItem("selectedProfile");
@@ -62,6 +67,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
     const formattedResponse = userResponse.replace(/\n/g, "<br/>");
 
+<<<<<<< HEAD
     const currentUrl = window.location.href;
     const collectionName = getCollectionNameFromUrl(currentUrl);
 
@@ -74,6 +80,31 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       userResponse: formattedResponse,
       selectedProfile,
       message: contribution.message,
+=======
+    const dataForBrevo = {
+      sender: {
+        email: "scanr@recherche.gouv.fr",
+        name: `${selectedProfile} de l'équipe scanR`,
+      },
+      to: [
+        {
+          email: `${contribution.email}`,
+          name: `${contribution.name}`,
+        },
+      ],
+      replyTo: {
+        email: "scanr@recherche.gouv.fr",
+        name: "L'équipe scanR",
+      },
+      subject: `Réponse à votre contribution, référence ${contribution.id}`,
+      templateId: 262,
+      params: {
+        date: new Date().toLocaleDateString(),
+        userResponse: formattedResponse,
+        message: contribution.message,
+        selectedProfile: selectedProfile,
+      },
+>>>>>>> 2e9190f (fix(api): update schemas)
     };
 
     try {

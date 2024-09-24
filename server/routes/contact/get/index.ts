@@ -1,7 +1,8 @@
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
-import { contactSchema } from "../../../schemas/get/contactSchema";
+import { contactListSchema } from "../../../schemas/get/contactSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 const getContactRoutes = new Elysia();
 
@@ -11,7 +12,6 @@ getContactRoutes.get(
     if (!validateQueryParams(query)) {
       return error(422, "Invalid query parameters");
     }
-
     const {
       where = "{}",
       sort = "created_at",
@@ -19,14 +19,17 @@ getContactRoutes.get(
       max_results = 20,
       fromApp,
     } = query;
-    const filters = JSON.parse(where as string);
+
+    let filters = JSON.parse(where as string);
     if (fromApp) {
       filters.fromApp = fromApp;
     }
+
     const limit = parseInt(max_results as string, 10) || 20;
     const skip = (parseInt(page as string, 10) - 1) * limit;
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
+
     const contacts = await db
       .collection("contact")
       .find(filters)
@@ -38,7 +41,7 @@ getContactRoutes.get(
 
     const formattedContacts = contacts.map((contact: any) => {
       return {
-        _id: contact._id.toString(),
+        id: contact.id.toString(),
         organisation: contact.organisation || "",
         fonction: contact.fonction || "",
         collectionName: contact.collectionName || "",
@@ -60,11 +63,19 @@ getContactRoutes.get(
 
     return formattedContacts;
   },
+
   {
+    query: t.Object({
+      sort: t.Optional(t.String()),
+      page: t.Optional(t.Numeric()),
+      max_results: t.Optional(t.Numeric()),
+      where: t.Optional(t.String()),
+      fromApp: t.Optional(t.String()),
+    }),
     response: {
-      200: t.Any(contactSchema),
-      401: t.Any({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: contactListSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary: "Obtenir toutes les contributions via formulaire de contact",

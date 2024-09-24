@@ -13,11 +13,15 @@ import StaffProductionActions from "./staff-production-action";
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Contribute_Production } from "../../../types";
 import { BadgeStatus, StatusLabel } from "../../../components/items/utils";
 =======
 import { Contribute_Production } from "@/types";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import { Contribute_Production } from "../../../types";
+>>>>>>> 2e9190f (fix(api): update schemas)
 
 const ContributionProductionItem = ({
   data,

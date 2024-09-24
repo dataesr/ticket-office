@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postProductionsSchema } from "../../../schemas/post/productionsSchema";
@@ -8,10 +9,17 @@ import { ObjectId } from "mongodb";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 =======
 import Elysia, { Static, t } from "elysia";
+=======
+import Elysia, { Static } from "elysia";
+>>>>>>> 2e9190f (fix(api): update schemas)
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
 import { postProductionsSchema } from "../../../schemas/post/productionsSchema";
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import { productionSchema } from "../../../schemas/get/productionSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+>>>>>>> 2e9190f (fix(api): update schemas)
 
 type postProductionSchemaType = Static<typeof postProductionsSchema>;
 
@@ -19,6 +27,7 @@ const postProductionRoutes = new Elysia();
 
 postProductionRoutes.post(
   "/production",
+<<<<<<< HEAD
 <<<<<<< HEAD
   async ({ error, body }: { error: any; body: postProductionSchemaType }) => {
     const extraLowercase = Object.keys(body.extra || {}).reduce(
@@ -43,6 +52,9 @@ postProductionRoutes.post(
       return error(422, "Invalid query parameters");
     }
 
+=======
+  async ({ error, body }: { error: any; body: any }) => {
+>>>>>>> 2e9190f (fix(api): update schemas)
     const productionData = {
       ...body,
     };
@@ -51,7 +63,6 @@ postProductionRoutes.post(
       name: productionData.name,
       message: productionData.message,
       organisation: productionData.organisation || "",
-      fromApp: productionData.fromApp || "",
       collectionName: productionData.collectionName || "",
       fonction: productionData.fonction || "",
       created_at: new Date(),
@@ -137,6 +148,7 @@ postProductionRoutes.post(
     body: postProductionsSchema,
     response: {
 <<<<<<< HEAD
+<<<<<<< HEAD
       200: productionSchema,
       401: errorSchema,
       500: errorSchema,
@@ -145,6 +157,11 @@ postProductionRoutes.post(
       400: t.Object({ message: t.String() }),
       500: t.Object({ message: t.String() }),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+      200: productionSchema,
+      401: errorSchema,
+      500: errorSchema,
+>>>>>>> 2e9190f (fix(api): update schemas)
     },
     detail: {
       summary:

@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postContributionObjectSchema } from "../../../schemas/post/contributionByObject";
@@ -13,17 +14,32 @@ type postContributionObjectSchemaType = Static<
 =======
 import Elysia, { Static, t } from "elysia";
 import { postContactSchema } from "../../../schemas/post/contactSchema";
+=======
+import Elysia, { Static } from "elysia";
+>>>>>>> 2e9190f (fix(api): update schemas)
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
+import { postContributionObjectSchema } from "../../../schemas/post/contributionByObject";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
+import { ObjectId } from "mongodb";
 
+<<<<<<< HEAD
 type postContributionObjectSchemaType = Static<typeof postContactSchema>;
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+type postContributionObjectSchemaType = Static<
+  typeof postContributionObjectSchema
+>;
+>>>>>>> 2e9190f (fix(api): update schemas)
 
 const postContributionObjectRoutes = new Elysia();
 
 postContributionObjectRoutes.post(
   "/contribute",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
   async ({
     error,
     body,
@@ -31,6 +47,7 @@ postContributionObjectRoutes.post(
     error: any;
     body: postContributionObjectSchemaType;
   }) => {
+<<<<<<< HEAD
     const extraLowercase = Object.keys(body.extra || {}).reduce(
       (acc, key) => ({
         ...acc,
@@ -64,10 +81,16 @@ postContributionObjectRoutes.post(
       fonction: contributionData.fonction || "",
       idref: contributionData.idref || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    const newContribution = {
+      ...body,
+      id: new ObjectId().toHexString(),
+>>>>>>> 2e9190f (fix(api): update schemas)
       created_at: new Date(),
       status: "new",
     };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (!body.objectId && !body.objectType) {
       return error(400, "objectId is required when objectType is provided");
@@ -142,20 +165,35 @@ postContributionObjectRoutes.post(
       500: errorSchema,
 =======
     const result = await db.collection("contribute").insertOne(newContact);
+=======
+    const result = await db.collection("contribute").insertOne(newContribution);
+>>>>>>> 2e9190f (fix(api): update schemas)
 
-    if (!result.acknowledged) {
-      return error(500, "Failed to create contribution");
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
     }
 
-    return newContact;
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
   },
   {
-    body: postContactSchema,
+    body: postContributionObjectSchema,
     response: {
+<<<<<<< HEAD
       200: t.Object({ message: t.String() }),
       400: t.Object({ message: t.String() }),
       500: t.Object({ message: t.String() }),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+      200: contributionObjectSchema,
+      401: errorSchema,
+      404: errorSchema,
+      500: errorSchema,
+>>>>>>> 2e9190f (fix(api): update schemas)
     },
     detail: {
       summary:
@@ -172,6 +210,9 @@ postContributionObjectRoutes.post(
           message: "Ceci est un message de test.",
           organisation: "MESRI",
           fromApp: "paysage",
+          objectType: "structure",
+          objectId: "1234",
+          section: "test",
           collectionName: "contribute",
           fonction: "Développeur",
           idref: "12312321",

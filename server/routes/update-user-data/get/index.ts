@@ -57,9 +57,13 @@ getUpdateUserDataRoutes.get(
 
     const formattedContribution = contribution.map((contrib: any) => ({
 <<<<<<< HEAD
+<<<<<<< HEAD
       id: contrib.id.toString(),
 =======
       _id: contrib._id.toString(),
+=======
+      id: contrib.id.toString(),
+>>>>>>> 2e9190f (fix(api): update schemas)
       organisation: contrib.organisation || "",
       fonction: contrib.fonction || "",
       collectionName: contrib.collectionName || "",

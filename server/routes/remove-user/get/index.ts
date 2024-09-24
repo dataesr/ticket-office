@@ -57,9 +57,13 @@ getRemoveUserRoutes.get(
 
     const formattedDeletation = deletation.map((deletation: any) => ({
 <<<<<<< HEAD
+<<<<<<< HEAD
       id: deletation.id.toString(),
 =======
       _id: deletation._id.toString(),
+=======
+      id: deletation.id.toString(),
+>>>>>>> 2e9190f (fix(api): update schemas)
       organisation: deletation.organisation || "",
       fonction: deletation.fonction || "",
       collectionName: deletation.collectionName || "",

@@ -6,10 +6,14 @@ import { useDataList } from "./data-list-context";
 import { Col } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Production } from "../../../types";
 =======
 import { Production } from "@/types";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import { Production } from "../../../types";
+>>>>>>> 2e9190f (fix(api): update schemas)
 
 const ContributorRequests: React.FC<{
   data: {

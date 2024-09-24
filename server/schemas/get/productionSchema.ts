@@ -3,6 +3,7 @@ import { t } from "elysia";
 export const productionSchema = t.Object(
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
     id: t.String(),
     objectId: t.String(),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
@@ -17,17 +18,19 @@ export const productionSchema = t.Object(
     extra: t.Optional(t.Record(t.String(), t.String())),
 =======
     _id: t.Optional(t.String()),
+=======
+    id: t.String(),
+>>>>>>> 2e9190f (fix(api): update schemas)
     organisation: t.Optional(t.String()),
-    fromApp: t.Optional(t.String()),
     collectionName: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
     message: t.Optional(t.String()),
-    treated_at: t.Optional(t.Date()),
+    treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     email: t.Optional(t.String()),
     name: t.Optional(t.String()),
     comment: t.Optional(t.String()),
-    modified_at: t.Optional(t.Date()),
-    created_at: t.Optional(t.Date()),
+    modified_at: t.Optional(t.Union([t.String(), t.Date()])),
+    created_at: t.Optional(t.Union([t.String(), t.Date()])),
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
     team: t.Optional(t.Array(t.String())),
@@ -41,6 +44,7 @@ export const productionSchema = t.Object(
             t.Array(
               t.Object({
 <<<<<<< HEAD
+<<<<<<< HEAD
                 responseMessage: t.Union([t.String(), t.Null()]),
                 read: t.Optional(t.Boolean()),
                 timestamp: t.Optional(
@@ -50,10 +54,17 @@ export const productionSchema = t.Object(
                 responseMessage: t.String(),
                 timestamp: t.Date(),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+                responseMessage: t.Union([t.String(), t.Null()]),
+                timestamp: t.Optional(
+                  t.Union([t.String(), t.Date(), t.Null()])
+                ),
+>>>>>>> 2e9190f (fix(api): update schemas)
                 team: t.Optional(t.Array(t.String())),
               })
             )
           ),
+<<<<<<< HEAD
 <<<<<<< HEAD
           timestamp: t.Optional(t.Union([t.String(), t.Date(), t.Null()])),
         })
@@ -78,13 +89,16 @@ export const responseSchema = t.Object({
 });
 =======
           timestamp: t.Date(),
+=======
+          timestamp: t.Optional(t.Union([t.String(), t.Date(), t.Null()])),
+>>>>>>> 2e9190f (fix(api): update schemas)
         })
       )
     ),
     productions: t.Optional(
       t.Array(
         t.Object({
-          id: t.String(),
+          id: t.Union([t.String(), t.Null()]),
           treated: t.Boolean(),
         })
       )
@@ -92,4 +106,9 @@ export const responseSchema = t.Object({
   },
   { additionalProperties: false }
 );
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+
+export const productionListSchema = t.Array(productionSchema);
+>>>>>>> 2e9190f (fix(api): update schemas)

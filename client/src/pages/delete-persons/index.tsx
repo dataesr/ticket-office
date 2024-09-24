@@ -64,9 +64,9 @@ const RemoveUserPage: React.FC = () => {
     if (contributions && contributions.length > 0) {
       setSelectedContribution((prevSelectedContribution) => {
         const isValid = contributions.some(
-          (contribution) => contribution._id === prevSelectedContribution
+          (contribution) => contribution.id === prevSelectedContribution
         );
-        return isValid ? prevSelectedContribution : contributions[0]?._id;
+        return isValid ? prevSelectedContribution : contributions[0]?.id;
       });
     }
   }, [contributions]);
@@ -96,7 +96,7 @@ const RemoveUserPage: React.FC = () => {
       contribution.name.toLowerCase().includes(q)
     );
     const idMatches = queryLower.some((q) =>
-      contribution._id.toLowerCase().includes(q)
+      contribution.id.toLowerCase().includes(q)
     );
     if (searchInMessage) {
       const messageMatches = queryLower.some((q) =>
@@ -178,7 +178,7 @@ const RemoveUserPage: React.FC = () => {
               allTags={allTags}
               key={selectedContribution}
               data={filteredContributions.find(
-                (contribution) => contribution?._id === selectedContribution
+                (contribution) => contribution?.id === selectedContribution
               )}
               refetch={refetch}
               highlightedQuery={highlightedQuery}

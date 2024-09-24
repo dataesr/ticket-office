@@ -9,6 +9,7 @@ const contributionObjectPutRoutes = new Elysia();
 
 contributionObjectPutRoutes.patch(
   "/contribute/:id",
+<<<<<<< HEAD
   async ({
     params: { id },
     body,
@@ -18,6 +19,9 @@ contributionObjectPutRoutes.patch(
     body: any;
     error: any;
   }) => {
+=======
+  async ({ params: { id }, body, error }) => {
+>>>>>>> 2e9190f (fix(api): update schemas)
     if (body.status && ["ongoing", "treated"].includes(body.status)) {
       body.treated_at = new Date();
     }
@@ -29,6 +33,7 @@ contributionObjectPutRoutes.patch(
       }
     }
 
+<<<<<<< HEAD
     if (body.threads) {
       body.threads = body.threads.map((thread: { responses: any[] }) => {
         thread.responses = thread.responses?.map(
@@ -43,6 +48,8 @@ contributionObjectPutRoutes.patch(
       });
     }
 
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
     const { acknowledged } = await db
       .collection("contribute")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -60,12 +67,20 @@ contributionObjectPutRoutes.patch(
 
     const responseObjectContribution = {
       id: updatedObjectContribution.id,
+<<<<<<< HEAD
+=======
+      organisation: updatedObjectContribution.organisation,
+      fromApp: updatedObjectContribution.fromApp,
+>>>>>>> 2e9190f (fix(api): update schemas)
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,
       team: updatedObjectContribution.team,
       modified_at: updatedObjectContribution.modified_at,
+<<<<<<< HEAD
       extra: updatedObjectContribution.extra || {},
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
     };
 
     return responseObjectContribution;

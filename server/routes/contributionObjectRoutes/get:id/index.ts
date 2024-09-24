@@ -40,7 +40,7 @@ getContributionObjectByIdRoutes.get(
     const contact = await db
       .collection("contribute")
       .findOne<contributionObjectType>({
-        _id: new ObjectId(id),
+        id: new ObjectId(id),
       })
       .catch((error) => error(500, "Failed to fetch contribution"));
 

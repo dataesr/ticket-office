@@ -21,6 +21,7 @@ productionsPutRoutes.patch(
       }
     }
 
+<<<<<<< HEAD
     if (body.threads) {
       body.threads = body.threads.map((thread) => {
         thread.responses = thread.responses?.map((response) => {
@@ -33,6 +34,8 @@ productionsPutRoutes.patch(
       });
     }
 
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
     const { acknowledged } = await db
       .collection("contribute_productions")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -50,13 +53,21 @@ productionsPutRoutes.patch(
 
     const responseObjectContribution = {
       id: updatedObjectContribution.id,
+<<<<<<< HEAD
+=======
+      organisation: updatedObjectContribution.organisation,
+      fromApp: updatedObjectContribution.fromApp,
+>>>>>>> 2e9190f (fix(api): update schemas)
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,
       team: updatedObjectContribution.team,
       modified_at: updatedObjectContribution.modified_at,
+<<<<<<< HEAD
       extra: updatedObjectContribution.extra || {},
       productions: updatedObjectContribution.productions || [],
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
     };
 
     return responseObjectContribution;

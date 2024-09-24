@@ -4,6 +4,7 @@ export const deleteSchema = t.Object(
   {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     id: t.String(),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
 =======
@@ -11,10 +12,14 @@ export const deleteSchema = t.Object(
 =======
     _id: t.Optional(t.String()),
 >>>>>>> dc7be2b (fix(schema): clean schemas)
+=======
+    id: t.String(),
+>>>>>>> 2e9190f (fix(api): update schemas)
     organisation: t.Optional(t.String()),
     appName: t.Optional(t.String()),
     collectionName: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
+<<<<<<< HEAD
     treated_at: t.Optional(t.Date()),
 <<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
@@ -36,6 +41,15 @@ export const deleteSchema = t.Object(
 =======
     modified_at: t.Date(),
     created_at: t.Date(),
+=======
+    treated_at: t.Optional(t.Union([t.String(), t.Date()])),
+    email: t.Optional(t.String()),
+    name: t.Optional(t.String()),
+    message: t.Optional(t.String()),
+    comment: t.Optional(t.String()),
+    modified_at: t.Optional(t.Union([t.String(), t.Date()])),
+    created_at: t.Optional(t.Union([t.String(), t.Date()])),
+>>>>>>> 2e9190f (fix(api): update schemas)
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
     team: t.Optional(t.Array(t.String())),
@@ -49,6 +63,7 @@ export const deleteSchema = t.Object(
             t.Array(
               t.Object({
 <<<<<<< HEAD
+<<<<<<< HEAD
                 responseMessage: t.Union([t.String(), t.Null()]),
                 read: t.Optional(t.Boolean()),
                 timestamp: t.Optional(
@@ -58,15 +73,25 @@ export const deleteSchema = t.Object(
                 responseMessage: t.String(),
                 timestamp: t.Date(),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+                responseMessage: t.Union([t.String(), t.Null()]),
+                timestamp: t.Optional(
+                  t.Union([t.String(), t.Date(), t.Null()])
+                ),
+>>>>>>> 2e9190f (fix(api): update schemas)
                 team: t.Optional(t.Array(t.String())),
               })
             )
           ),
 <<<<<<< HEAD
+<<<<<<< HEAD
           timestamp: t.Optional(t.Union([t.String(), t.Date(), t.Null()])),
 =======
           timestamp: t.Date(),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+          timestamp: t.Optional(t.Union([t.String(), t.Date(), t.Null()])),
+>>>>>>> 2e9190f (fix(api): update schemas)
         })
       )
     ),

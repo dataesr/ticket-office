@@ -52,6 +52,7 @@ app
           version: "1.0.0",
           title: "Mon API",
 <<<<<<< HEAD
+<<<<<<< HEAD
           description: "API du bureau des plaintes",
           contact: {
             name: "Mihoub",
@@ -74,20 +75,36 @@ app
           },
 =======
           description: "API pour gérer les contributions et contacts",
+=======
+          description: "API du bureau des plaintes",
+>>>>>>> 2e9190f (fix(api): update schemas)
           contact: {
-            name: "Mon Équipe",
-            email: "contact@monapi.com",
+            name: "Mihoub",
+            email: "scanr@recherche.gouv.fr",
           },
         },
         tags: [
           { name: "Contact", description: "Gestion des contacts" },
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
+<<<<<<< HEAD
 >>>>>>> 8372f23 (fix(edit): update package delete dep)
+=======
+          {
+            name: "Supression de profil",
+            description: "Gestion des demandes supression de profil",
+          },
+          {
+            name: "Mise à jour de données utilisateur",
+            description:
+              "Gestion des demandes de mise à jour de données utilisateur",
+          },
+>>>>>>> 2e9190f (fix(api): update schemas)
         ],
       },
     })
   )
+<<<<<<< HEAD
 <<<<<<< HEAD
   .onError(({ code, error }) => {
     return new Response(error.toString());
@@ -95,6 +112,11 @@ app
   .group("/api", (app) => {
     app.use(contactsRoutes);
 =======
+=======
+  .onError(({ code, error }) => {
+    return new Response(error.toString());
+  })
+>>>>>>> 2e9190f (fix(api): update schemas)
   .group("/api", (app) => {
     app.use(contactRoutes);
 >>>>>>> 8372f23 (fix(edit): update package delete dep)

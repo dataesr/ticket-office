@@ -14,10 +14,14 @@ getRemoveUserByIdRoutes.get(
       .collection("remove-user")
       .findOne<removeUserType>({
 <<<<<<< HEAD
+<<<<<<< HEAD
         id: new ObjectId(id),
 =======
         _id: new ObjectId(id),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+        id: new ObjectId(id),
+>>>>>>> 2e9190f (fix(api): update schemas)
       })
       .catch((error) => error(500, "Failed to fetch remove-user"));
 

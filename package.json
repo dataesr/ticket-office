@@ -20,6 +20,7 @@
   "scripts": {
     "start:client": "cd client && npm run dev",
 <<<<<<< HEAD
+<<<<<<< HEAD
     "start:server": "cd server && bun run --watch server.ts",
     "start": "concurrently \"npm run start:client\" \"bun run start:server\"",
     "deploy": "git switch main && git pull origin main --rebase --tags && git merge origin staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
@@ -41,5 +42,9 @@
 >>>>>>> 824b180 (fix(ci): update workflow)
 =======
 >>>>>>> 00d3d37 (fix(api): change url for request on staging)
+=======
+    "start:server": "cd server && bun run --watch server.ts",
+    "start": "concurrently \"npm run start:client\" \"bun run start:server\""
+>>>>>>> 2e9190f (fix(api): update schemas)
   }
 }

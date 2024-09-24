@@ -88,6 +88,7 @@ const EditModal: React.FC<EditModalProps> = ({
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     ? `http://localhost:3000/api/${basePath}/${data?.id}`
     : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?.id}`;
 =======
@@ -108,6 +109,10 @@ const EditModal: React.FC<EditModalProps> = ({
     ? `http://localhost:3000/api/${basePath}/${data?._id}`
     : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?._id}`;
 >>>>>>> 8758832 (fix(edit-contrib): fix bug)
+=======
+    ? `http://localhost:3000/api/${basePath}/${data?.id}`
+    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?.id}`;
+>>>>>>> 2e9190f (fix(api): update schemas)
 
   useEffect(() => {
     if (!selectedProfile) {
@@ -356,7 +361,7 @@ const EditModal: React.FC<EditModalProps> = ({
 >>>>>>> 8758832 (fix(edit-contrib): fix bug)
 
       const response = await fetch(url, {
-        method: "PUT",
+        method: "PATCH",
         headers: postHeaders,
         body,
       });

@@ -1,6 +1,7 @@
 export interface Contribution {
   [x: string]: any;
 <<<<<<< HEAD
+<<<<<<< HEAD
   id: string;
   name: string;
   email: string;
@@ -68,6 +69,8 @@ export interface ChangeNameContribution {
 =======
   _id: string;
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
   id: string;
   name: string;
   email: string;
@@ -95,7 +98,6 @@ export interface ContributionItemProps {
   allTags: string[];
 }
 export interface ChangeNameProps {
-  _id: string;
   id: string;
   name: string;
   email: string;
@@ -114,7 +116,6 @@ export interface ChangeNameProps {
 }
 
 export interface RemoveUserProps {
-  _id: string;
   id: string;
   name: string;
   email: string;
@@ -132,7 +133,6 @@ export interface RemoveUserProps {
   threads?: Thread[];
 }
 export interface ChangeNameContribution {
-  _id: string;
   id: string;
   name: string;
   email: string;
@@ -278,6 +278,20 @@ export type Publication = {
   landingPage?: string;
 };
 
+<<<<<<< HEAD
+=======
+export type MailData = {
+  name: string;
+  id: string;
+  threads?: Thread[];
+};
+
+export type LatestMailsProps = {
+  data: MailData[];
+  refetch?: () => void;
+};
+
+>>>>>>> 2e9190f (fix(api): update schemas)
 export type ProfileModalProps = {
   isOpen: boolean;
   selectedProfile: string | null;

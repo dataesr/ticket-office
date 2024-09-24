@@ -14,8 +14,13 @@ import db from "../../../libs/mongo";
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+<<<<<<< HEAD
 import { productionSchema } from "../../../schemas/get/productionSchema";
 >>>>>>> dc7be2b (fix(schema): clean schemas)
+=======
+import { productionListSchema } from "../../../schemas/get/productionSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+>>>>>>> 2e9190f (fix(api): update schemas)
 
 const getProductionsRoutes = new Elysia();
 
@@ -60,17 +65,24 @@ getProductionsRoutes.get(
 
     const formattedProductions = productions.map((production: any) => ({
 <<<<<<< HEAD
+<<<<<<< HEAD
       id: production.id.toString(),
       objectId: production.objectId.toString(),
       organisation: production.organisation || "",
       fonction: production.position || "",
 =======
       _id: production._id.toString(),
+=======
+      id: production.id.toString(),
+>>>>>>> 2e9190f (fix(api): update schemas)
       organisation: production.organisation || "",
-      fromApp: production.appName || "",
       collectionName: production.collectionName || "",
+<<<<<<< HEAD
       position: production.position || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+      fonction: production.position || "",
+>>>>>>> 2e9190f (fix(api): update schemas)
       treated_at: production.treated_at || new Date(),
       created_at: production.created_at_at || new Date(),
       modified_at: production.modified_at || new Date(),
@@ -115,12 +127,22 @@ getProductionsRoutes.get(
   },
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
+=======
+    query: t.Object({
+      sort: t.Optional(t.String()),
+      page: t.Optional(t.Numeric()),
+      max_results: t.Optional(t.Numeric()),
+      where: t.Optional(t.String()),
+      fromApp: t.Optional(t.String()),
+    }),
+>>>>>>> 2e9190f (fix(api): update schemas)
     response: {
-      200: t.Any(productionSchema),
-      401: t.Any({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: productionListSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
 >>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {

@@ -78,8 +78,12 @@ export default function Router() {
           element={<ContributionPage url={""} />}
 =======
           path="/scanr-contact"
+<<<<<<< HEAD
           element={<ContributionPage fromApp="scanr" />}
 >>>>>>> 57156e2 (fix(navigation): contact navigation updated)
+=======
+          element={<ContributionPage fromApp="scanR" />}
+>>>>>>> 2e9190f (fix(api): update schemas)
         />
         <Route
           path="/paysage-contact"

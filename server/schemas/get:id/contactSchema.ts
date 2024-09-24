@@ -3,10 +3,14 @@ import { t } from "elysia";
 export const contactSchema = t.Object(
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
     id: t.Optional(t.String()),
     fromApplication: t.Optional(t.String()),
 =======
     _id: t.Optional(t.String()),
+=======
+    id: t.Optional(t.String()),
+>>>>>>> 2e9190f (fix(api): update schemas)
     organisation: t.Optional(t.String()),
     fromApp: t.Optional(t.String()),
     collectionName: t.Optional(t.String()),

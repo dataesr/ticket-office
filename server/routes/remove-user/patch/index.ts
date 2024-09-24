@@ -21,6 +21,7 @@ removeUserPutRoutes.patch(
       }
     }
 
+<<<<<<< HEAD
     if (body.threads) {
       body.threads = body.threads.map((thread) => {
         thread.responses = thread.responses?.map((response) => {
@@ -33,6 +34,8 @@ removeUserPutRoutes.patch(
       });
     }
 
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
     const { acknowledged } = await db
       .collection("remove-user")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -56,7 +59,10 @@ removeUserPutRoutes.patch(
       status: updatedContact.status,
       team: updatedContact.team,
       modified_at: updatedContact.modified_at,
+<<<<<<< HEAD
       extra: updatedContact.extra || {},
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
     };
 
     return responseContact;
@@ -77,7 +83,11 @@ removeUserPutRoutes.patch(
         "Modifier une contribution sur une demande de suppression de profil par ID",
       description:
         "Cette route permet de mettre à jour une contribution spécifique via l'ID fourni.",
+<<<<<<< HEAD
       tags: ["Suppression de profil"],
+=======
+      tags: ["Supression de profil"],
+>>>>>>> 2e9190f (fix(api): update schemas)
     },
   }
 );

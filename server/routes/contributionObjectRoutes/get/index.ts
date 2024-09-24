@@ -14,8 +14,13 @@ import db from "../../../libs/mongo";
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+<<<<<<< HEAD
 import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
 >>>>>>> dc7be2b (fix(schema): clean schemas)
+=======
+import { contributionObjectListSchema } from "../../../schemas/get/contributionsObjectSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+>>>>>>> 2e9190f (fix(api): update schemas)
 
 const getContributionObjectRoutes = new Elysia();
 
@@ -39,6 +44,7 @@ getContributionObjectRoutes.get(
 
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
+<<<<<<< HEAD
 
 <<<<<<< HEAD
     const totalContacts = await db
@@ -50,6 +56,8 @@ getContributionObjectRoutes.get(
 
 =======
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
     const contributionObject = await db
       .collection("contribute")
       .find(filters)
@@ -62,6 +70,7 @@ getContributionObjectRoutes.get(
     const formattedContribution = contributionObject.map(
       (contributionObject: any) => ({
 <<<<<<< HEAD
+<<<<<<< HEAD
         id: contributionObject.id.toString(),
         treated_at: contributionObject.treated_at || new Date(),
         email: contributionObject.email || "",
@@ -70,6 +79,9 @@ getContributionObjectRoutes.get(
         objectType: contributionObject.objectType || "",
 =======
         _id: contributionObject._id.toString(),
+=======
+        id: contributionObject.id.toString(),
+>>>>>>> 2e9190f (fix(api): update schemas)
         organisation: contributionObject.organisation || "",
         fonction: contributionObject.fonction || "",
         collectionName: contributionObject.collectionName || "",
@@ -122,12 +134,22 @@ getContributionObjectRoutes.get(
   },
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
+=======
+    query: t.Object({
+      sort: t.Optional(t.String()),
+      page: t.Optional(t.Numeric()),
+      max_results: t.Optional(t.Numeric()),
+      where: t.Optional(t.String()),
+      fromApp: t.Optional(t.String()),
+    }),
+>>>>>>> 2e9190f (fix(api): update schemas)
     response: {
-      200: t.Any(contributionObjectSchema),
-      401: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: contributionObjectListSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
 >>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {

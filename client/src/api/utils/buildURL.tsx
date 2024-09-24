@@ -74,9 +74,13 @@ export const buildURL = (
       }
     }
   }
+<<<<<<< HEAD
   const fromAppQuery = fromApplication
     ? `&fromApplication=${fromApplication.toLocaleLowerCase()}`
     : "";
+=======
+  const fromAppQuery = fromApp ? `&fromApp=${fromApp.toLocaleLowerCase()}` : "";
+>>>>>>> 2e9190f (fix(api): update schemas)
   if (["new", "ongoing", "treated"].includes(status)) {
     where.status = status;
   }
@@ -85,9 +89,12 @@ export const buildURL = (
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   const fromAppQuery = fromApp ? `&fromApp=${fromApp.toLocaleLowerCase()}` : "";
 
 >>>>>>> 57156e2 (fix(navigation): contact navigation updated)
+=======
+>>>>>>> 2e9190f (fix(api): update schemas)
   return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}${fromAppQuery}`;
 };
