@@ -67,8 +67,11 @@ getUpdateUserDataRoutes.get(
       organisation: contrib.organisation || "",
       fonction: contrib.fonction || "",
       collectionName: contrib.collectionName || "",
+<<<<<<< HEAD
       fromApp: contrib.fromApp || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
       treated_at: contrib.treated_at || new Date(),
       email: contrib.email || "",
       name: contrib.name || "",

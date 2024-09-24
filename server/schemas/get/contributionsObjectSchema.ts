@@ -29,7 +29,6 @@ export const contributionObjectSchema = t.Object(
     id: t.String(),
 >>>>>>> 2e9190f (fix(api): update schemas)
     organisation: t.Optional(t.String()),
-    fromApp: t.Optional(t.String()),
     collectionName: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
     message: t.Optional(t.String()),

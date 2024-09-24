@@ -85,7 +85,6 @@ getContributionObjectRoutes.get(
         organisation: contributionObject.organisation || "",
         fonction: contributionObject.fonction || "",
         collectionName: contributionObject.collectionName || "",
-        fromApp: contributionObject.fromApp || "",
         treated_at: contributionObject.treated_at || new Date(),
         email: contributionObject.email || "",
         name: contributionObject.name || "",
@@ -120,6 +119,7 @@ getContributionObjectRoutes.get(
       page: t.Optional(t.Numeric()),
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
+<<<<<<< HEAD
     }),
     response: {
       200: responseSchema,
@@ -144,6 +144,8 @@ getContributionObjectRoutes.get(
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
       fromApp: t.Optional(t.String()),
+=======
+>>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
     }),
 >>>>>>> 2e9190f (fix(api): update schemas)
     response: {

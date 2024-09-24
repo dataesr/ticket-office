@@ -11,14 +11,18 @@ import "./styles.scss";
 import ContributorProductionInfo from "./contributor-production-info";
 import StaffProductionActions from "./staff-production-action";
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import { BadgeStatus, StatusLabel } from "../../../components/contact/utils";
 >>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
+=======
+>>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
 <<<<<<< HEAD
 <<<<<<< HEAD
 import { Contribute_Production } from "../../../types";
+<<<<<<< HEAD
 import { BadgeStatus, StatusLabel } from "../../../components/items/utils";
 =======
 import { Contribute_Production } from "@/types";
@@ -26,6 +30,9 @@ import { Contribute_Production } from "@/types";
 =======
 import { Contribute_Production } from "../../../types";
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+import { BadgeStatus, StatusLabel } from "../../../components/contact/utils";
+>>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
 
 const ContributionProductionItem = ({
   data,

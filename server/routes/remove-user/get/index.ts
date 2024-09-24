@@ -67,8 +67,11 @@ getRemoveUserRoutes.get(
       organisation: deletation.organisation || "",
       fonction: deletation.fonction || "",
       collectionName: deletation.collectionName || "",
+<<<<<<< HEAD
       fromApp: deletation.fromApp || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
       treated_at: deletation.treated_at || new Date(),
       email: deletation.email || "",
       name: deletation.name || "",

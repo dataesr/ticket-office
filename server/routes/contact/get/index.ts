@@ -41,11 +41,12 @@ getContactRoutes.get(
 
     const formattedContacts = contacts.map((contact: any) => {
       return {
-        id: contact.id.toString(),
+        id: contact.id || "",
         organisation: contact.organisation || "",
         fonction: contact.fonction || "",
         collectionName: contact.collectionName || "",
         fromApp: contact.fromApp || "",
+        fromSubApp: contact.fromSubApp || "",
         treated_at: contact.treated_at || new Date(),
         email: contact.email || "",
         name: contact.name || "",

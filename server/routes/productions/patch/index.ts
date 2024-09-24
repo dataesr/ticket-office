@@ -56,8 +56,11 @@ productionsPutRoutes.patch(
 <<<<<<< HEAD
 =======
       organisation: updatedObjectContribution.organisation,
+<<<<<<< HEAD
       fromApp: updatedObjectContribution.fromApp,
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,

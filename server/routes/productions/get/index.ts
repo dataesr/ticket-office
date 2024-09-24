@@ -116,6 +116,7 @@ getProductionsRoutes.get(
       page: t.Optional(t.Numeric()),
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
+<<<<<<< HEAD
     }),
     response: {
       200: responseSchema,
@@ -137,6 +138,8 @@ getProductionsRoutes.get(
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
       fromApp: t.Optional(t.String()),
+=======
+>>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
     }),
 >>>>>>> 2e9190f (fix(api): update schemas)
     response: {

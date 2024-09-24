@@ -104,7 +104,7 @@ export const responseSchema = t.Object({
       )
     ),
   },
-  { additionalProperties: false }
+  { additionalProperties: true }
 );
 <<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)

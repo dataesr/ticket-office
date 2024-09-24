@@ -85,6 +85,7 @@ export const updateDatasSchema = t.Object(
     ),
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
   { additionalProperties: true }
 );
 export const updataDataListSchema = t.Array(updateDatasSchema);
@@ -97,5 +98,8 @@ export const responseSchema = t.Object({
 });
 =======
   { additionalProperties: false }
+=======
+  { additionalProperties: true }
+>>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
 );
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
