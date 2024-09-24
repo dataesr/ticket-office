@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const contactSchema = t.Object(
   {
-    _id: t.Optional(t.String()),
+    id: t.Optional(t.String()),
     organisation: t.Optional(t.String()),
     fromApp: t.Optional(t.String()),
     collectionName: t.Optional(t.String()),

@@ -13,7 +13,7 @@ getUpdateUserDataByIdRoutes.get(
     const contribution = await db
       .collection("update-user-data")
       .findOne<updateUserDataType>({
-        _id: new ObjectId(id),
+        id: new ObjectId(id),
       })
       .catch((error) =>
         error(500, "Failed to fetch contribution from update-user-data")

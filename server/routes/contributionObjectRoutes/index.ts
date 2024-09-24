@@ -1,7 +1,7 @@
 import getContributionObjectRoutes from "./get";
 import getContributionObjectByIdRoutes from "./get:id";
 import postContributionObjectRoutes from "./post";
-import contributionObjectPutRoutes from "./put";
+import contributionObjectPutRoutes from "./patch";
 
 import { Elysia } from "elysia";
 

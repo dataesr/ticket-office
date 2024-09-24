@@ -16,7 +16,7 @@ export default function Router() {
         <Route path="/scanr-contributionPage" element={<ContributionPage />} />
         <Route
           path="/scanr-contact"
-          element={<ContributionPage fromApp="scanr" />}
+          element={<ContributionPage fromApp="scanR" />}
         />
         <Route
           path="/paysage-contact"

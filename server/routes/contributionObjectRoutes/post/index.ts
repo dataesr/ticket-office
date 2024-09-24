@@ -1,49 +1,52 @@
-import Elysia, { Static, t } from "elysia";
-import { postContactSchema } from "../../../schemas/post/contactSchema";
+import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
+import { postContributionObjectSchema } from "../../../schemas/post/contributionByObject";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
+import { ObjectId } from "mongodb";
 
-type postContributionObjectSchemaType = Static<typeof postContactSchema>;
+type postContributionObjectSchemaType = Static<
+  typeof postContributionObjectSchema
+>;
 
 const postContributionObjectRoutes = new Elysia();
 
 postContributionObjectRoutes.post(
   "/contribute",
-  async ({ query, error, body }: { query: any; error: any; body: any }) => {
-    if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
-    }
-
-    const contributionData = {
+  async ({
+    error,
+    body,
+  }: {
+    error: any;
+    body: postContributionObjectSchemaType;
+  }) => {
+    const newContribution = {
       ...body,
-    };
-    const newContact: postContributionObjectSchemaType = {
-      email: contributionData.email,
-      name: contributionData.name,
-      message: contributionData.message,
-      organisation: contributionData.organisation || "",
-      fromApp: contributionData.fromApp || "",
-      collectionName: contributionData.collectionName || "",
-      fonction: contributionData.fonction || "",
-      idref: contributionData.idref || "",
+      id: new ObjectId().toHexString(),
       created_at: new Date(),
       status: "new",
     };
 
-    const result = await db.collection("contribute").insertOne(newContact);
+    const result = await db.collection("contribute").insertOne(newContribution);
 
-    if (!result.acknowledged) {
-      return error(500, "Failed to create contribution");
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
     }
 
-    return newContact;
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
   },
   {
-    body: postContactSchema,
+    body: postContributionObjectSchema,
     response: {
-      200: t.Object({ message: t.String() }),
-      400: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: contributionObjectSchema,
+      401: errorSchema,
+      404: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary:
@@ -60,6 +63,9 @@ postContributionObjectRoutes.post(
           message: "Ceci est un message de test.",
           organisation: "MESRI",
           fromApp: "paysage",
+          objectType: "structure",
+          objectId: "1234",
+          section: "test",
           collectionName: "contribute",
           fonction: "Développeur",
           idref: "12312321",

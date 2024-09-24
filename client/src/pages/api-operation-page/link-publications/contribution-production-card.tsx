@@ -13,7 +13,7 @@ import StaffProductionActions from "./staff-production-action";
 import { BadgeStatus, StatusLabel } from "../../contribution-page/utils";
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
-import { Contribute_Production } from "@/types";
+import { Contribute_Production } from "../../../types";
 
 const ContributionProductionItem = ({
   data,
@@ -73,14 +73,12 @@ const ContributionProductionItem = ({
       <Row>
         <Col>
           <Text size="sm" bold className="name">
-            {data?.name} ({data?._id})
+            {data?.name} ({data?.id})
             <button
-              className={`copy-button ${
-                copiedId === data?._id ? "copied" : ""
-              }`}
-              onClick={() => copyToClipboard(data?._id)}
+              className={`copy-button ${copiedId === data?.id ? "copied" : ""}`}
+              onClick={() => copyToClipboard(data?.id)}
             >
-              {copiedId === data?._id && (
+              {copiedId === data?.id && (
                 <span className="copied-text">Copié</span>
               )}
               <FaCopy size={14} color="#2196f3" className="copy-icon" />

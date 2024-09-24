@@ -38,7 +38,7 @@ getRemoveUserRoutes.get(
       );
 
     const formattedDeletation = deletation.map((deletation: any) => ({
-      _id: deletation._id.toString(),
+      id: deletation.id.toString(),
       organisation: deletation.organisation || "",
       fonction: deletation.fonction || "",
       collectionName: deletation.collectionName || "",

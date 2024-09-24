@@ -1,7 +1,8 @@
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
-import { productionSchema } from "../../../schemas/get/productionSchema";
+import { productionListSchema } from "../../../schemas/get/productionSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 const getProductionsRoutes = new Elysia();
 
@@ -35,11 +36,10 @@ getProductionsRoutes.get(
       .catch((err) => error(500, "Error fetching productions"));
 
     const formattedProductions = productions.map((production: any) => ({
-      _id: production._id.toString(),
+      id: production.id.toString(),
       organisation: production.organisation || "",
-      fromApp: production.appName || "",
       collectionName: production.collectionName || "",
-      position: production.position || "",
+      fonction: production.position || "",
       treated_at: production.treated_at || new Date(),
       created_at: production.created_at_at || new Date(),
       modified_at: production.modified_at || new Date(),
@@ -58,10 +58,17 @@ getProductionsRoutes.get(
     return formattedProductions;
   },
   {
+    query: t.Object({
+      sort: t.Optional(t.String()),
+      page: t.Optional(t.Numeric()),
+      max_results: t.Optional(t.Numeric()),
+      where: t.Optional(t.String()),
+      fromApp: t.Optional(t.String()),
+    }),
     response: {
-      200: t.Any(productionSchema),
-      401: t.Any({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: productionListSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary: "Obtenir toutes les Productions",

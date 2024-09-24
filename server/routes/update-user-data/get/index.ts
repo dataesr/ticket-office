@@ -38,7 +38,7 @@ getUpdateUserDataRoutes.get(
       );
 
     const formattedContribution = contribution.map((contrib: any) => ({
-      _id: contrib._id.toString(),
+      id: contrib.id.toString(),
       organisation: contrib.organisation || "",
       fonction: contrib.fonction || "",
       collectionName: contrib.collectionName || "",

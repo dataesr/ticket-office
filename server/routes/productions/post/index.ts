@@ -1,7 +1,8 @@
-import Elysia, { Static, t } from "elysia";
+import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
 import { postProductionsSchema } from "../../../schemas/post/productionsSchema";
+import { productionSchema } from "../../../schemas/get/productionSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 type postProductionSchemaType = Static<typeof postProductionsSchema>;
 
@@ -9,11 +10,7 @@ const postProductionRoutes = new Elysia();
 
 postProductionRoutes.post(
   "/production",
-  async ({ query, error, body }: { query: any; error: any; body: any }) => {
-    if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
-    }
-
+  async ({ error, body }: { error: any; body: any }) => {
     const productionData = {
       ...body,
     };
@@ -22,7 +19,6 @@ postProductionRoutes.post(
       name: productionData.name,
       message: productionData.message,
       organisation: productionData.organisation || "",
-      fromApp: productionData.fromApp || "",
       collectionName: productionData.collectionName || "",
       fonction: productionData.fonction || "",
       created_at: new Date(),
@@ -44,9 +40,9 @@ postProductionRoutes.post(
   {
     body: postProductionsSchema,
     response: {
-      200: t.Object({ message: t.String() }),
-      400: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: productionSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary:

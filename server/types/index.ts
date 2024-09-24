@@ -1,7 +1,7 @@
 export type ProductionResponse = {
   appName?: string;
   collectionName?: string;
-  _id: string;
+  id: string;
   email: string;
   name: string;
   message: string;

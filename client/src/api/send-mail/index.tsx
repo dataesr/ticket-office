@@ -34,8 +34,8 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     ? "http://localhost:3000/api/"
     : "https://ticket-office.staging.dataesr.ovh/";
   const scanRUrl = isDevelopment
-    ? `http://localhost:3000/api${basePath}/${contribution?._id}`
-    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${contribution?._id}`;
+    ? `http://localhost:3000/api${basePath}/${contribution?.id}`
+    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${contribution?.id}`;
 
   useEffect(() => {
     const profileFromLocalStorage = localStorage.getItem("selectedProfile");
@@ -71,7 +71,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
         email: "scanr@recherche.gouv.fr",
         name: "L'équipe scanR",
       },
-      subject: `Réponse à votre contribution, référence ${contribution._id}`,
+      subject: `Réponse à votre contribution, référence ${contribution.id}`,
       templateId: 262,
       params: {
         date: new Date().toLocaleDateString(),
@@ -160,7 +160,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
               <p>À: {`${contribution?.name} <${contribution?.email}>`}</p>
               <p>
                 Objet: Réponse à votre contribution, référence{" "}
-                {contribution?._id}
+                {contribution?.id}
               </p>
               <div>
                 <h4>Message:</h4>

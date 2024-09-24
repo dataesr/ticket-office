@@ -30,11 +30,11 @@ export const buildURL = (
     const isObjectId = /^[0-9a-fA-F]{24}$/.test(query);
 
     if (isObjectId) {
-      where._id = query;
+      where.id = query;
     } else {
       where.$or = [
         { name: { $regex: `.*${query}.*`, $options: "i" } },
-        { _id: { $regex: `.*${query}.*`, $options: "i" } },
+        { id: { $regex: `.*${query}.*`, $options: "i" } },
       ];
 
       if (searchInMessages) {
@@ -44,15 +44,13 @@ export const buildURL = (
       }
     }
   }
-
+  const fromAppQuery = fromApp ? `&fromApp=${fromApp.toLocaleLowerCase()}` : "";
   if (["new", "ongoing", "treated"].includes(status)) {
     where.status = status;
   }
 
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
-
-  const fromAppQuery = fromApp ? `&fromApp=${fromApp.toLocaleLowerCase()}` : "";
 
   return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}${fromAppQuery}`;
 };

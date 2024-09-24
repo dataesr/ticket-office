@@ -13,7 +13,7 @@ getProductionByIdRoutes.get(
     const production = await db
       .collection("contribute_productions")
       .findOne<productionType>({
-        _id: new ObjectId(id),
+        id: new ObjectId(id),
       })
       .catch((error) => error(500, "Failed to fetch production"));
 

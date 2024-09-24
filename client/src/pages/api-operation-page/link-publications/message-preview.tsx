@@ -92,7 +92,7 @@ const MessagePreview = ({
       return updatedList;
     });
   };
-  const formattedProductionId = data._id.replace(/\//g, "%2f");
+  const formattedProductionId = data.id.replace(/\//g, "%2f");
 
   return (
     <Container fluid>

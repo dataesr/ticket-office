@@ -74,14 +74,12 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
       <Row>
         <Col>
           <Title look="h5">
-            {data?.name} ({data?._id})
+            {data?.name} ({data?.id})
             <button
-              className={`copy-button ${
-                copiedId === data?._id ? "copied" : ""
-              }`}
-              onClick={() => copyToClipboard(data?._id)}
+              className={`copy-button ${copiedId === data?.id ? "copied" : ""}`}
+              onClick={() => copyToClipboard(data?.id)}
             >
-              {copiedId === data?._id && (
+              {copiedId === data?.id && (
                 <span className="copied-text">Copié</span>
               )}
               <FaCopy size={14} color="#2196f3" className="copy-icon" />
