@@ -143,6 +143,12 @@ const Header: React.FC = () => {
           >
             datasupR
           </Link>
+          <Link
+            current={pathname.startsWith("/works-magnet")}
+            href="/works-magnet-contact"
+          >
+            Works magnet
+          </Link>
         </Nav>
       </HeaderWrapper>
       {!isLoading && !isError && data ? (

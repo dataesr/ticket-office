@@ -10,7 +10,7 @@ import {
 import "./styles.scss";
 import ContributorProductionInfo from "./contributor-production-info";
 import StaffProductionActions from "./staff-production-action";
-import { BadgeStatus, StatusLabel } from "../../contribution-page/utils";
+import { BadgeStatus, StatusLabel } from "../../../components/contact/utils";
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import { Contribute_Production } from "../../../types";

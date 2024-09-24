@@ -15,11 +15,13 @@ import { Contribution, ContributionPageProps } from "../../types";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
-import ContributionItem from "./contribution-item";
-import ContributorSummary from "./contributor-summary";
+import ContributionItem from "../../components/contact/contribution-item";
+import ContributorSummary from "../../components/contact/contributor-summary";
 import { contactUrl, contributionUrl } from "../../config/api";
 
-const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
+const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
+  fromApp,
+}) => {
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);
@@ -77,9 +79,6 @@ const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
   useEffect(() => {
     if (contributions && contributions.length > 0) {
       setSelectedContribution((prevSelectedContribution) => {
-        // Le .some itère sur chaque element [contributions]!!
-        // Ca retourne true dès qu'un élément valid la condition, sinon false!!
-        // Si prevSelectedContribution (donc l'id) est dans contributions, on le garde, sinon on prend le premier élément
         const isValid = contributions.some(
           (contribution) => contribution.id === prevSelectedContribution
         );
@@ -216,4 +215,4 @@ const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
   );
 };
 
-export default ContributionPage;
+export default ContactAndContributionPage;

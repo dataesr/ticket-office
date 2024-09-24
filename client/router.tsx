@@ -2,41 +2,52 @@ import { Route, Routes } from "react-router-dom";
 
 import Home from "./src/pages/home";
 import ApiOperationPage from "./src/pages/api-operation-page/link-publications";
-import ContributionPage from "./src/pages/contribution-page";
-import ChangeNamePage from "./src/pages/change-name";
 import Layout from "./src/layout";
-import RemoveUserPage from "./src/pages/delete-persons";
 import React from "react";
+import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";
 
 export default function Router() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/scanr-contributionPage" element={<ContributionPage />} />
+        <Route
+          path="/scanr-contributionPage"
+          element={<ContactAndContributionPage />}
+        />
         <Route
           path="/scanr-contact"
-          element={<ContributionPage fromApp="scanR" />}
+          element={<ContactAndContributionPage fromApp="scanR" />}
         />
         <Route
           path="/paysage-contact"
-          element={<ContributionPage fromApp="paysage" />}
+          element={<ContactAndContributionPage fromApp="paysage" />}
         />
         <Route
           path="/bso-contact"
-          element={<ContributionPage fromApp="bso" />}
+          element={<ContactAndContributionPage fromApp="bso" />}
         />
         <Route
           path="/curiexplore-contact"
-          element={<ContributionPage fromApp="curiexplore" />}
+          element={<ContactAndContributionPage fromApp="curiexplore" />}
+        />
+        <Route
+          path="/works-magnet-contact"
+          element={<ContactAndContributionPage fromApp="works-magnet" />}
         />
         <Route
           path="/datasupr-contact"
-          element={<ContributionPage fromApp="paysage" />}
+          element={<ContactAndContributionPage fromApp="paysage" />}
         />
         <Route path="/scanr-apioperations" element={<ApiOperationPage />} />
-        <Route path="/scanr-removeuser" element={<RemoveUserPage />} />
-        <Route path="/scanr-namechange" element={<ChangeNamePage />} />
+        <Route
+          path="/scanr-removeuser"
+          element={<ContactAndContributionPage />}
+        />
+        <Route
+          path="/scanr-namechange"
+          element={<ContactAndContributionPage />}
+        />
       </Route>
     </Routes>
   );
