@@ -41,7 +41,6 @@ getContributionObjectRoutes.get(
         organisation: contributionObject.organisation || "",
         fonction: contributionObject.fonction || "",
         collectionName: contributionObject.collectionName || "",
-        fromApp: contributionObject.fromApp || "",
         treated_at: contributionObject.treated_at || new Date(),
         email: contributionObject.email || "",
         name: contributionObject.name || "",
@@ -65,7 +64,6 @@ getContributionObjectRoutes.get(
       page: t.Optional(t.Numeric()),
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
-      fromApp: t.Optional(t.String()),
     }),
     response: {
       200: contributionObjectListSchema,

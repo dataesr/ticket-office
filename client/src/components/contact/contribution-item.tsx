@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
 import ContributorInfo from "./contributor-info";
-import StaffActions from "./staff-action";
+import StaffActions from "../../components/contact/staff-action";
 import { ContributionItemProps } from "../../types";
 import {
   BadgeColor,
@@ -39,6 +39,11 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
         {data?.tags?.length > 0 && (
           <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
             {data.tags.join(", ")}
+          </Badge>
+        )}
+        {data?.fromSubApp && (
+          <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
+            {data.fromSubApp}
           </Badge>
         )}
         {data?.status && (

@@ -42,7 +42,6 @@ getUpdateUserDataRoutes.get(
       organisation: contrib.organisation || "",
       fonction: contrib.fonction || "",
       collectionName: contrib.collectionName || "",
-      fromApp: contrib.fromApp || "",
       treated_at: contrib.treated_at || new Date(),
       email: contrib.email || "",
       name: contrib.name || "",

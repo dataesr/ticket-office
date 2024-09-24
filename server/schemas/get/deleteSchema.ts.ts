@@ -38,5 +38,5 @@ export const deleteSchema = t.Object(
       )
     ),
   },
-  { additionalProperties: false }
+  { additionalProperties: true }
 );
