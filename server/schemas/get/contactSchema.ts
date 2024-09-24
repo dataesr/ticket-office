@@ -30,6 +30,7 @@ export const contactSchema = t.Object(
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     email: t.Optional(t.String()),
     name: t.Optional(t.String()),
+    fromSubApp: t.Optional(t.String()),
     comment: t.Optional(t.String()),
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),

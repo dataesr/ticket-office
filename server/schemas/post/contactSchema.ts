@@ -45,6 +45,7 @@ export const postContactSchema = t.Object(
 >>>>>>> f850256 (fix(router): update router, clean types, and requier things in post schema)
     organisation: t.Optional(t.String()),
     fromApp: t.Required(t.String()),
+    fromSubApp: t.Optional(t.String()),
     collectionName: t.Required(t.String()),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
