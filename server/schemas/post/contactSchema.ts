@@ -7,6 +7,7 @@ export const postContactSchema = t.Object(
     message: t.Required(t.String()),
     organisation: t.Optional(t.String()),
     fromApp: t.Required(t.String()),
+    fromSubApp: t.Optional(t.String()),
     collectionName: t.Required(t.String()),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
