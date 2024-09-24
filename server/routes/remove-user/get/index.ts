@@ -42,7 +42,6 @@ getRemoveUserRoutes.get(
       organisation: deletation.organisation || "",
       fonction: deletation.fonction || "",
       collectionName: deletation.collectionName || "",
-      fromApp: deletation.fromApp || "",
       treated_at: deletation.treated_at || new Date(),
       email: deletation.email || "",
       name: deletation.name || "",

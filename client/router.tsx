@@ -37,7 +37,7 @@ export default function Router() {
         />
         <Route
           path="/datasupr-contact"
-          element={<ContactAndContributionPage fromApp="paysage" />}
+          element={<ContactAndContributionPage fromApp="datasupr" />}
         />
         <Route path="/scanr-apioperations" element={<ApiOperationPage />} />
         <Route

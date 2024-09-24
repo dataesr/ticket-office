@@ -38,5 +38,5 @@ export const updateDatasSchema = t.Object(
       )
     ),
   },
-  { additionalProperties: false }
+  { additionalProperties: true }
 );

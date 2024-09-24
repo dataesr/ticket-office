@@ -45,7 +45,7 @@ export const productionSchema = t.Object(
       )
     ),
   },
-  { additionalProperties: false }
+  { additionalProperties: true }
 );
 
 export const productionListSchema = t.Array(productionSchema);

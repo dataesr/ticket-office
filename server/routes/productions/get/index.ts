@@ -63,7 +63,6 @@ getProductionsRoutes.get(
       page: t.Optional(t.Numeric()),
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
-      fromApp: t.Optional(t.String()),
     }),
     response: {
       200: productionListSchema,

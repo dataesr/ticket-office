@@ -39,7 +39,6 @@ productionsPutRoutes.patch(
     const responseObjectContribution = {
       id: updatedObjectContribution.id,
       organisation: updatedObjectContribution.organisation,
-      fromApp: updatedObjectContribution.fromApp,
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,
