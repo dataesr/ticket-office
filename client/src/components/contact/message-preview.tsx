@@ -1,8 +1,8 @@
 import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import type { Contribution } from "../../types";
-import HighlightedMessage from "../../components/highlighted-message";
+import HighlightedMessage from "../highlighted-message";
 import { useLocation } from "react-router-dom";
-import EditModal from "../../components/edit-modal";
+import EditModal from "../edit-modal";
 import { useState, useCallback } from "react";
 import { FaCopy } from "react-icons/fa";
 

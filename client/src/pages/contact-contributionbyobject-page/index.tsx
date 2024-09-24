@@ -15,13 +15,36 @@ import { Contribution, ContributionPageProps } from "../../types";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
+<<<<<<< HEAD
+=======
+<<<<<<<< HEAD:client/src/pages/contribution-page/index.tsx
+>>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
 import ContributionItem from "../../components/items/contribution-item";
 import ContributorSummary from "../../components/items/contributor-summary";
 import { contactUrl, contributionUrl } from "../../config/api";
 
+<<<<<<< HEAD
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
 }) => {
+=======
+<<<<<<< HEAD
+const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
+  fromApplication,
+}) => {
+=======
+const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
+>>>>>>> 57156e2 (fix(navigation): contact navigation updated)
+========
+import ContributionItem from "../../components/contact/contribution-item";
+import ContributorSummary from "../../components/contact/contributor-summary";
+import { contactUrl, contributionUrl } from "../../config/api";
+
+const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
+  fromApp,
+}) => {
+>>>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page):client/src/pages/contact-contributionbyobject-page/index.tsx
+>>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);
@@ -59,7 +82,15 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     query.join(" "),
     page,
     searchInMessage,
+<<<<<<< HEAD
     fromApplication
+=======
+<<<<<<< HEAD
+    fromApplication
+=======
+    fromApp
+>>>>>>> 57156e2 (fix(navigation): contact navigation updated)
+>>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
   );
   let urlToSend;
   if (location.pathname.includes("contributionPage")) {

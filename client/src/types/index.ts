@@ -281,6 +281,7 @@ export type Publication = {
 <<<<<<< HEAD
 =======
 export type MailData = {
+  fromApp: string;
   name: string;
   id: string;
   threads?: Thread[];

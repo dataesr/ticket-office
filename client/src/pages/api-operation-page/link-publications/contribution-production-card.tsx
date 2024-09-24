@@ -10,6 +10,10 @@ import {
 import "./styles.scss";
 import ContributorProductionInfo from "./contributor-production-info";
 import StaffProductionActions from "./staff-production-action";
+<<<<<<< HEAD
+=======
+import { BadgeStatus, StatusLabel } from "../../../components/contact/utils";
+>>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
 <<<<<<< HEAD

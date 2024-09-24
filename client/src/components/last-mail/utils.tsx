@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 export const getContactUrl = (fromApplication: string, mailId: string) => {
   switch (fromApplication) {
+=======
+export const getContactUrl = (fromApp: string, mailId: string) => {
+  switch (fromApp) {
+>>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
     case "scanr":
       return `/scanr-contact?query=${mailId}`;
     case "paysage":
