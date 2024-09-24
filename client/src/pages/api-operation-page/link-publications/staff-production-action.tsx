@@ -12,21 +12,19 @@ const StaffProductionActions = ({
 }) => {
   return (
     <>
-      {data?.threads?.[0] && (
+      {data?.threads?.length > 0 && (
         <Col className="staffSide">
-          <Text size="sm">
-            {data.responseFrom !== "" ? "Réponse apportée par " : ""}
-            {data.responseFrom}
-            {" le "}
-            {new Date(
-              data?.threads?.[0]?.responses?.[0].timestamp
-            ).toLocaleDateString()}
-            {" à "}
-            {new Date(
-              data?.threads?.[0]?.responses?.[0].timestamp
-            ).toLocaleTimeString()}
-          </Text>
-          <Text>{data?.threads?.[0]?.toString()}</Text>
+          {data.threads.map((thread) =>
+            thread.responses.map((response, index) => (
+              <Text size="sm" key={index}>
+                Réponse apportée par {response.team.join(", ")} le{" "}
+                {new Date(response.timestamp).toLocaleDateString()}
+                {" à "}
+                {new Date(response.timestamp).toLocaleTimeString()} :<br />
+                {response.responseMessage}
+              </Text>
+            ))
+          )}
         </Col>
       )}
       <EmailSender contribution={data} refetch={refetch} />

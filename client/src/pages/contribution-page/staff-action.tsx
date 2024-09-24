@@ -8,19 +8,25 @@ const StaffActions = ({ data, refetch }: { data: Contribution; refetch }) => {
   const contributorClassName = location.pathname.includes("contributionpage")
     ? "staffSide"
     : "staffSideContact";
+
   return (
     <>
-      {data?.mailSent && (
+      {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
-          <Text size="sm">
-            Réponse apportée par {data.responseFrom} le{" "}
-            {new Date(data?.mailSentDate).toLocaleDateString()}
-            {" à "}
-            {new Date(data?.mailSentDate).toLocaleTimeString()}{" "}
-          </Text>
-          <Text>{data.mailSent}</Text>
+          {data.threads.map((thread) =>
+            thread.responses.map((response, index) => (
+              <Text size="sm" key={index}>
+                Réponse apportée par {response.team.join(", ")} le{" "}
+                {new Date(response.timestamp).toLocaleDateString()}
+                {" à "}
+                {new Date(response.timestamp).toLocaleTimeString()} :<br />
+                {response.responseMessage}
+              </Text>
+            ))
+          )}
         </Col>
       )}
+
       <EmailSender contribution={data} refetch={refetch} />
     </>
   );
