@@ -4,6 +4,7 @@ export const postProductionsSchema = t.Object(
   {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     objectId: t.String(),
     email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
@@ -25,13 +26,18 @@ export const postProductionsSchema = t.Object(
 =======
     message: t.Required(t.String()),
 >>>>>>> f850256 (fix(router): update router, clean types, and requier things in post schema)
+=======
+    email: t.String(),
+    name: t.String(),
+    message: t.String(),
+>>>>>>> 7077f11 (fix(schema): update post schema for contact)
     created_at: t.Optional(t.Date()),
     organisation: t.Optional(t.String()),
-    collectionName: t.Required(t.String()),
+    collectionName: t.String(),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
-    productions: t.Required(
+    productions: t.Optional(
       t.Array(
         t.Object({
           id: t.String(),

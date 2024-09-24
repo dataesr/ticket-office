@@ -81,6 +81,9 @@ export const contactSchema = t.Object(
     ),
   },
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 7077f11 (fix(schema): update post schema for contact)
   { additionalProperties: true }
 );
 

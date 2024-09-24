@@ -3,39 +3,32 @@ import { postContactSchema } from "../../../schemas/post/contactSchema";
 import db from "../../../libs/mongo";
 import { contactSchema } from "../../../schemas/get/contactSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { ObjectId } from "mongodb";
 
 type postContactSchemaType = Static<typeof postContactSchema>;
-
 const postContactRoutes = new Elysia();
 
 postContactRoutes.post(
   "/contact",
-  async ({ error, body }: { error: any; body: any }) => {
-    const contactData = {
+  async ({ error, body }: { error: any; body: postContactSchemaType }) => {
+    const newContribution = {
       ...body,
-    };
-
-    const newContact: postContactSchemaType = {
-      email: contactData.email,
-      name: contactData.name,
-      message: contactData.message,
-      organisation: contactData.organisation || "",
-      fromApp: contactData.fromApp,
-      fromSubApp: contactData.fromSubApp || "",
-      collectionName: contactData.collectionName || "",
-      fonction: contactData.fonction || "",
-      idref: contactData.idref || "",
+      id: new ObjectId().toHexString(),
       created_at: new Date(),
       status: "new",
     };
 
-    const result = await db.collection("contact").insertOne(newContact);
-
-    if (!result.acknowledged) {
-      return error(500, "Failed to create contact");
+    const result = await db.collection("contact").insertOne(newContribution);
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
     }
 
-    return newContact;
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
   },
   {
     body: postContactSchema,
