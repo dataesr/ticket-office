@@ -31,13 +31,6 @@ postUpdateUserDataRoutes.post(
       return error(500, "Failed to create the contribution");
     }
 
-    if (body.collectionName !== "update-user-data") {
-      return error(
-        400,
-        "Invalid collectionName value. Must be 'update-user-data"
-      );
-    }
-
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),

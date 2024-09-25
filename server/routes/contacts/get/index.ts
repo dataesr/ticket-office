@@ -44,7 +44,6 @@ getContactRoutes.get(
         id: contact.id || "",
         organisation: contact.organisation || "",
         fonction: contact.fonction || "",
-        collectionName: contact.collectionName || "",
         fromApp: contact.fromApp || "",
         fromSubApp: contact.fromSubApp || "",
         treated_at: contact.treated_at || new Date(),

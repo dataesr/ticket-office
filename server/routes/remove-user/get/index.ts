@@ -41,7 +41,6 @@ getRemoveUserRoutes.get(
       id: deletation.id.toString(),
       organisation: deletation.organisation || "",
       fonction: deletation.fonction || "",
-      collectionName: deletation.collectionName || "",
       treated_at: deletation.treated_at || new Date(),
       email: deletation.email || "",
       name: deletation.name || "",

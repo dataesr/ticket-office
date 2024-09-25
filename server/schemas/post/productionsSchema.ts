@@ -6,7 +6,6 @@ export const postProductionsSchema = t.Object(
     name: t.String(),
     message: t.String(),
     organisation: t.Optional(t.String()),
-    collectionName: t.Literal("contribute_productions"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
     productions: t.Array(

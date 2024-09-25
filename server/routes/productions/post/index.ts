@@ -27,13 +27,6 @@ postProductionRoutes.post(
       return error(500, "Failed to create the contribution");
     }
 
-    if (body.collectionName !== "contribute_productions") {
-      return error(
-        400,
-        "Invalid collectionName value. Must be 'contribute_productions'"
-      );
-    }
-
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),

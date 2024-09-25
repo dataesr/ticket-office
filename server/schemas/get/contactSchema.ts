@@ -5,7 +5,6 @@ export const contactSchema = t.Object(
     id: t.String(),
     organisation: t.Optional(t.String()),
     fromApp: t.Optional(t.String()),
-    collectionName: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
     message: t.Optional(t.String()),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),

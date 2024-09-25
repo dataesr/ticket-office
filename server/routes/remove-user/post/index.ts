@@ -25,10 +25,6 @@ postRemoveUserRoutes.post(
       return error(500, "Failed to create the contribution");
     }
 
-    if (body.collectionName !== "remove-user") {
-      return error(400, "Invalid collectionName value. Must be 'remove-user");
-    }
-
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),

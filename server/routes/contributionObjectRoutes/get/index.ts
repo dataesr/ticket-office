@@ -40,7 +40,6 @@ getContributionObjectRoutes.get(
         id: contributionObject.id.toString(),
         organisation: contributionObject.organisation || "",
         fonction: contributionObject.fonction || "",
-        collectionName: contributionObject.collectionName || "",
         treated_at: contributionObject.treated_at || new Date(),
         email: contributionObject.email || "",
         name: contributionObject.name || "",
