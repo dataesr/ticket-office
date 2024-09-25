@@ -6,7 +6,6 @@ export const postRemoveUserSchema = t.Object(
     name: t.String(),
     message: t.String(),
     organisation: t.Optional(t.String()),
-    collectionName: t.Literal("remove-user"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
   },

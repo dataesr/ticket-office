@@ -38,7 +38,6 @@ getProductionsRoutes.get(
     const formattedProductions = productions.map((production: any) => ({
       id: production.id.toString(),
       organisation: production.organisation || "",
-      collectionName: production.collectionName || "",
       fonction: production.position || "",
       treated_at: production.treated_at || new Date(),
       created_at: production.created_at_at || new Date(),

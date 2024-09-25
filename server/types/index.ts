@@ -1,6 +1,5 @@
 export type ProductionResponse = {
   appName?: string;
-  collectionName?: string;
   id: string;
   email: string;
   name: string;

@@ -5,7 +5,6 @@ export const updateDatasSchema = t.Object(
     id: t.String(),
     organisation: t.Optional(t.String()),
     appName: t.Optional(t.String()),
-    collectionName: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     email: t.Optional(t.String()),
