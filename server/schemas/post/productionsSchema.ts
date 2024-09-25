@@ -8,7 +8,14 @@ export const postProductionsSchema = t.Object(
     objectId: t.String(),
     email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
+<<<<<<< HEAD
     extra: t.Optional(t.Record(t.String(), t.String())),
+=======
+    message: t.String(),
+    organisation: t.Optional(t.String()),
+    fonction: t.Optional(t.String()),
+    idref: t.Optional(t.String()),
+>>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
     productions: t.Array(
       t.Object({
         id: t.String(),

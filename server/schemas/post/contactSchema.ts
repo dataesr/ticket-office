@@ -59,7 +59,6 @@ export const postContactSchema = t.Object(
       curieXplore: "curiexplore",
     }),
     fromSubApp: t.Optional(t.String()),
-    collectionName: t.Literal("contact"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
 <<<<<<< HEAD

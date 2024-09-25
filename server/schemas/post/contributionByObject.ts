@@ -24,7 +24,6 @@ export const postContributionObjectSchema = t.Object(
     section: t.Optional(t.String()),
     objectId: t.Optional(t.String()),
     objectType: t.Optional(t.String()),
-    collectionName: t.Literal("contribute"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
 <<<<<<< HEAD

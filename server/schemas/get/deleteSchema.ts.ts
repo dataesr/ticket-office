@@ -17,7 +17,6 @@ export const deleteSchema = t.Object(
 >>>>>>> 2e9190f (fix(api): update schemas)
     organisation: t.Optional(t.String()),
     appName: t.Optional(t.String()),
-    collectionName: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
 <<<<<<< HEAD
     treated_at: t.Optional(t.Date()),

@@ -26,11 +26,15 @@ import productionsRoutes from "./routes/productions";
 import removeUserRoutes from "./routes/remove-user";
 import updateUserDataRoutes from "./routes/update-user-data";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import contactsRoutes from "./routes/contacts";
 import sendMail from "./routes/reply/replyRoutes";
 import { fetchEmails } from "./routes/receive-email";
 =======
 import replyRoutes from "./routes/reply/replyRoutes";
+=======
+// import replyRoutes from "./routes/reply/replyRoutes";
+>>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
 import contactsRoutes from "./routes/contacts";
 // import connectToImapServer from "./routes/receive-email";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
@@ -135,6 +139,7 @@ app
     app.use(removeUserRoutes);
     app.use(updateUserDataRoutes);
 <<<<<<< HEAD
+<<<<<<< HEAD
     app.use(sendMail);
     return app;
   })
@@ -176,6 +181,9 @@ app.get("*", () => Bun.file("public/index.html"));
 >>>>>>> 824b180 (fix(ci): update workflow)
 =======
     app.use(replyRoutes);
+=======
+    // app.use(replyRoutes);
+>>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
     return app;
   })
   .use(

@@ -13,7 +13,6 @@ export const contactSchema = t.Object(
 >>>>>>> 2e9190f (fix(api): update schemas)
     organisation: t.Optional(t.String()),
     fromApp: t.Optional(t.String()),
-    collectionName: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
     message: t.Optional(t.String()),

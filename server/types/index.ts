@@ -3,11 +3,14 @@ export type ProductionResponse = {
   id: string;
 =======
   appName?: string;
+<<<<<<< HEAD
   collectionName?: string;
 <<<<<<< HEAD
   _id: string;
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
+=======
+>>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
   id: string;
 >>>>>>> 2e9190f (fix(api): update schemas)
   email: string;

@@ -130,6 +130,7 @@ postRemoveUserRoutes.post(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     return newDeletation;
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
@@ -137,6 +138,8 @@ postRemoveUserRoutes.post(
       return error(400, "Invalid collectionName value. Must be 'remove-user");
     }
 
+=======
+>>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),

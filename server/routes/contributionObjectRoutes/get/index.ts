@@ -84,7 +84,6 @@ getContributionObjectRoutes.get(
 >>>>>>> 2e9190f (fix(api): update schemas)
         organisation: contributionObject.organisation || "",
         fonction: contributionObject.fonction || "",
-        collectionName: contributionObject.collectionName || "",
         treated_at: contributionObject.treated_at || new Date(),
         email: contributionObject.email || "",
         name: contributionObject.name || "",

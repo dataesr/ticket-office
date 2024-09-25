@@ -55,10 +55,6 @@ postContactRoutes.post(
       return error(400, "Invalid fromApp value, check child attributes");
     }
 
-    if (body.collectionName !== "contact") {
-      return error(400, "Invalid collectionName value. Must be 'contact'");
-    }
-
     const newContribution = {
       ...body,
       id: new ObjectId().toHexString(),

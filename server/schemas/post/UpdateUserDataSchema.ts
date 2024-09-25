@@ -12,7 +12,6 @@ export const postUpdateUserDataSchema = t.Object(
     name: t.String(),
     message: t.String(),
     organisation: t.Optional(t.String()),
-    collectionName: t.Literal("update-user-data"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
 >>>>>>> b05991b (fix(api): update schemas)

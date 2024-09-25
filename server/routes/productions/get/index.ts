@@ -76,11 +76,14 @@ getProductionsRoutes.get(
       id: production.id.toString(),
 >>>>>>> 2e9190f (fix(api): update schemas)
       organisation: production.organisation || "",
+<<<<<<< HEAD
       collectionName: production.collectionName || "",
 <<<<<<< HEAD
       position: production.position || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
+=======
+>>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
       fonction: production.position || "",
 >>>>>>> 2e9190f (fix(api): update schemas)
       treated_at: production.treated_at || new Date(),

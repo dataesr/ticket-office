@@ -27,7 +27,6 @@ export const postRemoveUserSchema = t.Object(
     message: t.String(),
 >>>>>>> 7077f11 (fix(schema): update post schema for contact)
     organisation: t.Optional(t.String()),
-    collectionName: t.Literal("remove-user"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
 <<<<<<< HEAD

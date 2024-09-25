@@ -83,6 +83,7 @@ postUpdateUserDataRoutes.post(
       return error(500, "Failed to create the contribution");
     }
 
+<<<<<<< HEAD
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),
@@ -160,6 +161,8 @@ postUpdateUserDataRoutes.post(
       );
     }
 
+=======
+>>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),
