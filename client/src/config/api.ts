@@ -11,8 +11,8 @@ export const contributionUrl = isDevelopment
   : "https://ticket-office.staging.dataesr.ovh/api/contribute?max_results=2000";
 
 export const contactUrl = isDevelopment
-  ? "http://localhost:3000/api/contact?max_results=2000"
-  : "https://ticket-office.staging.dataesr.ovh/api/contact?max_results=2000";
+  ? "http://localhost:3000/api/contacts?max_results=2000"
+  : "https://ticket-office.staging.dataesr.ovh/api/contacts?max_results=2000";
 
 export const productionUrl = isDevelopment
   ? "http://localhost:3000/api/production?max_results=2000"

@@ -9,10 +9,10 @@ type contactType = Static<typeof contactSchema>;
 const getContactByIdRoutes = new Elysia();
 
 getContactByIdRoutes.get(
-  "/contact/:id",
+  "/contacts/:id",
   async ({ params: { id } }) => {
     const contact = await db
-      .collection("contact")
+      .collection("contacts")
       .findOne<contactType>({
         id: new ObjectId(id),
       })

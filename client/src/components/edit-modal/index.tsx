@@ -36,7 +36,7 @@ const EditModal: React.FC<EditModalProps> = ({
   const [tagInput, setTagInput] = useState("");
   const [showTagModal] = useState(false);
 
-  let basePath = "contact";
+  let basePath = "contacts";
 
   if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";

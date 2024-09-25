@@ -4,12 +4,12 @@ import { swagger } from "@elysiajs/swagger";
 import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
 
-import contactRoutes from "./routes/contact";
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
 import productionsRoutes from "./routes/productions";
 import removeUserRoutes from "./routes/remove-user";
 import updateUserDataRoutes from "./routes/update-user-data";
 import replyRoutes from "./routes/reply/replyRoutes";
+import contactsRoutes from "./routes/contacts";
 // import connectToImapServer from "./routes/receive-email";
 
 dotenv.config();
@@ -34,15 +34,15 @@ app
           },
         },
         tags: [
-          { name: "Contact", description: "Gestion des contacts" },
+          { name: "Contacts", description: "Gestion des contacts" },
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
           {
-            name: "Supression de profil",
+            name: "Supressions de profil",
             description: "Gestion des demandes supression de profil",
           },
           {
-            name: "Mise à jour de données utilisateur",
+            name: "Mise à jour de données utilisateurs",
             description:
               "Gestion des demandes de mise à jour de données utilisateur",
           },
@@ -54,7 +54,7 @@ app
     return new Response(error.toString());
   })
   .group("/api", (app) => {
-    app.use(contactRoutes);
+    app.use(contactsRoutes);
     app.use(contributionObjectRoutes);
     app.use(productionsRoutes);
     app.use(removeUserRoutes);

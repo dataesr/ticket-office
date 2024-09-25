@@ -24,7 +24,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   );
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  let basePath = "contact";
+  let basePath = "contacts";
   if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";
   } else if (window.location.pathname.includes("apioperations")) {
