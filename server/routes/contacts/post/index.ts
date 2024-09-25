@@ -9,7 +9,7 @@ type postContactSchemaType = Static<typeof postContactSchema>;
 const postContactRoutes = new Elysia();
 
 postContactRoutes.post(
-  "/contact",
+  "/contacts",
   async ({ error, body }: { error: any; body: postContactSchemaType }) => {
     const allowedFromApps = [
       "paysage",
@@ -35,7 +35,7 @@ postContactRoutes.post(
       status: "new",
     };
 
-    const result = await db.collection("contact").insertOne(newContribution);
+    const result = await db.collection("contacts").insertOne(newContribution);
     if (!result.insertedId) {
       return error(500, "Failed to create the contribution");
     }

@@ -12,7 +12,7 @@ export const buildURL = (
     ? "http://localhost:3000/api"
     : `https://ticket-office.staging.dataesr.ovh/api`;
 
-  let baseUrl = "contact";
+  let baseUrl = "contacts";
   if (location?.pathname?.includes("scanr-contributionpage")) {
     baseUrl = "contribute";
   } else if (location?.pathname?.includes("removeuser")) {

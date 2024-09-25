@@ -22,7 +22,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
       ? "contribute"
       : window.location.pathname.includes("apioperations")
       ? "contribute_productions"
-      : "contact";
+      : "contacts";
 
     const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
     const urlBase = isDevelopment

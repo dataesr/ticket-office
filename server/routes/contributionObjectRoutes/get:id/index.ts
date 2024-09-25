@@ -10,16 +10,16 @@ const getContributionObjectByIdRoutes = new Elysia();
 getContributionObjectByIdRoutes.get(
   "/contribute/:id",
   async ({ params: { id } }) => {
-    const contact = await db
+    const contribution = await db
       .collection("contribute")
       .findOne<contributionObjectType>({
         id: new ObjectId(id),
       })
       .catch((error) => error(500, "Failed to fetch contribution"));
 
-    if (!contact) return { message: "Une erreur s'est produite" };
+    if (!contribution) return { message: "Une erreur s'est produite" };
 
-    return contact;
+    return contribution;
   },
   {
     response: {

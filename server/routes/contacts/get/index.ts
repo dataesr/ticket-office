@@ -7,7 +7,7 @@ import { errorSchema } from "../../../schemas/errors/errorSchema";
 const getContactRoutes = new Elysia();
 
 getContactRoutes.get(
-  "/contact",
+  "/contacts",
   async ({ query, error }: { query: any; error: any }) => {
     if (!validateQueryParams(query)) {
       return error(422, "Invalid query parameters");
@@ -31,7 +31,7 @@ getContactRoutes.get(
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
     const contacts = await db
-      .collection("contact")
+      .collection("contacts")
       .find(filters)
       .sort({ [sortField]: sortOrder })
       .skip(skip)

@@ -8,7 +8,7 @@ type contactType = Static<typeof contactSchema>;
 const contactPutRoutes = new Elysia();
 
 contactPutRoutes.patch(
-  "/contact/:id",
+  "/contacts/:id",
   async ({ params: { id }, body, error }) => {
     if (body.status && ["ongoing", "treated"].includes(body.status)) {
       body.treated_at = new Date();
@@ -22,7 +22,7 @@ contactPutRoutes.patch(
     }
 
     const { acknowledged } = await db
-      .collection("contact")
+      .collection("contacts")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
 
     if (!acknowledged) {
@@ -30,7 +30,7 @@ contactPutRoutes.patch(
     }
 
     const updatedContact = await db
-      .collection("contact")
+      .collection("contacts")
       .findOne<contactType>({ id });
     if (!updatedContact) {
       return error(404, { message: "Contact non trouvé" });
