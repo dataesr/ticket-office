@@ -30,7 +30,11 @@ getContactByIdRoutes.get(
       summary: "Obtenir une contribution via formulaire de contact par ID",
       description:
         "Cette route retourne les détails d'une contribution spécifique via l'ID fourni.",
+<<<<<<< HEAD
       tags: ["Contacts"],
+=======
+      tags: ["Contact"],
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
     },
   }
 );

@@ -25,11 +25,15 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 <<<<<<< HEAD
+<<<<<<< HEAD
   const apiBaseUrl = isDevelopment
     ? "http://localhost:3000/api/send-email"
     : "https://ticket-office.staging.dataesr.ovh/api/send-email";
 =======
   let basePath = "contact";
+=======
+  let basePath = "contacts";
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
   if (window.location.pathname.includes("contributionpage")) {
     basePath = "contribute";
   } else if (window.location.pathname.includes("apioperations")) {

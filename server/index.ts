@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import { cors } from "@elysiajs/cors";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 =======
 import staticPlugin from "@elysiajs/static";
@@ -18,6 +19,8 @@ import { cors } from "@elysiajs/cors";
 >>>>>>> c249e13 (fix(api): change url for request on staging)
 import contactRoutes from "./routes/contact";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
 import productionsRoutes from "./routes/productions";
 import removeUserRoutes from "./routes/remove-user";
@@ -28,6 +31,7 @@ import sendMail from "./routes/reply/replyRoutes";
 import { fetchEmails } from "./routes/receive-email";
 =======
 import replyRoutes from "./routes/reply/replyRoutes";
+import contactsRoutes from "./routes/contacts";
 // import connectToImapServer from "./routes/receive-email";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
@@ -61,6 +65,7 @@ app
         },
         tags: [
           { name: "Contacts", description: "Gestion des contacts" },
+<<<<<<< HEAD
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
           { name: "Envoi de mails", description: "Envoi de mails" },
@@ -85,17 +90,19 @@ app
         },
         tags: [
           { name: "Contact", description: "Gestion des contacts" },
+=======
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
 <<<<<<< HEAD
 >>>>>>> 8372f23 (fix(edit): update package delete dep)
 =======
           {
-            name: "Supression de profil",
+            name: "Supressions de profil",
             description: "Gestion des demandes supression de profil",
           },
           {
-            name: "Mise à jour de données utilisateur",
+            name: "Mise à jour de données utilisateurs",
             description:
               "Gestion des demandes de mise à jour de données utilisateur",
           },
@@ -111,6 +118,7 @@ app
   })
   .group("/api", (app) => {
     app.use(contactsRoutes);
+<<<<<<< HEAD
 =======
 =======
   .onError(({ code, error }) => {
@@ -120,6 +128,8 @@ app
   .group("/api", (app) => {
     app.use(contactRoutes);
 >>>>>>> 8372f23 (fix(edit): update package delete dep)
+=======
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
     app.use(contributionObjectRoutes);
     app.use(productionsRoutes);
     app.use(removeUserRoutes);

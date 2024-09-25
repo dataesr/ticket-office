@@ -21,6 +21,7 @@ contactPutRoutes.patch(
       }
     }
 
+<<<<<<< HEAD
     if (body.threads) {
       body.threads = body.threads.map((thread) => {
         thread.responses = thread.responses?.map((response) => {
@@ -33,6 +34,8 @@ contactPutRoutes.patch(
       });
     }
 
+=======
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
     const { acknowledged } = await db
       .collection("contacts")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -50,13 +53,21 @@ contactPutRoutes.patch(
 
     const responseContact = {
       id: updatedContact.id,
+<<<<<<< HEAD
       fromApplication: updatedContact.fromApplication,
+=======
+      organisation: updatedContact.organisation,
+      fromApp: updatedContact.fromApp,
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
       name: updatedContact.name,
       email: updatedContact.email,
       status: updatedContact.status,
       team: updatedContact.team,
       modified_at: updatedContact.modified_at,
+<<<<<<< HEAD
       extra: updatedContact.extra || {},
+=======
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
     };
 
     return responseContact;
@@ -75,8 +86,13 @@ contactPutRoutes.patch(
     detail: {
       summary: "Modifier une contribution via formulaire de contact par ID",
       description:
+<<<<<<< HEAD
         "Cette route permet de mettre à jour une contribution spécifique via l'ID fourni. Elle permet de modifier le statut, d'ajouter la personne modifiant dans l'équipe, et de mettre à jour la date de traitement et de modification.",
       tags: ["Contacts"],
+=======
+        "Cette route permet de mettre à jour une contribution spécifique via l'ID fourni. Elle permet de modifier le statut, l'idref, d'ajouter la personne modifiant dans l'équipe, et de mettre à jour la date de traitement et de modification.",
+      tags: ["Contact"],
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
     },
   }
 );

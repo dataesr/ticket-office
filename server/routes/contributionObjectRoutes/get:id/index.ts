@@ -19,6 +19,7 @@ getContributionObjectByIdRoutes.get(
   "/contribute/:id",
   async ({ params: { id } }) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
     const contribution = await db
       .collection("contribute")
       .findOne<contributionObjectType>({
@@ -38,15 +39,18 @@ getContributionObjectByIdRoutes.get(
     },
 =======
     const contact = await db
+=======
+    const contribution = await db
+>>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
       .collection("contribute")
       .findOne<contributionObjectType>({
         id: new ObjectId(id),
       })
       .catch((error) => error(500, "Failed to fetch contribution"));
 
-    if (!contact) return { message: "Une erreur s'est produite" };
+    if (!contribution) return { message: "Une erreur s'est produite" };
 
-    return contact;
+    return contribution;
   },
   {
 <<<<<<< HEAD

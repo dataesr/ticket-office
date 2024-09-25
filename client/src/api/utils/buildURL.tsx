@@ -41,7 +41,7 @@ export const buildURL = (
     : `https://ticket-office.staging.dataesr.ovh/api`;
 >>>>>>> d4acea1 (typo)
 
-  let baseUrl = "contact";
+  let baseUrl = "contacts";
   if (location?.pathname?.includes("scanr-contributionpage")) {
 >>>>>>> dfca0bc (chore(api): clean code)
     baseUrl = "contribute";
