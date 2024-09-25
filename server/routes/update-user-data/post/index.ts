@@ -1,32 +1,25 @@
 import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
-import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
+import { postUpdateUserDataSchema } from "../../../schemas/post/UpdateUserDataSchema";
+import { ObjectId } from "mongodb";
 
-type postUpdateUserDataSchemaType = Static<typeof postRemoveUserSchema>;
+type postUpdateUserDataSchemaType = Static<typeof postUpdateUserDataSchema>;
 
 const postUpdateUserDataRoutes = new Elysia();
 
 postUpdateUserDataRoutes.post(
   "/update-user-data",
-  async ({ query, error, body }: { query: any; error: any; body: any }) => {
-    if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
-    }
-
-    const updateUserData = {
+  async ({
+    error,
+    body,
+  }: {
+    error: any;
+    body: postUpdateUserDataSchemaType;
+  }) => {
+    const newContribution = {
       ...body,
-    };
-
-    const newContribution: postUpdateUserDataSchemaType = {
-      email: updateUserData.email,
-      name: updateUserData.name,
-      message: updateUserData.message,
-      organisation: updateUserData.organisation || "",
-      collectionName: updateUserData.collectionName || "",
-      fonction: updateUserData.fonction || "",
+      id: new ObjectId().toHexString(),
       created_at: new Date(),
-      idref: updateUserData.idref || "",
       status: "new",
     };
 
@@ -34,14 +27,26 @@ postUpdateUserDataRoutes.post(
       .collection("update-user-data")
       .insertOne(newContribution);
 
-    if (!result.acknowledged) {
-      return error(500, "Failed to create contribution from update-user-data");
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
     }
 
-    return newContribution;
+    if (body.collectionName !== "update-user-data") {
+      return error(
+        400,
+        "Invalid collectionName value. Must be 'update-user-data"
+      );
+    }
+
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
   },
   {
-    body: postRemoveUserSchema,
+    body: postUpdateUserDataSchema,
     response: {
       200: t.Object({ message: t.String() }),
       400: t.Object({ message: t.String() }),

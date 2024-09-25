@@ -3,6 +3,7 @@ import db from "../../../libs/mongo";
 import { postProductionsSchema } from "../../../schemas/post/productionsSchema";
 import { productionSchema } from "../../../schemas/get/productionSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { ObjectId } from "mongodb";
 
 type postProductionSchemaType = Static<typeof postProductionsSchema>;
 
@@ -10,32 +11,35 @@ const postProductionRoutes = new Elysia();
 
 postProductionRoutes.post(
   "/production",
-  async ({ error, body }: { error: any; body: any }) => {
-    const productionData = {
+  async ({ error, body }: { error: any; body: postProductionSchemaType }) => {
+    const newContribution = {
       ...body,
-    };
-    const newContact: postProductionSchemaType = {
-      email: productionData.email,
-      name: productionData.name,
-      message: productionData.message,
-      organisation: productionData.organisation || "",
-      collectionName: productionData.collectionName || "",
-      fonction: productionData.fonction || "",
+      id: new ObjectId().toHexString(),
       created_at: new Date(),
-      idref: productionData.idref || "",
       status: "new",
-      productions: productionData.productions || [],
     };
 
     const result = await db
       .collection("contribute_productions")
-      .insertOne(newContact);
+      .insertOne(newContribution);
 
-    if (!result.acknowledged) {
-      return error(500, "Failed to create contribution");
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
     }
 
-    return newContact;
+    if (body.collectionName !== "contribute_productions") {
+      return error(
+        400,
+        "Invalid collectionName value. Must be 'contribute_productions'"
+      );
+    }
+
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
   },
   {
     body: postProductionsSchema,
