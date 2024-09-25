@@ -36,13 +36,10 @@ export const productionSchema = t.Object(
         })
       )
     ),
-    productions: t.Optional(
-      t.Array(
-        t.Object({
-          id: t.Union([t.String(), t.Null()]),
-          treated: t.Boolean(),
-        })
-      )
+    productions: t.Array(
+      t.Object({
+        id: t.Union([t.String(), t.Null()]),
+      })
     ),
   },
   { additionalProperties: true }

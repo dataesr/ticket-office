@@ -1,12 +1,12 @@
 import { t } from "elysia";
 
-export const postRemoveUserSchema = t.Object(
+export const postUpdateUserDataSchema = t.Object(
   {
     email: t.String(),
     name: t.String(),
     message: t.String(),
     organisation: t.Optional(t.String()),
-    collectionName: t.Literal("remove-user"),
+    collectionName: t.Literal("update-user-data"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
   },

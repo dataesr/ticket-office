@@ -33,6 +33,10 @@ postContributionObjectRoutes.post(
       return error(500, "Failed to create the contribution");
     }
 
+    if (body.collectionName !== "contribute") {
+      return error(400, "Invalid collectionName value. Must be 'contribute'");
+    }
+
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),
@@ -54,24 +58,6 @@ postContributionObjectRoutes.post(
       description:
         "Cette route permet de créer une nouvelle contribution soumise via le formulaire de contact.",
       tags: ["Contribution par objet"],
-    },
-    example: {
-      request: {
-        body: {
-          email: "debache.mihoub@example.com",
-          name: "Debache Mihoub",
-          message: "Ceci est un message de test.",
-          organisation: "MESRI",
-          fromApp: "paysage",
-          objectType: "structure",
-          objectId: "1234",
-          section: "test",
-          collectionName: "contribute",
-          fonction: "Développeur",
-          idref: "12312321",
-          status: "new",
-        },
-      },
     },
   }
 );

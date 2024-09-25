@@ -1,7 +1,7 @@
 import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
 import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
+import { ObjectId } from "mongodb";
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
@@ -9,33 +9,32 @@ const postRemoveUserRoutes = new Elysia();
 
 postRemoveUserRoutes.post(
   "/remove-user",
-  async ({ query, error, body }: { query: any; error: any; body: any }) => {
-    if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
-    }
-
-    const removeUserData = {
+  async ({ error, body }: { error: any; body: postRemoveUserSchemaType }) => {
+    const newContribution = {
       ...body,
-    };
-    const newDeletation: postRemoveUserSchemaType = {
-      email: removeUserData.email,
-      name: removeUserData.name,
-      message: removeUserData.message,
-      organisation: removeUserData.organisation || "",
-      collectionName: removeUserData.collectionName || "",
-      fonction: removeUserData.fonction || "",
+      id: new ObjectId().toHexString(),
       created_at: new Date(),
-      idref: removeUserData.idref || "",
-      status: removeUserData.status || "new",
+      status: "new",
     };
 
-    const result = await db.collection("remove-user").insertOne(newDeletation);
+    const result = await db
+      .collection("remove-user")
+      .insertOne(newContribution);
 
-    if (!result.acknowledged) {
-      return error(500, "Failed to create contribution");
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
     }
 
-    return newDeletation;
+    if (body.collectionName !== "remove-user") {
+      return error(400, "Invalid collectionName value. Must be 'remove-user");
+    }
+
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
   },
   {
     body: postRemoveUserSchema,
