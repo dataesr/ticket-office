@@ -50,14 +50,24 @@ export const postContactSchema = t.Object(
     message: t.String(),
 >>>>>>> 7077f11 (fix(schema): update post schema for contact)
     organisation: t.Optional(t.String()),
-    fromApp: t.String(),
+    fromApp: t.Enum({
+      paysage: "paysage",
+      scanr: "scanr",
+      bso: "bso",
+      "works-magnet": "works-magnet",
+      datasupr: "datasupr",
+      curieXplore: "curiexplore",
+    }),
     fromSubApp: t.Optional(t.String()),
-    collectionName: t.String(),
+    collectionName: t.Literal("contact"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
+<<<<<<< HEAD
     status: t.Optional(t.String()),
     created_at: t.Optional(t.Date()),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 9a22dff (fix(api schema): set schema to accept waited values inf fromApp and collectionName)
   },
   { additionalProperties: false }
 );

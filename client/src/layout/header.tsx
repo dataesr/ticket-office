@@ -214,10 +214,10 @@ const Header: React.FC = () => {
               current={pathname.startsWith("/scanr")}
               href="/scanr-contributionpage"
             >
-              Formulaire de contribution par objet
+              Contribution par objet
             </Link>
             <Link current={pathname.startsWith("/scanr")} href="/scanr-contact">
-              Contributions via formulaire de contact
+              Formulaire de contact
             </Link>
             <Link
               current={pathname.startsWith("/scanr")}
@@ -250,9 +250,14 @@ const Header: React.FC = () => {
           >
             CurieXplore
           </Link>
-          <Link current={pathname.startsWith("/bso")} href="/bso-contact">
-            BSO
-          </Link>
+          <NavItem current={pathname.split("/").includes("bso")} title={"BSO"}>
+            <Link current={pathname.startsWith("/bso")} href="/bso-contact">
+              Formulaire de contact
+            </Link>
+            <Link current={pathname.startsWith("/bso")} href="/bso-local">
+              Demandes de BSO local
+            </Link>
+          </NavItem>
           <Link
             current={pathname.startsWith("/datasupr")}
             href="/datasupr-contact"

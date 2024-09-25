@@ -8,6 +8,7 @@ import Layout from "./src/layout";
 import React from "react";
 import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";
 import LocalBSO from "./src/pages/bso/index";
+<<<<<<< HEAD
 =======
 import ContributionPage from "./src/pages/contribution-page";
 import ChangeNamePage from "./src/pages/change-name";
@@ -20,6 +21,8 @@ import React from "react";
 =======
 import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";
 >>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
+=======
+>>>>>>> 9a22dff (fix(api schema): set schema to accept waited values inf fromApp and collectionName)
 
 export default function Router() {
   return (
@@ -106,6 +109,7 @@ export default function Router() {
           path="/bso-contact"
           element={<ContactAndContributionPage fromApp="bso" />}
         />
+        <Route path="/bso-local" element={<LocalBSO />} />
         <Route
           path="/curiexplore-contact"
           element={<ContactAndContributionPage fromApp="curiexplore" />}
