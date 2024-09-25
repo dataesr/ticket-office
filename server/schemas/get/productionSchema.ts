@@ -74,6 +74,7 @@ export const productionSchema = t.Object(
       t.Object({
         id: t.Union([t.String(), t.Null()]),
       })
+<<<<<<< HEAD
     ),
   },
   { additionalProperties: true }
@@ -102,6 +103,8 @@ export const responseSchema = t.Object({
           treated: t.Boolean(),
         })
       )
+=======
+>>>>>>> b05991b (fix(api): update schemas)
     ),
   },
   { additionalProperties: true }

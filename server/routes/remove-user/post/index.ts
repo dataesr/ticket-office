@@ -9,9 +9,12 @@ import { emailRecipients } from "../../contacts/post/emailRecipents";
 =======
 import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
 import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+import { ObjectId } from "mongodb";
+>>>>>>> b05991b (fix(api): update schemas)
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
@@ -19,6 +22,7 @@ const postRemoveUserRoutes = new Elysia();
 
 postRemoveUserRoutes.post(
   "/remove-user",
+<<<<<<< HEAD
 <<<<<<< HEAD
   async ({ error, body }: { error: any; body: postRemoveUserSchemaType }) => {
     const extraLowercase = Object.keys(body.extra || {}).reduce(
@@ -107,28 +111,39 @@ postRemoveUserRoutes.post(
     }
 
     const removeUserData = {
+=======
+  async ({ error, body }: { error: any; body: postRemoveUserSchemaType }) => {
+    const newContribution = {
+>>>>>>> b05991b (fix(api): update schemas)
       ...body,
-    };
-    const newDeletation: postRemoveUserSchemaType = {
-      email: removeUserData.email,
-      name: removeUserData.name,
-      message: removeUserData.message,
-      organisation: removeUserData.organisation || "",
-      collectionName: removeUserData.collectionName || "",
-      fonction: removeUserData.fonction || "",
+      id: new ObjectId().toHexString(),
       created_at: new Date(),
-      idref: removeUserData.idref || "",
-      status: removeUserData.status || "new",
+      status: "new",
     };
 
-    const result = await db.collection("remove-user").insertOne(newDeletation);
+    const result = await db
+      .collection("remove-user")
+      .insertOne(newContribution);
 
-    if (!result.acknowledged) {
-      return error(500, "Failed to create contribution");
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
     }
 
+<<<<<<< HEAD
     return newDeletation;
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    if (body.collectionName !== "remove-user") {
+      return error(400, "Invalid collectionName value. Must be 'remove-user");
+    }
+
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
+>>>>>>> b05991b (fix(api): update schemas)
   },
   {
     body: postRemoveUserSchema,

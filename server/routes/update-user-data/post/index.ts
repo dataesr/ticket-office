@@ -11,17 +11,24 @@ type postUpdateUserDataSchemaType = Static<typeof postUpdateUserDataSchema>;
 =======
 import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
-import { validateQueryParams } from "../../../utils/queryValidator";
-import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
+import { postUpdateUserDataSchema } from "../../../schemas/post/UpdateUserDataSchema";
+import { ObjectId } from "mongodb";
 
+<<<<<<< HEAD
 type postUpdateUserDataSchemaType = Static<typeof postRemoveUserSchema>;
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+type postUpdateUserDataSchemaType = Static<typeof postUpdateUserDataSchema>;
+>>>>>>> b05991b (fix(api): update schemas)
 
 const postUpdateUserDataRoutes = new Elysia();
 
 postUpdateUserDataRoutes.post(
   "/update-user-data",
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> b05991b (fix(api): update schemas)
   async ({
     error,
     body,
@@ -29,6 +36,7 @@ postUpdateUserDataRoutes.post(
     error: any;
     body: postUpdateUserDataSchemaType;
   }) => {
+<<<<<<< HEAD
     const extraLowercase = Object.keys(body.extra || {}).reduce(
       (acc, key) => ({
         ...acc,
@@ -51,19 +59,17 @@ postUpdateUserDataRoutes.post(
     }
 
     const updateUserData = {
+=======
+    const newContribution = {
+>>>>>>> b05991b (fix(api): update schemas)
       ...body,
-    };
-
-    const newContribution: postUpdateUserDataSchemaType = {
-      email: updateUserData.email,
-      name: updateUserData.name,
-      message: updateUserData.message,
-      organisation: updateUserData.organisation || "",
-      collectionName: updateUserData.collectionName || "",
-      fonction: updateUserData.fonction || "",
+      id: new ObjectId().toHexString(),
       created_at: new Date(),
+<<<<<<< HEAD
       idref: updateUserData.idref || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> b05991b (fix(api): update schemas)
       status: "new",
     };
 
@@ -71,6 +77,7 @@ postUpdateUserDataRoutes.post(
       .collection("update-user-data")
       .insertOne(newContribution);
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (!result.insertedId) {
       return error(500, "Failed to create the contribution");
@@ -140,12 +147,28 @@ postUpdateUserDataRoutes.post(
 =======
     if (!result.acknowledged) {
       return error(500, "Failed to create contribution from update-user-data");
+=======
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
+>>>>>>> b05991b (fix(api): update schemas)
     }
 
-    return newContribution;
+    if (body.collectionName !== "update-user-data") {
+      return error(
+        400,
+        "Invalid collectionName value. Must be 'update-user-data"
+      );
+    }
+
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
   },
   {
-    body: postRemoveUserSchema,
+    body: postUpdateUserDataSchema,
     response: {
       200: t.Object({ message: t.String() }),
       400: t.Object({ message: t.String() }),

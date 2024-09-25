@@ -6,6 +6,7 @@ import { postProductionsSchema } from "../../../schemas/post/productionsSchema";
 import { productionSchema } from "../../../schemas/get/productionSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { ObjectId } from "mongodb";
+<<<<<<< HEAD
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 =======
 import Elysia, { Static, t } from "elysia";
@@ -20,6 +21,8 @@ import { postProductionsSchema } from "../../../schemas/post/productionsSchema";
 import { productionSchema } from "../../../schemas/get/productionSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> b05991b (fix(api): update schemas)
 
 type postProductionSchemaType = Static<typeof postProductionsSchema>;
 
@@ -27,6 +30,7 @@ const postProductionRoutes = new Elysia();
 
 postProductionRoutes.post(
   "/production",
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
   async ({ error, body }: { error: any; body: postProductionSchemaType }) => {
@@ -56,24 +60,24 @@ postProductionRoutes.post(
   async ({ error, body }: { error: any; body: any }) => {
 >>>>>>> 2e9190f (fix(api): update schemas)
     const productionData = {
+=======
+  async ({ error, body }: { error: any; body: postProductionSchemaType }) => {
+    const newContribution = {
+>>>>>>> b05991b (fix(api): update schemas)
       ...body,
-    };
-    const newContact: postProductionSchemaType = {
-      email: productionData.email,
-      name: productionData.name,
-      message: productionData.message,
-      organisation: productionData.organisation || "",
-      collectionName: productionData.collectionName || "",
-      fonction: productionData.fonction || "",
+      id: new ObjectId().toHexString(),
       created_at: new Date(),
-      idref: productionData.idref || "",
       status: "new",
+<<<<<<< HEAD
       productions: productionData.productions || [],
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> b05991b (fix(api): update schemas)
     };
 
     const result = await db
       .collection("contribute_productions")
+<<<<<<< HEAD
 <<<<<<< HEAD
       .insertOne(newContribution);
 
@@ -136,13 +140,32 @@ postProductionRoutes.post(
     return finalContribution;
 =======
       .insertOne(newContact);
+=======
+      .insertOne(newContribution);
+>>>>>>> b05991b (fix(api): update schemas)
 
-    if (!result.acknowledged) {
-      return error(500, "Failed to create contribution");
+    if (!result.insertedId) {
+      return error(500, "Failed to create the contribution");
     }
 
+<<<<<<< HEAD
     return newContact;
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    if (body.collectionName !== "contribute_productions") {
+      return error(
+        400,
+        "Invalid collectionName value. Must be 'contribute_productions'"
+      );
+    }
+
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    };
+
+    return finalContribution;
+>>>>>>> b05991b (fix(api): update schemas)
   },
   {
     body: postProductionsSchema,

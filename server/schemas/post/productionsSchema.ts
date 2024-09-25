@@ -17,6 +17,7 @@ export const postProductionsSchema = t.Object(
     email: t.String(),
     name: t.String(),
     message: t.String(),
+<<<<<<< HEAD
 =======
     email: t.Required(t.String()),
     name: t.Required(t.String()),
@@ -32,10 +33,13 @@ export const postProductionsSchema = t.Object(
     message: t.String(),
 >>>>>>> 7077f11 (fix(schema): update post schema for contact)
     created_at: t.Optional(t.Date()),
+=======
+>>>>>>> b05991b (fix(api): update schemas)
     organisation: t.Optional(t.String()),
-    collectionName: t.String(),
+    collectionName: t.Literal("contribute_productions"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
+<<<<<<< HEAD
     status: t.Optional(t.String()),
     productions: t.Optional(
       t.Array(
@@ -45,6 +49,12 @@ export const postProductionsSchema = t.Object(
         })
       )
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    productions: t.Array(
+      t.Object({
+        id: t.String(),
+      })
+>>>>>>> b05991b (fix(api): update schemas)
     ),
   },
   { additionalProperties: false }
