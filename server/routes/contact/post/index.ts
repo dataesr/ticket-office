@@ -11,6 +11,23 @@ const postContactRoutes = new Elysia();
 postContactRoutes.post(
   "/contact",
   async ({ error, body }: { error: any; body: postContactSchemaType }) => {
+    const allowedFromApps = [
+      "paysage",
+      "scanr",
+      "bso",
+      "works-magnet",
+      "datasupr",
+      "curiexplore",
+    ];
+
+    if (!allowedFromApps.includes(body.fromApp)) {
+      return error(400, "Invalid fromApp value, check child attributes");
+    }
+
+    if (body.collectionName !== "contact") {
+      return error(400, "Invalid collectionName value. Must be 'contact'");
+    }
+
     const newContribution = {
       ...body,
       id: new ObjectId().toHexString(),
@@ -42,21 +59,6 @@ postContactRoutes.post(
       description:
         "Cette route permet de créer une nouvelle contribution soumise via le formulaire de contact.",
       tags: ["Contact"],
-      example: {
-        request: {
-          body: {
-            email: "debache.mihoub@example.com",
-            name: "Debache Mihoub",
-            message: "Ceci est un message de test.",
-            organisation: "MESRI",
-            fromApp: "paysage",
-            collectionName: "contact",
-            fonction: "Développeur",
-            idref: "12312321",
-            status: "new",
-          },
-        },
-      },
     },
   }
 );

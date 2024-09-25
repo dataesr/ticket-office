@@ -6,13 +6,18 @@ export const postContactSchema = t.Object(
     name: t.String(),
     message: t.String(),
     organisation: t.Optional(t.String()),
-    fromApp: t.String(),
+    fromApp: t.Enum({
+      paysage: "paysage",
+      scanr: "scanr",
+      bso: "bso",
+      "works-magnet": "works-magnet",
+      datasupr: "datasupr",
+      curieXplore: "curiexplore",
+    }),
     fromSubApp: t.Optional(t.String()),
-    collectionName: t.String(),
+    collectionName: t.Literal("contact"),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
-    status: t.Optional(t.String()),
-    created_at: t.Optional(t.Date()),
   },
   { additionalProperties: false }
 );
