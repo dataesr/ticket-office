@@ -5,6 +5,7 @@ import ApiOperationPage from "./src/pages/api-operation-page/link-publications";
 import Layout from "./src/layout";
 import React from "react";
 import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";
+import LocalBSO from "./src/pages/bso/index";
 
 export default function Router() {
   return (
@@ -27,6 +28,7 @@ export default function Router() {
           path="/bso-contact"
           element={<ContactAndContributionPage fromApp="bso" />}
         />
+        <Route path="/bso-local" element={<LocalBSO />} />
         <Route
           path="/curiexplore-contact"
           element={<ContactAndContributionPage fromApp="curiexplore" />}

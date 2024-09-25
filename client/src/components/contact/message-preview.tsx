@@ -45,10 +45,10 @@ const MessagePreview = ({
     <>
       <Container fluid className="fr-mb-4w">
         <Row>
-          {data?.id && (
+          {data?.idref && (
             <Col>
               <Text size="sm">
-                ID de l'objet concerné: <strong>{data.id}</strong>
+                ID de l'objet concerné: <strong>{data.idref}</strong>
                 <button
                   className={`copy-button ${
                     copiedId === data.id ? "copied" : ""
