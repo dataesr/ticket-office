@@ -5,18 +5,15 @@ export const postContactSchema = t.Object(
     email: t.String(),
     name: t.String(),
     message: t.String(),
-    organisation: t.Optional(t.String()),
-    fromApp: t.Enum({
+    fromApplication: t.Enum({
       paysage: "paysage",
       scanr: "scanr",
       bso: "bso",
       "works-magnet": "works-magnet",
       datasupr: "datasupr",
-      curieXplore: "curiexplore",
+      curiexplore: "curiexplore",
     }),
-    fromSubApp: t.Optional(t.String()),
-    fonction: t.Optional(t.String()),
-    idref: t.Optional(t.String()),
+    extra: t.Optional(t.Record(t.String(), t.String())),
   },
   { additionalProperties: false }
 );

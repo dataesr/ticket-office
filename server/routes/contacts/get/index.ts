@@ -17,12 +17,12 @@ getContactRoutes.get(
       sort = "created_at",
       page = 1,
       max_results = 20,
-      fromApp,
+      fromApplication,
     } = query;
 
     let filters = JSON.parse(where as string);
-    if (fromApp) {
-      filters.fromApp = fromApp;
+    if (fromApplication) {
+      filters.fromApplication = fromApplication;
     }
 
     const limit = parseInt(max_results as string, 10) || 20;
@@ -42,9 +42,7 @@ getContactRoutes.get(
     const formattedContacts = contacts.map((contact: any) => {
       return {
         id: contact.id || "",
-        organisation: contact.organisation || "",
-        fonction: contact.fonction || "",
-        fromApp: contact.fromApp || "",
+        fromApplication: contact.fromApplication || "",
         fromSubApp: contact.fromSubApp || "",
         treated_at: contact.treated_at || new Date(),
         email: contact.email || "",
@@ -53,11 +51,11 @@ getContactRoutes.get(
         comment: contact.comment || "",
         modified_at: contact.modified_at || new Date(),
         created_at: contact.created_at || new Date(),
-        idref: contact.idref || "",
         status: contact.status || "",
         team: contact.team || [],
         tags: contact.tags || [],
         threads: contact.threads || [],
+        extra: contact.extra || {},
       };
     });
 
@@ -70,7 +68,7 @@ getContactRoutes.get(
       page: t.Optional(t.Numeric()),
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
-      fromApp: t.Optional(t.String()),
+      fromApplication: t.Optional(t.String()),
     }),
     response: {
       200: contactListSchema,

@@ -39,8 +39,6 @@ getUpdateUserDataRoutes.get(
 
     const formattedContribution = contribution.map((contrib: any) => ({
       id: contrib.id.toString(),
-      organisation: contrib.organisation || "",
-      fonction: contrib.fonction || "",
       treated_at: contrib.treated_at || new Date(),
       email: contrib.email || "",
       name: contrib.name || "",
@@ -48,11 +46,11 @@ getUpdateUserDataRoutes.get(
       comment: contrib.comment || "",
       modified_at: contrib.modified_at || new Date(),
       created_at: contrib.created_at || new Date(),
-      idref: contrib.idref || "",
       status: contrib.status || "",
       team: contrib.team || [],
       tags: contrib.tags || [],
       threads: contrib.threads || [],
+      extra: contrib.extra || {},
     }));
 
     return formattedContribution;

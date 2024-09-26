@@ -1,5 +1,5 @@
-export const getContactUrl = (fromApp: string, mailId: string) => {
-  switch (fromApp) {
+export const getContactUrl = (fromApplication: string, mailId: string) => {
+  switch (fromApplication) {
     case "scanr":
       return `/scanr-contact?query=${mailId}`;
     case "paysage":

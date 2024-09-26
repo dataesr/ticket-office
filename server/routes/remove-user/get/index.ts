@@ -39,8 +39,6 @@ getRemoveUserRoutes.get(
 
     const formattedDeletation = deletation.map((deletation: any) => ({
       id: deletation.id.toString(),
-      organisation: deletation.organisation || "",
-      fonction: deletation.fonction || "",
       treated_at: deletation.treated_at || new Date(),
       email: deletation.email || "",
       name: deletation.name || "",
@@ -48,11 +46,11 @@ getRemoveUserRoutes.get(
       comment: deletation.comment || "",
       modified_at: deletation.modified_at || new Date(),
       created_at: deletation.created_at || new Date(),
-      idref: deletation.idref || "",
       status: deletation.status || "",
       team: deletation.team || [],
       tags: deletation.tags || [],
       threads: deletation.threads || [],
+      extra: deletation.extra || {},
     }));
 
     return formattedDeletation;

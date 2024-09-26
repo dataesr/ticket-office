@@ -1,7 +1,9 @@
-import Elysia, { Static, t } from "elysia";
+import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
 import { ObjectId } from "mongodb";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
@@ -10,11 +12,20 @@ const postRemoveUserRoutes = new Elysia();
 postRemoveUserRoutes.post(
   "/remove-user",
   async ({ error, body }: { error: any; body: postRemoveUserSchemaType }) => {
+    const extraLowercase = Object.keys(body.extra || {}).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: body.extra ? body.extra[key].toLowerCase() : "",
+      }),
+      {}
+    );
+
     const newContribution = {
       ...body,
       id: new ObjectId().toHexString(),
       created_at: new Date(),
       status: "new",
+      extra: extraLowercase,
     };
 
     const result = await db
@@ -35,9 +46,9 @@ postRemoveUserRoutes.post(
   {
     body: postRemoveUserSchema,
     response: {
-      200: t.Object({ message: t.String() }),
-      400: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: deleteSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary: "Créer une nouvelle demande de suppression de profil",

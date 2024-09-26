@@ -12,11 +12,20 @@ const postProductionRoutes = new Elysia();
 postProductionRoutes.post(
   "/production",
   async ({ error, body }: { error: any; body: postProductionSchemaType }) => {
+    const extraLowercase = Object.keys(body.extra || {}).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: body.extra ? body.extra[key].toLowerCase() : "",
+      }),
+      {}
+    );
+
     const newContribution = {
       ...body,
       id: new ObjectId().toHexString(),
       created_at: new Date(),
       status: "new",
+      extra: extraLowercase,
     };
 
     const result = await db

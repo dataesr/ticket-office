@@ -38,20 +38,20 @@ getContributionObjectRoutes.get(
     const formattedContribution = contributionObject.map(
       (contributionObject: any) => ({
         id: contributionObject.id.toString(),
-        organisation: contributionObject.organisation || "",
-        fonction: contributionObject.fonction || "",
         treated_at: contributionObject.treated_at || new Date(),
         email: contributionObject.email || "",
         name: contributionObject.name || "",
+        objectId: contributionObject.objectId || "",
+        objectType: contributionObject.objectType || "",
         message: contributionObject.message || "",
         comment: contributionObject.comment || "",
         modified_at: contributionObject.modified_at || new Date(),
         created_at: contributionObject.created_at || new Date(),
-        idref: contributionObject.idref || "",
         status: contributionObject.status || "",
         team: contributionObject.team || [],
         tags: contributionObject.tags || [],
         threads: contributionObject.threads || [],
+        extra: contributionObject.extra || {},
       })
     );
 

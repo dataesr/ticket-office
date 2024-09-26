@@ -38,13 +38,13 @@ contactPutRoutes.patch(
 
     const responseContact = {
       id: updatedContact.id,
-      organisation: updatedContact.organisation,
-      fromApp: updatedContact.fromApp,
+      fromApplication: updatedContact.fromApplication,
       name: updatedContact.name,
       email: updatedContact.email,
       status: updatedContact.status,
       team: updatedContact.team,
       modified_at: updatedContact.modified_at,
+      extra: updatedContact.extra || {},
     };
 
     return responseContact;

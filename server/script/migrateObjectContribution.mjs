@@ -55,8 +55,8 @@ async function migrateObjectContribution() {
             mailSent: "",
             mailSentDate: "",
             responseFrom: "",
-            id: "", // Supprime l'ancienne clé "id"
-            type: "", // Supprime l'ancienne clé "type"
+            id: "",
+            type: "",
           },
         }
       );

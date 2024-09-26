@@ -5,7 +5,7 @@ export const buildURL = (
   query: string,
   page: number,
   searchInMessages: boolean = false,
-  fromApp?: string
+  fromApplication?: string
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const baseApiUrl = isDevelopment
@@ -44,7 +44,9 @@ export const buildURL = (
       }
     }
   }
-  const fromAppQuery = fromApp ? `&fromApp=${fromApp.toLocaleLowerCase()}` : "";
+  const fromAppQuery = fromApplication
+    ? `&fromApplication=${fromApplication.toLocaleLowerCase()}`
+    : "";
   if (["new", "ongoing", "treated"].includes(status)) {
     where.status = status;
   }

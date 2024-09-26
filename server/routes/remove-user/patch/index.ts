@@ -44,6 +44,7 @@ removeUserPutRoutes.patch(
       status: updatedContact.status,
       team: updatedContact.team,
       modified_at: updatedContact.modified_at,
+      extra: updatedContact.extra || {},
     };
 
     return responseContact;
@@ -64,7 +65,7 @@ removeUserPutRoutes.patch(
         "Modifier une contribution sur une demande de suppression de profil par ID",
       description:
         "Cette route permet de mettre à jour une contribution spécifique via l'ID fourni.",
-      tags: ["Supression de profil"],
+      tags: ["Suppression de profil"],
     },
   }
 );

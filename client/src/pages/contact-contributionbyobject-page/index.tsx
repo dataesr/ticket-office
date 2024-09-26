@@ -20,7 +20,7 @@ import ContributorSummary from "../../components/contact/contributor-summary";
 import { contactUrl, contributionUrl } from "../../config/api";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
-  fromApp,
+  fromApplication,
 }) => {
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
@@ -59,7 +59,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     query.join(" "),
     page,
     searchInMessage,
-    fromApp
+    fromApplication
   );
   let urlToSend;
   if (location.pathname.includes("contributionpage")) {

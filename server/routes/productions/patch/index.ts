@@ -38,12 +38,13 @@ productionsPutRoutes.patch(
 
     const responseObjectContribution = {
       id: updatedObjectContribution.id,
-      organisation: updatedObjectContribution.organisation,
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,
       team: updatedObjectContribution.team,
       modified_at: updatedObjectContribution.modified_at,
+      extra: updatedObjectContribution.extra || {},
+      productions: updatedObjectContribution.productions || [],
     };
 
     return responseObjectContribution;

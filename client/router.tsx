@@ -18,28 +18,30 @@ export default function Router() {
         />
         <Route
           path="/scanr-contact"
-          element={<ContactAndContributionPage fromApp="scanR" />}
+          element={<ContactAndContributionPage fromApplication="scanR" />}
         />
         <Route
           path="/paysage-contact"
-          element={<ContactAndContributionPage fromApp="paysage" />}
+          element={<ContactAndContributionPage fromApplication="paysage" />}
         />
         <Route
           path="/bso-contact"
-          element={<ContactAndContributionPage fromApp="bso" />}
+          element={<ContactAndContributionPage fromApplication="bso" />}
         />
         <Route path="/bso-local" element={<LocalBSO />} />
         <Route
           path="/curiexplore-contact"
-          element={<ContactAndContributionPage fromApp="curiexplore" />}
+          element={<ContactAndContributionPage fromApplication="curiexplore" />}
         />
         <Route
           path="/works-magnet-contact"
-          element={<ContactAndContributionPage fromApp="works-magnet" />}
+          element={
+            <ContactAndContributionPage fromApplication="works-magnet" />
+          }
         />
         <Route
           path="/datasupr-contact"
-          element={<ContactAndContributionPage fromApp="datasupr" />}
+          element={<ContactAndContributionPage fromApplication="datasupr" />}
         />
         <Route path="/scanr-apioperations" element={<ApiOperationPage />} />
         <Route

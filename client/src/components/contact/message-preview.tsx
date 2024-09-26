@@ -4,7 +4,8 @@ import HighlightedMessage from "../highlighted-message";
 import { useLocation } from "react-router-dom";
 import EditModal from "../edit-modal";
 import { useState, useCallback } from "react";
-import { FaCopy } from "react-icons/fa";
+import { capitalizeFirstLetter } from "./utils/capitalize";
+import { CopyButton } from "./utils/copy-button";
 
 const MessagePreview = ({
   data,
@@ -19,21 +20,14 @@ const MessagePreview = ({
 }) => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedText, setCopiedText] = useState<string | null>(null);
 
   const copyToClipboard = useCallback((text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      setCopiedId(text);
-      setTimeout(() => setCopiedId(null), 2000);
+      setCopiedText(text);
+      setTimeout(() => setCopiedText(null), 2000);
     });
   }, []);
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
 
   const contributorMessageClassName = location.pathname.includes(
     "contributionpage"
@@ -45,117 +39,67 @@ const MessagePreview = ({
     <>
       <Container fluid className="fr-mb-4w">
         <Row>
-          {data?.idref && (
-            <Col>
-              <Text size="sm">
-                ID de l'objet concerné: <strong>{data.idref}</strong>
-                <button
-                  className={`copy-button ${
-                    copiedId === data.id ? "copied" : ""
-                  }`}
-                  onClick={() => copyToClipboard(data.id)}
-                >
-                  {copiedId === data.id && (
-                    <span className="copied-text">Copié</span>
-                  )}
-                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                </button>
-              </Text>
-            </Col>
-          )}
           <Col>
+            {data?.objectId && (
+              <Text size="sm">
+                ID de l'objet concerné: <strong>{data.objectId}</strong>
+                <CopyButton
+                  text={data.objectId}
+                  copiedText={copiedText}
+                  onCopy={copyToClipboard}
+                />
+              </Text>
+            )}
             <Text size="sm">
               Nom: {data?.name ? <strong>{data.name}</strong> : "non renseigné"}
               {data?.name && (
-                <button
-                  className={`copy-button ${
-                    copiedId === data.name ? "copied" : ""
-                  }`}
-                  onClick={() => copyToClipboard(data.name)}
-                >
-                  {copiedId === data.name && (
-                    <span className="copied-text">Copié</span>
-                  )}
-                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                </button>
+                <CopyButton
+                  text={data.name}
+                  copiedText={copiedText}
+                  onCopy={copyToClipboard}
+                />
               )}
             </Text>
-          </Col>
-        </Row>
-        {data?.email && (
-          <Row>
-            <Col>
+            {data?.email && (
               <Text size="sm">
-                Email: <strong>{data.email}</strong>
-                <button
-                  className={`copy-button ${
-                    copiedId === data.email ? "copied" : ""
-                  }`}
-                  onClick={() => copyToClipboard(data.email)}
-                >
-                  {copiedId === data.email && (
-                    <span className="copied-text">Copié</span>
-                  )}
-                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                </button>
-              </Text>
-            </Col>
-          </Row>
-        )}
-        <Row>
-          <Col>
-            {data?.organisation ? (
-              <Text size="sm">
-                Organisation: <strong>{data.organisation}</strong>
-                <button
-                  className={`copy-button ${
-                    copiedId === data.organisation ? "copied" : ""
-                  }`}
-                  onClick={() => copyToClipboard(data.organisation)}
-                >
-                  {copiedId === data.organisation && (
-                    <span className="copied-text">Copié</span>
-                  )}
-                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                </button>
-              </Text>
-            ) : (
-              <Text size="sm" bold>
-                Organisation non renseignée
+                Email: <strong>{data?.email}</strong>
+                <CopyButton
+                  text={data.email}
+                  copiedText={copiedText}
+                  onCopy={copyToClipboard}
+                />
               </Text>
             )}
           </Col>
           <Col>
-            {data?.fonction ? (
-              <Text size="sm">
-                Fonction: <strong>{data.fonction}</strong>
-                <button
-                  className={`copy-button ${
-                    copiedId === data.fonction ? "copied" : ""
-                  }`}
-                  onClick={() => copyToClipboard(data.fonction)}
-                >
-                  {copiedId === data.fonction && (
-                    <span className="copied-text">Copié</span>
-                  )}
-                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                </button>
-              </Text>
-            ) : (
-              <Text size="sm" bold>
-                Fonction non renseignée
-              </Text>
+            {data?.extra && (
+              <Col>
+                <ul>
+                  {Object.entries(data.extra).map(([key, value]) => (
+                    <div key={key}>
+                      <Text size="sm">
+                        {capitalizeFirstLetter(key)}:{" "}
+                        <strong>{value as string}</strong>
+                        <CopyButton
+                          text={value as string}
+                          copiedText={copiedText}
+                          onCopy={copyToClipboard}
+                        />
+                      </Text>
+                    </div>
+                  ))}
+                </ul>
+              </Col>
             )}
           </Col>
         </Row>
         <Col>
-          {data?.team && data?.team?.length > 0 && (
+          {data?.team?.length > 0 && (
             <Text size="sm">
               Traité par :{" "}
               <strong>
-                {data?.team[0]} le{" "}
-                {new Date(data.modified_at).toLocaleDateString()}
-                {" à "}
+                {data.team[0]} le{" "}
+                {new Date(data.modified_at).toLocaleDateString()} à{" "}
                 {new Date(data.modified_at).toLocaleTimeString()}
               </strong>
             </Text>
@@ -163,78 +107,76 @@ const MessagePreview = ({
         </Col>
         <Col>
           {data?.comment && (
-            <>
-              <Text size="sm">
-                Commentaire ({data?.team ? data.team[0] : ""}){" "}
-                <strong> : {data.comment}</strong>
-              </Text>
-            </>
+            <Text size="sm">
+              Commentaire ({data.team ? data.team[0] : ""}){" "}
+              <strong>: {data.comment}</strong>
+            </Text>
           )}
         </Col>
-        {data?.type === "structures" && (
+        {["structures", "publications", "persons"].includes(
+          data?.objectType
+        ) && (
           <Row>
-            <Col>
-              <Link
-                size="sm"
-                target="_blank"
-                className="fr-footer__top-link"
-                href={`https://scanr.enseignementsup-recherche.gouv.fr/entite/${data.id}`}
-              >
-                Sur scanR
-              </Link>
-            </Col>
-            <Col>
-              <Link
-                size="sm"
-                target="_blank"
-                className="fr-footer__top-link"
-                href={`http://185.161.45.213/ui/organizations/${data.id}`}
-              >
-                Sur dataESR
-              </Link>
-            </Col>
-          </Row>
-        )}
-        {data?.type === "publications" && (
-          <Row>
-            <Link
-              size="sm"
-              target="_blank"
-              className="fr-footer__top-link"
-              href={`https://scanr.enseignementsup-recherche.gouv.fr/publication/${data.id}`}
-            >
-              Sur scanR
-            </Link>
-            <br />
-            <Link
-              size="sm"
-              target="_blank"
-              className="fr-footer__top-link"
-              href={`http://185.161.45.213/ui/publications/${data.id}`}
-            >
-              Sur dataESR
-            </Link>
-          </Row>
-        )}
-        {data?.type === "persons" && (
-          <Row>
-            <Link
-              size="sm"
-              target="_blank"
-              className="fr-footer__top-link"
-              href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${data.id}`}
-            >
-              Sur scanR
-            </Link>
-            <br />
-            <Link
-              size="sm"
-              target="_blank"
-              className="fr-footer__top-link"
-              href={`http://185.161.45.213/ui/persons/${data.id}`}
-            >
-              Sur dataEsr
-            </Link>
+            {data.objectType === "structures" && (
+              <>
+                <Col>
+                  <Link
+                    size="sm"
+                    target="_blank"
+                    href={`https://scanr.enseignementsup-recherche.gouv.fr/entite/${data.id}`}
+                  >
+                    Sur scanR
+                  </Link>
+                </Col>
+                <Col>
+                  <Link
+                    size="sm"
+                    target="_blank"
+                    href={`http://185.161.45.213/ui/organizations/${data.id}`}
+                  >
+                    Sur dataESR
+                  </Link>
+                </Col>
+              </>
+            )}
+            {data.objectType === "publications" && (
+              <>
+                <Link
+                  size="sm"
+                  target="_blank"
+                  href={`https://scanr.enseignementsup-recherche.gouv.fr/publication/${data.objectId}`}
+                >
+                  Sur scanR
+                </Link>
+                <br />
+                <Link
+                  size="sm"
+                  target="_blank"
+                  href={`http://185.161.45.213/ui/publications/${data.objectId}`}
+                >
+                  Sur dataESR
+                </Link>
+              </>
+            )}
+            {data.objectType === "persons" && (
+              <>
+                <Link
+                  size="sm"
+                  target="_blank"
+                  href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${data.objectId}`}
+                >
+                  Sur scanR
+                </Link>
+                <br />
+                <Link
+                  size="sm"
+                  target="_blank"
+                  href={`http://185.161.45.213/ui/persons/${data.objectId}`}
+                >
+                  Sur dataESR
+                </Link>
+              </>
+            )}
           </Row>
         )}
       </Container>
@@ -248,14 +190,16 @@ const MessagePreview = ({
         <EditModal
           refetch={refetch}
           isOpen={showModal}
-          onClose={handleCloseModal}
+          onClose={() => setShowModal(false)}
           data={data}
           allTags={allTags}
           dataProduction={[]}
         />
       </Row>
       <Row className="fr-mb-5w fr-mt-3w">
-        <Button onClick={handleOpenModal}>Editer la contribution</Button>
+        <Button onClick={() => setShowModal(true)}>
+          Éditer la contribution
+        </Button>
       </Row>
     </>
   );
