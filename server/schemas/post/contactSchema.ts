@@ -13,7 +13,17 @@ export const postContactSchema = t.Object(
       datasupr: "datasupr",
       curiexplore: "curiexplore",
     }),
-    extra: t.Optional(t.Record(t.String(), t.String())),
+    extra: t.Optional(
+      t.Record(t.String(), t.String(), {
+        example: {
+          exemple: "exemple",
+          idref: "4134",
+          fonction: "chercheur",
+          organisation: "Université",
+          subApplication: "teds",
+        },
+      })
+    ),
   },
   { additionalProperties: false }
 );
