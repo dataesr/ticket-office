@@ -15,10 +15,17 @@ import { Container, Row, Title } from "@dataesr/dsfr-plus";
 // import ContributionData from "../../api/contribution-api/getData";
 
 const Home = () => {
+<<<<<<< HEAD
   // const [filter, setFilter] = useState("contributions");
   // const url = filter === "object" ? contributionUrl : contactUrl;
   // const { data, isLoading, isError } = ContributionData(url);
   // const contributions = data?.data as { data: [] };
+=======
+  const [filter, setFilter] = useState("contributions");
+  const url = filter === "object" ? contributionUrl : contactUrl;
+  const { data, isLoading, isError } = ContributionData(url);
+  const contributions = data?.data as { data: [] };
+>>>>>>> 34a5a9c (typo)
 
   return (
     <Container className="fr-mt-10v">
