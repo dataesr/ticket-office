@@ -64,7 +64,7 @@ contactPutRoutes.patch(
       summary: "Modifier une contribution via formulaire de contact par ID",
       description:
         "Cette route permet de mettre à jour une contribution spécifique via l'ID fourni. Elle permet de modifier le statut, l'idref, d'ajouter la personne modifiant dans l'équipe, et de mettre à jour la date de traitement et de modification.",
-      tags: ["Contact"],
+      tags: ["Contacts"],
     },
   }
 );
