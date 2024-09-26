@@ -4,6 +4,7 @@ import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
 import { responseSchema } from "../../../schemas/get/contributionsObjectSchema";
+<<<<<<< HEAD
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 =======
 import Elysia from "elysia";
@@ -19,6 +20,8 @@ import { contributionObjectSchema } from "../../../schemas/get/contributionsObje
 >>>>>>> dc7be2b (fix(schema): clean schemas)
 =======
 import { contributionObjectListSchema } from "../../../schemas/get/contributionsObjectSchema";
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 >>>>>>> 2e9190f (fix(api): update schemas)
 
@@ -45,8 +48,12 @@ getContributionObjectRoutes.get(
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
+=======
+
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
     const totalContacts = await db
       .collection("contribute")
       .countDocuments(filters)
@@ -54,10 +61,13 @@ getContributionObjectRoutes.get(
         return error(500, "Error fetching contacts count");
       });
 
+<<<<<<< HEAD
 =======
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
     const contributionObject = await db
       .collection("contribute")
       .find(filters)
@@ -136,6 +146,7 @@ getContributionObjectRoutes.get(
     }),
     response: {
       200: responseSchema,
+<<<<<<< HEAD
       401: errorSchema,
       500: errorSchema,
     },
@@ -163,6 +174,8 @@ getContributionObjectRoutes.get(
 >>>>>>> 2e9190f (fix(api): update schemas)
     response: {
       200: contributionObjectListSchema,
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
       401: errorSchema,
       500: errorSchema,
     },

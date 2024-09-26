@@ -93,6 +93,7 @@ export const responseSchema = t.Object({
     total: t.Number(),
   }),
 });
+<<<<<<< HEAD
 =======
           timestamp: t.Date(),
 =======
@@ -120,3 +121,5 @@ export const responseSchema = t.Object({
 
 export const productionListSchema = t.Array(productionSchema);
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)

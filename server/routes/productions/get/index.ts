@@ -3,6 +3,7 @@
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+<<<<<<< HEAD
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { responseSchema } from "../../../schemas/get/productionSchema";
 =======
@@ -21,6 +22,10 @@ import { productionSchema } from "../../../schemas/get/productionSchema";
 import { productionListSchema } from "../../../schemas/get/productionSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { responseSchema } from "../../../schemas/get/productionSchema";
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
 
 const getProductionsRoutes = new Elysia();
 
@@ -45,6 +50,9 @@ getProductionsRoutes.get(
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
     const totalContacts = await db
       .collection("contribute_productions")
       .countDocuments(filters)
@@ -52,8 +60,11 @@ getProductionsRoutes.get(
         return error(500, "Error fetching contacts count");
       });
 
+<<<<<<< HEAD
 =======
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
     const productions = await db
       .collection("contribute_productions")
       .find(filters)
@@ -109,6 +120,9 @@ getProductionsRoutes.get(
     }));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
     return {
       data: formattedProductions,
       meta: {
@@ -126,6 +140,7 @@ getProductionsRoutes.get(
     }),
     response: {
       200: responseSchema,
+<<<<<<< HEAD
       401: errorSchema,
       500: errorSchema,
     },
@@ -150,6 +165,8 @@ getProductionsRoutes.get(
 >>>>>>> 2e9190f (fix(api): update schemas)
     response: {
       200: productionListSchema,
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
       401: errorSchema,
       500: errorSchema,
     },

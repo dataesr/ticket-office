@@ -57,10 +57,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     refetch,
   } = ContributionData(url);
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   const getTags = ContributionData(productionUrl);
   const allTags = getTags?.data.data?.map((tag) => tag?.tags);
 >>>>>>> 220c881 (fix(api): add meta in response schema)
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
 
   const contrib: Contribute_Production[] = fetchedData?.data || [];
 
@@ -155,10 +158,14 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
         <ContributionProductionItem
           key={contribution.id}
 <<<<<<< HEAD
+<<<<<<< HEAD
           data={contribution}
 =======
           data={contribution as Contribute_Production}
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+          data={contribution}
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
           refetch={refetch}
           allTags={fetchedData?.tags || []} // Assurez-vous que le schéma a un champ tags
         />

@@ -1,6 +1,7 @@
-import Elysia, { t } from "elysia";
+import Elysia from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 import { responseSchema } from "../../../schemas/get/updateDatasSchema";
@@ -10,6 +11,10 @@ import { errorSchema } from "../../../schemas/errors/errorSchema";
 =======
 import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
 >>>>>>> dc7be2b (fix(schema): clean schemas)
+=======
+import { responseSchema } from "../../../schemas/get/updateDatasSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
 
 const getUpdateUserDataRoutes = new Elysia();
 
@@ -35,6 +40,9 @@ getUpdateUserDataRoutes.get(
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
     const totalContacts = await db
       .collection("update-user-data")
       .countDocuments(filters)
@@ -42,8 +50,11 @@ getUpdateUserDataRoutes.get(
         return error(500, "Error fetching contacts count");
       });
 
+<<<<<<< HEAD
 =======
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
     const contribution = await db
       .collection("update-user-data")
       .find(filters)
@@ -107,6 +118,7 @@ getUpdateUserDataRoutes.get(
         total: totalContacts,
       },
     };
+<<<<<<< HEAD
   },
   {
     response: {
@@ -121,15 +133,17 @@ getUpdateUserDataRoutes.get(
     }));
 
     return formattedContribution;
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
   },
   {
 <<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
     response: {
-      200: t.Any(updateDatasSchema),
-      401: t.Any({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: responseSchema,
+      422: errorSchema,
+      500: errorSchema,
     },
 >>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {

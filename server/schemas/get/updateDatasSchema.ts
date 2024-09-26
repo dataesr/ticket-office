@@ -103,6 +103,7 @@ export const responseSchema = t.Object({
     total: t.Number(),
   }),
 });
+<<<<<<< HEAD
 =======
   { additionalProperties: false }
 =======
@@ -110,3 +111,5 @@ export const responseSchema = t.Object({
 >>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
 );
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)

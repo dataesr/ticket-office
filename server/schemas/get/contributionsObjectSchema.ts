@@ -105,6 +105,7 @@ export const responseSchema = t.Object({
     total: t.Number(),
   }),
 });
+<<<<<<< HEAD
 =======
   { additionalProperties: false }
 );
@@ -115,3 +116,5 @@ export const responseSchema = t.Object({
 
 export const contributionObjectListSchema = t.Array(contributionObjectSchema);
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> 2bdd841 (fix(api): update schema get data for productions, remove, update route)
