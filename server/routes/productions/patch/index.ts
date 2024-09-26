@@ -54,6 +54,7 @@ productionsPutRoutes.patch(
     const responseObjectContribution = {
       id: updatedObjectContribution.id,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       organisation: updatedObjectContribution.organisation,
 <<<<<<< HEAD
@@ -61,16 +62,23 @@ productionsPutRoutes.patch(
 >>>>>>> 2e9190f (fix(api): update schemas)
 =======
 >>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,
       team: updatedObjectContribution.team,
       modified_at: updatedObjectContribution.modified_at,
 <<<<<<< HEAD
+<<<<<<< HEAD
       extra: updatedObjectContribution.extra || {},
       productions: updatedObjectContribution.productions || [],
 =======
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+      extra: updatedObjectContribution.extra || {},
+      productions: updatedObjectContribution.productions || [],
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     };
 
     return responseObjectContribution;

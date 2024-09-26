@@ -60,9 +60,13 @@ removeUserPutRoutes.patch(
       team: updatedContact.team,
       modified_at: updatedContact.modified_at,
 <<<<<<< HEAD
+<<<<<<< HEAD
       extra: updatedContact.extra || {},
 =======
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+      extra: updatedContact.extra || {},
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     };
 
     return responseContact;
@@ -84,10 +88,14 @@ removeUserPutRoutes.patch(
       description:
         "Cette route permet de mettre à jour une contribution spécifique via l'ID fourni.",
 <<<<<<< HEAD
+<<<<<<< HEAD
       tags: ["Suppression de profil"],
 =======
       tags: ["Supression de profil"],
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+      tags: ["Suppression de profil"],
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     },
   }
 );

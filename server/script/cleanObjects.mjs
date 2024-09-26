@@ -7,13 +7,20 @@ const client = new MongoClient(mongoURI);
 // THE FIELD IS CALLED "fromApplication" AND ITS VALUE IS "scanr"
 // USE IT DIRECTLY WE PROD
 
+<<<<<<< HEAD
 console.log(mongoURI);
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 async function addFromAppField() {
   try {
     await client.connect();
     console.log("Connecté à MongoDB");
 
+<<<<<<< HEAD
     const db = client.db("ticket-office");
+=======
+    const db = client.db("ticket-office-api");
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     // change collection with contact / contribute_production and contribute
     const collection = db.collection("contribute_productions");
 
@@ -22,6 +29,10 @@ async function addFromAppField() {
 
     for (const contact of contacts) {
       const updateData = {
+<<<<<<< HEAD
+=======
+        fromApplication: "scanr",
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
         id: contact._id.toString(),
       };
 

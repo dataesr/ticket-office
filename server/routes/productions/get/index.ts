@@ -96,8 +96,11 @@ getProductionsRoutes.get(
 =======
       message: production.message || "",
       comment: production.comment || "",
+<<<<<<< HEAD
       idref: production.idref || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       status: production.status || "",
       team: production.team || [],
       tags: production.tags || [],

@@ -48,6 +48,9 @@ postContributionObjectRoutes.post(
     body: postContributionObjectSchemaType;
   }) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     const extraLowercase = Object.keys(body.extra || {}).reduce(
       (acc, key) => ({
         ...acc,
@@ -56,6 +59,7 @@ postContributionObjectRoutes.post(
       {}
     );
 
+<<<<<<< HEAD
     const _id = new ObjectId();
     const newContribution = {
       ...body,
@@ -82,8 +86,11 @@ postContributionObjectRoutes.post(
       idref: contributionData.idref || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     const newContribution = {
       ...body,
+      extra: extraLowercase,
       id: new ObjectId().toHexString(),
 >>>>>>> 2e9190f (fix(api): update schemas)
       created_at: new Date(),
@@ -97,6 +104,10 @@ postContributionObjectRoutes.post(
     }
 
     const result = await db.collection("contribute").insertOne(newContribution);
+
+    if (!body.objectId && !body.objectType) {
+      return error(400, "objectId is required when objectType is provided");
+    }
 
     if (!result.insertedId) {
       return error(500, "Failed to create the contribution");

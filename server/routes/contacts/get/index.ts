@@ -29,6 +29,7 @@ getContactRoutes.get(
       page = 1,
       max_results = 20,
 <<<<<<< HEAD
+<<<<<<< HEAD
       fromApplication,
     } = query;
 
@@ -43,6 +44,14 @@ getContactRoutes.get(
     if (fromApp) {
       filters.fromApp = fromApp;
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+      fromApplication,
+    } = query;
+
+    let filters = JSON.parse(where as string);
+    if (fromApplication) {
+      filters.fromApplication = fromApplication;
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     }
 
     const limit = parseInt(max_results as string, 10) || 20;
@@ -102,9 +111,7 @@ getContactRoutes.get(
     const formattedContacts = contacts.map((contact: any) => {
       return {
         id: contact.id || "",
-        organisation: contact.organisation || "",
-        fonction: contact.fonction || "",
-        fromApp: contact.fromApp || "",
+        fromApplication: contact.fromApplication || "",
         fromSubApp: contact.fromSubApp || "",
         treated_at: contact.treated_at || new Date(),
         email: contact.email || "",
@@ -113,11 +120,11 @@ getContactRoutes.get(
         comment: contact.comment || "",
         modified_at: contact.modified_at || new Date(),
         created_at: contact.created_at || new Date(),
-        idref: contact.idref || "",
         status: contact.status || "",
         team: contact.team || [],
         tags: contact.tags || [],
         threads: contact.threads || [],
+        extra: contact.extra || {},
       };
     });
 
@@ -132,6 +139,7 @@ getContactRoutes.get(
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
 <<<<<<< HEAD
+<<<<<<< HEAD
       fromApplication: t.Optional(t.String()),
     }),
     response: {
@@ -139,6 +147,9 @@ getContactRoutes.get(
       422: errorSchema,
 =======
       fromApp: t.Optional(t.String()),
+=======
+      fromApplication: t.Optional(t.String()),
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     }),
     response: {
       200: contactListSchema,

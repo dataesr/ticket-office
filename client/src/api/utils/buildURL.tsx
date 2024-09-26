@@ -6,10 +6,14 @@ export const buildURL = (
   page: number,
   searchInMessages: boolean = false,
 <<<<<<< HEAD
+<<<<<<< HEAD
   fromApplication?: string
 =======
   fromApp?: string
 >>>>>>> 57156e2 (fix(navigation): contact navigation updated)
+=======
+  fromApplication?: string
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 <<<<<<< HEAD
@@ -75,12 +79,18 @@ export const buildURL = (
     }
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
   const fromAppQuery = fromApplication
     ? `&fromApplication=${fromApplication.toLocaleLowerCase()}`
     : "";
 =======
   const fromAppQuery = fromApp ? `&fromApp=${fromApp.toLocaleLowerCase()}` : "";
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+  const fromAppQuery = fromApplication
+    ? `&fromApplication=${fromApplication.toLocaleLowerCase()}`
+    : "";
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   if (["new", "ongoing", "treated"].includes(status)) {
     where.status = status;
   }

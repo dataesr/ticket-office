@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postUpdateUserDataSchema } from "../../../schemas/post/UpdateUserDataSchema";
@@ -10,9 +11,14 @@ import { emailRecipients } from "../../contacts/post/emailRecipents";
 type postUpdateUserDataSchemaType = Static<typeof postUpdateUserDataSchema>;
 =======
 import Elysia, { Static, t } from "elysia";
+=======
+import Elysia, { Static } from "elysia";
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 import db from "../../../libs/mongo";
 import { postUpdateUserDataSchema } from "../../../schemas/post/UpdateUserDataSchema";
 import { ObjectId } from "mongodb";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
 
 <<<<<<< HEAD
 type postUpdateUserDataSchemaType = Static<typeof postRemoveUserSchema>;
@@ -37,6 +43,9 @@ postUpdateUserDataRoutes.post(
     body: postUpdateUserDataSchemaType;
   }) => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     const extraLowercase = Object.keys(body.extra || {}).reduce(
       (acc, key) => ({
         ...acc,
@@ -45,7 +54,10 @@ postUpdateUserDataRoutes.post(
       {}
     );
 
+<<<<<<< HEAD
     const _id = new ObjectId();
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     const newContribution = {
       ...body,
       _id,
@@ -71,6 +83,7 @@ postUpdateUserDataRoutes.post(
 =======
 >>>>>>> b05991b (fix(api): update schemas)
       status: "new",
+      extra: extraLowercase,
     };
 
     const result = await db
@@ -173,10 +186,16 @@ postUpdateUserDataRoutes.post(
   {
     body: postUpdateUserDataSchema,
     response: {
+<<<<<<< HEAD
       200: t.Object({ message: t.String() }),
       400: t.Object({ message: t.String() }),
       500: t.Object({ message: t.String() }),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+      200: updateDatasSchema,
+      401: errorSchema,
+      500: errorSchema,
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     },
     detail: {
       summary:

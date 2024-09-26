@@ -1,10 +1,14 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
 import { ObjectId } from "mongodb";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
+<<<<<<< HEAD
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 =======
 import Elysia, { Static, t } from "elysia";
@@ -15,6 +19,8 @@ import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
 =======
 import { ObjectId } from "mongodb";
 >>>>>>> b05991b (fix(api): update schemas)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
@@ -33,7 +39,10 @@ postRemoveUserRoutes.post(
       {}
     );
 
+<<<<<<< HEAD
     const _id = new ObjectId();
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     const newContribution = {
       ...body,
       _id,
@@ -41,6 +50,7 @@ postRemoveUserRoutes.post(
       id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
+      extra: extraLowercase,
     };
 
     const result = await db
@@ -152,6 +162,7 @@ postRemoveUserRoutes.post(
     body: postRemoveUserSchema,
     response: {
 <<<<<<< HEAD
+<<<<<<< HEAD
       200: deleteSchema,
       401: errorSchema,
       500: errorSchema,
@@ -160,6 +171,11 @@ postRemoveUserRoutes.post(
       400: t.Object({ message: t.String() }),
       500: t.Object({ message: t.String() }),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+      200: deleteSchema,
+      401: errorSchema,
+      500: errorSchema,
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     },
     detail: {
       summary: "Créer une nouvelle demande de suppression de profil",

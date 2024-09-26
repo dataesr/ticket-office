@@ -54,20 +54,28 @@ contactPutRoutes.patch(
     const responseContact = {
       id: updatedContact.id,
 <<<<<<< HEAD
+<<<<<<< HEAD
       fromApplication: updatedContact.fromApplication,
 =======
       organisation: updatedContact.organisation,
       fromApp: updatedContact.fromApp,
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+      fromApplication: updatedContact.fromApplication,
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       name: updatedContact.name,
       email: updatedContact.email,
       status: updatedContact.status,
       team: updatedContact.team,
       modified_at: updatedContact.modified_at,
 <<<<<<< HEAD
+<<<<<<< HEAD
       extra: updatedContact.extra || {},
 =======
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+      extra: updatedContact.extra || {},
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     };
 
     return responseContact;

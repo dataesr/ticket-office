@@ -72,6 +72,7 @@ getContributionObjectRoutes.get(
 <<<<<<< HEAD
 <<<<<<< HEAD
         id: contributionObject.id.toString(),
+<<<<<<< HEAD
         treated_at: contributionObject.treated_at || new Date(),
         email: contributionObject.email || "",
         name: contributionObject.name || "",
@@ -88,19 +89,32 @@ getContributionObjectRoutes.get(
         email: contributionObject.email || "",
         name: contributionObject.name || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+        treated_at: contributionObject.treated_at || new Date(),
+        email: contributionObject.email || "",
+        name: contributionObject.name || "",
+        objectId: contributionObject.objectId || "",
+        objectType: contributionObject.objectType || "",
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
         message: contributionObject.message || "",
         comment: contributionObject.comment || "",
         modified_at: contributionObject.modified_at || new Date(),
         created_at: contributionObject.created_at || new Date(),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         idref: contributionObject.idref || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
         status: contributionObject.status || "",
         team: contributionObject.team || [],
         tags: contributionObject.tags || [],
         threads: contributionObject.threads || [],
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
         extra: contributionObject.extra || {},
       })
     );

@@ -114,7 +114,7 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
                     : mail.threads[0].responses[0].responseMessage}{" "}
                   <Link
                     key={mail.id}
-                    href={getContactUrl(mail.fromApp, mail.id)}
+                    href={getContactUrl(mail.fromApplication, mail.id)}
                     style={{
                       textDecoration: "underline",
                       marginRight: "10px",

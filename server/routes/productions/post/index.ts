@@ -62,6 +62,14 @@ postProductionRoutes.post(
     const productionData = {
 =======
   async ({ error, body }: { error: any; body: postProductionSchemaType }) => {
+    const extraLowercase = Object.keys(body.extra || {}).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: body.extra ? body.extra[key].toLowerCase() : "",
+      }),
+      {}
+    );
+
     const newContribution = {
 >>>>>>> b05991b (fix(api): update schemas)
       ...body,
@@ -69,10 +77,14 @@ postProductionRoutes.post(
       created_at: new Date(),
       status: "new",
 <<<<<<< HEAD
+<<<<<<< HEAD
       productions: productionData.productions || [],
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
 >>>>>>> b05991b (fix(api): update schemas)
+=======
+      extra: extraLowercase,
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     };
 
     const result = await db

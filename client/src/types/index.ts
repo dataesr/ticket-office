@@ -187,6 +187,7 @@ export type ContributionDataType = {
 
 export type ContributionPageProps = {
 <<<<<<< HEAD
+<<<<<<< HEAD
   fromApplication?: string;
 };
 export type ChangeNamePageProps = {
@@ -197,6 +198,9 @@ export type RemoveUserPageProps = {
 =======
   fromApp?: string;
 >>>>>>> 57156e2 (fix(navigation): contact navigation updated)
+=======
+  fromApplication?: string;
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 };
 
 export type StaffActionsProps = {
@@ -260,9 +264,12 @@ export type Inputs = {
   status: string;
   tags: string[];
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
   idref: string;
 >>>>>>> 8758832 (fix(edit-contrib): fix bug)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   comment: string;
   extra: string;
 };
@@ -281,7 +288,7 @@ export type Publication = {
 <<<<<<< HEAD
 =======
 export type MailData = {
-  fromApp: string;
+  fromApplication: string;
   name: string;
   id: string;
   threads?: Thread[];

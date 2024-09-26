@@ -34,6 +34,9 @@ const EditModal: React.FC<EditModalProps> = ({
     status: "treated",
     tags: [],
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     comment: "",
     extra: "",
   });
@@ -172,6 +175,9 @@ const EditModal: React.FC<EditModalProps> = ({
     setFilteredTags(formattedTags);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 
     if (data) {
       setInputs((prevInputs) => ({
@@ -187,6 +193,7 @@ const EditModal: React.FC<EditModalProps> = ({
       }));
     }
   }, [allTags, selectedProfile, data]);
+<<<<<<< HEAD
 
   const handleInputChange = (key: keyof Inputs, value: any) => {
     setInputs((prevInputs) => ({
@@ -265,6 +272,14 @@ const EditModal: React.FC<EditModalProps> = ({
       inputs.tags.filter((tag) => tag !== tagToRemove)
     );
 >>>>>>> 8758832 (fix(edit-contrib): fix bug)
+=======
+
+  const handleInputChange = (key: keyof Inputs, value: any) => {
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      [key]: value,
+    }));
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   };
 
   const handleSubmit = async () => {
@@ -280,6 +295,9 @@ const EditModal: React.FC<EditModalProps> = ({
     try {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       const extraEntries = inputs.extra.split("\n").reduce((acc, line) => {
         const [key, value] = line.split(":").map((part) => part.trim());
         if (key && value) {
@@ -329,6 +347,7 @@ const EditModal: React.FC<EditModalProps> = ({
       "tags",
       inputs.tags.filter((tag) => tag !== tagToRemove)
     );
+<<<<<<< HEAD
 =======
       const currentDataResponse = await fetch(url, {
         method: "GET",
@@ -378,6 +397,8 @@ const EditModal: React.FC<EditModalProps> = ({
       toast.error("Une erreur est survenue lors de l'enregistrement");
     }
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   };
 
   return (
@@ -496,10 +517,14 @@ const EditModal: React.FC<EditModalProps> = ({
               <TextArea
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
                 label="Ajouter des extra"
                 value={inputs.extra}
                 onChange={(e) => handleInputChange("extra", e.target.value)}
                 hint="Exemple : clé: valeur"
+<<<<<<< HEAD
 =======
                 label="Ajouter un idref"
                 value={inputs.idRef}
@@ -511,6 +536,8 @@ const EditModal: React.FC<EditModalProps> = ({
 >>>>>>> 8758832 (fix(edit-contrib): fix bug)
                 hint="Ajoutez un identifiant"
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
               />
             </Col>
             <Col md="6">

@@ -12,10 +12,14 @@ export const postProductionsSchema = t.Object(
     extra: t.Optional(t.Record(t.String(), t.String())),
 =======
     message: t.String(),
+<<<<<<< HEAD
     organisation: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
 >>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
+=======
+    extra: t.Optional(t.Record(t.String(), t.String())),
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     productions: t.Array(
       t.Object({
         id: t.String(),

@@ -54,18 +54,25 @@ updateUserDataPutRoutes.patch(
     const responseContact = {
       id: updatedContact.id,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       organisation: updatedContact.organisation,
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       name: updatedContact.name,
       message: updatedContact.message,
       email: updatedContact.email,
       status: updatedContact.status,
       team: updatedContact.team,
 <<<<<<< HEAD
+<<<<<<< HEAD
       extra: updatedContact.extra || {},
 =======
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+      extra: updatedContact.extra || {},
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       modified_at: updatedContact.modified_at,
     };
 

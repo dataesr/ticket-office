@@ -11,10 +11,14 @@ export const postUpdateUserDataSchema = t.Object(
     email: t.String(),
     name: t.String(),
     message: t.String(),
+<<<<<<< HEAD
     organisation: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
     idref: t.Optional(t.String()),
 >>>>>>> b05991b (fix(api): update schemas)
+=======
+    extra: t.Optional(t.Record(t.String(), t.String())),
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   },
   { additionalProperties: false }
 );

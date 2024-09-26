@@ -14,10 +14,14 @@ postContactsRoutes.post(
 =======
 
 type postContactSchemaType = Static<typeof postContactSchema>;
-const postContactRoutes = new Elysia();
+const postContactsRoutes = new Elysia();
 
+<<<<<<< HEAD
 postContactRoutes.post(
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+postContactsRoutes.post(
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   "/contacts",
   async ({ error, body }: { error: any; body: postContactSchemaType }) => {
     const allowedFromApps = [
@@ -29,6 +33,7 @@ postContactRoutes.post(
       "curiexplore",
     ];
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     if (!allowedFromApps.includes(body.fromApplication)) {
       return error(400, {
@@ -53,10 +58,26 @@ postContactRoutes.post(
 =======
     if (!allowedFromApps.includes(body.fromApp)) {
       return error(400, "Invalid fromApp value, check child attributes");
+=======
+    if (!allowedFromApps.includes(body.fromApplication)) {
+      return error(
+        400,
+        "Invalid fromApplication value, check child attributes"
+      );
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     }
+
+    const extraLowercase = Object.keys(body.extra || {}).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: body.extra ? body.extra[key].toLowerCase() : "",
+      }),
+      {}
+    );
 
     const newContribution = {
       ...body,
+      extra: extraLowercase,
       id: new ObjectId().toHexString(),
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
       created_at: new Date(),
@@ -143,6 +164,7 @@ postContactRoutes.post(
     },
     detail: {
 <<<<<<< HEAD
+<<<<<<< HEAD
       summary: "Créer une nouvelle contribution",
       description:
         "Cette route permet de créer une nouvelle contribution soumise via un formulaire de contact.",
@@ -162,3 +184,13 @@ export default postContactsRoutes;
 =======
 export default postContactRoutes;
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+      summary: "Créer une nouvelle contribution",
+      description:
+        "Cette route permet de créer une nouvelle contribution soumise via un formulaire de contact.",
+      tags: ["Contacts"],
+    },
+  }
+);
+export default postContactsRoutes;
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)

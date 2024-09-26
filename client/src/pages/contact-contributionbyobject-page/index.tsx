@@ -41,7 +41,7 @@ import ContributorSummary from "../../components/contact/contributor-summary";
 import { contactUrl, contributionUrl } from "../../config/api";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
-  fromApp,
+  fromApplication,
 }) => {
 >>>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page):client/src/pages/contact-contributionbyobject-page/index.tsx
 >>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
@@ -83,6 +83,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     page,
     searchInMessage,
 <<<<<<< HEAD
+<<<<<<< HEAD
     fromApplication
 =======
 <<<<<<< HEAD
@@ -91,6 +92,9 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     fromApp
 >>>>>>> 57156e2 (fix(navigation): contact navigation updated)
 >>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
+=======
+    fromApplication
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   );
   let urlToSend;
   if (location.pathname.includes("contributionPage")) {

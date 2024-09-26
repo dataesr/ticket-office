@@ -6,6 +6,7 @@ export const deleteSchema = t.Object(
 <<<<<<< HEAD
 <<<<<<< HEAD
     id: t.String(),
+<<<<<<< HEAD
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
 =======
     _id: t.String(),
@@ -41,19 +42,28 @@ export const deleteSchema = t.Object(
     modified_at: t.Date(),
     created_at: t.Date(),
 =======
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
-    email: t.Optional(t.String()),
-    name: t.Optional(t.String()),
-    message: t.Optional(t.String()),
+    email: t.String(),
+    name: t.String(),
+    message: t.String(),
     comment: t.Optional(t.String()),
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
+<<<<<<< HEAD
 >>>>>>> 2e9190f (fix(api): update schemas)
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
     team: t.Optional(t.Array(t.String())),
     tags: t.Optional(t.Array(t.String())),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    status: t.Optional(t.String()),
+    team: t.Optional(t.Array(t.String())),
+    tags: t.Optional(t.Array(t.String())),
+    extra: t.Optional(t.Record(t.String(), t.String())),
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     threads: t.Optional(
       t.Array(
         t.Object({

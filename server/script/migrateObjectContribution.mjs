@@ -65,12 +65,17 @@ async function migrateObjectContribution() {
             mailSentDate: "",
             responseFrom: "",
 <<<<<<< HEAD
+<<<<<<< HEAD
             id: "",
             type: "",
 =======
             id: "", // Supprime l'ancienne clé "id"
             type: "", // Supprime l'ancienne clé "type"
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+            id: "",
+            type: "",
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
           },
         }
       );

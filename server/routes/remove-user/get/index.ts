@@ -59,6 +59,7 @@ getRemoveUserRoutes.get(
 <<<<<<< HEAD
 <<<<<<< HEAD
       id: deletation.id.toString(),
+<<<<<<< HEAD
 =======
       _id: deletation._id.toString(),
 =======
@@ -75,6 +76,8 @@ getRemoveUserRoutes.get(
 >>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
 =======
 >>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       treated_at: deletation.treated_at || new Date(),
       email: deletation.email || "",
       name: deletation.name || "",
@@ -83,13 +86,17 @@ getRemoveUserRoutes.get(
       modified_at: deletation.modified_at || new Date(),
       created_at: deletation.created_at || new Date(),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       idref: deletation.idref || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       status: deletation.status || "",
       team: deletation.team || [],
       tags: deletation.tags || [],
       threads: deletation.threads || [],
+<<<<<<< HEAD
 <<<<<<< HEAD
       extra: deletation.extra || {},
     }));
@@ -108,6 +115,9 @@ getRemoveUserRoutes.get(
       500: errorSchema,
     },
 =======
+=======
+      extra: deletation.extra || {},
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     }));
 
     return formattedDeletation;

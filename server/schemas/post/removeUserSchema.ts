@@ -25,6 +25,7 @@ export const postRemoveUserSchema = t.Object(
     email: t.String(),
     name: t.String(),
     message: t.String(),
+<<<<<<< HEAD
 >>>>>>> 7077f11 (fix(schema): update post schema for contact)
     organisation: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
@@ -35,6 +36,9 @@ export const postRemoveUserSchema = t.Object(
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
 >>>>>>> b05991b (fix(api): update schemas)
+=======
+    extra: t.Optional(t.Record(t.String(), t.String())),
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   },
   { additionalProperties: false }
 );

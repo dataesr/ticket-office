@@ -5,6 +5,7 @@ export const updateDatasSchema = t.Object(
 <<<<<<< HEAD
 <<<<<<< HEAD
     id: t.String(),
+<<<<<<< HEAD
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
 =======
     _id: t.Optional(t.String()),
@@ -18,6 +19,8 @@ export const updateDatasSchema = t.Object(
     treated_at: t.Optional(t.Date()),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
 >>>>>>> 2e9190f (fix(api): update schemas)
     email: t.Optional(t.String()),
@@ -28,6 +31,7 @@ export const updateDatasSchema = t.Object(
 <<<<<<< HEAD
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
+<<<<<<< HEAD
     status: t.Optional(t.String()),
     extra: t.Optional(t.Record(t.String(), t.String())),
 =======
@@ -40,6 +44,10 @@ export const updateDatasSchema = t.Object(
     idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    status: t.Optional(t.String()),
+    extra: t.Optional(t.Record(t.String(), t.String())),
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     team: t.Optional(t.Array(t.String())),
     tags: t.Optional(t.Array(t.String())),
     threads: t.Optional(

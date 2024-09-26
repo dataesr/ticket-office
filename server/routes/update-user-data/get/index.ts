@@ -59,6 +59,7 @@ getUpdateUserDataRoutes.get(
 <<<<<<< HEAD
 <<<<<<< HEAD
       id: contrib.id.toString(),
+<<<<<<< HEAD
 =======
       _id: contrib._id.toString(),
 =======
@@ -75,6 +76,8 @@ getUpdateUserDataRoutes.get(
 >>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
 =======
 >>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       treated_at: contrib.treated_at || new Date(),
       email: contrib.email || "",
       name: contrib.name || "",
@@ -83,13 +86,17 @@ getUpdateUserDataRoutes.get(
       modified_at: contrib.modified_at || new Date(),
       created_at: contrib.created_at || new Date(),
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
       idref: contrib.idref || "",
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       status: contrib.status || "",
       team: contrib.team || [],
       tags: contrib.tags || [],
       threads: contrib.threads || [],
+<<<<<<< HEAD
 <<<<<<< HEAD
       extra: contrib.extra || {},
     }));
@@ -108,6 +115,9 @@ getUpdateUserDataRoutes.get(
       500: errorSchema,
     },
 =======
+=======
+      extra: contrib.extra || {},
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     }));
 
     return formattedContribution;

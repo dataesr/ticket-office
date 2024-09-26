@@ -6,6 +6,7 @@ export const contactSchema = t.Object(
 <<<<<<< HEAD
     id: t.String(),
     fromApplication: t.Optional(t.String()),
+<<<<<<< HEAD
     message: t.Optional(t.String()),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     email: t.Optional(t.String()),
@@ -25,19 +26,23 @@ export const contactSchema = t.Object(
     organisation: t.Optional(t.String()),
     fromApp: t.Optional(t.String()),
     fonction: t.Optional(t.String()),
+=======
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     message: t.Optional(t.String()),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     email: t.Optional(t.String()),
     name: t.Optional(t.String()),
-    fromSubApp: t.Optional(t.String()),
     comment: t.Optional(t.String()),
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
-    idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
     team: t.Optional(t.Array(t.String())),
     tags: t.Optional(t.Array(t.String())),
+<<<<<<< HEAD
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+    extra: t.Optional(t.Record(t.String(), t.String())),
+>>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     threads: t.Optional(
       t.Array(
         t.Object({
