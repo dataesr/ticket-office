@@ -77,7 +77,7 @@ getContactRoutes.get(
     },
     detail: {
       summary: "Obtenir toutes les contributions via formulaire de contact",
-      tags: ["Contact"],
+      tags: ["Contacts"],
     },
   }
 );

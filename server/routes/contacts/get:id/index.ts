@@ -30,7 +30,7 @@ getContactByIdRoutes.get(
       summary: "Obtenir une contribution via formulaire de contact par ID",
       description:
         "Cette route retourne les détails d'une contribution spécifique via l'ID fourni.",
-      tags: ["Contact"],
+      tags: ["Contacts"],
     },
   }
 );
