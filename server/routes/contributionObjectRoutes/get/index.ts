@@ -1,7 +1,7 @@
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
-import { contributionObjectListSchema } from "../../../schemas/get/contributionsObjectSchema";
+import { responseSchema } from "../../../schemas/get/contributionsObjectSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 const getContributionObjectRoutes = new Elysia();
@@ -26,6 +26,14 @@ getContributionObjectRoutes.get(
 
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
+
+    const totalContacts = await db
+      .collection("contribute")
+      .countDocuments(filters)
+      .catch((err) => {
+        return error(500, "Error fetching contacts count");
+      });
+
     const contributionObject = await db
       .collection("contribute")
       .find(filters)
@@ -55,7 +63,12 @@ getContributionObjectRoutes.get(
       })
     );
 
-    return formattedContribution;
+    return {
+      data: formattedContribution,
+      meta: {
+        total: totalContacts,
+      },
+    };
   },
   {
     query: t.Object({
@@ -65,7 +78,7 @@ getContributionObjectRoutes.get(
       where: t.Optional(t.String()),
     }),
     response: {
-      200: contributionObjectListSchema,
+      200: responseSchema,
       401: errorSchema,
       500: errorSchema,
     },
