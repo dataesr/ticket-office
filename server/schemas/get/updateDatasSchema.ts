@@ -36,3 +36,11 @@ export const updateDatasSchema = t.Object(
   },
   { additionalProperties: true }
 );
+export const updataDataListSchema = t.Array(updateDatasSchema);
+
+export const responseSchema = t.Object({
+  data: updataDataListSchema,
+  meta: t.Object({
+    total: t.Number(),
+  }),
+});

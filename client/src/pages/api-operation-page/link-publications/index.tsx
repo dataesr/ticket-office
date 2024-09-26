@@ -18,7 +18,6 @@ import ContributionData from "../../../api/contribution-api/getData";
 import { buildURL } from "../../../api/utils/buildURL";
 import ExcelExportButton from "./export-to-xlsx";
 import { useDataList } from "./data-list-context";
-import { productionUrl } from "../../../config/api";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -26,7 +25,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [status, setStatus] = useState("new");
   const [query, setQuery] = useState<string[]>([]);
   const [page, setPage] = useState(1);
-  const [, setData] = useState(null);
   const location = useLocation();
   const { dataList } = useDataList();
 
@@ -50,11 +48,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     setPage(1);
   }, [reload, location.pathname]);
 
-  useEffect(() => {
-    if (location.pathname.includes("apioperations")) {
-    }
-  }, [location.pathname]);
-
   const url = buildURL(location, sort, status, query.join(" "), page);
 
   const {
@@ -63,16 +56,12 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     isError,
     refetch,
   } = ContributionData(url);
-  const getTags = ContributionData(productionUrl);
-  const allTags = getTags?.data.data?.map((tag) => tag?.tags);
 
-  useEffect(() => {
-    setData(fetchedData);
-  }, [fetchedData]);
+  const contrib: Contribute_Production[] = fetchedData?.data || [];
 
-  const meta = (fetchedData as { meta: any })?.meta;
-  const maxPage = meta ? Math.ceil(meta?.total / 10) : 1;
-  const contrib: Contribute_Production[] = fetchedData;
+  const meta = fetchedData?.meta || {};
+  const maxPage = meta.total ? Math.ceil(meta.total / 10) : 1;
+
   const handleSearch = (value: string) => {
     const trimmedValue = value.trim();
     if (trimmedValue !== "" && !query.includes(trimmedValue)) {
@@ -84,7 +73,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     setQuery(query.filter((q) => q !== item));
   };
 
-  const filteredContributions = contrib?.filter((contribution) => {
+  const filteredContributions = contrib.filter((contribution) => {
     if (query.length === 0) {
       return true;
     }
@@ -107,7 +96,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   if (isError)
     return (
       <Container className="fr-my-5w">
-        <Text>Erreur</Text>
+        <Text>Erreur lors du chargement des données.</Text>
       </Container>
     );
 
@@ -157,12 +146,12 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           />
         </Col>
       </Row>
-      {filteredContributions?.map((contribution) => (
+      {filteredContributions.map((contribution) => (
         <ContributionProductionItem
           key={contribution.id}
-          data={contribution as Contribute_Production}
+          data={contribution}
           refetch={refetch}
-          allTags={allTags}
+          allTags={fetchedData?.tags || []} // Assurez-vous que le schéma a un champ tags
         />
       ))}
       {dataList.some((item) => item.export === true) && (

@@ -1,7 +1,8 @@
-import Elysia, { t } from "elysia";
+import Elysia from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
-import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
+import { responseSchema } from "../../../schemas/get/updateDatasSchema";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 const getUpdateUserDataRoutes = new Elysia();
 
@@ -25,6 +26,13 @@ getUpdateUserDataRoutes.get(
 
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
+
+    const totalContacts = await db
+      .collection("update-user-data")
+      .countDocuments(filters)
+      .catch((err) => {
+        return error(500, "Error fetching contacts count");
+      });
 
     const contribution = await db
       .collection("update-user-data")
@@ -53,13 +61,18 @@ getUpdateUserDataRoutes.get(
       extra: contrib.extra || {},
     }));
 
-    return formattedContribution;
+    return {
+      data: formattedContribution,
+      meta: {
+        total: totalContacts,
+      },
+    };
   },
   {
     response: {
-      200: t.Any(updateDatasSchema),
-      401: t.Any({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: responseSchema,
+      422: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary:

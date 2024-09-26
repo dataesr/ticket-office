@@ -43,3 +43,10 @@ export const productionSchema = t.Object(
 );
 
 export const productionListSchema = t.Array(productionSchema);
+
+export const responseSchema = t.Object({
+  data: productionListSchema,
+  meta: t.Object({
+    total: t.Number(),
+  }),
+});

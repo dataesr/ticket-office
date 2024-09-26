@@ -36,3 +36,11 @@ export const deleteSchema = t.Object(
   },
   { additionalProperties: true }
 );
+export const deleteListSchema = t.Array(deleteSchema);
+
+export const responseSchema = t.Object({
+  data: deleteListSchema,
+  meta: t.Object({
+    total: t.Number(),
+  }),
+});

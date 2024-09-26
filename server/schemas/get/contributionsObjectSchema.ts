@@ -41,3 +41,10 @@ export const contributionObjectSchema = t.Object(
 );
 
 export const contributionObjectListSchema = t.Array(contributionObjectSchema);
+
+export const responseSchema = t.Object({
+  data: contributionObjectListSchema,
+  meta: t.Object({
+    total: t.Number(),
+  }),
+});

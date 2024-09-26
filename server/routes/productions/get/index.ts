@@ -1,8 +1,8 @@
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
-import { productionListSchema } from "../../../schemas/get/productionSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { responseSchema } from "../../../schemas/get/productionSchema";
 
 const getProductionsRoutes = new Elysia();
 
@@ -25,6 +25,13 @@ getProductionsRoutes.get(
 
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
+
+    const totalContacts = await db
+      .collection("contribute_productions")
+      .countDocuments(filters)
+      .catch((err) => {
+        return error(500, "Error fetching contacts count");
+      });
 
     const productions = await db
       .collection("contribute_productions")
@@ -53,7 +60,12 @@ getProductionsRoutes.get(
       threads: production.threads || [],
     }));
 
-    return formattedProductions;
+    return {
+      data: formattedProductions,
+      meta: {
+        total: totalContacts,
+      },
+    };
   },
   {
     query: t.Object({
@@ -63,7 +75,7 @@ getProductionsRoutes.get(
       where: t.Optional(t.String()),
     }),
     response: {
-      200: productionListSchema,
+      200: responseSchema,
       401: errorSchema,
       500: errorSchema,
     },

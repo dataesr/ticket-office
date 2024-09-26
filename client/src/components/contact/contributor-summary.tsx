@@ -70,7 +70,7 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
               </Row>
               <div>
                 <Text size="sm">
-                  {contribution.name}
+                  {contribution.name}{" "}
                   {new Date(contribution.created_at).toLocaleDateString()}
                 </Text>
                 <p className="contribution-message">{contribution.message}</p>

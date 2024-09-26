@@ -30,45 +30,47 @@ getContactRoutes.get(
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
-    try {
-      const totalContacts = await db
-        .collection("contacts")
-        .countDocuments(filters);
+    const totalContacts = await db
+      .collection("contacts")
+      .countDocuments(filters)
+      .catch((err) => {
+        return error(500, "Error fetching contacts count");
+      });
 
-      const contacts = await db
-        .collection("contacts")
-        .find(filters)
-        .sort({ [sortField]: sortOrder })
-        .skip(skip)
-        .limit(limit)
-        .toArray();
+    const contacts = await db
+      .collection("contacts")
+      .find(filters)
+      .sort({ [sortField]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .toArray()
+      .catch((err) => {
+        return error(500, "Error fetching contacts");
+      });
 
-      const formattedContacts = contacts.map((contact: any) => ({
-        id: contact.id || "",
-        fromApplication: contact.fromApplication || "",
-        treated_at: contact.treated_at || new Date(),
-        email: contact.email || "",
-        name: contact.name || "",
-        message: contact.message,
-        comment: contact.comment || "",
-        modified_at: contact.modified_at || new Date(),
-        created_at: contact.created_at || new Date(),
-        status: contact.status || "",
-        team: contact.team || [],
-        tags: contact.tags || [],
-        threads: contact.threads || [],
-        extra: contact.extra || {},
-      }));
+    const formattedContacts = contacts.map((contact: any) => ({
+      id: contact.id || "",
+      fromApplication: contact.fromApplication || "",
+      treated_at: contact.treated_at || new Date(),
+      email: contact.email || "",
+      name: contact.name || "",
+      message: contact.message,
+      comment: contact.comment || "",
+      modified_at: contact.modified_at || new Date(),
+      created_at: contact.created_at || new Date(),
+      status: contact.status || "",
+      team: contact.team || [],
+      tags: contact.tags || [],
+      threads: contact.threads || [],
+      extra: contact.extra || {},
+    }));
 
-      return {
-        data: formattedContacts,
-        meta: {
-          total: totalContacts,
-        },
-      };
-    } catch (err) {
-      return error(500, "Error fetching contacts");
-    }
+    return {
+      data: formattedContacts,
+      meta: {
+        total: totalContacts,
+      },
+    };
   },
   {
     query: t.Object({

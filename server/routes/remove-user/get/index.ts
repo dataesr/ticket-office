@@ -1,7 +1,8 @@
-import Elysia, { t } from "elysia";
+import Elysia from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
-import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
+import { responseSchema } from "../../../schemas/get/deleteSchema.ts";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 const getRemoveUserRoutes = new Elysia();
 
@@ -25,6 +26,13 @@ getRemoveUserRoutes.get(
 
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
+
+    const totalContacts = await db
+      .collection("remove-user")
+      .countDocuments(filters)
+      .catch((err) => {
+        return error(500, "Error fetching contacts count");
+      });
 
     const deletation = await db
       .collection("remove-user")
@@ -53,13 +61,18 @@ getRemoveUserRoutes.get(
       extra: deletation.extra || {},
     }));
 
-    return formattedDeletation;
+    return {
+      data: formattedDeletation,
+      meta: {
+        total: totalContacts,
+      },
+    };
   },
   {
     response: {
-      200: t.Any(deleteSchema),
-      401: t.Any({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: responseSchema,
+      422: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary:
