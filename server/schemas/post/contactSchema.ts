@@ -27,6 +27,7 @@ export const postContactSchema = t.Object(
         },
       })
     ),
+<<<<<<< HEAD
 =======
     email: t.String(),
     name: t.String(),
@@ -75,6 +76,8 @@ export const postContactSchema = t.Object(
 =======
     extra: t.Optional(t.Record(t.String(), t.String())),
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+>>>>>>> b019d42 (fix(schema): add exemple to post contacts schema)
   },
   { additionalProperties: false }
 );
