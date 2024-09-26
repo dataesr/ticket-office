@@ -64,7 +64,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     refetch,
   } = ContributionData(url);
   const getTags = ContributionData(productionUrl);
-  const allTags = getTags?.data?.map((tag) => tag?.tags);
+  const allTags = getTags?.data.data?.map((tag) => tag?.tags);
 
   useEffect(() => {
     setData(fetchedData);

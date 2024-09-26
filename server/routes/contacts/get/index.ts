@@ -1,17 +1,17 @@
 import Elysia, { t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
-import { contactListSchema } from "../../../schemas/get/contactSchema";
+import { responseSchema } from "../../../schemas/get/contactSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 
 const getContactRoutes = new Elysia();
-
 getContactRoutes.get(
   "/contacts",
   async ({ query, error }: { query: any; error: any }) => {
     if (!validateQueryParams(query)) {
       return error(422, "Invalid query parameters");
     }
+
     const {
       where = "{}",
       sort = "created_at",
@@ -30,20 +30,22 @@ getContactRoutes.get(
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
-    const contacts = await db
-      .collection("contacts")
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-      .catch((err) => error(500, "Error fetching contacts"));
+    try {
+      const totalContacts = await db
+        .collection("contacts")
+        .countDocuments(filters);
 
-    const formattedContacts = contacts.map((contact: any) => {
-      return {
+      const contacts = await db
+        .collection("contacts")
+        .find(filters)
+        .sort({ [sortField]: sortOrder })
+        .skip(skip)
+        .limit(limit)
+        .toArray();
+
+      const formattedContacts = contacts.map((contact: any) => ({
         id: contact.id || "",
         fromApplication: contact.fromApplication || "",
-        fromSubApp: contact.fromSubApp || "",
         treated_at: contact.treated_at || new Date(),
         email: contact.email || "",
         name: contact.name || "",
@@ -56,12 +58,18 @@ getContactRoutes.get(
         tags: contact.tags || [],
         threads: contact.threads || [],
         extra: contact.extra || {},
+      }));
+
+      return {
+        data: formattedContacts,
+        meta: {
+          total: totalContacts,
+        },
       };
-    });
-
-    return formattedContacts;
+    } catch (err) {
+      return error(500, "Error fetching contacts");
+    }
   },
-
   {
     query: t.Object({
       sort: t.Optional(t.String()),
@@ -71,8 +79,8 @@ getContactRoutes.get(
       fromApplication: t.Optional(t.String()),
     }),
     response: {
-      200: contactListSchema,
-      401: errorSchema,
+      200: responseSchema,
+      422: errorSchema,
       500: errorSchema,
     },
     detail: {

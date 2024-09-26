@@ -71,11 +71,12 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   }
   const { data, isLoading, isError, refetch } = ContributionData(url);
 
-  const getTags = ContributionData(urlToSend);
-  const allTags = getTags?.data?.map((tag) => tag?.tags);
-  const meta = (data as { meta: any })?.meta;
+  const contributions: Contribution[] = data ? data.data : [];
+  const meta = data?.meta;
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
-  const contributions: Contribution[] = data;
+
+  const getTags = ContributionData(urlToSend);
+  const allTags = getTags?.data?.data?.map((tag) => tag?.tags);
   useEffect(() => {
     if (contributions && contributions.length > 0) {
       setSelectedContribution((prevSelectedContribution) => {
@@ -102,7 +103,6 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   const onSelectContribution = (id: string) => {
     setSelectedContribution(id);
   };
-
   const filteredContributions = contributions?.filter((contribution) => {
     if (query.length === 0) {
       return true;

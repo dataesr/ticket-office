@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const postContributionObjectSchema = t.Object(
   {
-    email: t.String(),
+    email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
     message: t.Optional(t.String()),
     section: t.Optional(t.String()),
