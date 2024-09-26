@@ -114,7 +114,7 @@ export type ContributionDataType = {
 };
 
 export type ContributionPageProps = {
-  fromApp?: string;
+  fromApplication?: string;
 };
 
 export type StaffActionsProps = {
@@ -175,8 +175,8 @@ export type Inputs = {
   team: string[];
   status: string;
   tags: string[];
-  idref: string;
   comment: string;
+  extra: string;
 };
 
 export interface PersonInfo {
@@ -191,7 +191,7 @@ export type Publication = {
 };
 
 export type MailData = {
-  fromApp: string;
+  fromApplication: string;
   name: string;
   id: string;
   threads?: Thread[];

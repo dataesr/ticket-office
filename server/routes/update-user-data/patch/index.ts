@@ -38,12 +38,12 @@ updateUserDataPutRoutes.patch(
 
     const responseContact = {
       id: updatedContact.id,
-      organisation: updatedContact.organisation,
       name: updatedContact.name,
       message: updatedContact.message,
       email: updatedContact.email,
       status: updatedContact.status,
       team: updatedContact.team,
+      extra: updatedContact.extra || {},
       modified_at: updatedContact.modified_at,
     };
 

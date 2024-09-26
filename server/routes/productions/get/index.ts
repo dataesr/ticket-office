@@ -46,7 +46,6 @@ getProductionsRoutes.get(
       name: production.name || "",
       message: production.message || "",
       comment: production.comment || "",
-      idref: production.idref || "",
       status: production.status || "",
       team: production.team || [],
       tags: production.tags || [],

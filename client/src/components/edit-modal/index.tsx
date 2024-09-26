@@ -29,8 +29,8 @@ const EditModal: React.FC<EditModalProps> = ({
     team: [selectedProfile],
     status: "treated",
     tags: [],
-    idref: "",
     comment: "",
+    extra: "",
   });
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
@@ -71,29 +71,27 @@ const EditModal: React.FC<EditModalProps> = ({
         ).sort()
       : [];
     setFilteredTags(formattedTags);
-  }, [allTags, selectedProfile]);
+
+    if (data) {
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        comment: data.comment || "",
+        extra:
+          "extra" in data && data.extra
+            ? Object.entries(data.extra)
+                .map(([key, value]) => `${key}: ${value}`)
+                .join("\n")
+            : "",
+        tags: "tags" in data ? data.tags : [],
+      }));
+    }
+  }, [allTags, selectedProfile, data]);
 
   const handleInputChange = (key: keyof Inputs, value: any) => {
-    setInputs((prevInputs) => ({ ...prevInputs, [key]: value }));
-  };
-
-  const handleTagInputChange = () => {
-    const tagsArray = tagInput
-      .split(",")
-      .map((tag) => tag.trim().toUpperCase())
-      .filter((tag) => tag !== "");
-
-    if (tagsArray.length > 0) {
-      handleInputChange("tags", [...inputs.tags, ...tagsArray]);
-      setTagInput("");
-    }
-  };
-
-  const handleTagRemove = (tagToRemove: string) => {
-    handleInputChange(
-      "tags",
-      inputs.tags.filter((tag) => tag !== tagToRemove)
-    );
+    setInputs((prevInputs) => ({
+      ...prevInputs,
+      [key]: value,
+    }));
   };
 
   const handleSubmit = async () => {
@@ -107,7 +105,19 @@ const EditModal: React.FC<EditModalProps> = ({
     }
 
     try {
-      const body = JSON.stringify({ ...inputs, team: [selectedProfile] });
+      const extraEntries = inputs.extra.split("\n").reduce((acc, line) => {
+        const [key, value] = line.split(":").map((part) => part.trim());
+        if (key && value) {
+          acc[key] = value;
+        }
+        return acc;
+      }, {} as Record<string, string>);
+
+      const body = JSON.stringify({
+        ...inputs,
+        team: [selectedProfile],
+        extra: extraEntries,
+      });
 
       const response = await fetch(url, {
         method: "PATCH",
@@ -126,6 +136,24 @@ const EditModal: React.FC<EditModalProps> = ({
       console.error("Erreur lors de la soumission:", error);
       toast.error("Une erreur est survenue lors de l'enregistrement");
     }
+  };
+
+  const handleTagInputChange = () => {
+    const tagsArray = tagInput
+      .split(",")
+      .map((tag) => tag.trim().toUpperCase())
+      .filter((tag) => tag !== "");
+    if (tagsArray.length > 0) {
+      handleInputChange("tags", [...inputs.tags, ...tagsArray]);
+      setTagInput("");
+    }
+  };
+
+  const handleTagRemove = (tagToRemove: string) => {
+    handleInputChange(
+      "tags",
+      inputs.tags.filter((tag) => tag !== tagToRemove)
+    );
   };
 
   return (
@@ -182,10 +210,10 @@ const EditModal: React.FC<EditModalProps> = ({
           <Row gutters>
             <Col md="6">
               <TextArea
-                label="Ajouter un idRef"
-                value={inputs.idref}
-                onChange={(e) => handleInputChange("idref", e.target.value)}
-                hint="Ajoutez un identifiant"
+                label="Ajouter des extra"
+                value={inputs.extra}
+                onChange={(e) => handleInputChange("extra", e.target.value)}
+                hint="Exemple : clé: valeur"
               />
             </Col>
             <Col md="6">

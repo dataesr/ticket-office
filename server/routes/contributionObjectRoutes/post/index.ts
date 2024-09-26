@@ -20,14 +20,27 @@ postContributionObjectRoutes.post(
     error: any;
     body: postContributionObjectSchemaType;
   }) => {
+    const extraLowercase = Object.keys(body.extra || {}).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: body.extra ? body.extra[key].toLowerCase() : "",
+      }),
+      {}
+    );
+
     const newContribution = {
       ...body,
+      extra: extraLowercase,
       id: new ObjectId().toHexString(),
       created_at: new Date(),
       status: "new",
     };
 
     const result = await db.collection("contribute").insertOne(newContribution);
+
+    if (!body.objectId && !body.objectType) {
+      return error(400, "objectId is required when objectType is provided");
+    }
 
     if (!result.insertedId) {
       return error(500, "Failed to create the contribution");

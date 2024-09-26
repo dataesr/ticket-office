@@ -6,9 +6,9 @@ import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { ObjectId } from "mongodb";
 
 type postContactSchemaType = Static<typeof postContactSchema>;
-const postContactRoutes = new Elysia();
+const postContactsRoutes = new Elysia();
 
-postContactRoutes.post(
+postContactsRoutes.post(
   "/contacts",
   async ({ error, body }: { error: any; body: postContactSchemaType }) => {
     const allowedFromApps = [
@@ -20,12 +20,24 @@ postContactRoutes.post(
       "curiexplore",
     ];
 
-    if (!allowedFromApps.includes(body.fromApp)) {
-      return error(400, "Invalid fromApp value, check child attributes");
+    if (!allowedFromApps.includes(body.fromApplication)) {
+      return error(
+        400,
+        "Invalid fromApplication value, check child attributes"
+      );
     }
+
+    const extraLowercase = Object.keys(body.extra || {}).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: body.extra ? body.extra[key].toLowerCase() : "",
+      }),
+      {}
+    );
 
     const newContribution = {
       ...body,
+      extra: extraLowercase,
       id: new ObjectId().toHexString(),
       created_at: new Date(),
       status: "new",
@@ -51,12 +63,11 @@ postContactRoutes.post(
       500: errorSchema,
     },
     detail: {
-      summary: "Créer une nouvelle contribution via formulaire de contact",
+      summary: "Créer une nouvelle contribution",
       description:
-        "Cette route permet de créer une nouvelle contribution soumise via le formulaire de contact.",
-      tags: ["Contact"],
+        "Cette route permet de créer une nouvelle contribution soumise via un formulaire de contact.",
+      tags: ["Contacts"],
     },
   }
 );
-
-export default postContactRoutes;
+export default postContactsRoutes;

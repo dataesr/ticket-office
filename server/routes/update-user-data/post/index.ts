@@ -1,7 +1,9 @@
-import Elysia, { Static, t } from "elysia";
+import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postUpdateUserDataSchema } from "../../../schemas/post/UpdateUserDataSchema";
 import { ObjectId } from "mongodb";
+import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
 
 type postUpdateUserDataSchemaType = Static<typeof postUpdateUserDataSchema>;
 
@@ -16,11 +18,20 @@ postUpdateUserDataRoutes.post(
     error: any;
     body: postUpdateUserDataSchemaType;
   }) => {
+    const extraLowercase = Object.keys(body.extra || {}).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: body.extra ? body.extra[key].toLowerCase() : "",
+      }),
+      {}
+    );
+
     const newContribution = {
       ...body,
       id: new ObjectId().toHexString(),
       created_at: new Date(),
       status: "new",
+      extra: extraLowercase,
     };
 
     const result = await db
@@ -41,9 +52,9 @@ postUpdateUserDataRoutes.post(
   {
     body: postUpdateUserDataSchema,
     response: {
-      200: t.Object({ message: t.String() }),
-      400: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
+      200: updateDatasSchema,
+      401: errorSchema,
+      500: errorSchema,
     },
     detail: {
       summary:

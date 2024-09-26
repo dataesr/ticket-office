@@ -3,8 +3,6 @@ import { t } from "elysia";
 export const contributionObjectSchema = t.Object(
   {
     id: t.String(),
-    organisation: t.Optional(t.String()),
-    fonction: t.Optional(t.String()),
     message: t.Optional(t.String()),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     email: t.Optional(t.String()),
@@ -15,10 +13,10 @@ export const contributionObjectSchema = t.Object(
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
     section: t.Optional(t.String()),
-    idref: t.Optional(t.String()),
     status: t.Optional(t.String()),
     team: t.Optional(t.Array(t.String())),
     tags: t.Optional(t.Array(t.String())),
+    extra: t.Optional(t.Record(t.String(), t.String())),
     threads: t.Optional(
       t.Array(
         t.Object({
