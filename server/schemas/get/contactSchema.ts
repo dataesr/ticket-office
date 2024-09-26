@@ -39,3 +39,10 @@ export const contactSchema = t.Object(
 );
 
 export const contactListSchema = t.Array(contactSchema);
+
+export const responseSchema = t.Object({
+  data: contactListSchema,
+  meta: t.Object({
+    total: t.Number(),
+  }),
+});

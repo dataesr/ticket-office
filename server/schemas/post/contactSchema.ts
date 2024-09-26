@@ -2,7 +2,7 @@ import { t } from "elysia";
 
 export const postContactSchema = t.Object(
   {
-    email: t.String(),
+    email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
     message: t.String(),
     fromApplication: t.Enum({

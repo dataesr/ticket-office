@@ -190,15 +190,26 @@ export type Publication = {
   landingPage?: string;
 };
 
-export type MailData = {
+interface MailData {
   fromApplication: string;
-  name: string;
   id: string;
-  threads?: Thread[];
-};
+  name: string;
+  threads: Array<{
+    team: string[];
+    responses: Array<{
+      responseMessage: string;
+      timestamp: string;
+    }>;
+  }>;
+}
 
 export type LatestMailsProps = {
-  data: MailData[];
+  data: {
+    data: MailData[];
+    meta: {
+      total: number;
+    };
+  };
   refetch?: () => void;
 };
 
