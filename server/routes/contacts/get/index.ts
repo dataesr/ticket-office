@@ -160,10 +160,14 @@ getContactRoutes.get(
     detail: {
       summary: "Obtenir toutes les contributions via formulaire de contact",
 <<<<<<< HEAD
+<<<<<<< HEAD
       tags: ["Contacts"],
 =======
       tags: ["Contact"],
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+      tags: ["Contacts"],
+>>>>>>> f4a866d (typo)
     },
   }
 );

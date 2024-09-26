@@ -31,10 +31,14 @@ getContactByIdRoutes.get(
       description:
         "Cette route retourne les détails d'une contribution spécifique via l'ID fourni.",
 <<<<<<< HEAD
+<<<<<<< HEAD
       tags: ["Contacts"],
 =======
       tags: ["Contact"],
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+      tags: ["Contacts"],
+>>>>>>> f4a866d (typo)
     },
   }
 );
