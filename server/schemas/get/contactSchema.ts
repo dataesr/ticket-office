@@ -99,6 +99,7 @@ export const responseSchema = t.Object({
     total: t.Number(),
   }),
 });
+<<<<<<< HEAD
 =======
   { additionalProperties: false }
 );
@@ -108,3 +109,5 @@ export const responseSchema = t.Object({
 
 export const contactListSchema = t.Array(contactSchema);
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> 220c881 (fix(api): add meta in response schema)

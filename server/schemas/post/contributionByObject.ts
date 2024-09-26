@@ -3,6 +3,9 @@ import { t } from "elysia";
 export const postContributionObjectSchema = t.Object(
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 220c881 (fix(api): add meta in response schema)
     email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
     message: t.Optional(t.String()),

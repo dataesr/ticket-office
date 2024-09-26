@@ -56,6 +56,11 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     isError,
     refetch,
   } = ContributionData(url);
+<<<<<<< HEAD
+=======
+  const getTags = ContributionData(productionUrl);
+  const allTags = getTags?.data.data?.map((tag) => tag?.tags);
+>>>>>>> 220c881 (fix(api): add meta in response schema)
 
   const contrib: Contribute_Production[] = fetchedData?.data || [];
 

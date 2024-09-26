@@ -8,11 +8,13 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
   const [scrollIndex, setScrollIndex] = useState(0);
   const [isMouseOver, setIsMouseOver] = useState(false);
 
-  if (data.length === 0) {
+  const mailData = data.data || [];
+
+  if (!Array.isArray(mailData) || mailData.length === 0) {
     return <Text>Aucun email trouvé.</Text>;
   }
 
-  const filteredMails = data
+  const filteredMails = mailData
     .filter((mail) => mail?.threads?.[0]?.responses?.[0]?.responseMessage)
     .sort((a, b) => {
       const dateA = new Date(
@@ -23,7 +25,6 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
       ).getTime();
       return dateB - dateA;
     });
-
   useEffect(() => {
     let interval = null;
 

@@ -5,6 +5,9 @@ export const postContactSchema = t.Object(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 220c881 (fix(api): add meta in response schema)
     email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
     message: t.String(),

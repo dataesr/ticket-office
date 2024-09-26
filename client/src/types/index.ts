@@ -286,16 +286,31 @@ export type Publication = {
 };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 export type MailData = {
+=======
+interface MailData {
+>>>>>>> 220c881 (fix(api): add meta in response schema)
   fromApplication: string;
-  name: string;
   id: string;
-  threads?: Thread[];
-};
+  name: string;
+  threads: Array<{
+    team: string[];
+    responses: Array<{
+      responseMessage: string;
+      timestamp: string;
+    }>;
+  }>;
+}
 
 export type LatestMailsProps = {
-  data: MailData[];
+  data: {
+    data: MailData[];
+    meta: {
+      total: number;
+    };
+  };
   refetch?: () => void;
 };
 
