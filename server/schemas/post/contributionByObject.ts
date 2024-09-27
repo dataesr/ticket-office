@@ -6,7 +6,7 @@ export const postContributionObjectSchema = t.Object(
     name: t.String(),
     message: t.Optional(t.String()),
     section: t.Optional(t.String()),
-    objectId: t.Optional(t.String()),
+    objectId: t.String(),
     objectType: t.Enum({
       structures: "structures",
       persons: "persons",
