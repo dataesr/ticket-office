@@ -25,6 +25,7 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
       ).getTime();
       return dateB - dateA;
     });
+
   useEffect(() => {
     let interval = null;
 
