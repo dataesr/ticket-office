@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
 import ContributorInfo from "./contributor-info";
-import StaffActions from "../../components/contact/staff-action";
+import StaffActions from "./staff-action";
 import { ContributionItemProps } from "../../types";
 import {
   BadgeColor,
