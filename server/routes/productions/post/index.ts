@@ -20,12 +20,14 @@ postProductionRoutes.post(
       {}
     );
 
+    const _id = new ObjectId();
     const newContribution = {
       ...body,
-      id: new ObjectId().toHexString(),
+      _id,
+      extra: extraLowercase,
+      id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
-      extra: extraLowercase,
     };
 
     const result = await db

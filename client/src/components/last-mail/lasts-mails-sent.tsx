@@ -96,7 +96,9 @@ const LatestMails: React.FC<LatestMailsProps> = ({ data }) => {
             }}
           >
             <Text size="xs">
-              <strong>{mail.threads?.[0]?.team?.join(", ") || "Équipe"}</strong>{" "}
+              <strong>
+                {mail.threads?.[0].responses?.[0]?.team?.join(", ") || "Équipe"}
+              </strong>{" "}
               le{" "}
               <i>
                 {new Date(
