@@ -42,6 +42,14 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
             {data.tags.join(", ")}
           </Badge>
         )}
+<<<<<<< HEAD
+=======
+        {data?.fromSubApp && (
+          <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
+            {data.fromSubApp}
+          </Badge>
+        )}
+>>>>>>> 7e6255f (fix(naming): clean code)
         {data?.status && (
           <Badge
             size="sm"

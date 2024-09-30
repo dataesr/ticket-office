@@ -16,6 +16,7 @@ import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 <<<<<<<< HEAD:client/src/pages/contribution-page/index.tsx
 >>>>>>> 9e0ca29 (fix(router): update router and create works magnet contact page)
@@ -38,6 +39,10 @@ const ContributionPage: React.FC<ContributionPageProps> = ({ fromApp }) => {
 ========
 import ContributionItem from "../../components/contact/contribution-item";
 import ContributorSummary from "../../components/contact/contributor-summary";
+=======
+import ContributionItem from "../../components/items/contribution-item";
+import ContributorSummary from "../../components/items/contributor-summary";
+>>>>>>> 7e6255f (fix(naming): clean code)
 import { contactUrl, contributionUrl } from "../../config/api";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({

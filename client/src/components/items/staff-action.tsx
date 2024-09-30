@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Col, Text, Toggle } from "@dataesr/dsfr-plus";
 import EmailSender from "../../api/send-mail";
 import type { Contribution } from "../../types";
@@ -27,10 +28,20 @@ const StaffActions = ({
     baseUrl = "production";
   }
 
+=======
+import { Col, Text } from "@dataesr/dsfr-plus";
+import EmailSender from "../../api/send-mail";
+import type { Contribution } from "../../types";
+import { useLocation } from "react-router-dom";
+
+const StaffActions = ({ data, refetch }: { data: Contribution; refetch }) => {
+  const location = useLocation();
+>>>>>>> 7e6255f (fix(naming): clean code)
   const contributorClassName = location.pathname.includes("contributionpage")
     ? "staffSide"
     : "staffSideContact";
 
+<<<<<<< HEAD
   const displayedDates = new Set<string>();
   const queryClient = useQueryClient();
 
@@ -119,10 +130,13 @@ const StaffActions = ({
     setIsAllRead(allRead);
   }, [data]);
 
+=======
+>>>>>>> 7e6255f (fix(naming): clean code)
   return (
     <>
       {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
+<<<<<<< HEAD
           {data.threads.length > 2 && (
             <Toggle
               label="Marquer toutes les réponses comme lues"
@@ -170,6 +184,19 @@ const StaffActions = ({
                 })
               : null;
           })}
+=======
+          {data.threads.map((thread) =>
+            thread.responses.map((response, index) => (
+              <Text size="sm" key={index}>
+                Réponse apportée par {response.team.join(", ")} le{" "}
+                {new Date(response.timestamp).toLocaleDateString()}
+                {" à "}
+                {new Date(response.timestamp).toLocaleTimeString()} :<br />
+                {response.responseMessage}
+              </Text>
+            ))
+          )}
+>>>>>>> 7e6255f (fix(naming): clean code)
         </Col>
       )}
 

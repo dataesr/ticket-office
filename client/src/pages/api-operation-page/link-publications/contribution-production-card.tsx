@@ -23,6 +23,7 @@ import { FaCopy } from "react-icons/fa";
 <<<<<<< HEAD
 import { Contribute_Production } from "../../../types";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { BadgeStatus, StatusLabel } from "../../../components/items/utils";
 =======
 import { Contribute_Production } from "@/types";
@@ -33,6 +34,9 @@ import { Contribute_Production } from "../../../types";
 =======
 import { BadgeStatus, StatusLabel } from "../../../components/contact/utils";
 >>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
+=======
+import { BadgeStatus, StatusLabel } from "../../../components/items/utils";
+>>>>>>> 7e6255f (fix(naming): clean code)
 
 const ContributionProductionItem = ({
   data,
