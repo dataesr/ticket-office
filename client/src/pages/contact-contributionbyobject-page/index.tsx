@@ -15,8 +15,8 @@ import { Contribution, ContributionPageProps } from "../../types";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
-import ContributionItem from "../../components/contact/contribution-item";
-import ContributorSummary from "../../components/contact/contributor-summary";
+import ContributionItem from "../../components/items/contribution-item";
+import ContributorSummary from "../../components/items/contributor-summary";
 import { contactUrl, contributionUrl } from "../../config/api";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
