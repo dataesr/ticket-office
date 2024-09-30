@@ -40,9 +40,13 @@ postRemoveUserRoutes.post(
     );
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const _id = new ObjectId();
 =======
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+    const _id = new ObjectId();
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
     const newContribution = {
       ...body,
       _id,
@@ -50,7 +54,6 @@ postRemoveUserRoutes.post(
       id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
-      extra: extraLowercase,
     };
 
     const result = await db

@@ -60,6 +60,7 @@ postContributionObjectRoutes.post(
     );
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const _id = new ObjectId();
     const newContribution = {
       ...body,
@@ -88,11 +89,19 @@ postContributionObjectRoutes.post(
 =======
 =======
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+    const _id = new ObjectId();
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
     const newContribution = {
       ...body,
+      _id,
       extra: extraLowercase,
+<<<<<<< HEAD
       id: new ObjectId().toHexString(),
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+      id: _id.toHexString(),
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
       created_at: new Date(),
       status: "new",
     };

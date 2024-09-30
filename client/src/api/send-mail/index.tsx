@@ -26,6 +26,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   const apiBaseUrl = isDevelopment
     ? "http://localhost:3000/api/send-email"
     : "https://ticket-office.staging.dataesr.ovh/api/send-email";
@@ -51,6 +52,11 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     ? `http://localhost:3000/api${basePath}/${contribution?.id}`
     : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${contribution?.id}`;
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+  const apiBaseUrl = isDevelopment
+    ? "http://localhost:3000/api/send-email"
+    : "https://ticket-office.staging.dataesr.ovh/api/send-email";
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
 
   useEffect(() => {
     const profileFromLocalStorage = localStorage.getItem("selectedProfile");
@@ -72,6 +78,9 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     const formattedResponse = userResponse.replace(/\n/g, "<br/>");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
     const currentUrl = window.location.href;
     const collectionName = getCollectionNameFromUrl(currentUrl);
 
@@ -80,6 +89,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       collectionName: collectionName,
       to: contribution.email,
       name: contribution.name,
+<<<<<<< HEAD
       subject: `Réponse à votre contribution, référence ${collectionName}-${contribution.id}`,
       userResponse: formattedResponse,
       selectedProfile,
@@ -109,6 +119,12 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
         selectedProfile: selectedProfile,
       },
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+      subject: `Réponse à votre contribution, référence ${contribution.id}`,
+      userResponse: formattedResponse,
+      selectedProfile,
+      message: contribution.message,
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
     };
 
     try {

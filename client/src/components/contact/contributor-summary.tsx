@@ -26,9 +26,9 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
 
   return (
     <SideMenu title="Contributeurs" sticky fullHeight>
-      {contributions.map((contribution) => (
+      {contributions.map((contribution, index) => (
         <SideMenuItem
-          key={contribution.id}
+          key={`${contribution.id}-${index}`}
           className="contribution-message"
           title={
             <>
@@ -56,9 +56,9 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
                   {contribution?.tags?.length > 0 &&
                     contribution.tags
                       .filter((tag) => tag !== "")
-                      .map((tag) => (
+                      .map((tag, key) => (
                         <Badge
-                          key={tag}
+                          key={key}
                           size="sm"
                           color="green-menthe"
                           className="fr-mr-1w fr-mb-1w"

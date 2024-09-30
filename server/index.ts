@@ -27,6 +27,7 @@ import removeUserRoutes from "./routes/remove-user";
 import updateUserDataRoutes from "./routes/update-user-data";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import contactsRoutes from "./routes/contacts";
 import sendMail from "./routes/reply/replyRoutes";
 import { fetchEmails } from "./routes/receive-email";
@@ -35,7 +36,10 @@ import replyRoutes from "./routes/reply/replyRoutes";
 =======
 // import replyRoutes from "./routes/reply/replyRoutes";
 >>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
+=======
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
 import contactsRoutes from "./routes/contacts";
+import sendMail from "./routes/reply/replyRoutes";
 // import connectToImapServer from "./routes/receive-email";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
@@ -72,7 +76,11 @@ app
 <<<<<<< HEAD
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
+<<<<<<< HEAD
           { name: "Envoi de mails", description: "Envoi de mails" },
+=======
+          { name: "Envoi de mails", description: "Gestion de emails" },
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
           {
             name: "Supressions de profil",
             description: "Gestion des demandes supression de profil",
@@ -140,6 +148,9 @@ app
     app.use(updateUserDataRoutes);
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
     app.use(sendMail);
     return app;
   })

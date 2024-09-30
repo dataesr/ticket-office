@@ -86,6 +86,7 @@ export interface ChangeNameContribution {
   fonction?: string;
   modified_at?: string;
   threads?: Thread[];
+  fromApplication: string;
 }
 export interface ContributorSummaryProps {
   contributions: Contribution[];
@@ -298,6 +299,7 @@ interface MailData {
   threads: Array<{
     team: string[];
     responses: Array<{
+      team: any;
       responseMessage: string;
       timestamp: string;
     }>;

@@ -74,12 +74,17 @@ postContactsRoutes.post(
       }),
       {}
     );
-
+    const _id = new ObjectId();
     const newContribution = {
       ...body,
+      _id,
       extra: extraLowercase,
+<<<<<<< HEAD
       id: new ObjectId().toHexString(),
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+      id: _id.toHexString(),
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
       created_at: new Date(),
       status: "new",
     };

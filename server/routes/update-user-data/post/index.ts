@@ -55,14 +55,19 @@ postUpdateUserDataRoutes.post(
     );
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const _id = new ObjectId();
 =======
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+    const _id = new ObjectId();
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
     const newContribution = {
       ...body,
       _id,
       extra: extraLowercase,
       id: _id.toHexString(),
+<<<<<<< HEAD
       created_at: new Date(),
 =======
   async ({ query, error, body }: { query: any; error: any; body: any }) => {
@@ -76,6 +81,8 @@ postUpdateUserDataRoutes.post(
 >>>>>>> b05991b (fix(api): update schemas)
       ...body,
       id: new ObjectId().toHexString(),
+=======
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
       created_at: new Date(),
 <<<<<<< HEAD
       idref: updateUserData.idref || "",
@@ -83,7 +90,6 @@ postUpdateUserDataRoutes.post(
 =======
 >>>>>>> b05991b (fix(api): update schemas)
       status: "new",
-      extra: extraLowercase,
     };
 
     const result = await db

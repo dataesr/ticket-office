@@ -70,12 +70,16 @@ postProductionRoutes.post(
       {}
     );
 
+    const _id = new ObjectId();
     const newContribution = {
 >>>>>>> b05991b (fix(api): update schemas)
       ...body,
-      id: new ObjectId().toHexString(),
+      _id,
+      extra: extraLowercase,
+      id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
       productions: productionData.productions || [],
@@ -85,6 +89,8 @@ postProductionRoutes.post(
 =======
       extra: extraLowercase,
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+>>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
     };
 
     const result = await db
