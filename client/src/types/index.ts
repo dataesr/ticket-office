@@ -15,6 +15,7 @@ export interface Contribution {
   fonction?: string;
   modified_at?: string;
   threads?: Thread[];
+  fromApplication: string;
 }
 export interface ContributorSummaryProps {
   contributions: Contribution[];
@@ -144,6 +145,7 @@ export type Contribute_Production = {
   status: string;
   productions: any[];
   threads?: Thread[];
+  fromApplication: string;
 };
 
 export type EditModalProps = {
@@ -197,6 +199,7 @@ interface MailData {
   threads: Array<{
     team: string[];
     responses: Array<{
+      team: any;
       responseMessage: string;
       timestamp: string;
     }>;

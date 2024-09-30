@@ -34,11 +34,12 @@ postContactsRoutes.post(
       }),
       {}
     );
-
+    const _id = new ObjectId();
     const newContribution = {
       ...body,
+      _id,
       extra: extraLowercase,
-      id: new ObjectId().toHexString(),
+      id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
     };

@@ -1,5 +1,4 @@
 import { Button, Col, Row, TextArea, ButtonGroup } from "@dataesr/dsfr-plus";
-import React from "react";
 
 function EmailForm({
   userResponse,

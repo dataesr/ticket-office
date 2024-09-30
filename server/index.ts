@@ -8,8 +8,8 @@ import contributionObjectRoutes from "./routes/contributionObjectRoutes";
 import productionsRoutes from "./routes/productions";
 import removeUserRoutes from "./routes/remove-user";
 import updateUserDataRoutes from "./routes/update-user-data";
-// import replyRoutes from "./routes/reply/replyRoutes";
 import contactsRoutes from "./routes/contacts";
+import sendMail from "./routes/reply/replyRoutes";
 // import connectToImapServer from "./routes/receive-email";
 
 dotenv.config();
@@ -37,6 +37,7 @@ app
           { name: "Contacts", description: "Gestion des contacts" },
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
+          { name: "Envoi de mails", description: "Gestion de emails" },
           {
             name: "Supressions de profil",
             description: "Gestion des demandes supression de profil",
@@ -59,7 +60,7 @@ app
     app.use(productionsRoutes);
     app.use(removeUserRoutes);
     app.use(updateUserDataRoutes);
-    // app.use(replyRoutes);
+    app.use(sendMail);
     return app;
   })
   .use(
