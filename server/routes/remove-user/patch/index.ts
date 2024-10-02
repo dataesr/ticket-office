@@ -21,6 +21,18 @@ removeUserPutRoutes.patch(
       }
     }
 
+    if (body.threads) {
+      body.threads = body.threads.map((thread) => {
+        thread.responses = thread.responses?.map((response) => {
+          if (response.read === false) {
+            response.read = true;
+          }
+          return response;
+        });
+        return thread;
+      });
+    }
+
     const { acknowledged } = await db
       .collection("remove-user")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });

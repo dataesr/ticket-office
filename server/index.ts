@@ -10,11 +10,13 @@ import removeUserRoutes from "./routes/remove-user";
 import updateUserDataRoutes from "./routes/update-user-data";
 import contactsRoutes from "./routes/contacts";
 import sendMail from "./routes/reply/replyRoutes";
+import { fetchEmails } from "./routes/receive-email";
 // import connectToImapServer from "./routes/receive-email";
 
 dotenv.config();
 
 const app = new Elysia();
+fetchEmails();
 app
   .use(
     cors({
@@ -37,7 +39,7 @@ app
           { name: "Contacts", description: "Gestion des contacts" },
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
-          { name: "Envoi de mails", description: "Gestion de emails" },
+          { name: "Envoi de mails", description: "Envoi de mails" },
           {
             name: "Supressions de profil",
             description: "Gestion des demandes supression de profil",

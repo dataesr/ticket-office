@@ -55,7 +55,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       collectionName: collectionName,
       to: contribution.email,
       name: contribution.name,
-      subject: `Réponse à votre contribution, référence ${contribution.id}`,
+      subject: `Réponse à votre contribution, référence ${collectionName}-${contribution.id}`,
       userResponse: formattedResponse,
       selectedProfile,
       message: contribution.message,
@@ -117,8 +117,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
           <Row gutters>
             <Col>
               <p>
-                De:{" "}
-                {`${selectedProfile} de l'équipe scanR <scanr@recherche.gouv.fr>`}
+                De: {`${selectedProfile} de l'équipe scanR <support@scanr.fr>`}
               </p>
               <p>À: {`${contribution?.name} <${contribution?.email}>`}</p>
               <p>

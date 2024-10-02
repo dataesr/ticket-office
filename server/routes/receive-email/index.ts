@@ -1,77 +1,194 @@
-import imap from "imap";
-import { ImapSimple, connect } from "imap-simple";
+import { ImapFlow } from "imapflow";
+import { MongoClient } from "mongodb";
 
-const MAIL_ADRESSE = process.env.MAIL_ADRESSE || "";
-const MAIL_PASSWORD = process.env.MAIL_PASSWORD || "";
-const MAIL_HOST = process.env.MAIL_HOST || "";
+const email = process.env.MAIL_ADRESSE;
+const password = process.env.MAIL_PASSWORD;
+const mailHost = process.env.MAIL_HOST || "defaultMailHost";
+const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017";
+const dbName = "ticket-office-api";
 
-const imapConfig: imap.Config = {
-  user: MAIL_ADRESSE,
-  password: MAIL_PASSWORD,
-  host: MAIL_HOST,
-  port: 993,
-  tls: true,
-  tlsOptions: {
-    rejectUnauthorized: false,
-  },
-};
+if (!email || !password || !mongoUri) {
+  throw new Error(
+    "MAIL_ADRESSE, MAIL_PASSWORD and MONGO_URI environment variables must be defined"
+  );
+}
 
-export default async function connectToImapServer() {
+function formatDate(dateString: string | number | Date | null) {
+  const date = new Date(dateString || "");
+  return date.toISOString();
+}
+async function updateContribution(
+  referenceId: string,
+  responseMessage: string,
+  timestamp: string | null,
+  collectionName: string
+) {
+  const client = new MongoClient(mongoUri);
   try {
-    console.log("Connecting to IMAP server...");
-    console.log(imapConfig);
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection(collectionName);
 
-    // Connexion au serveur IMAP
-    const connection: ImapSimple = await connect({ imap: imapConfig });
-    console.log("IMAP Connection Established");
+    // Assurez-vous que la collection existe avant de continuer
+    if (!collection) {
+      console.log("La collection n'existe pas :", collectionName);
+      return;
+    }
 
-    connection.on("ready", () => {
-      console.log("IMAP Connection Ready");
+    // Utilisez le bon champ de recherche
+    const contribution = await collection.findOne({
+      // Assurez-vous que 'id' est le bon champ à interroger
+      id: referenceId,
     });
 
-    connection.on("error", (err) => {
-      console.error("IMAP Connection Error:", err);
-    });
+    console.log(contribution);
+    if (contribution) {
+      const existingThreads = Array.isArray(contribution.threads)
+        ? contribution.threads
+        : [];
 
-    connection.on("end", () => {
-      console.log("IMAP Connection Ended");
-    });
+      const isDuplicate = existingThreads.some(
+        (thread) => thread.timestamp === formatDate(timestamp)
+      );
 
-    try {
-      const inbox = await connection.openBox("INBOX");
-      console.log("INBOX opened:", inbox);
+      if (isDuplicate) {
+        console.log(
+          "Un thread avec la même date existe déjà, mise à jour annulée pour la contribution:",
+          referenceId
+        );
+        return;
+      }
 
-      // Rechercher les emails dans la boîte
-      const searchCriteria = ["ALL"]; // Critères de recherche, par exemple ['UNSEEN'] pour les emails non lus
-      const fetchOptions = {
-        bodies: ["HEADER.FIELDS (FROM TO SUBJECT DATE)", "TEXT"],
-        struct: true,
+      const response = {
+        threadId: contribution._id.toString(),
+        responses: [
+          {
+            responseMessage,
+            read: false,
+            timestamp: formatDate(timestamp),
+            team: ["user"],
+          },
+        ],
+        timestamp: formatDate(timestamp),
       };
 
-      const messages = await connection.search(searchCriteria, fetchOptions);
-      console.log(`Found ${messages.length} message(s)`);
-
-      messages.forEach((message) => {
-        // Extraire les parties de l'email
-        const header = message.parts.find(
-          (part) => part.which === "HEADER.FIELDS (FROM TO SUBJECT DATE)"
-        );
-        const body = message.parts.find((part) => part.which === "TEXT");
-
-        if (header) {
-          console.log("Email Header:", header.body);
-        }
-
-        if (body) {
-          console.log("Email Body:", body.body);
-        }
-      });
-    } catch (err) {
-      console.error("Error opening INBOX or retrieving emails:", err);
+      await collection.updateOne(
+        { _id: contribution._id },
+        { $set: { threads: [...existingThreads, response] } }
+      );
+      console.log(
+        "Réponse ajoutée dans les threads pour la contribution:",
+        referenceId
+      );
+    } else {
+      console.log(
+        "Aucune contribution trouvée pour l'ID de référence",
+        referenceId
+      );
     }
-  } catch (error) {
-    console.error("Failed to connect to IMAP server:", error);
+  } finally {
+    await client.close();
   }
 }
 
-connectToImapServer();
+export async function fetchEmails() {
+  const client = new ImapFlow({
+    host: mailHost!,
+    port: 993,
+    secure: true,
+    auth: {
+      user: email!,
+      pass: password,
+    },
+  });
+
+  await client.connect();
+
+  let lock = await client.getMailboxLock("INBOX");
+  try {
+    const messages = await client.fetch("1:*", {
+      source: true,
+      envelope: true,
+    });
+
+    const emails = [];
+
+    for await (let message of messages) {
+      const messageSource = message.source.toString();
+      const date = message.envelope.date?.toISOString() || null;
+
+      const subject = message.envelope.subject || null;
+
+      const referenceMatch = subject?.match(
+        /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
+      );
+
+      let referenceId = null;
+      let collectionPrefix = null;
+
+      if (referenceMatch) {
+        collectionPrefix = referenceMatch[1];
+        referenceId = referenceMatch[2];
+      }
+
+      console.log("Collection Prefix:", collectionPrefix);
+      console.log("Reference ID:", referenceId);
+
+      const startMarker = "Content-Transfer-Encoding: quoted-printable";
+      const endMarker = "Le ";
+
+      const startIndex =
+        messageSource.indexOf(startMarker) + startMarker.length;
+      const endIndex = messageSource.indexOf(endMarker);
+
+      let extractedContent = null;
+
+      if (startIndex !== -1 && endIndex !== -1) {
+        extractedContent = messageSource.substring(startIndex, endIndex).trim();
+      } else {
+        console.log("Les marqueurs de début ou de fin n'ont pas été trouvés.");
+      }
+
+      emails.push({
+        content: extractedContent,
+        date: formatDate(date),
+        referenceId,
+      });
+
+      if (referenceId && extractedContent) {
+        const collectionName = determineCollectionName(
+          collectionPrefix || "default"
+        );
+        await updateContribution(
+          referenceId,
+          extractedContent,
+          formatDate(date),
+          collectionName
+        );
+      }
+    }
+  } finally {
+    lock.release();
+  }
+
+  await client.logout();
+}
+
+function determineCollectionName(collectionPrefix: string) {
+  if (collectionPrefix === "remove-user") {
+    return "remove-user";
+  } else if (collectionPrefix === "contacts") {
+    return "contacts";
+  } else if (collectionPrefix === "contribute") {
+    return "contribute";
+  } else if (collectionPrefix === "contribute_productions") {
+    return "contribute_productions";
+  } else if (collectionPrefix === "update-user-data") {
+    return "update-user-data";
+  }
+  return "contacts";
+}
+setInterval(() => {
+  console.log("Vérification des emails...");
+  fetchEmails().catch((err) => console.error(err));
+}, 60 * 1000);

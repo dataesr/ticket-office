@@ -202,6 +202,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
               )}
               refetch={refetch}
               highlightedQuery={highlightedQuery}
+              url={url}
             />
           )}
         </Col>

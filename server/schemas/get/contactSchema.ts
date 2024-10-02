@@ -23,6 +23,7 @@ export const contactSchema = t.Object(
             t.Array(
               t.Object({
                 responseMessage: t.Union([t.String(), t.Null()]),
+                read: t.Optional(t.Boolean()),
                 timestamp: t.Optional(
                   t.Union([t.String(), t.Date(), t.Null()])
                 ),

@@ -16,9 +16,15 @@
   padding: 15px;
 }
 
+.user-side {
+  text-align: left;
+  background-color: var(--background-alt-pink-macaron);
+  border-radius: 20px;
+  padding: 20px;
+}
+
 .staffSide {
   text-align: right;
-  background-color: var(--background-alt-pink-macaron);
   border-radius: 20px;
   padding: 20px;
   margin-left: 140px;
@@ -26,7 +32,6 @@
 
 .staffSideContact {
   text-align: right;
-  background-color: var(--background-alt-blue-cumulus);
   border-radius: 20px;
   padding: 20px;
   margin-left: 140px;
