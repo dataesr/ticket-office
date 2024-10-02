@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { Col, Text, Toggle } from "@dataesr/dsfr-plus";
 import EmailSender from "../../api/send-mail";
 import type { Contribution } from "../../types";
@@ -30,18 +31,49 @@ const StaffActions = ({
 
 =======
 import { Col, Text } from "@dataesr/dsfr-plus";
+=======
+import { Col, Text, Toggle } from "@dataesr/dsfr-plus";
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
 import EmailSender from "../../api/send-mail";
 import type { Contribution } from "../../types";
 import { useLocation } from "react-router-dom";
-
-const StaffActions = ({ data, refetch }: { data: Contribution; refetch }) => {
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import "./styles.scss";
+import { useState, useEffect } from "react";
+const StaffActions = ({
+  data,
+  refetch,
+  url,
+}: {
+  data: Contribution;
+  refetch: () => void;
+  url: string;
+}) => {
   const location = useLocation();
+<<<<<<< HEAD
 >>>>>>> 7e6255f (fix(naming): clean code)
+=======
+
+  let baseUrl = "contacts";
+  if (location?.pathname?.includes("scanr-contributionpage")) {
+    baseUrl = "contribute";
+  } else if (location?.pathname?.includes("removeuser")) {
+    baseUrl = "remove-user";
+  } else if (location?.pathname?.includes("namechange")) {
+    baseUrl = "update-user-data";
+  } else if (location?.pathname?.includes("apioperations")) {
+    baseUrl = "production";
+  }
+
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
   const contributorClassName = location.pathname.includes("contributionpage")
     ? "staffSide"
     : "staffSideContact";
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
   const displayedDates = new Set<string>();
   const queryClient = useQueryClient();
 
@@ -130,12 +162,16 @@ const StaffActions = ({ data, refetch }: { data: Contribution; refetch }) => {
     setIsAllRead(allRead);
   }, [data]);
 
+<<<<<<< HEAD
 =======
 >>>>>>> 7e6255f (fix(naming): clean code)
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
   return (
     <>
       {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
+<<<<<<< HEAD
 <<<<<<< HEAD
           {data.threads.length > 2 && (
             <Toggle
@@ -195,6 +231,51 @@ const StaffActions = ({ data, refetch }: { data: Contribution; refetch }) => {
                 {response.responseMessage}
               </Text>
             ))
+=======
+          <Toggle
+            label="Marquer toutes les réponses comme lues"
+            checked={isAllRead}
+            onChange={handleToggleChange}
+          />
+
+          {data.threads.map((thread, threadIndex) =>
+            thread.responses.map((response, index) => {
+              const responseDate = new Date(
+                response.timestamp
+              ).toLocaleDateString();
+              const responseTime = new Date(
+                response.timestamp
+              ).toLocaleTimeString();
+
+              if (displayedDates.has(responseDate + responseTime)) {
+                return null;
+              }
+
+              displayedDates.add(responseDate + responseTime);
+
+              const responder = response.team.includes("user")
+                ? data.name
+                : response.team.join(", ");
+
+              return (
+                <div
+                  key={`${threadIndex}-${index}`}
+                  className="response-container"
+                >
+                  <Text
+                    size="sm"
+                    className={
+                      response.team.includes("user") ? "user-side" : "staffSide"
+                    }
+                  >
+                    Réponse apportée par {responder} le {responseDate} à{" "}
+                    {responseTime} :<br />
+                    {response.responseMessage}
+                  </Text>
+                </div>
+              );
+            })
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
           )}
 >>>>>>> 7e6255f (fix(naming): clean code)
         </Col>

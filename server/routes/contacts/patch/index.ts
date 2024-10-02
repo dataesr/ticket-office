@@ -22,6 +22,9 @@ contactPutRoutes.patch(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
     if (body.threads) {
       body.threads = body.threads.map((thread) => {
         thread.responses = thread.responses?.map((response) => {
@@ -34,8 +37,11 @@ contactPutRoutes.patch(
       });
     }
 
+<<<<<<< HEAD
 =======
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
     const { acknowledged } = await db
       .collection("contacts")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -95,6 +101,9 @@ contactPutRoutes.patch(
       summary: "Modifier une contribution via formulaire de contact par ID",
       description:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
         "Cette route permet de mettre à jour une contribution spécifique via l'ID fourni. Elle permet de modifier le statut, d'ajouter la personne modifiant dans l'équipe, et de mettre à jour la date de traitement et de modification.",
       tags: ["Contacts"],
 =======

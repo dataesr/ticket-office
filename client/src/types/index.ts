@@ -97,6 +97,7 @@ export interface ContributionItemProps {
   highlightedQuery: string;
   refetch: () => void;
   allTags: string[];
+  url: string;
 }
 export interface ChangeNameProps {
   id: string;

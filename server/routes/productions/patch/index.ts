@@ -22,6 +22,9 @@ productionsPutRoutes.patch(
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
     if (body.threads) {
       body.threads = body.threads.map((thread) => {
         thread.responses = thread.responses?.map((response) => {
@@ -34,8 +37,11 @@ productionsPutRoutes.patch(
       });
     }
 
+<<<<<<< HEAD
 =======
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
     const { acknowledged } = await db
       .collection("contribute_productions")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });

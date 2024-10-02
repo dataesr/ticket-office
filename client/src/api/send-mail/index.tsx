@@ -90,6 +90,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       to: contribution.email,
       name: contribution.name,
 <<<<<<< HEAD
+<<<<<<< HEAD
       subject: `Réponse à votre contribution, référence ${collectionName}-${contribution.id}`,
       userResponse: formattedResponse,
       selectedProfile,
@@ -121,6 +122,9 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 >>>>>>> 2e9190f (fix(api): update schemas)
 =======
       subject: `Réponse à votre contribution, référence ${contribution.id}`,
+=======
+      subject: `Réponse à votre contribution, référence ${collectionName}-${contribution.id}`,
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
       userResponse: formattedResponse,
       selectedProfile,
       message: contribution.message,

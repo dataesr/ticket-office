@@ -43,6 +43,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
           </Badge>
         )}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         {data?.fromSubApp && (
           <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
@@ -50,6 +51,8 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
           </Badge>
         )}
 >>>>>>> 7e6255f (fix(naming): clean code)
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
         {data?.status && (
           <Badge
             size="sm"

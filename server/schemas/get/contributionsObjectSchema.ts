@@ -71,6 +71,7 @@ export const contributionObjectSchema = t.Object(
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
                 responseMessage: t.Union([t.String(), t.Null()]),
+                read: t.Optional(t.Boolean()),
                 timestamp: t.Optional(
                   t.Union([t.String(), t.Date(), t.Null()])
                 ),

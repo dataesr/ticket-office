@@ -40,6 +40,7 @@ import replyRoutes from "./routes/reply/replyRoutes";
 >>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
 import contactsRoutes from "./routes/contacts";
 import sendMail from "./routes/reply/replyRoutes";
+import { fetchEmails } from "./routes/receive-email";
 // import connectToImapServer from "./routes/receive-email";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
@@ -48,9 +49,13 @@ dotenv.config();
 const app = new Elysia();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 fetchEmails();
 =======
 >>>>>>> 8372f23 (fix(edit): update package delete dep)
+=======
+fetchEmails();
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
 app
   .use(
     cors({
@@ -77,10 +82,14 @@ app
           { name: "Contributions", description: "Gestion des contributions" },
           { name: "Productions", description: "Gestion des productions" },
 <<<<<<< HEAD
+<<<<<<< HEAD
           { name: "Envoi de mails", description: "Envoi de mails" },
 =======
           { name: "Envoi de mails", description: "Gestion de emails" },
 >>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
+=======
+          { name: "Envoi de mails", description: "Envoi de mails" },
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
           {
             name: "Supressions de profil",
             description: "Gestion des demandes supression de profil",

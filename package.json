@@ -8,6 +8,7 @@
   "devDependencies": {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     "@types/imapflow": "^1.0.19",
     "@types/mailparser": "^3.4.4",
 =======
@@ -15,6 +16,10 @@
 >>>>>>> 824b180 (fix(ci): update workflow)
 =======
 >>>>>>> 00d3d37 (fix(api): change url for request on staging)
+=======
+    "@types/imapflow": "^1.0.19",
+    "@types/mailparser": "^3.4.4",
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
     "concurrently": "^8.2.2"
   },
   "scripts": {
@@ -45,6 +50,13 @@
 =======
     "start:server": "cd server && bun run --watch server.ts",
     "start": "concurrently \"npm run start:client\" \"bun run start:server\""
+<<<<<<< HEAD
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+  },
+  "dependencies": {
+    "imapflow": "^1.0.164",
+    "mailparser": "^3.7.1"
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
   }
 }

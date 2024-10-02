@@ -26,6 +26,9 @@ export const editContributionsSchema = t.Object(
     treated_at: t.Optional(t.Date()),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
     threads: t.Optional(
       t.Array(
         t.Object({
@@ -46,8 +49,11 @@ export const editContributionsSchema = t.Object(
         })
       )
     ),
+<<<<<<< HEAD
 =======
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
     productions: t.Optional(
       t.Array(
         t.Object({

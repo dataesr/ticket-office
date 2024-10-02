@@ -66,6 +66,7 @@ sendMail.post(
     const dataForBrevo = {
       sender: {
         email: "support@scanr.fr",
+<<<<<<< HEAD
         name: `${selectedProfile} de l'équipe scanR`,
       },
       to: [{ email: to, name: name }],
@@ -224,12 +225,14 @@ sendMail.post(
     const dataForBrevo = {
       sender: {
         email: "scanr@recherche.gouv.fr",
+=======
+>>>>>>> ca679c1 (feat(imap-server): add imap server)
         name: `${selectedProfile} de l'équipe scanR`,
       },
       to: [{ email: to, name: name }],
-      replyTo: { email: "scanr@recherche.gouv.fr", name: "L'équipe scanR" },
+      replyTo: { email: "support@scanr.fr", name: "L'équipe scanR" },
       subject: subject,
-      templateId: 262,
+      templateId: 267,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
         userResponse,
@@ -267,10 +270,11 @@ sendMail.post(
 
     const updatedThreads = existingDoc.threads || [];
     updatedThreads.push({
-      threadId: new Date().toISOString(),
+      threadId: existingDoc._id.toString(),
       responses: [
         {
           responseMessage: userResponse,
+          read: true,
           timestamp: new Date(),
           team: [selectedProfile],
         },
@@ -285,7 +289,11 @@ sendMail.post(
       }
     );
 
-    return { success: true, message: "E-mail envoyé et réponse enregistrée" };
+    return {
+      success: true,
+      message: "E-mail envoyé et réponse enregistrée",
+      collection: collectionName,
+    };
   },
   {
     response: {
