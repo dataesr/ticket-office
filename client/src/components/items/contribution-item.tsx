@@ -18,6 +18,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
   highlightedQuery,
   refetch,
   allTags,
+  url,
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -39,11 +40,6 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
         {data?.tags?.length > 0 && (
           <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
             {data.tags.join(", ")}
-          </Badge>
-        )}
-        {data?.fromSubApp && (
-          <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
-            {data.fromSubApp}
           </Badge>
         )}
         {data?.status && (
@@ -109,7 +105,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
           refetch={refetch}
           allTags={allTags}
         />
-        <StaffActions refetch={refetch} data={data} />
+        <StaffActions url={url} refetch={refetch} data={data} />
       </Col>
     </>
   );

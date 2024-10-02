@@ -9,7 +9,15 @@ const contributionObjectPutRoutes = new Elysia();
 
 contributionObjectPutRoutes.patch(
   "/contribute/:id",
-  async ({ params: { id }, body, error }) => {
+  async ({
+    params: { id },
+    body,
+    error,
+  }: {
+    params: { id: string };
+    body: any;
+    error: any;
+  }) => {
     if (body.status && ["ongoing", "treated"].includes(body.status)) {
       body.treated_at = new Date();
     }
@@ -19,6 +27,20 @@ contributionObjectPutRoutes.patch(
       if (!body.team.includes(userWhoModified)) {
         body.team.push(userWhoModified);
       }
+    }
+
+    if (body.threads) {
+      body.threads = body.threads.map((thread: { responses: any[] }) => {
+        thread.responses = thread.responses?.map(
+          (response: { read: boolean }) => {
+            if (response.read === false) {
+              response.read = true;
+            }
+            return response;
+          }
+        );
+        return thread;
+      });
     }
 
     const { acknowledged } = await db

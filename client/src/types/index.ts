@@ -26,6 +26,7 @@ export interface ContributionItemProps {
   highlightedQuery: string;
   refetch: () => void;
   allTags: string[];
+  url: string;
 }
 export interface ChangeNameProps {
   id: string;
@@ -89,6 +90,7 @@ export interface Thread {
 }
 
 export interface Response {
+  read: boolean;
   responseMessage: string;
   timestamp: string;
   team?: string[];
