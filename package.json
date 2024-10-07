@@ -55,6 +55,7 @@
 =======
   },
   "dependencies": {
+    "@types/imapflow": "^1.0.19",
     "imapflow": "^1.0.164",
     "mailparser": "^3.7.1"
 >>>>>>> ca679c1 (feat(imap-server): add imap server)
