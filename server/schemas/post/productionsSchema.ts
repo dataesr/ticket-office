@@ -12,6 +12,9 @@ export const postProductionsSchema = t.Object(
     email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dc5a63d (fix(productions): delete message from schemas)
     extra: t.Optional(t.Record(t.String(), t.String())),
 =======
     message: t.String(),

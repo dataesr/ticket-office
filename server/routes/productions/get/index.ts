@@ -103,9 +103,12 @@ getProductionsRoutes.get(
       email: production.email || "",
       name: production.name || "",
 <<<<<<< HEAD
+<<<<<<< HEAD
       comment: production.comment || "",
 =======
       message: production.message || "",
+=======
+>>>>>>> dc5a63d (fix(productions): delete message from schemas)
       comment: production.comment || "",
 <<<<<<< HEAD
       idref: production.idref || "",

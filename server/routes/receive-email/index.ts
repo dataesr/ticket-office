@@ -6,6 +6,7 @@ import { MongoClient } from "mongodb";
 const email = process.env.MAIL_ADRESSE;
 const password = process.env.MAIL_PASSWORD;
 const mailHost = process.env.MAIL_HOST || "";
+<<<<<<< HEAD
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017";
 const dbName = process.env.MONGO_DATABASE || "ticket-office";
 
@@ -262,6 +263,8 @@ import { MongoClient } from "mongodb";
 const email = process.env.MAIL_ADRESSE;
 const password = process.env.MAIL_PASSWORD;
 const mailHost = process.env.MAIL_HOST || "defaultMailHost";
+=======
+>>>>>>> dc5a63d (fix(productions): delete message from schemas)
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017";
 const dbName = "ticket-office-api";
 
@@ -270,7 +273,6 @@ if (!email || !password || !mongoUri) {
     "MAIL_ADRESSE, MAIL_PASSWORD and MONGO_URI environment variables must be defined"
   );
 }
-
 function formatDate(dateString: string | number | Date | null) {
   const date = new Date(dateString || "");
   return date.toISOString();
@@ -286,7 +288,7 @@ async function updateContribution(
     await client.connect();
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
-
+    console.log("Collection:", collectionName);
     if (!collection) {
       console.log("La collection n'existe pas :", collectionName);
       return;

@@ -6,7 +6,10 @@ export const productionSchema = t.Object(
 <<<<<<< HEAD
     id: t.String(),
 <<<<<<< HEAD
+<<<<<<< HEAD
     objectId: t.String(),
+=======
+>>>>>>> dc5a63d (fix(productions): delete message from schemas)
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     email: t.Optional(t.String()),
     name: t.Optional(t.String()),

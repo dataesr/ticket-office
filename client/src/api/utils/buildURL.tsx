@@ -46,8 +46,12 @@ export const buildURL = (
 >>>>>>> d4acea1 (typo)
 
   let baseUrl = "contacts";
+<<<<<<< HEAD
   if (location?.pathname?.includes("scanr-contributionpage")) {
 >>>>>>> dfca0bc (chore(api): clean code)
+=======
+  if (location?.pathname?.includes("scanr-contributionPage")) {
+>>>>>>> dc5a63d (fix(productions): delete message from schemas)
     baseUrl = "contribute";
   } else if (location?.pathname?.includes("removeuser")) {
     baseUrl = "remove-user";
