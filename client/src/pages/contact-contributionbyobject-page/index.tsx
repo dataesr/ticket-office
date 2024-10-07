@@ -62,7 +62,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     fromApplication
   );
   let urlToSend;
-  if (location.pathname.includes("contributionpage")) {
+  if (location.pathname.includes("contributionPage")) {
     urlToSend = contributionUrl;
   } else if (location.pathname.includes("-contact")) {
     urlToSend = contactUrl;
@@ -140,9 +140,18 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   return (
     <Container className="fr-my-5w">
       <Title as="h1">
-        {location.pathname.includes("contributionpage")
-          ? "Contribution par objets"
-          : "Contribution via formulaire de contact"}
+        {(() => {
+          switch (true) {
+            case location.pathname.includes("contributionPage"):
+              return "Contribution par objets";
+            case location.pathname.includes("removeuser"):
+              return "Demande de suppression";
+            case location.pathname.includes("namechange"):
+              return "Demande de changement de nom";
+            default:
+              return "Contribution via formulaire de contact";
+          }
+        })()}
       </Title>
       <Row gutters className="fr-mb-3w">
         <Col md="8" xs="12">

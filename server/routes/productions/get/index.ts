@@ -51,7 +51,6 @@ getProductionsRoutes.get(
       modified_at: production.modified_at || new Date(),
       email: production.email || "",
       name: production.name || "",
-      message: production.message || "",
       comment: production.comment || "",
       status: production.status || "",
       team: production.team || [],
