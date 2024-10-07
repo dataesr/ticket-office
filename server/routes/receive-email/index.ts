@@ -287,19 +287,15 @@ async function updateContribution(
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
 
-    // Assurez-vous que la collection existe avant de continuer
     if (!collection) {
       console.log("La collection n'existe pas :", collectionName);
       return;
     }
 
-    // Utilisez le bon champ de recherche
     const contribution = await collection.findOne({
-      // Assurez-vous que 'id' est le bon champ à interroger
       id: referenceId,
     });
 
-    console.log(contribution);
     if (contribution) {
       const existingThreads = Array.isArray(contribution.threads)
         ? contribution.threads
