@@ -11,7 +11,6 @@ import updateUserDataRoutes from "./routes/update-user-data";
 import contactsRoutes from "./routes/contacts";
 import sendMail from "./routes/reply/replyRoutes";
 import { fetchEmails } from "./routes/receive-email";
-// import connectToImapServer from "./routes/receive-email";
 
 dotenv.config();
 
