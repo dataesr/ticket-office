@@ -3,7 +3,6 @@ import { t } from "elysia";
 export const productionSchema = t.Object(
   {
     id: t.String(),
-    message: t.Optional(t.String()),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     email: t.Optional(t.String()),
     name: t.Optional(t.String()),
