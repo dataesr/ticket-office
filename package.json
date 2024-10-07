@@ -16,6 +16,7 @@
     "start": "concurrently \"npm run start:client\" \"bun run start:server\""
   },
   "dependencies": {
+    "@types/imapflow": "^1.0.19",
     "imapflow": "^1.0.164",
     "mailparser": "^3.7.1"
   }
