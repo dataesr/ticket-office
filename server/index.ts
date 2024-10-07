@@ -41,8 +41,11 @@ import replyRoutes from "./routes/reply/replyRoutes";
 import contactsRoutes from "./routes/contacts";
 import sendMail from "./routes/reply/replyRoutes";
 import { fetchEmails } from "./routes/receive-email";
+<<<<<<< HEAD
 // import connectToImapServer from "./routes/receive-email";
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> 7d1545e (fix(mongo): update connexion to mongo)
 
 dotenv.config();
 
