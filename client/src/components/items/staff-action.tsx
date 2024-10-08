@@ -123,11 +123,14 @@ const StaffActions = ({
     <>
       {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
-          <Toggle
-            label="Marquer toutes les réponses comme lues"
-            checked={isAllRead}
-            onChange={handleToggleChange}
-          />
+          {/* Afficher le toggle uniquement s'il y a plus de 2 objets dans threads */}
+          {data.threads.length > 2 && (
+            <Toggle
+              label="Marquer toutes les réponses comme lues"
+              checked={isAllRead}
+              onChange={handleToggleChange}
+            />
+          )}
 
           {data.threads.map((thread, threadIndex) =>
             thread.responses.map((response, index) => {
@@ -159,9 +162,14 @@ const StaffActions = ({
                       response.team.includes("user") ? "user-side" : "staffSide"
                     }
                   >
-                    Réponse apportée par {responder} le {responseDate} à{" "}
-                    {responseTime} :<br />
-                    {response.responseMessage}
+                    {responder && (
+                      <>
+                        Réponse apportée par {responder} le {responseDate} à{" "}
+                        {responseTime} :
+                        <br />
+                        {response.responseMessage}
+                      </>
+                    )}
                   </Text>
                 </div>
               );
