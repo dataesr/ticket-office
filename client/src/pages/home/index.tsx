@@ -16,16 +16,22 @@ import { Container, Row, Title } from "@dataesr/dsfr-plus";
 
 const Home = () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 03c66cc (fix(contribute_productions): update schemas)
   // const [filter, setFilter] = useState("contributions");
   // const url = filter === "object" ? contributionUrl : contactUrl;
   // const { data, isLoading, isError } = ContributionData(url);
   // const contributions = data?.data as { data: [] };
+<<<<<<< HEAD
 =======
   const [filter, setFilter] = useState("contributions");
   const url = filter === "object" ? contributionUrl : contactUrl;
   const { data, isLoading, isError } = ContributionData(url);
   const contributions = data?.data as { data: [] };
 >>>>>>> 34a5a9c (typo)
+=======
+>>>>>>> 03c66cc (fix(contribute_productions): update schemas)
 
   return (
     <Container className="fr-mt-10v">

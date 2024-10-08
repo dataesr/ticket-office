@@ -78,7 +78,11 @@ getProductionsRoutes.get(
 <<<<<<< HEAD
 <<<<<<< HEAD
       id: production.id.toString(),
+<<<<<<< HEAD
       objectId: production.objectId.toString(),
+=======
+      objectId: production._id.toString(),
+>>>>>>> 03c66cc (fix(contribute_productions): update schemas)
       organisation: production.organisation || "",
       fonction: production.position || "",
 =======

@@ -6,9 +6,13 @@ export const postProductionsSchema = t.Object(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     objectId: t.String(),
 =======
 >>>>>>> 220c881 (fix(api): add meta in response schema)
+=======
+    objectId: t.String(),
+>>>>>>> 03c66cc (fix(contribute_productions): update schemas)
     email: t.String({ regex: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }),
     name: t.String(),
 <<<<<<< HEAD

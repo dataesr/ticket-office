@@ -124,6 +124,7 @@ const Header: React.FC = () => {
 =======
   const handleCloseModal = () => setShowModal(false);
 
+<<<<<<< HEAD
   const countNewContributions = (data, appName) => {
     if (!data || !data.data) return 0;
 
@@ -139,6 +140,8 @@ const Header: React.FC = () => {
   };
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 
+=======
+>>>>>>> 03c66cc (fix(contribute_productions): update schemas)
   return (
     <>
       <HeaderWrapper>
@@ -246,22 +249,14 @@ const Header: React.FC = () => {
             current={pathname.split("/").includes("scanr")}
             title={"scanR"}
           >
-            {urls.map(({ href, name }, index) => {
-              const { data, isLoading, isError } = contributionsData[index];
-              const appName = href === "/scanr-contact" ? "scanr" : null;
-
+            {urls.map(({ href, name }) => {
               return (
                 <Link
                   key={href}
                   current={pathname.startsWith("/scanr")}
                   href={href}
                 >
-                  {name}{" "}
-                  {isLoading
-                    ? "(Chargement...)"
-                    : !isError && data
-                    ? `(${countNewContributions(data, appName)})`
-                    : ""}
+                  {name}
                 </Link>
               );
             })}
@@ -270,35 +265,17 @@ const Header: React.FC = () => {
             current={pathname.startsWith("/paysage")}
             href="/paysage-contact"
           >
-            Paysage{" "}
-            {!contributionsData[1].isLoading &&
-            countNewContributions(contributionsData[1].data, "paysage") > 0
-              ? `(${countNewContributions(
-                  contributionsData[1].data,
-                  "paysage"
-                )})`
-              : ""}
+            Paysage
           </Link>
           <Link
             current={pathname.startsWith("/curiexplore")}
             href="/curiexplore-contact"
           >
-            CurieXplore{" "}
-            {!contributionsData[1].isLoading &&
-            countNewContributions(contributionsData[1].data, "curiexplore") > 0
-              ? `(${countNewContributions(
-                  contributionsData[1].data,
-                  "curiexplore"
-                )})`
-              : ""}
+            CurieXplore
           </Link>
           <NavItem current={pathname.split("/").includes("bso")} title={"BSO"}>
             <Link current={pathname.startsWith("/bso")} href="/bso-contact">
-              Formulaire de contact{" "}
-              {!contributionsData[1].isLoading &&
-              countNewContributions(contributionsData[1].data, "bso") > 0
-                ? `(${countNewContributions(contributionsData[1].data, "bso")})`
-                : ""}
+              Formulaire de contact
             </Link>
             <Link current={pathname.startsWith("/bso")} href="/bso-local">
               Demandes de BSO local
@@ -308,27 +285,13 @@ const Header: React.FC = () => {
             current={pathname.startsWith("/datasupr")}
             href="/datasupr-contact"
           >
-            datasupR{" "}
-            {!contributionsData[1].isLoading &&
-            countNewContributions(contributionsData[1].data, "datasupr") > 0
-              ? `(${countNewContributions(
-                  contributionsData[1].data,
-                  "datasupr"
-                )})`
-              : ""}
+            datasupR
           </Link>
           <Link
             current={pathname.startsWith("/works-magnet")}
             href="/works-magnet-contact"
           >
-            Works magnet{" "}
-            {!contributionsData[1].isLoading &&
-            countNewContributions(contributionsData[1].data, "works-magnet") > 0
-              ? `(${countNewContributions(
-                  contributionsData[1].data,
-                  "works-magnet"
-                )})`
-              : ""}
+            Works magnet
           </Link>
         </Nav>
       </HeaderWrapper>
