@@ -129,6 +129,7 @@ export type MessagePreviewProps = {
 };
 
 export type Contribute_Production = {
+  objectId: string;
   fullName: string;
   firstName: string;
   lastName: string;

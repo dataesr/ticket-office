@@ -15,7 +15,7 @@ async function addFromAppField() {
 
     const db = client.db("ticket-office-api");
     // change collection with contact / contribute_production and contribute
-    const collection = db.collection("contribute");
+    const collection = db.collection("contribute_productions");
 
     const contacts = await collection.find().toArray();
     console.log(`Nombre de contacts trouvés : ${contacts.length}`);

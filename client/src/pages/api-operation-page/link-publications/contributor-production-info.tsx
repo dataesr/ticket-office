@@ -1,4 +1,4 @@
-import { Contribute_Production } from "@/types";
+import { Contribute_Production } from "../../../types";
 import MessagePreview from "./message-preview";
 
 const ContributorProductionInfo = ({
