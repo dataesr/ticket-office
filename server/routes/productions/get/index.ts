@@ -44,6 +44,7 @@ getProductionsRoutes.get(
 
     const formattedProductions = productions.map((production: any) => ({
       id: production.id.toString(),
+      objectId: production._id.toString(),
       organisation: production.organisation || "",
       fonction: production.position || "",
       treated_at: production.treated_at || new Date(),

@@ -1,30 +1,30 @@
-import { Col, Container, Row, Title } from "@dataesr/dsfr-plus";
-import ContributionsGraphByYear from "../../components/graphs/contributions-by-year";
-import ContributionsGraphByName from "../../components/graphs/contributions-by-name";
-import ContributionsGraphByStatus from "../../components/graphs/by-status";
-import ContributionsGraphByTags from "../../components/graphs/by-tags";
-import ContributionsGraphByDomains from "../../components/graphs/by-domains";
-import ContributionsGraphByTypes from "../../components/graphs/by-types";
-import AdminTreatmentGraph from "../../components/graphs/treatment-by-admin";
-import AdminResponseGraph from "../../components/graphs/response-by-admin";
-import ContributionsGraphByProductions from "../../components/graphs/by-missing-productions";
-import CommentsGraphByTeamMember from "../../components/graphs/comment-by-team";
-import ContributionsGraphByYearAndType from "../../components/graphs/contribution-by-type";
-import { useState } from "react";
-import { contactUrl, contributionUrl } from "../../config/api";
-import ContributionData from "../../api/contribution-api/getData";
+import { Container, Row, Title } from "@dataesr/dsfr-plus";
+// import ContributionsGraphByYear from "../../components/graphs/contributions-by-year";
+// import ContributionsGraphByName from "../../components/graphs/contributions-by-name";
+// import ContributionsGraphByStatus from "../../components/graphs/by-status";
+// import ContributionsGraphByTags from "../../components/graphs/by-tags";
+// import ContributionsGraphByDomains from "../../components/graphs/by-domains";
+// import ContributionsGraphByTypes from "../../components/graphs/by-types";
+// import AdminTreatmentGraph from "../../components/graphs/treatment-by-admin";
+// import AdminResponseGraph from "../../components/graphs/response-by-admin";
+// import ContributionsGraphByProductions from "../../components/graphs/by-missing-productions";
+// import CommentsGraphByTeamMember from "../../components/graphs/comment-by-team";
+// import ContributionsGraphByYearAndType from "../../components/graphs/contribution-by-type";
+// import { useState } from "react";
+// import { contactUrl, contributionUrl } from "../../config/api";
+// import ContributionData from "../../api/contribution-api/getData";
 
 const Home = () => {
-  const [filter, setFilter] = useState("contributions");
-  const url = filter === "object" ? contributionUrl : contactUrl;
-  const { data, isLoading, isError } = ContributionData(url);
-  const contributions = data?.data as { data: [] };
+  // const [filter, setFilter] = useState("contributions");
+  // const url = filter === "object" ? contributionUrl : contactUrl;
+  // const { data, isLoading, isError } = ContributionData(url);
+  // const contributions = data?.data as { data: [] };
 
   return (
     <Container className="fr-mt-10v">
       <Title>Bienvenue sur le Guichet numérique du DISD</Title>
       <Row gutters className="fr-grid-row--center fr-mt-5w">
-        <Col md="6">
+        {/* <Col md="6">
           <ContributionsGraphByYear
             contributions={contributions}
             isLoading={isLoading}
@@ -128,7 +128,7 @@ const Home = () => {
             isLoading={isLoading}
             isError={isError}
           />
-        </Col>
+        </Col> */}
       </Row>
     </Container>
   );
