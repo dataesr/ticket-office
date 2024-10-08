@@ -96,14 +96,12 @@ const ContributionProductionItem = ({
       <Row>
         <Col>
           <Text size="sm" bold className="name">
-            {data?.name} ({data?.objectId})
+            {data?.name} ({data?.id})
             <button
-              className={`copy-button ${
-                copiedId === data?.objectId ? "copied" : ""
-              }`}
-              onClick={() => copyToClipboard(data?.objectId)}
+              className={`copy-button ${copiedId === data?.id ? "copied" : ""}`}
+              onClick={() => copyToClipboard(data?.id)}
             >
-              {copiedId === data?.objectId && (
+              {copiedId === data?.id && (
                 <span className="copied-text">Copié</span>
               )}
               <FaCopy size={14} color="#2196f3" className="copy-icon" />
