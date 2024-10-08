@@ -7,6 +7,7 @@ const client = new MongoClient(mongoURI);
 // THE FIELD IS CALLED "fromApplication" AND ITS VALUE IS "scanr"
 // USE IT DIRECTLY WE PROD
 
+console.log(mongoURI);
 async function addFromAppField() {
   try {
     await client.connect();
@@ -14,14 +15,13 @@ async function addFromAppField() {
 
     const db = client.db("ticket-office-api");
     // change collection with contact / contribute_production and contribute
-    const collection = db.collection("contribute_productions");
+    const collection = db.collection("contribute");
 
     const contacts = await collection.find().toArray();
     console.log(`Nombre de contacts trouvés : ${contacts.length}`);
 
     for (const contact of contacts) {
       const updateData = {
-        fromApplication: "scanr",
         id: contact._id.toString(),
       };
 
