@@ -136,7 +136,6 @@ async function sendNotificationEmail(
     );
   }
 }
-
 export async function fetchEmails() {
   const client = new ImapFlow({
     host: mailHost!,
@@ -159,55 +158,69 @@ export async function fetchEmails() {
     });
 
     const emails = [];
-
     for await (let message of messages) {
-      const messageSource = message.source.toString();
-      const date = message.envelope.date?.toISOString() || null;
+      try {
+        if (!message.envelope || !message.source) {
+          console.warn("Message sans enveloppe ou contenu, ignoré.");
+          continue;
+        }
 
-      const subject = message.envelope.subject || null;
+        const messageSource = message.source.toString();
+        const date = message.envelope.date?.toISOString() || null;
+        const subject = message.envelope.subject || null;
 
-      const referenceMatch = subject?.match(
-        /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
-      );
-
-      let referenceId = null;
-      let collectionPrefix = null;
-
-      if (referenceMatch) {
-        collectionPrefix = referenceMatch[1];
-        referenceId = referenceMatch[2];
-      }
-
-      const startMarker = "Content-Transfer-Encoding: quoted-printable";
-      const endMarker = "Le ";
-
-      const startIndex =
-        messageSource.indexOf(startMarker) + startMarker.length;
-      const endIndex = messageSource.indexOf(endMarker);
-
-      let extractedContent = null;
-
-      if (startIndex !== -1 && endIndex !== -1) {
-        extractedContent = messageSource.substring(startIndex, endIndex).trim();
-      } else {
-        console.log("Les marqueurs de début ou de fin n'ont pas été trouvés.");
-      }
-
-      emails.push({
-        content: extractedContent,
-        date: formatDate(date),
-        referenceId,
-      });
-
-      if (referenceId && extractedContent) {
-        const collectionName = determineCollectionName(
-          collectionPrefix || "default"
+        const referenceMatch = subject?.match(
+          /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
         );
-        await updateContribution(
+        let referenceId = null;
+        let collectionPrefix = null;
+
+        if (referenceMatch) {
+          collectionPrefix = referenceMatch[1];
+          referenceId = referenceMatch[2];
+        }
+
+        const startMarker = "Content-Transfer-Encoding: quoted-printable";
+        const endMarker = "Le ";
+        const startIndex =
+          messageSource.indexOf(startMarker) + startMarker.length;
+        const endIndex = messageSource.indexOf(endMarker);
+
+        let extractedContent = null;
+
+        // Vérifie que les marqueurs existent bien
+        if (startIndex !== -1 && endIndex !== -1) {
+          extractedContent = messageSource
+            .substring(startIndex, endIndex)
+            .trim();
+        } else {
+          console.log(
+            "Les marqueurs de début ou de fin n'ont pas été trouvés. Email ignoré."
+          );
+          continue;
+        }
+
+        emails.push({
+          content: extractedContent,
+          date: formatDate(date),
           referenceId,
-          extractedContent,
-          formatDate(date),
-          collectionName
+        });
+
+        if (referenceId && extractedContent) {
+          const collectionName = determineCollectionName(
+            collectionPrefix || "default"
+          );
+          await updateContribution(
+            referenceId,
+            extractedContent,
+            formatDate(date),
+            collectionName
+          );
+        }
+      } catch (emailProcessingError) {
+        console.error(
+          "Erreur lors du traitement de l'email :",
+          emailProcessingError
         );
       }
     }
