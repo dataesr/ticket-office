@@ -288,16 +288,12 @@ async function updateContribution(
     await client.connect();
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
-    console.log("Collection:", collectionName);
     if (!collection) {
       console.log("La collection n'existe pas :", collectionName);
       return;
     }
 
-    const contribution = await collection.findOne({
-      id: referenceId,
-    });
-
+    const contribution = await collection.findOne({ id: referenceId });
     if (contribution) {
       const existingThreads = Array.isArray(contribution.threads)
         ? contribution.threads
@@ -328,14 +324,21 @@ async function updateContribution(
         timestamp: formatDate(timestamp),
       };
 
-      await collection.updateOne(
+      const updateResult = await collection.updateOne(
         { _id: contribution._id },
         { $set: { threads: [...existingThreads, response] } }
       );
-      console.log(
-        "Réponse ajoutée dans les threads pour la contribution:",
-        referenceId
-      );
+
+      if (updateResult.modifiedCount > 0) {
+        console.log(
+          `Contribution mise à jour avec succès pour l'ID de référence: ${referenceId}`
+        );
+        await sendNotificationEmail(referenceId, contribution, responseMessage);
+      } else {
+        console.log(
+          `Aucune contribution mise à jour pour l'ID de référence: ${referenceId}`
+        );
+      }
     } else {
       console.log(
         "Aucune contribution trouvée pour l'ID de référence",
@@ -348,9 +351,60 @@ async function updateContribution(
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 connectToImapServer();
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
+=======
+async function sendNotificationEmail(
+  referenceId: string,
+  contribution: any,
+  responseMessage: string
+) {
+  const recipients = {
+    to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
+  };
+  const BREVO_API_KEY = process.env.BREVO_API_KEY;
+  if (!BREVO_API_KEY) {
+    throw new Error("BREVO_API_KEY is not defined");
+  }
+  const dataForBrevo = {
+    sender: {
+      email: process.env.MAIL_SENDER,
+      name: "L'équipe scanR",
+    },
+    to: recipients.to.map((email: string) => ({
+      email,
+      name: email.split("@")[0],
+    })),
+    replyTo: { email: process.env.MAIL_SENDER, name: "L'équipe scanR" },
+    subject: "Nouvelle réponse à une contribution",
+    templateId: 268,
+    params: {
+      date: new Date().toLocaleDateString("fr-FR"),
+      message: `La contribution avec l'ID ${referenceId} a été mise à jour. Vous pouvez consulter la contribution en cliquant sur le lien suivant : URL A VENIR`,
+    },
+  };
+
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": BREVO_API_KEY,
+    },
+    body: JSON.stringify(dataForBrevo),
+  });
+
+  if (!response.ok) {
+    console.error(`Erreur d'envoi d'email: ${response.statusText}`);
+  } else {
+    console.log(
+      `Email envoyé avec succès pour la contribution ID: ${referenceId}`
+    );
+  }
+}
+
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
 export async function fetchEmails() {
   const client = new ImapFlow({
     host: mailHost!,
@@ -360,6 +414,7 @@ export async function fetchEmails() {
       user: email!,
       pass: password,
     },
+    logger: false,
   });
 
   await client.connect();
@@ -390,9 +445,6 @@ export async function fetchEmails() {
         collectionPrefix = referenceMatch[1];
         referenceId = referenceMatch[2];
       }
-
-      console.log("Collection Prefix:", collectionPrefix);
-      console.log("Reference ID:", referenceId);
 
       const startMarker = "Content-Transfer-Encoding: quoted-printable";
       const endMarker = "Le ";

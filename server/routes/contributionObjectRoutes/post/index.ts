@@ -108,15 +108,20 @@ postContributionObjectRoutes.post(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     if (!body.objectId && !body.objectType) {
       return error(400, "objectId is required when objectType is provided");
     }
 
     const result = await db.collection("contribute").insertOne(newContribution);
 
+=======
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
     if (!body.objectId && !body.objectType) {
       return error(400, "objectId is required when objectType is provided");
     }
+
+    const result = await db.collection("contribute").insertOne(newContribution);
 
     if (!result.insertedId) {
       return error(500, "Failed to create the contribution");

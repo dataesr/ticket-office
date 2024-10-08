@@ -5,6 +5,7 @@ import { contactSchema } from "../../../schemas/get/contactSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { ObjectId } from "mongodb";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { emailRecipients } from "./emailRecipents";
 
 type postContactSchemaType = Static<typeof postContactSchema>;
@@ -12,14 +13,20 @@ type postContactSchemaType = Static<typeof postContactSchema>;
 const postContactsRoutes = new Elysia();
 postContactsRoutes.post(
 =======
+=======
+import { emailRecipients } from "./emailRecipents";
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
 
 type postContactSchemaType = Static<typeof postContactSchema>;
-const postContactsRoutes = new Elysia();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 postContactRoutes.post(
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
 =======
+=======
+const postContactsRoutes = new Elysia();
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
 postContactsRoutes.post(
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   "/contacts",
@@ -92,13 +99,19 @@ postContactsRoutes.post(
     const result = await db.collection("contacts").insertOne(newContribution);
     if (!result.insertedId) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
       return error(500, {
         message: "Failed to create the contribution",
         code: "INSERTION_FAILED",
       });
+<<<<<<< HEAD
 =======
       return error(500, "Failed to create the contribution");
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
     }
 
     const finalContribution = {
@@ -107,6 +120,9 @@ postContactsRoutes.post(
     };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
     const contributionLink = `https://ticket-office.staging.dataesr.ovh/${body.fromApplication}-contact?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
 
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
@@ -156,8 +172,11 @@ postContactsRoutes.post(
       });
     }
 
+<<<<<<< HEAD
 =======
 >>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
+=======
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
     return finalContribution;
   },
   {
@@ -197,5 +216,6 @@ export default postContactRoutes;
     },
   }
 );
+
 export default postContactsRoutes;
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)

@@ -20,8 +20,12 @@ async function migrateContacts() {
 =======
     const db = client.db("ticket-office-api");
     // change collection with contacts / contribute_production and contribute
+<<<<<<< HEAD
     const collection = db.collection("contribute");
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+    const collection = db.collection("contribute_productions");
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
 
     const contacts = await collection.find().toArray();
     console.log(contacts);

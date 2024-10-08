@@ -8,9 +8,13 @@ const client = new MongoClient(mongoURI);
 // USE IT DIRECTLY WE PROD
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 console.log(mongoURI);
 =======
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+console.log(mongoURI);
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
 async function addFromAppField() {
   try {
     await client.connect();
@@ -22,7 +26,7 @@ async function addFromAppField() {
     const db = client.db("ticket-office-api");
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     // change collection with contact / contribute_production and contribute
-    const collection = db.collection("contribute_productions");
+    const collection = db.collection("contribute");
 
     const contacts = await collection.find().toArray();
     console.log(`Nombre de contacts trouvés : ${contacts.length}`);
@@ -30,9 +34,12 @@ async function addFromAppField() {
     for (const contact of contacts) {
       const updateData = {
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         fromApplication: "scanr",
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
         id: contact._id.toString(),
       };
 

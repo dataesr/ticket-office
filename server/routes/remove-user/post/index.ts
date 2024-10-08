@@ -9,6 +9,7 @@ import { ObjectId } from "mongodb";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 =======
 import Elysia, { Static, t } from "elysia";
@@ -21,6 +22,9 @@ import { ObjectId } from "mongodb";
 >>>>>>> b05991b (fix(api): update schemas)
 =======
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+import { emailRecipients } from "../../contacts/post/emailRecipents";
+>>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
