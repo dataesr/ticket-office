@@ -289,6 +289,7 @@ export type Publication = {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 export type MailData = {
 =======
@@ -318,6 +319,8 @@ export type LatestMailsProps = {
 };
 
 >>>>>>> 2e9190f (fix(api): update schemas)
+=======
+>>>>>>> e9e16fd (fix(lastest-mail): delete latest mail)
 export type ProfileModalProps = {
   isOpen: boolean;
   selectedProfile: string | null;

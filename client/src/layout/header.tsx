@@ -18,6 +18,9 @@ import {
   Button,
   NavItem,
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e9e16fd (fix(lastest-mail): delete latest mail)
 } from "@dataesr/dsfr-plus";
 import ProfileModal from "../components/profil-modal";
 import {
@@ -96,6 +99,7 @@ const Header: React.FC = () => {
 =======
 >>>>>>> 6c85106 (fix(header): add count of new contribution)
 
+<<<<<<< HEAD
   const contributionsData = urls.map(({ url }) => ContributionData(url));
 
 <<<<<<< HEAD
@@ -107,6 +111,8 @@ const Header: React.FC = () => {
   };
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
 =======
+=======
+>>>>>>> e9e16fd (fix(lastest-mail): delete latest mail)
   const handleButtonClick = () => setShowModal(true);
 >>>>>>> 6c85106 (fix(header): add count of new contribution)
 
@@ -295,6 +301,7 @@ const Header: React.FC = () => {
           </Link>
         </Nav>
       </HeaderWrapper>
+<<<<<<< HEAD
       {!contributionsData.some(({ isLoading }) => isLoading) &&
       !contributionsData.some(({ isError }) => isError) &&
       contributionsData[0].data ? (
@@ -308,6 +315,8 @@ const Header: React.FC = () => {
         <Text>Chargement des mails...</Text>
       )}
 >>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
+=======
+>>>>>>> e9e16fd (fix(lastest-mail): delete latest mail)
     </>
   );
 };
