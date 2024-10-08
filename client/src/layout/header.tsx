@@ -9,12 +9,8 @@ import {
   FastAccess,
   Button,
   NavItem,
-  Text,
-  Col,
 } from "@dataesr/dsfr-plus";
 import ProfileModal from "../components/profil-modal";
-import LatestMails from "../components/last-mail/lasts-mails-sent";
-import ContributionData from "../api/contribution-api/getData";
 import {
   contactUrl,
   contributionUrl,
@@ -55,8 +51,6 @@ const Header: React.FC = () => {
       href: "/scanr-namechange",
     },
   ];
-
-  const contributionsData = urls.map(({ url }) => ContributionData(url));
 
   const handleButtonClick = () => setShowModal(true);
 
@@ -156,18 +150,6 @@ const Header: React.FC = () => {
           </Link>
         </Nav>
       </HeaderWrapper>
-      {!contributionsData.some(({ isLoading }) => isLoading) &&
-      !contributionsData.some(({ isError }) => isError) &&
-      contributionsData[0].data ? (
-        <Col>
-          <LatestMails
-            data={contributionsData[0].data}
-            refetch={contributionsData[0].refetch}
-          />
-        </Col>
-      ) : (
-        <Text>Chargement des mails...</Text>
-      )}
     </>
   );
 };

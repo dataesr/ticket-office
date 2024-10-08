@@ -195,30 +195,6 @@ export type Publication = {
   landingPage?: string;
 };
 
-interface MailData {
-  fromApplication: string;
-  id: string;
-  name: string;
-  threads: Array<{
-    team: string[];
-    responses: Array<{
-      team: any;
-      responseMessage: string;
-      timestamp: string;
-    }>;
-  }>;
-}
-
-export type LatestMailsProps = {
-  data: {
-    data: MailData[];
-    meta: {
-      total: number;
-    };
-  };
-  refetch?: () => void;
-};
-
 export type ProfileModalProps = {
   isOpen: boolean;
   selectedProfile: string | null;
