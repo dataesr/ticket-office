@@ -173,6 +173,10 @@ const StaffActions = ({
         <Col className={contributorClassName}>
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+          {/* Afficher le toggle uniquement s'il y a plus de 2 objets dans threads */}
+>>>>>>> dcbf3d6 (fix(mail): secure imap server, no request if no mail)
           {data.threads.length > 2 && (
             <Toggle
               label="Marquer toutes les réponses comme lues"
@@ -180,6 +184,7 @@ const StaffActions = ({
               onChange={handleToggleChange}
             />
           )}
+<<<<<<< HEAD
 
           {data.threads.map((thread, threadIndex) => {
             const teamResponses = thread.responses.filter(
@@ -237,6 +242,8 @@ const StaffActions = ({
             checked={isAllRead}
             onChange={handleToggleChange}
           />
+=======
+>>>>>>> dcbf3d6 (fix(mail): secure imap server, no request if no mail)
 
           {data.threads.map((thread, threadIndex) =>
             thread.responses.map((response, index) => {
@@ -268,9 +275,14 @@ const StaffActions = ({
                       response.team.includes("user") ? "user-side" : "staffSide"
                     }
                   >
-                    Réponse apportée par {responder} le {responseDate} à{" "}
-                    {responseTime} :<br />
-                    {response.responseMessage}
+                    {responder && (
+                      <>
+                        Réponse apportée par {responder} le {responseDate} à{" "}
+                        {responseTime} :
+                        <br />
+                        {response.responseMessage}
+                      </>
+                    )}
                   </Text>
                 </div>
               );
