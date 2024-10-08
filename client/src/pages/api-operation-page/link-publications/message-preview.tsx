@@ -121,10 +121,12 @@ const MessagePreview = ({
             style={{ cursor: "pointer" }}
             className="fr-icon-user-line"
           >
-            ID de la personne concernée : {data.id}{" "}
+            ID de la personne concernée : {data.objectId}
             <button
-              className={`copy-button ${copiedId === data.id ? "copied" : ""}`}
-              onClick={() => copyToClipboard(data.id)}
+              className={`copy-button ${
+                copiedId === data.objectId ? "copied" : ""
+              }`}
+              onClick={() => copyToClipboard(data.objectId)}
             >
               {copiedId === data.id && (
                 <span className="copied-text">Copié</span>
