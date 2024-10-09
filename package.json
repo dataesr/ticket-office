@@ -5,20 +5,10 @@
     "server",
     "client"
   ],
-  "devDependencies": {
-    "@types/imapflow": "^1.0.19",
-    "@types/mailparser": "^3.4.4",
-    "concurrently": "^8.2.2"
-  },
   "scripts": {
     "start:client": "cd client && npm run dev",
     "start:server": "cd server && bun run --watch server.ts",
     "start": "concurrently \"npm run start:client\" \"bun run start:server\"",
-    "deploy": "git switch main && git pull origin main --rebase --tags && git merge origin staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
-  },
-  "dependencies": {
-    "@types/imapflow": "^1.0.19",
-    "imapflow": "^1.0.164",
-    "mailparser": "^3.7.1"
+    "deploy": "git switch main && git pull origin main --rebase --tags && git merge origin/staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
   }
 }
