@@ -92,7 +92,7 @@ const MessagePreview = ({
       return updatedList;
     });
   };
-  const formattedProductionId = data.id.replace(/\//g, "%2f");
+  const formattedProductionId = data.objectId.replace(/\//g, "%2f");
 
   return (
     <Container fluid>
@@ -142,7 +142,7 @@ const MessagePreview = ({
             }`}
             target="_blank"
             rel="noreferrer noopener external"
-            href={`https://www.idref.fr/${data.id.replace("idref", "")}`}
+            href={`https://www.idref.fr/${data.objectId.replace("idref", "")}`}
             onClick={() => setIdRefClicked(true)}
           >
             IdRef
