@@ -10,8 +10,8 @@ add a var env of the ticket-office API KEY as : VITE_TICKET_OFFICE_API_AUTHORIZA
 
 # run Ticket-office
 
-`npm run dev`
+`bun start`
 
 ## deploy
 
-`npm run deploy --level=[patch|minor|major]`
+`bun run deploy --level=[patch|minor|major]`
