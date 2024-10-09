@@ -51,9 +51,10 @@ const EditModal: React.FC<EditModalProps> = ({
   }
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const baseURL = import.meta.env.BASE_API_URL;
   const url = isDevelopment
     ? `http://localhost:3000/api/${basePath}/${data?.id}`
-    : `https://ticket-office.staging.dataesr.ovh/api/${basePath}/${data?.id}`;
+    : `${baseURL}/api/${basePath}/${data?.id}`;
 
   useEffect(() => {
     if (!selectedProfile) {

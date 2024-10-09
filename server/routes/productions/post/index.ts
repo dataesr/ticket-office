@@ -44,7 +44,8 @@ postProductionRoutes.post(
       id: result.insertedId.toHexString(),
     };
 
-    const contributionLink = `https://ticket-office.staging.dataesr.ovh/scanr-apioperations?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
+    const url = process.env.BASE_API_URL;
+    const contributionLink = `${url}//scanr-apioperations?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
 
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
     if (!BREVO_API_KEY) {

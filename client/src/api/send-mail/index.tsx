@@ -24,9 +24,10 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   );
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const url = import.meta.env.BASE_API_URL;
   const apiBaseUrl = isDevelopment
     ? "http://localhost:3000/api/send-email"
-    : "https://ticket-office.staging.dataesr.ovh/api/send-email";
+    : `${url}/api/send-email`;
 
   useEffect(() => {
     const profileFromLocalStorage = localStorage.getItem("selectedProfile");

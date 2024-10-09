@@ -8,9 +8,8 @@ export const buildURL = (
   fromApplication?: string
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const baseApiUrl = isDevelopment
-    ? "http://localhost:3000/api"
-    : `https://ticket-office.staging.dataesr.ovh/api`;
+  const url = import.meta.env.BASE_API_URL;
+  const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : `${url}/api`;
 
   let baseUrl = "contacts";
   if (location?.pathname?.includes("scanr-contributionPage")) {
