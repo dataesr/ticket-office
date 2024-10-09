@@ -10,10 +10,10 @@ const url = import.meta.env.VITE_BASE_API_URL || "";
 export const contributionUrl = isDevelopment
   ? "http://localhost:3000/api/contribute?max_results=2000"
   : `${url}/api/contribute?max_results=2000`;
+
 export const contactUrl = isDevelopment
   ? "http://localhost:3000/api/contacts?max_results=2000"
   : `${url}/api/contacts?max_results=2000`;
-console.log(contactURl);
 
 export const productionUrl = isDevelopment
   ? "http://localhost:3000/api/production?max_results=2000"
