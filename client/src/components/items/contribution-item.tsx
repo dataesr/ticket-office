@@ -32,7 +32,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
   };
 
   const firstThread = data?.threads?.[0];
-  const firstResponse = firstThread?.responses?.[0];
+  const firstResponse = firstThread?.responses?.[1];
 
   return (
     <>
