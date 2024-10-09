@@ -17,27 +17,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: 🪚 Build app
-        run: |
-          npm ci
-          npm run build -- --mode production
-
-      - name: 🏷️ Get tag
-        id: tag
-        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+      - uses: oven-sh/setup-bun@v2
 
       - name: 🔑 Login Docker
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐳 Build Docker image
+      - name: Build 🐳 🐳 🐳
         run: |
+          bun i
+          bunx --bun vite build client --emptyOutDir --outDir '../server/public'
           IMAGE_ID=ghcr.io/${{ github.repository }}
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker build -t $IMAGE_ID:${{ steps.tag.outputs.tag }} -t $IMAGE_ID:latest .
+
+      - name: 🏷️ Get tag
+        id: tag
+        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: 📦 Push Docker image
         run: |
@@ -89,7 +84,7 @@ jobs:
           restart: ${{ env.DEPLOYMENT }}
 
   notify:
-    name: 📢 Notify in mattermost channel
+    name: 📢📢📢 Notify in mattermost channel
     needs: deploy
     if: always()
     runs-on: ubuntu-latest
