@@ -13,7 +13,7 @@ async function addFromAppField() {
     await client.connect();
     console.log("Connecté à MongoDB");
 
-    const db = client.db("ticket-office-api");
+    const db = client.db("ticket-office");
     // change collection with contact / contribute_production and contribute
     const collection = db.collection("contribute_productions");
 

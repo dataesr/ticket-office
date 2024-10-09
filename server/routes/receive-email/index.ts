@@ -5,11 +5,11 @@ const email = process.env.MAIL_ADRESSE;
 const password = process.env.MAIL_PASSWORD;
 const mailHost = process.env.MAIL_HOST || "";
 const mongoUri = process.env.MONGO_URI || "mongodb://localhost:27017";
-const dbName = "ticket-office-api";
+const dbName = process.env.MONGO_DATABASE || "ticket-office";
 
-if (!email || !password || !mongoUri) {
+if (!email || !password || !mongoUri || !dbName) {
   throw new Error(
-    "MAIL_ADRESSE, MAIL_PASSWORD and MONGO_URI environment variables must be defined"
+    "MAIL_ADRESSE, MAIL_PASSWORD, DBNAME, MONGO_URI environment variables must be defined"
   );
 }
 function formatDate(dateString: string | number | Date | null) {
