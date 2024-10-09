@@ -123,7 +123,6 @@ const StaffActions = ({
     <>
       {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
-          {/* Afficher le toggle uniquement s'il y a plus de 2 objets dans threads */}
           {data.threads.length > 2 && (
             <Toggle
               label="Marquer toutes les réponses comme lues"
@@ -132,49 +131,45 @@ const StaffActions = ({
             />
           )}
 
-          {data.threads.map((thread, threadIndex) =>
-            thread.responses.map((response, index) => {
-              const responseDate = new Date(
-                response.timestamp
-              ).toLocaleDateString();
-              const responseTime = new Date(
-                response.timestamp
-              ).toLocaleTimeString();
+          {data.threads.map((thread, threadIndex) => {
+            const teamResponses = thread.responses.filter(
+              (response) => !response.team.includes("user")
+            );
 
-              if (displayedDates.has(responseDate + responseTime)) {
-                return null;
-              }
+            return teamResponses.length > 0
+              ? teamResponses.map((response, index) => {
+                  const responseDate = new Date(
+                    response.timestamp
+                  ).toLocaleDateString();
+                  const responseTime = new Date(
+                    response.timestamp
+                  ).toLocaleTimeString();
 
-              displayedDates.add(responseDate + responseTime);
+                  if (displayedDates.has(responseDate + responseTime)) {
+                    return null;
+                  }
 
-              const responder = response.team.includes("user")
-                ? data.name
-                : response.team.join(", ");
+                  displayedDates.add(responseDate + responseTime);
 
-              return (
-                <div
-                  key={`${threadIndex}-${index}`}
-                  className="response-container"
-                >
-                  <Text
-                    size="sm"
-                    className={
-                      response.team.includes("user") ? "user-side" : "staffSide"
-                    }
-                  >
-                    {responder && (
-                      <>
-                        Réponse apportée par {responder} le {responseDate} à{" "}
-                        {responseTime} :
-                        <br />
-                        {response.responseMessage}
-                      </>
-                    )}
-                  </Text>
-                </div>
-              );
-            })
-          )}
+                  const responder = response.team.join(", ");
+
+                  return (
+                    <div key={`${threadIndex}-${index}`}>
+                      <Text size="sm" className="staffSide">
+                        {responder && (
+                          <>
+                            Réponse apportée par {responder} le {responseDate} à{" "}
+                            {responseTime} :
+                            <br />
+                            {response.responseMessage}
+                          </>
+                        )}
+                      </Text>
+                    </div>
+                  );
+                })
+              : null;
+          })}
         </Col>
       )}
 
