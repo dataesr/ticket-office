@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { Col, Text, Toggle } from "@dataesr/dsfr-plus";
 import EmailSender from "../../api/send-mail";
 import type { Contribution } from "../../types";
@@ -29,51 +27,10 @@ const StaffActions = ({
     baseUrl = "production";
   }
 
-=======
-import { Col, Text } from "@dataesr/dsfr-plus";
-=======
-import { Col, Text, Toggle } from "@dataesr/dsfr-plus";
->>>>>>> ca679c1 (feat(imap-server): add imap server)
-import EmailSender from "../../api/send-mail";
-import type { Contribution } from "../../types";
-import { useLocation } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import "./styles.scss";
-import { useState, useEffect } from "react";
-const StaffActions = ({
-  data,
-  refetch,
-  url,
-}: {
-  data: Contribution;
-  refetch: () => void;
-  url: string;
-}) => {
-  const location = useLocation();
-<<<<<<< HEAD
->>>>>>> 7e6255f (fix(naming): clean code)
-=======
-
-  let baseUrl = "contacts";
-  if (location?.pathname?.includes("scanr-contributionpage")) {
-    baseUrl = "contribute";
-  } else if (location?.pathname?.includes("removeuser")) {
-    baseUrl = "remove-user";
-  } else if (location?.pathname?.includes("namechange")) {
-    baseUrl = "update-user-data";
-  } else if (location?.pathname?.includes("apioperations")) {
-    baseUrl = "production";
-  }
-
->>>>>>> ca679c1 (feat(imap-server): add imap server)
   const contributorClassName = location.pathname.includes("contributionpage")
     ? "staffSide"
     : "staffSideContact";
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
   const displayedDates = new Set<string>();
   const queryClient = useQueryClient();
 
@@ -162,24 +119,10 @@ const StaffActions = ({
     setIsAllRead(allRead);
   }, [data]);
 
-<<<<<<< HEAD
-=======
->>>>>>> 7e6255f (fix(naming): clean code)
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
   return (
     <>
       {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-          {/* Afficher le toggle uniquement s'il y a plus de 2 objets dans threads */}
->>>>>>> dcbf3d6 (fix(mail): secure imap server, no request if no mail)
-=======
->>>>>>> 5f63e6c (fix(staffactions): small fixes)
           {data.threads.length > 2 && (
             <Toggle
               label="Marquer toutes les réponses comme lues"
@@ -187,7 +130,6 @@ const StaffActions = ({
               onChange={handleToggleChange}
             />
           )}
-<<<<<<< HEAD
 
           {data.threads.map((thread, threadIndex) => {
             const teamResponses = thread.responses.filter(
@@ -228,94 +170,6 @@ const StaffActions = ({
                 })
               : null;
           })}
-=======
-          {data.threads.map((thread) =>
-            thread.responses.map((response, index) => (
-              <Text size="sm" key={index}>
-                Réponse apportée par {response.team.join(", ")} le{" "}
-                {new Date(response.timestamp).toLocaleDateString()}
-                {" à "}
-                {new Date(response.timestamp).toLocaleTimeString()} :<br />
-                {response.responseMessage}
-              </Text>
-            ))
-=======
-          <Toggle
-            label="Marquer toutes les réponses comme lues"
-            checked={isAllRead}
-            onChange={handleToggleChange}
-          />
-=======
->>>>>>> dcbf3d6 (fix(mail): secure imap server, no request if no mail)
-
-          {data.threads.map((thread, threadIndex) => {
-            const teamResponses = thread.responses.filter(
-              (response) => !response.team.includes("user")
-            );
-
-            return teamResponses.length > 0
-              ? teamResponses.map((response, index) => {
-                  const responseDate = new Date(
-                    response.timestamp
-                  ).toLocaleDateString();
-                  const responseTime = new Date(
-                    response.timestamp
-                  ).toLocaleTimeString();
-
-                  if (displayedDates.has(responseDate + responseTime)) {
-                    return null;
-                  }
-
-                  displayedDates.add(responseDate + responseTime);
-
-<<<<<<< HEAD
-              return (
-                <div
-                  key={`${threadIndex}-${index}`}
-                  className="response-container"
-                >
-                  <Text
-                    size="sm"
-                    className={
-                      response.team.includes("user") ? "user-side" : "staffSide"
-                    }
-                  >
-                    {responder && (
-                      <>
-                        Réponse apportée par {responder} le {responseDate} à{" "}
-                        {responseTime} :
-                        <br />
-                        {response.responseMessage}
-                      </>
-                    )}
-                  </Text>
-                </div>
-              );
-            })
->>>>>>> ca679c1 (feat(imap-server): add imap server)
-          )}
->>>>>>> 7e6255f (fix(naming): clean code)
-=======
-                  const responder = response.team.join(", ");
-
-                  return (
-                    <div key={`${threadIndex}-${index}`}>
-                      <Text size="sm" className="staffSide">
-                        {responder && (
-                          <>
-                            Réponse apportée par {responder} le {responseDate} à{" "}
-                            {responseTime} :
-                            <br />
-                            {response.responseMessage}
-                          </>
-                        )}
-                      </Text>
-                    </div>
-                  );
-                })
-              : null;
-          })}
->>>>>>> 5f63e6c (fix(staffactions): small fixes)
         </Col>
       )}
 

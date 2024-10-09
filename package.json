@@ -6,26 +6,12 @@
     "client"
   ],
   "devDependencies": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     "@types/imapflow": "^1.0.19",
     "@types/mailparser": "^3.4.4",
-=======
-    "@types/bun": "^1.1.9",
->>>>>>> 824b180 (fix(ci): update workflow)
-=======
->>>>>>> 00d3d37 (fix(api): change url for request on staging)
-=======
-    "@types/imapflow": "^1.0.19",
-    "@types/mailparser": "^3.4.4",
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     "concurrently": "^8.2.2"
   },
   "scripts": {
     "start:client": "cd client && npm run dev",
-<<<<<<< HEAD
-<<<<<<< HEAD
     "start:server": "cd server && bun run --watch server.ts",
     "start": "concurrently \"npm run start:client\" \"bun run start:server\"",
     "deploy": "git switch main && git pull origin main --rebase --tags && git merge origin staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
@@ -34,36 +20,5 @@
     "@types/imapflow": "^1.0.19",
     "imapflow": "^1.0.164",
     "mailparser": "^3.7.1"
-<<<<<<< HEAD
-=======
-    "start:server": "cd server && bun run server.ts",
-    "start": "concurrently \"npm run start:client\" \"npm run start:server\""
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> de4cfb7 (typo)
-=======
-  },
-  "dependencies": {
-    "@elysiajs/static": "^1.1.1"
->>>>>>> 824b180 (fix(ci): update workflow)
-=======
->>>>>>> 00d3d37 (fix(api): change url for request on staging)
-=======
-    "start:server": "cd server && bun run --watch server.ts",
-    "start": "concurrently \"npm run start:client\" \"bun run start:server\""
-<<<<<<< HEAD
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
-  },
-  "dependencies": {
-    "@types/imapflow": "^1.0.19",
-    "imapflow": "^1.0.164",
-    "mailparser": "^3.7.1"
->>>>>>> ca679c1 (feat(imap-server): add imap server)
   }
 }
-=======
-  },
-  "version": "2.0.0"
-}
->>>>>>> e1f06ac (1.0.0)

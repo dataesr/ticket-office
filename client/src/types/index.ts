@@ -1,76 +1,5 @@
 export interface Contribution {
   [x: string]: any;
-<<<<<<< HEAD
-<<<<<<< HEAD
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
-  type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
-  fromApplication: string;
-}
-export interface ContributorSummaryProps {
-  contributions: Contribution[];
-  onSelectContribution: (id: string) => void;
-}
-export interface ContributionItemProps {
-  data: Contribution & { type: string };
-  highlightedQuery: string;
-  refetch: () => void;
-  allTags: string[];
-  url: string;
-}
-export interface ChangeNameProps {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
-  type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
-}
-
-export interface RemoveUserProps {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
-  type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
-}
-export interface ChangeNameContribution {
-=======
-  _id: string;
->>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
   id: string;
   name: string;
   email: string;
@@ -188,21 +117,7 @@ export type ContributionDataType = {
 };
 
 export type ContributionPageProps = {
-<<<<<<< HEAD
-<<<<<<< HEAD
   fromApplication?: string;
-};
-export type ChangeNamePageProps = {
-  url: string;
-};
-export type RemoveUserPageProps = {
-  url: string;
-=======
-  fromApp?: string;
->>>>>>> 57156e2 (fix(navigation): contact navigation updated)
-=======
-  fromApplication?: string;
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 };
 
 export type StaffActionsProps = {
@@ -265,13 +180,6 @@ export type Inputs = {
   team: string[];
   status: string;
   tags: string[];
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-  idref: string;
->>>>>>> 8758832 (fix(edit-contrib): fix bug)
-=======
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   comment: string;
   extra: string;
 };
@@ -287,40 +195,6 @@ export type Publication = {
   landingPage?: string;
 };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-export type MailData = {
-=======
-interface MailData {
->>>>>>> 220c881 (fix(api): add meta in response schema)
-  fromApplication: string;
-  id: string;
-  name: string;
-  threads: Array<{
-    team: string[];
-    responses: Array<{
-      team: any;
-      responseMessage: string;
-      timestamp: string;
-    }>;
-  }>;
-}
-
-export type LatestMailsProps = {
-  data: {
-    data: MailData[];
-    meta: {
-      total: number;
-    };
-  };
-  refetch?: () => void;
-};
-
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> e9e16fd (fix(lastest-mail): delete latest mail)
 export type ProfileModalProps = {
   isOpen: boolean;
   selectedProfile: string | null;

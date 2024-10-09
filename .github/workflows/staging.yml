@@ -22,24 +22,8 @@ jobs:
 
       - name: Build client (Vite.js)
         run: |
-<<<<<<< HEAD
-<<<<<<< HEAD
           bun i
-<<<<<<< HEAD
           bunx --bun vite build client --emptyOutDir --outDir '../server/public'
-=======
-=======
-          bun i
->>>>>>> 824b180 (fix(ci): update workflow)
-          cd client
-          bunx --bun vite build client --emptyOutDir --outDir '../server/public'
-          docker build -t ${{ github.repository }} .
-
-
-          cd ..
-=======
-          bunx --bun vite build client --emptyOutDir --outDir '../server/public'
->>>>>>> 2aa2952 (fix(ci): typo)
           docker build -t ${{ github.repository }} .
 
       - name: Get Tag

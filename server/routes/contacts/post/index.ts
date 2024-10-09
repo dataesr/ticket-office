@@ -4,31 +4,12 @@ import db from "../../../libs/mongo";
 import { contactSchema } from "../../../schemas/get/contactSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { ObjectId } from "mongodb";
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { emailRecipients } from "./emailRecipents";
 
 type postContactSchemaType = Static<typeof postContactSchema>;
 
 const postContactsRoutes = new Elysia();
 postContactsRoutes.post(
-=======
-=======
-import { emailRecipients } from "./emailRecipents";
->>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
-
-type postContactSchemaType = Static<typeof postContactSchema>;
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-postContactRoutes.post(
->>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
-=======
-=======
-const postContactsRoutes = new Elysia();
->>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
-postContactsRoutes.post(
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
   "/contacts",
   async ({ error, body }: { error: any; body: postContactSchemaType }) => {
     const allowedFromApps = [
@@ -40,8 +21,6 @@ postContactsRoutes.post(
       "curiexplore",
     ];
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     if (!allowedFromApps.includes(body.fromApplication)) {
       return error(400, {
         message: "Invalid fromApplication value, check child attributes",
@@ -62,56 +41,16 @@ postContactsRoutes.post(
       _id,
       extra: extraLowercase,
       id: _id.toHexString(),
-=======
-    if (!allowedFromApps.includes(body.fromApp)) {
-      return error(400, "Invalid fromApp value, check child attributes");
-=======
-    if (!allowedFromApps.includes(body.fromApplication)) {
-      return error(
-        400,
-        "Invalid fromApplication value, check child attributes"
-      );
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
-    }
-
-    const extraLowercase = Object.keys(body.extra || {}).reduce(
-      (acc, key) => ({
-        ...acc,
-        [key]: body.extra ? body.extra[key].toLowerCase() : "",
-      }),
-      {}
-    );
-    const _id = new ObjectId();
-    const newContribution = {
-      ...body,
-      _id,
-      extra: extraLowercase,
-<<<<<<< HEAD
-      id: new ObjectId().toHexString(),
->>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
-=======
-      id: _id.toHexString(),
->>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
       created_at: new Date(),
       status: "new",
     };
 
     const result = await db.collection("contacts").insertOne(newContribution);
     if (!result.insertedId) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
       return error(500, {
         message: "Failed to create the contribution",
         code: "INSERTION_FAILED",
       });
-<<<<<<< HEAD
-=======
-      return error(500, "Failed to create the contribution");
->>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
-=======
->>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
     }
 
     const finalContribution = {
@@ -119,10 +58,6 @@ postContactsRoutes.post(
       id: result.insertedId.toHexString(),
     };
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
     const contributionLink = `https://ticket-office.staging.dataesr.ovh/${body.fromApplication}-contact?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
 
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
@@ -172,11 +107,6 @@ postContactsRoutes.post(
       });
     }
 
-<<<<<<< HEAD
-=======
->>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
-=======
->>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
     return finalContribution;
   },
   {
@@ -187,28 +117,6 @@ postContactsRoutes.post(
       500: errorSchema,
     },
     detail: {
-<<<<<<< HEAD
-<<<<<<< HEAD
-      summary: "Créer une nouvelle contribution",
-      description:
-        "Cette route permet de créer une nouvelle contribution soumise via un formulaire de contact.",
-      tags: ["Contacts"],
-=======
-      summary: "Créer une nouvelle contribution via formulaire de contact",
-      description:
-        "Cette route permet de créer une nouvelle contribution soumise via le formulaire de contact.",
-      tags: ["Contact"],
->>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
-    },
-  }
-);
-
-<<<<<<< HEAD
-export default postContactsRoutes;
-=======
-export default postContactRoutes;
->>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
-=======
       summary: "Créer une nouvelle contribution",
       description:
         "Cette route permet de créer une nouvelle contribution soumise via un formulaire de contact.",
@@ -218,4 +126,3 @@ export default postContactRoutes;
 );
 
 export default postContactsRoutes;
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)

@@ -21,10 +21,6 @@ productionsPutRoutes.patch(
       }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     if (body.threads) {
       body.threads = body.threads.map((thread) => {
         thread.responses = thread.responses?.map((response) => {
@@ -37,11 +33,6 @@ productionsPutRoutes.patch(
       });
     }
 
-<<<<<<< HEAD
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     const { acknowledged } = await db
       .collection("contribute_productions")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -59,32 +50,13 @@ productionsPutRoutes.patch(
 
     const responseObjectContribution = {
       id: updatedObjectContribution.id,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-      organisation: updatedObjectContribution.organisation,
-<<<<<<< HEAD
-      fromApp: updatedObjectContribution.fromApp,
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
-=======
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,
       team: updatedObjectContribution.team,
       modified_at: updatedObjectContribution.modified_at,
-<<<<<<< HEAD
-<<<<<<< HEAD
       extra: updatedObjectContribution.extra || {},
       productions: updatedObjectContribution.productions || [],
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
-      extra: updatedObjectContribution.extra || {},
-      productions: updatedObjectContribution.productions || [],
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     };
 
     return responseObjectContribution;

@@ -1,12 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 import Elysia, { Static, t } from "elysia";
-=======
-import Elysia, { Static } from "elysia";
->>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
-=======
-import Elysia, { Static, t } from "elysia";
->>>>>>> dc7be2b (fix(schema): clean schemas)
 import db from "../../../libs/mongo";
 import { ObjectId } from "mongodb";
 import { contactSchema } from "../../../schemas/get:id/contactSchema";
@@ -18,8 +10,6 @@ const getContributionObjectByIdRoutes = new Elysia();
 getContributionObjectByIdRoutes.get(
   "/contribute/:id",
   async ({ params: { id } }) => {
-<<<<<<< HEAD
-<<<<<<< HEAD
     const contribution = await db
       .collection("contribute")
       .findOne<contributionObjectType>({
@@ -37,32 +27,6 @@ getContributionObjectByIdRoutes.get(
       401: t.Object({ message: t.String() }),
       500: t.Object({ message: t.String() }),
     },
-=======
-    const contact = await db
-=======
-    const contribution = await db
->>>>>>> 1d567d7 (fix(api): rename contact mongo base to contacts)
-      .collection("contribute")
-      .findOne<contributionObjectType>({
-        id: new ObjectId(id),
-      })
-      .catch((error) => error(500, "Failed to fetch contribution"));
-
-    if (!contribution) return { message: "Une erreur s'est produite" };
-
-    return contribution;
-  },
-  {
-<<<<<<< HEAD
-    body: contactSchema,
->>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
-=======
-    response: {
-      400: t.Object({ message: t.String() }),
-      401: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
-    },
->>>>>>> dc7be2b (fix(schema): clean schemas)
     detail: {
       summary:
         "Obtenir une contribution via formulaire de contribution par objet par ID",

@@ -21,10 +21,6 @@ updateUserDataPutRoutes.patch(
       }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     if (body.threads) {
       body.threads = body.threads.map((thread) => {
         thread.responses = thread.responses?.map((response) => {
@@ -37,11 +33,6 @@ updateUserDataPutRoutes.patch(
       });
     }
 
-<<<<<<< HEAD
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     const { acknowledged } = await db
       .collection("update-user-data")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -59,26 +50,12 @@ updateUserDataPutRoutes.patch(
 
     const responseContact = {
       id: updatedContact.id,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-      organisation: updatedContact.organisation,
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       name: updatedContact.name,
       message: updatedContact.message,
       email: updatedContact.email,
       status: updatedContact.status,
       team: updatedContact.team,
-<<<<<<< HEAD
-<<<<<<< HEAD
       extra: updatedContact.extra || {},
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
-      extra: updatedContact.extra || {},
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       modified_at: updatedContact.modified_at,
     };
 

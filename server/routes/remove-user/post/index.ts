@@ -1,30 +1,10 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
 import Elysia, { Static } from "elysia";
 import db from "../../../libs/mongo";
 import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
 import { ObjectId } from "mongodb";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
-<<<<<<< HEAD
-<<<<<<< HEAD
 import { emailRecipients } from "../../contacts/post/emailRecipents";
-=======
-import Elysia, { Static, t } from "elysia";
-import db from "../../../libs/mongo";
-import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
-<<<<<<< HEAD
->>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
-=======
-import { ObjectId } from "mongodb";
->>>>>>> b05991b (fix(api): update schemas)
-=======
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
-=======
-import { emailRecipients } from "../../contacts/post/emailRecipents";
->>>>>>> 36c204e (fix(mails): add sending mail after contribution received)
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
@@ -32,8 +12,6 @@ const postRemoveUserRoutes = new Elysia();
 
 postRemoveUserRoutes.post(
   "/remove-user",
-<<<<<<< HEAD
-<<<<<<< HEAD
   async ({ error, body }: { error: any; body: postRemoveUserSchemaType }) => {
     const extraLowercase = Object.keys(body.extra || {}).reduce(
       (acc, key) => ({
@@ -43,14 +21,7 @@ postRemoveUserRoutes.post(
       {}
     );
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     const _id = new ObjectId();
-=======
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
-=======
-    const _id = new ObjectId();
->>>>>>> abc94ae (fix(send-mail): add send mail route to ui)
     const newContribution = {
       ...body,
       _id,
@@ -121,68 +92,13 @@ postRemoveUserRoutes.post(
     }
 
     return finalContribution;
-=======
-  async ({ query, error, body }: { query: any; error: any; body: any }) => {
-    if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
-    }
-
-    const removeUserData = {
-=======
-  async ({ error, body }: { error: any; body: postRemoveUserSchemaType }) => {
-    const newContribution = {
->>>>>>> b05991b (fix(api): update schemas)
-      ...body,
-      id: new ObjectId().toHexString(),
-      created_at: new Date(),
-      status: "new",
-    };
-
-    const result = await db
-      .collection("remove-user")
-      .insertOne(newContribution);
-
-    if (!result.insertedId) {
-      return error(500, "Failed to create the contribution");
-    }
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-    return newDeletation;
->>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
-=======
-    if (body.collectionName !== "remove-user") {
-      return error(400, "Invalid collectionName value. Must be 'remove-user");
-    }
-
-=======
->>>>>>> 1d32145 (fix(collectionName): delete collectionName fields)
-    const finalContribution = {
-      ...newContribution,
-      id: result.insertedId.toHexString(),
-    };
-
-    return finalContribution;
->>>>>>> b05991b (fix(api): update schemas)
   },
   {
     body: postRemoveUserSchema,
     response: {
-<<<<<<< HEAD
-<<<<<<< HEAD
       200: deleteSchema,
       401: errorSchema,
       500: errorSchema,
-=======
-      200: t.Object({ message: t.String() }),
-      400: t.Object({ message: t.String() }),
-      500: t.Object({ message: t.String() }),
->>>>>>> 3fa33f3 (refactor(ci): mix ui and api in one repo)
-=======
-      200: deleteSchema,
-      401: errorSchema,
-      500: errorSchema,
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     },
     detail: {
       summary: "Créer une nouvelle demande de suppression de profil",

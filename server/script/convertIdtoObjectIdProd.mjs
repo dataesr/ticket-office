@@ -1,14 +1,7 @@
 import { MongoClient } from "mongodb";
 
 const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017";
-<<<<<<< HEAD
-<<<<<<< HEAD
 const mongoDataBase = process.env.MONGO_DATABASE || "ticket-office";
-=======
->>>>>>> 03c66cc (fix(contribute_productions): update schemas)
-=======
-const mongoDataBase = process.env.MONGO_DATABASE || "ticket-office";
->>>>>>> 37578c4 (fix(mongo): rename db name)
 const client = new MongoClient(mongoURI);
 
 // THIS SCRIPT IS USED TO RENAME "id" FIELD TO "objectId"
@@ -20,15 +13,7 @@ async function renameIdToObjectId() {
     await client.connect();
     console.log("Connecté à MongoDB");
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     const db = client.db(mongoDataBase);
-=======
-    const db = client.db("ticket-office-api");
->>>>>>> 03c66cc (fix(contribute_productions): update schemas)
-=======
-    const db = client.db(mongoDataBase);
->>>>>>> 37578c4 (fix(mongo): rename db name)
     // change collection if needed
     const collection = db.collection("contribute_productions");
 

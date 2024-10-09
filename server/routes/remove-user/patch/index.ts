@@ -21,10 +21,6 @@ removeUserPutRoutes.patch(
       }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     if (body.threads) {
       body.threads = body.threads.map((thread) => {
         thread.responses = thread.responses?.map((response) => {
@@ -37,11 +33,6 @@ removeUserPutRoutes.patch(
       });
     }
 
-<<<<<<< HEAD
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     const { acknowledged } = await db
       .collection("remove-user")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -65,14 +56,7 @@ removeUserPutRoutes.patch(
       status: updatedContact.status,
       team: updatedContact.team,
       modified_at: updatedContact.modified_at,
-<<<<<<< HEAD
-<<<<<<< HEAD
       extra: updatedContact.extra || {},
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
-      extra: updatedContact.extra || {},
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     };
 
     return responseContact;
@@ -93,15 +77,7 @@ removeUserPutRoutes.patch(
         "Modifier une contribution sur une demande de suppression de profil par ID",
       description:
         "Cette route permet de mettre à jour une contribution spécifique via l'ID fourni.",
-<<<<<<< HEAD
-<<<<<<< HEAD
       tags: ["Suppression de profil"],
-=======
-      tags: ["Supression de profil"],
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
-      tags: ["Suppression de profil"],
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     },
   }
 );

@@ -9,10 +9,6 @@ const contributionObjectPutRoutes = new Elysia();
 
 contributionObjectPutRoutes.patch(
   "/contribute/:id",
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
   async ({
     params: { id },
     body,
@@ -22,12 +18,6 @@ contributionObjectPutRoutes.patch(
     body: any;
     error: any;
   }) => {
-<<<<<<< HEAD
-=======
-  async ({ params: { id }, body, error }) => {
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     if (body.status && ["ongoing", "treated"].includes(body.status)) {
       body.treated_at = new Date();
     }
@@ -39,10 +29,6 @@ contributionObjectPutRoutes.patch(
       }
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     if (body.threads) {
       body.threads = body.threads.map((thread: { responses: any[] }) => {
         thread.responses = thread.responses?.map(
@@ -57,11 +43,6 @@ contributionObjectPutRoutes.patch(
       });
     }
 
-<<<<<<< HEAD
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> ca679c1 (feat(imap-server): add imap server)
     const { acknowledged } = await db
       .collection("contribute")
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
@@ -79,30 +60,12 @@ contributionObjectPutRoutes.patch(
 
     const responseObjectContribution = {
       id: updatedObjectContribution.id,
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-      organisation: updatedObjectContribution.organisation,
-<<<<<<< HEAD
-      fromApp: updatedObjectContribution.fromApp,
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
->>>>>>> cebb1b3 (fix(api schema): update schema, delete fromApp from inconcerned object)
-=======
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,
       team: updatedObjectContribution.team,
       modified_at: updatedObjectContribution.modified_at,
-<<<<<<< HEAD
-<<<<<<< HEAD
       extra: updatedObjectContribution.extra || {},
-=======
->>>>>>> 2e9190f (fix(api): update schemas)
-=======
-      extra: updatedObjectContribution.extra || {},
->>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
     };
 
     return responseObjectContribution;
