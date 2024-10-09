@@ -1,6 +1,8 @@
 import { MongoClient, ObjectId } from "mongodb";
 
 const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017";
+const mongoDataBase = process.env.MONGO_DATABASE || "ticket-office";
+
 const client = new MongoClient(mongoURI);
 
 async function migrateObjectContribution() {
@@ -8,7 +10,7 @@ async function migrateObjectContribution() {
     await client.connect();
     console.log("Connecté à MongoDB");
 
-    const db = client.db("ticket-office-api");
+    const db = client.db(mongoDataBase);
     const collection = db.collection("contribute");
 
     const contributions = await collection.find().toArray();
