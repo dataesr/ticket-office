@@ -1,4 +1,12 @@
-FROM nginx:stable
-COPY dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/templates/nginx.conf.template
-EXPOSE 5173
+FROM oven/bun
+
+WORKDIR /app
+
+COPY ./server/package.json .
+RUN bun i --production
+COPY ./server .
+
+ENV NODE_ENV=production
+CMD ["bun", "run", "index.ts"]
+
+EXPOSE 3000
