@@ -8,7 +8,7 @@ type productionType = Static<typeof productionSchema>;
 const productionsPutRoutes = new Elysia();
 
 productionsPutRoutes.patch(
-  "/contribute_productions/:id",
+  "/production/:id",
   async ({ params: { id }, body, error }) => {
     if (body.status && ["ongoing", "treated"].includes(body.status)) {
       body.treated_at = new Date();
@@ -50,6 +50,7 @@ productionsPutRoutes.patch(
 
     const responseObjectContribution = {
       id: updatedObjectContribution.id,
+      objectId: updatedObjectContribution.objectId,
       name: updatedObjectContribution.name,
       email: updatedObjectContribution.email,
       status: updatedObjectContribution.status,
