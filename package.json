@@ -34,6 +34,7 @@
     "@types/imapflow": "^1.0.19",
     "imapflow": "^1.0.164",
     "mailparser": "^3.7.1"
+<<<<<<< HEAD
 =======
     "start:server": "cd server && bun run server.ts",
     "start": "concurrently \"npm run start:client\" \"npm run start:server\""
@@ -61,3 +62,8 @@
 >>>>>>> ca679c1 (feat(imap-server): add imap server)
   }
 }
+=======
+  },
+  "version": "1.0.0"
+}
+>>>>>>> e1f06ac (1.0.0)
