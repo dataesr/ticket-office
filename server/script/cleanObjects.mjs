@@ -21,10 +21,14 @@ async function addFromAppField() {
     console.log("Connecté à MongoDB");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const db = client.db("ticket-office");
 =======
     const db = client.db("ticket-office-api");
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+    const db = client.db("ticket-office");
+>>>>>>> 37578c4 (fix(mongo): rename db name)
     // change collection with contact / contribute_production and contribute
     const collection = db.collection("contribute_productions");
 

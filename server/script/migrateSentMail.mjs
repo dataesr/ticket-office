@@ -2,10 +2,14 @@ import { MongoClient, ObjectId } from "mongodb";
 
 const mongoURI = process.env.MONGO_URI || "mongodb://localhost:27017";
 <<<<<<< HEAD
+<<<<<<< HEAD
 const mongoDataBase = process.env.MONGO_DATABASE || "ticket-office";
 =======
 
 >>>>>>> 1fc81a3 (feat(api): add extra and change scripts)
+=======
+const mongoDataBase = process.env.MONGO_DATABASE || "ticket-office";
+>>>>>>> 37578c4 (fix(mongo): rename db name)
 const client = new MongoClient(mongoURI);
 
 async function migrateContacts() {
@@ -14,6 +18,9 @@ async function migrateContacts() {
     console.log("Connecté à MongoDB");
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 37578c4 (fix(mongo): rename db name)
     const db = client.db(mongoDataBase);
     // change collection with contacts / contribute_production and contribute
     const collection = db.collection("contribute_productions");
