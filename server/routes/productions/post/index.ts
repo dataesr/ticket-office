@@ -45,7 +45,7 @@ postProductionRoutes.post(
     };
 
     const url = process.env.BASE_API_URL;
-    const contributionLink = `${url}//scanr-apioperations?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
+    const contributionLink = `${url}/scanr-apioperations?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
 
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
     if (!BREVO_API_KEY) {

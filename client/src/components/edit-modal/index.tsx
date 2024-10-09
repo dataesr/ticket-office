@@ -25,6 +25,8 @@ const EditModal: React.FC<EditModalProps> = ({
 }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile] = useState(localStorage.getItem("selectedProfile"));
+  const [showTagModal, setShowTagModal] = useState(false);
+
   const [inputs, setInputs] = useState<Inputs>({
     team: [selectedProfile],
     status: "treated",
@@ -34,11 +36,10 @@ const EditModal: React.FC<EditModalProps> = ({
   });
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
-  const [showTagModal] = useState(false);
 
   let basePath = "contacts";
 
-  if (window.location.pathname.includes("contributionpage")) {
+  if (window.location.pathname.includes("contributionPage")) {
     basePath = "contribute";
   }
   if (window.location.pathname.includes("scanr-removeuser")) {
@@ -149,6 +150,9 @@ const EditModal: React.FC<EditModalProps> = ({
       setTagInput("");
     }
   };
+  const handleOpenTagModal = () => {
+    setShowTagModal(true);
+  };
 
   const handleTagRemove = (tagToRemove: string) => {
     handleInputChange(
@@ -208,6 +212,14 @@ const EditModal: React.FC<EditModalProps> = ({
               ))}
             </Col>
           </Row>
+          <Button
+            onClick={handleOpenTagModal}
+            variant="secondary"
+            size="sm"
+            className="fr-mt-2w"
+          >
+            Sélectionner des tags
+          </Button>
           <Row gutters>
             <Col md="6">
               <TextArea
@@ -247,7 +259,10 @@ const EditModal: React.FC<EditModalProps> = ({
       <TagSelectionModal
         isOpen={showTagModal}
         allTags={filteredTags}
-        onClose={(selectedTags) => handleInputChange("tags", selectedTags)}
+        onClose={(selectedTags) => {
+          handleInputChange("tags", selectedTags);
+          setShowTagModal(false);
+        }}
       />
     </>
   );
