@@ -38,7 +38,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
   let basePath = "contacts";
 
-  if (window.location.pathname.includes("contributionpage")) {
+  if (window.location.pathname.includes("contributionPage")) {
     basePath = "contribute";
   }
   if (window.location.pathname.includes("scanr-removeuser")) {
