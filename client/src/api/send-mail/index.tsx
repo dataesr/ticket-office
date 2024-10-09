@@ -24,7 +24,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   );
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const url = import.meta.env.BASE_API_URL;
+  const url = import.meta.env.VITE_BASE_API_URL;
   const apiBaseUrl = isDevelopment
     ? "http://localhost:3000/api/send-email"
     : `${url}/api/send-email`;

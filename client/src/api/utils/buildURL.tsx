@@ -8,7 +8,7 @@ export const buildURL = (
   fromApplication?: string
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const url = import.meta.env.BASE_API_URL;
+  const url = import.meta.env.VITE_BASE_API_URL;
   const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : `${url}/api`;
 
   let baseUrl = "contacts";

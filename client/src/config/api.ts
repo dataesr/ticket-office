@@ -13,7 +13,7 @@ export const contributionUrl = isDevelopment
 
 export const contactUrl = isDevelopment
   ? "http://localhost:3000/api/contacts?max_results=2000"
-  : `${url}api/contacts?max_results=2000`;
+  : `${url}/api/contacts?max_results=2000`;
 
 export const productionUrl = isDevelopment
   ? "http://localhost:3000/api/production?max_results=2000"
