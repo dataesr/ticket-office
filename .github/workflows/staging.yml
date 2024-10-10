@@ -20,22 +20,23 @@ jobs:
       - name: 🔑 Login Docker
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
+      - name: 🏷️ Get tag
+        id: tag
+        run: echo "tag=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
       - name: Build client (Vite.js)
         run: |
           bun i
           bunx --bun vite build client --mode staging --emptyOutDir --outDir '../server/public'
-          docker build -t ${{ github.repository }} .
-
-      - name: Get Tag
-        id: version
-        run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          IMAGE_ID=ghcr.io/${{ github.repository }}
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          docker build -t $IMAGE_ID:${{ steps.tag.outputs.tag }} .
 
       - name: 📦 Push Docker image
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker tag ${{ github.repository }} $IMAGE_ID:staging
-          docker push $IMAGE_ID:staging
+          docker push -a $IMAGE_ID
 
   deploy:
     name: 💭 Update staging deployment
