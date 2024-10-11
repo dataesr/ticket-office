@@ -55,7 +55,7 @@ const MessagePreview = ({
     setDataList((prevState) => {
       let addedToCart = false;
       const updatedList = prevState.map((item) => {
-        if (item.person_id === data.id && !item.export) {
+        if (item.person_id === data.objectId && !item.export) {
           addedToCart = true;
           return { ...item, export: true };
         } else {

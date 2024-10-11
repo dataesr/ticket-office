@@ -87,9 +87,13 @@ postContactsRoutes.post(
       templateId: 268,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
-        message: `La contribution avec l'ID ${finalContribution.id} a été ajoutée. Vous pouvez consulter la contribution en cliquant sur le lien suivant : ${contributionLink}`,
+        title: "Nouvelle contribution créée via formulaire de contact",
+        id: finalContribution.id,
+        link: contributionLink,
+        message: `${finalContribution.message}`,
       },
     };
+    console.log(finalContribution);
 
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
@@ -99,6 +103,7 @@ postContactsRoutes.post(
       },
       body: JSON.stringify(dataForBrevo),
     });
+    console.log(recipients);
 
     if (!response.ok) {
       return error(500, {

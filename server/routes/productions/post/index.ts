@@ -73,7 +73,11 @@ postProductionRoutes.post(
       templateId: 268,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
-        message: `La contribution avec l'ID ${finalContribution.id} a été ajoutée. Vous pouvez consulter la contribution en cliquant sur le lien suivant : <a href="${contributionLink}">Consulter la contribution</a>`,
+        title:
+          "Nouvelle contribution créée pour une affiliation de publication(s)",
+        link: contributionLink,
+        message: `La contribution avec l'ID ${finalContribution.id} a été ajoutée.
+        `,
       },
     };
 

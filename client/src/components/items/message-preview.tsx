@@ -99,8 +99,8 @@ const MessagePreview = ({
               Traité par :{" "}
               <strong>
                 {data.team[0]} le{" "}
-                {new Date(data.modified_at).toLocaleDateString()} à{" "}
-                {new Date(data.modified_at).toLocaleTimeString()}
+                {new Date(data.treated_at).toLocaleDateString()} à{" "}
+                {new Date(data.treated_at).toLocaleTimeString()}
               </strong>
             </Text>
           )}
@@ -123,7 +123,7 @@ const MessagePreview = ({
                   <Link
                     size="sm"
                     target="_blank"
-                    href={`https://scanr.enseignementsup-recherche.gouv.fr/entite/${data.id}`}
+                    href={`https://scanr.enseignementsup-recherche.gouv.fr/entite/${data.objectId}`}
                   >
                     Sur scanR
                   </Link>
@@ -132,7 +132,7 @@ const MessagePreview = ({
                   <Link
                     size="sm"
                     target="_blank"
-                    href={`http://185.161.45.213/ui/organizations/${data.id}`}
+                    href={`http://185.161.45.213/ui/organizations/${data.treated_at}`}
                   >
                     Sur dataESR
                   </Link>

@@ -9,6 +9,7 @@ import { Production } from "../../../types";
 
 const ContributorRequests: React.FC<{
   data: {
+    objectId: string;
     id: string;
     name: string;
     productions: Production[];
@@ -69,7 +70,7 @@ const ContributorRequests: React.FC<{
             <div style={{ flex: 1 }}>
               <SelectWithNames
                 productionId={production.id}
-                idRef={data.id}
+                idRef={data.objectId}
                 coloredName={coloredName}
                 contributionId={data.id}
               />

@@ -79,8 +79,10 @@ postUpdateUserDataRoutes.post(
       templateId: 267,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
-        userResponse: "Une nouvelle demande de modification de profil.",
-        message: `La demande avec l'ID ${finalContribution.id} a été ajoutée. Vous pouvez consulter la contribution en cliquant sur le lien suivant : <a href="${contributionLink}">Consulter la contribution</a>`,
+        title: "Nouvelle demande de modification de profil",
+        id: finalContribution.id,
+        link: contributionLink,
+        message: `${finalContribution.message}`,
       },
     };
 
