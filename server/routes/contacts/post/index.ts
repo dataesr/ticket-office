@@ -87,7 +87,9 @@ postContactsRoutes.post(
       templateId: 268,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
-        message: `La contribution avec l'ID ${finalContribution.id} a été ajoutée. Vous pouvez consulter la contribution en cliquant sur le lien suivant : ${contributionLink}`,
+        id: finalContribution.id,
+        link: contributionLink,
+        message: `${finalContribution.message}`,
       },
     };
 
@@ -99,6 +101,7 @@ postContactsRoutes.post(
       },
       body: JSON.stringify(dataForBrevo),
     });
+    console.log(recipients);
 
     if (!response.ok) {
       return error(500, {

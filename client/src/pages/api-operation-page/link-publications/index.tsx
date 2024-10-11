@@ -151,7 +151,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
           key={contribution.id}
           data={contribution}
           refetch={refetch}
-          allTags={fetchedData?.tags || []} // Assurez-vous que le schéma a un champ tags
+          allTags={fetchedData?.tags || []}
         />
       ))}
       {dataList.some((item) => item.export === true) && (

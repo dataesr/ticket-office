@@ -14,7 +14,6 @@ interface ExcelExportButtonProps {
 const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
   const { dataList, setDataList } = useDataList();
   const [isMinimized, setIsMinimized] = useState(false);
-
   const markAsTreated = async (
     contributionIds: any[] | Iterable<unknown> | null | undefined
   ) => {
@@ -26,7 +25,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
 
     const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
     const urlBase = isDevelopment
-      ? `https://scanr-api.dataesr.ovh/${basePath}`
+      ? `http://localhost:3000/api/${basePath}`
       : `${window.location.origin}/api/${basePath}`;
 
     const body = { status: "treated" };
@@ -59,6 +58,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
   };
 
   const handleExportClick = async () => {
+    console.log(dataList);
     const dataToExport = dataList
       .filter((item) => item.export === true)
       .map((item) => ({
