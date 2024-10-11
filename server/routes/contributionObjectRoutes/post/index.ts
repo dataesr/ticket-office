@@ -83,6 +83,7 @@ postContributionObjectRoutes.post(
       templateId: 268,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
+        title: "Nouvelle contribution créée concernant un objet",
         id: finalContribution.id,
         link: contributionLink,
         message: `${finalContribution.message}`,

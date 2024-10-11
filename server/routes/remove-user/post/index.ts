@@ -73,6 +73,7 @@ postRemoveUserRoutes.post(
       templateId: 268,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
+        title: "Nouvelle demande de suppression de profil",
         id: finalContribution.id,
         link: contributionLink,
         message: `${finalContribution.message}`,

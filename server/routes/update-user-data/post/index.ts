@@ -79,6 +79,7 @@ postUpdateUserDataRoutes.post(
       templateId: 267,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
+        title: "Nouvelle demande de modification de profil",
         id: finalContribution.id,
         link: contributionLink,
         message: `${finalContribution.message}`,

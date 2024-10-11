@@ -87,11 +87,13 @@ postContactsRoutes.post(
       templateId: 268,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
+        title: "Nouvelle contribution créée via formulaire de contact",
         id: finalContribution.id,
         link: contributionLink,
         message: `${finalContribution.message}`,
       },
     };
+    console.log(finalContribution);
 
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
