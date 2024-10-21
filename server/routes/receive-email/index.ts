@@ -1,5 +1,7 @@
 import { ImapFlow } from "imapflow";
 import { MongoClient } from "mongodb";
+import * as cheerio from "cheerio";
+import { simpleParser } from "mailparser";
 
 const email = process.env.MAIL_ADRESSE;
 const password = process.env.MAIL_PASSWORD;
@@ -12,10 +14,12 @@ if (!email || !password || !mongoUri || !dbName) {
     "MAIL_ADRESSE, MAIL_PASSWORD, DBNAME, MONGO_URI environment variables must be defined"
   );
 }
+
 function formatDate(dateString: string | number | Date | null) {
   const date = new Date(dateString || "");
   return date.toISOString();
 }
+
 async function updateContribution(
   referenceId: string,
   responseMessage: string,
@@ -23,66 +27,63 @@ async function updateContribution(
   collectionName: string
 ) {
   const client = new MongoClient(mongoUri);
+
   try {
     await client.connect();
     const database = client.db(dbName);
     const collection = database.collection(collectionName);
-    if (!collection) {
-      console.log("La collection n'existe pas :", collectionName);
+
+    const contribution = await collection.findOne({ id: referenceId });
+    if (!contribution) {
+      console.log(
+        `Aucune contribution trouvée pour l'ID de référence: ${referenceId}`
+      );
       return;
     }
 
-    const contribution = await collection.findOne({ id: referenceId });
-    if (contribution) {
-      const existingThreads = Array.isArray(contribution.threads)
-        ? contribution.threads
-        : [];
+    const existingThreads = Array.isArray(contribution.threads)
+      ? contribution.threads
+      : [];
 
-      const isDuplicate = existingThreads.some(
-        (thread) => thread.timestamp === formatDate(timestamp)
-      );
+    const isDuplicate = existingThreads.some(
+      (thread) => thread.timestamp === formatDate(timestamp)
+    );
 
-      if (isDuplicate) {
-        console.log(
-          "Un thread avec la même date existe déjà, mise à jour annulée pour la contribution:",
-          referenceId
-        );
-        return;
-      }
-
-      const response = {
-        threadId: contribution._id.toString(),
-        responses: [
-          {
-            responseMessage,
-            read: false,
-            timestamp: formatDate(timestamp),
-            team: ["user"],
-          },
-        ],
-        timestamp: formatDate(timestamp),
-      };
-
-      const updateResult = await collection.updateOne(
-        { _id: contribution._id },
-        { $set: { threads: [...existingThreads, response] } }
-      );
-
-      if (updateResult.modifiedCount > 0) {
-        console.log(
-          `Contribution mise à jour avec succès pour l'ID de référence: ${referenceId}`
-        );
-        await sendNotificationEmail(referenceId, contribution, responseMessage);
-      } else {
-        console.log(
-          `Aucune contribution mise à jour pour l'ID de référence: ${referenceId}`
-        );
-      }
-    } else {
+    if (isDuplicate) {
       console.log(
-        "Aucune contribution trouvée pour l'ID de référence",
-        referenceId
+        `Thread déjà existant pour la date: ${timestamp}, annulation.`
       );
+      return;
+    }
+
+    const response = {
+      threadId: contribution._id.toString(),
+      responses: [
+        {
+          responseMessage,
+          read: false,
+          timestamp: formatDate(timestamp),
+          team: ["user"],
+        },
+      ],
+      timestamp: formatDate(timestamp),
+    };
+
+    const updateResult = await collection.updateOne(
+      { _id: contribution._id },
+      { $set: { threads: [...existingThreads, response] } }
+    );
+
+    if (updateResult.modifiedCount > 0) {
+      console.log(`Mise à jour réussie pour l'ID de référence: ${referenceId}`);
+      await sendNotificationEmail(
+        referenceId,
+        contribution,
+        responseMessage,
+        collectionName
+      );
+    } else {
+      console.log(`Aucune mise à jour pour l'ID: ${referenceId}`);
     }
   } finally {
     await client.close();
@@ -92,30 +93,35 @@ async function updateContribution(
 async function sendNotificationEmail(
   referenceId: string,
   contribution: any,
-  responseMessage: string
+  responseMessage: string,
+  collectionName: string
 ) {
-  const recipients = {
-    to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
-  };
+  const recipients = process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [];
   const BREVO_API_KEY = process.env.BREVO_API_KEY;
+
   if (!BREVO_API_KEY) {
     throw new Error("BREVO_API_KEY is not defined");
   }
-  const dataForBrevo = {
+
+  const contributionLink = generateContributionLink(
+    referenceId,
+    contribution.fromApplication,
+    collectionName
+  );
+
+  const emailData = {
     sender: {
       email: process.env.MAIL_SENDER,
       name: "L'équipe scanR",
     },
-    to: recipients.to.map((email: string) => ({
-      email,
-      name: email.split("@")[0],
-    })),
+    to: recipients.map((email) => ({ email, name: email.split("@")[0] })),
     replyTo: { email: process.env.MAIL_SENDER, name: "L'équipe scanR" },
     subject: "Nouvelle réponse à une contribution",
-    templateId: 268,
+    templateId: 269,
     params: {
       date: new Date().toLocaleDateString("fr-FR"),
-      message: `La contribution avec l'ID ${referenceId} a été mise à jour. Vous pouvez consulter la contribution en cliquant sur le lien suivant : URL A VENIR`,
+      title: "Nouvelle réponse à une contribution",
+      url: contributionLink,
     },
   };
 
@@ -125,16 +131,79 @@ async function sendNotificationEmail(
       "Content-Type": "application/json",
       "api-key": BREVO_API_KEY,
     },
-    body: JSON.stringify(dataForBrevo),
+    body: JSON.stringify(emailData),
   });
 
   if (!response.ok) {
-    console.error(`Erreur d'envoi d'email: ${response.statusText}`);
+    console.error(`Erreur d'envoi de l'email: ${response.statusText}`);
   } else {
-    console.log(
-      `Email envoyé avec succès pour la contribution ID: ${referenceId}`
-    );
+    console.log(`Email envoyé pour la contribution ID: ${referenceId}`);
   }
+}
+
+function generateContributionLink(
+  referenceId: string,
+  fromApplication: string,
+  collectionName: string
+) {
+  const baseUrl = "https://ticket-office.dataesr.ovh";
+  if (collectionName === "contacts") {
+    switch (fromApplication) {
+      case "scanr":
+        return `${baseUrl}/scanr-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+      case "paysage":
+        return `${baseUrl}/paysage-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+      case "curiexplore":
+        return `${baseUrl}/curiexplore-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+      case "datasupr":
+        return `${baseUrl}/datasupr-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+      case "works-magnet":
+        return `${baseUrl}/works-magnet-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+      case "bso":
+        return `${baseUrl}/bso-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+    }
+  }
+  if (collectionName === "contribute") {
+    return `${baseUrl}/scanr-contributionPage?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+  }
+  if (collectionName === "contribute_productions") {
+    return `${baseUrl}/apiOperations?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+  }
+  if (collectionName === "remove-user") {
+    return `${baseUrl}/scanr-removeuser?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+  }
+  if (collectionName === "update-user-data") {
+    return `${baseUrl}/scanr-namechange?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+  }
+  return "";
+}
+async function processEmailContent(messageSource: string) {
+  const parsed = await simpleParser(messageSource);
+  const bodyText = parsed.text || parsed.html || "";
+
+  if (!bodyText) {
+    console.log("Aucun texte trouvé dans l'email");
+    return "";
+  }
+
+  const $ = cheerio.load(bodyText);
+  let cleanedText = $("body").text().trim();
+
+  cleanedText = cleanedText
+    .split("\n")
+    .filter((line) => {
+      const trimmedLine = line.trim();
+      return (
+        trimmedLine &&
+        !/^(De :|Réponse de|L'équipe scanR vous remercie pour votre contribution)/i.test(
+          trimmedLine
+        )
+      );
+    })
+    .join("\n")
+    .trim();
+
+  return cleanedText;
 }
 export async function fetchEmails() {
   const client = new ImapFlow({
@@ -157,72 +226,29 @@ export async function fetchEmails() {
       envelope: true,
     });
 
-    const emails = [];
     for await (let message of messages) {
-      try {
-        if (!message.envelope || !message.source) {
-          console.warn("Message sans enveloppe ou contenu, ignoré.");
-          continue;
-        }
+      if (!message.envelope || !message.source) continue;
 
-        const messageSource = message.source.toString();
-        const date = message.envelope.date?.toISOString() || null;
-        const subject = message.envelope.subject || null;
+      const messageSource = message.source.toString();
+      const date = formatDate(message.envelope.date?.toISOString() || null);
+      const subject = message.envelope.subject || "";
 
-        const referenceMatch = subject?.match(
-          /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
-        );
-        let referenceId = null;
-        let collectionPrefix = null;
+      const referenceMatch = subject.match(
+        /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
+      );
+      let referenceId = referenceMatch ? referenceMatch[2] : null;
+      let collectionPrefix = referenceMatch ? referenceMatch[1] : "contacts";
 
-        if (referenceMatch) {
-          collectionPrefix = referenceMatch[1];
-          referenceId = referenceMatch[2];
-        }
+      const extractedContent = await processEmailContent(messageSource);
+      if (!extractedContent) continue;
 
-        const startMarker = "Content-Transfer-Encoding: quoted-printable";
-        const endMarker = "Le ";
-        const startIndex =
-          messageSource.indexOf(startMarker) + startMarker.length;
-        const endIndex = messageSource.indexOf(endMarker);
-
-        let extractedContent = null;
-
-        // Vérifie que les marqueurs existent bien
-        if (startIndex !== -1 && endIndex !== -1) {
-          extractedContent = messageSource
-            .substring(startIndex, endIndex)
-            .trim();
-        } else {
-          console.log(
-            "Les marqueurs de début ou de fin n'ont pas été trouvés. Email ignoré."
-          );
-          continue;
-        }
-
-        emails.push({
-          content: extractedContent,
-          date: formatDate(date),
-          referenceId,
-        });
-
-        if (referenceId && extractedContent) {
-          const collectionName = determineCollectionName(
-            collectionPrefix || "default"
-          );
-          await updateContribution(
-            referenceId,
-            extractedContent,
-            formatDate(date),
-            collectionName
-          );
-        }
-      } catch (emailProcessingError) {
-        console.error(
-          "Erreur lors du traitement de l'email :",
-          emailProcessingError
-        );
-      }
+      const collectionName = determineCollectionName(collectionPrefix);
+      await updateContribution(
+        referenceId!,
+        extractedContent,
+        date,
+        collectionName
+      );
     }
   } finally {
     lock.release();
@@ -232,20 +258,17 @@ export async function fetchEmails() {
 }
 
 function determineCollectionName(collectionPrefix: string) {
-  if (collectionPrefix === "remove-user") {
-    return "remove-user";
-  } else if (collectionPrefix === "contacts") {
-    return "contacts";
-  } else if (collectionPrefix === "contribute") {
-    return "contribute";
-  } else if (collectionPrefix === "contribute_productions") {
-    return "contribute_productions";
-  } else if (collectionPrefix === "update-user-data") {
-    return "update-user-data";
-  }
-  return "contacts";
+  const collections: Record<string, string> = {
+    "remove-user": "remove-user",
+    contacts: "contacts",
+    contribute: "contribute",
+    contribute_productions: "contribute_productions",
+    "update-user-data": "update-user-data",
+  };
+  return collections[collectionPrefix] || "contacts";
 }
+
 setInterval(() => {
   console.log("Vérification des emails...");
-  fetchEmails().catch((err) => console.error(err));
-}, 60 * 1000);
+  fetchEmails().catch(console.error);
+}, 10 * 1000);
