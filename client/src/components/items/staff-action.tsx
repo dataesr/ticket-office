@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import "./styles.scss";
 import { useState, useEffect } from "react";
+
 const StaffActions = ({
   data,
   refetch,
@@ -31,7 +32,6 @@ const StaffActions = ({
     ? "staffSide"
     : "staffSideContact";
 
-  const displayedDates = new Set<string>();
   const queryClient = useQueryClient();
 
   const [isAllRead, setIsAllRead] = useState(() => {
@@ -41,6 +41,7 @@ const StaffActions = ({
       ) || false
     );
   });
+
   const mutation = useMutation(
     async (isRead: boolean) => {
       return fetch(`api/${baseUrl}/${data.id}`, {
@@ -119,6 +120,14 @@ const StaffActions = ({
     setIsAllRead(allRead);
   }, [data]);
 
+  const cleanResponseMessage = (message: string) => {
+    return message
+      .replace(/De:.*$/s, "")
+      .replace(/Objet :.*$/s, "")
+      .replace(/Envoyé :.*$/s, "")
+      .trim();
+  };
+
   return (
     <>
       {data?.threads?.length > 0 && (
@@ -131,45 +140,31 @@ const StaffActions = ({
             />
           )}
 
-          {data.threads.map((thread, threadIndex) => {
-            const teamResponses = thread.responses.filter(
-              (response) => !response.team.includes("user")
-            );
+          {data.threads.map((thread, threadIndex) =>
+            thread.responses.map((response, index) => {
+              const responseDate = new Date(
+                response.timestamp
+              ).toLocaleDateString();
+              const responseTime = new Date(
+                response.timestamp
+              ).toLocaleTimeString();
 
-            return teamResponses.length > 0
-              ? teamResponses.map((response, index) => {
-                  const responseDate = new Date(
-                    response.timestamp
-                  ).toLocaleDateString();
-                  const responseTime = new Date(
-                    response.timestamp
-                  ).toLocaleTimeString();
+              const isStaffResponse = !response.team.includes("user");
+              const className = isStaffResponse ? "staffSide" : "user-side";
 
-                  if (displayedDates.has(responseDate + responseTime)) {
-                    return null;
-                  }
-
-                  displayedDates.add(responseDate + responseTime);
-
-                  const responder = response.team.join(", ");
-
-                  return (
-                    <div key={`${threadIndex}-${index}`}>
-                      <Text size="sm" className="staffSide">
-                        {responder && (
-                          <>
-                            Réponse apportée par {responder} le {responseDate} à{" "}
-                            {responseTime} :
-                            <br />
-                            {response.responseMessage}
-                          </>
-                        )}
-                      </Text>
-                    </div>
-                  );
-                })
-              : null;
-          })}
+              return (
+                <div key={`${threadIndex}-${index}`} className={className}>
+                  <Text size="sm">
+                    {cleanResponseMessage(response.responseMessage)}
+                    <br />
+                    <small>
+                      Répondu le {responseDate} à {responseTime}
+                    </small>
+                  </Text>
+                </div>
+              );
+            })
+          )}
         </Col>
       )}
 
