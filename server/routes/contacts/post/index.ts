@@ -93,7 +93,6 @@ postContactsRoutes.post(
         message: `${finalContribution.message}`,
       },
     };
-    console.log(finalContribution);
 
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
@@ -103,7 +102,6 @@ postContactsRoutes.post(
       },
       body: JSON.stringify(dataForBrevo),
     });
-    console.log(recipients);
 
     if (!response.ok) {
       return error(500, {
