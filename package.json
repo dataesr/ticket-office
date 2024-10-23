@@ -11,5 +11,5 @@
     "start": "concurrently \"npm run start:client\" \"bun run start:server\"",
     "deploy": "git switch main && git pull origin main --rebase --tags && git merge origin/staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
   },
-  "version": "2.0.8"
+  "version": "2.0.9"
 }
