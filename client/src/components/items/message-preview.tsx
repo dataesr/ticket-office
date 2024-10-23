@@ -132,7 +132,7 @@ const MessagePreview = ({
                   <Link
                     size="sm"
                     target="_blank"
-                    href={`http://185.161.45.213/ui/organizations/${data.treated_at}`}
+                    href={`http://185.161.45.213/ui/organizations/${data.objectId}`}
                   >
                     Sur dataESR
                   </Link>
