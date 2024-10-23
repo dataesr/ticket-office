@@ -25,7 +25,9 @@ created a .env.local (ask me mine)
 
 # Issues
 
-you might have issues with imap server if you start localy (especialy on work wifi), if needed, disable the function called : "fetchEmails"
+--you might have issues with imap server if you start localy (especialy on work wifi), if needed, disable the function called : "fetchEmails"
+
+--you also might have issues if you install a new dependencie, check if all dependencies are in package.json (especially in server)
 
 # Links
 
