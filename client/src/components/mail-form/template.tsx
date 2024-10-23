@@ -28,7 +28,7 @@ function TemplateResponseModal({ isOpen, onClose, setUserResponse }) {
   return (
     <Modal isOpen={isOpen} hide={onClose}>
       <ModalContent>
-        <h2>Réponse Préparée</h2>
+        <h2>Réponse Préparée pour une demande d'accès à l'api</h2>
         <TextInput
           label="Identifiant"
           value={user}
@@ -37,14 +37,13 @@ function TemplateResponseModal({ isOpen, onClose, setUserResponse }) {
         />
         <TextInput
           label="Mot de passe"
-          type="password"
           value={mdp}
           onChange={(e) => setMdp(e.target.value)}
           placeholder="Entrez le mot de passe"
         />
         <ButtonGroup>
           <Button variant="secondary" onClick={handleClick}>
-            Utiliser une réponse préparée
+            Valider
           </Button>
           <Button variant="secondary" onClick={onClose}>
             Annuler
