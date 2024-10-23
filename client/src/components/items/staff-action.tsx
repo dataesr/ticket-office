@@ -155,10 +155,14 @@ const StaffActions = ({
               return (
                 <div key={`${threadIndex}-${index}`} className={className}>
                   <Text size="sm">
-                    {cleanResponseMessage(response.responseMessage)}
+                    {cleanResponseMessage(response.responseMessage).replaceAll(
+                      "<br/>",
+                      "\n"
+                    )}
                     <br />
                     <small>
-                      Répondu le {responseDate} à {responseTime}
+                      Répondu le {responseDate} à {responseTime} par{" "}
+                      {response.team}
                     </small>
                   </Text>
                 </div>
