@@ -19,7 +19,6 @@ function formatDate(dateString: string | number | Date | null) {
   const date = new Date(dateString || "");
   return date.toISOString();
 }
-
 async function updateContribution(
   referenceId: string,
   responseMessage: string,
@@ -34,54 +33,52 @@ async function updateContribution(
     const collection = database.collection(collectionName);
 
     const contribution = await collection.findOne({ id: referenceId });
-    if (!contribution) {
-      console.log(
-        `Aucune contribution trouvée pour l'ID de référence: ${referenceId}`
+    if (contribution) {
+      const existingThreads = Array.isArray(contribution.threads)
+        ? contribution.threads
+        : [];
+
+      const isDuplicate = existingThreads.some(
+        (thread) =>
+          thread.timestamp === formatDate(timestamp) &&
+          thread.responses.some(
+            (response: { responseMessage: string }) =>
+              response.responseMessage === responseMessage
+          )
       );
-      return;
-    }
 
-    const existingThreads = Array.isArray(contribution.threads)
-      ? contribution.threads
-      : [];
+      if (isDuplicate) {
+        console.log(
+          "Un thread avec la même date et réponse existe déjà, mise à jour annulée pour la contribution:",
+          referenceId
+        );
+        return;
+      }
 
-    const isDuplicate = existingThreads.some(
-      (thread) => thread.timestamp === formatDate(timestamp)
-    );
+      const response = {
+        threadId: contribution._id.toString(),
+        responses: [
+          {
+            responseMessage,
+            read: false,
+            timestamp: formatDate(timestamp),
+            team: ["user"],
+          },
+        ],
+        timestamp: formatDate(timestamp),
+      };
 
-    if (isDuplicate) {
-      console.log(
-        `Thread déjà existant pour la date: ${timestamp}, annulation.`
+      const updateResult = await collection.updateOne(
+        { _id: contribution._id },
+        { $set: { threads: [...existingThreads, response] } }
       );
-      return;
-    }
 
-    const response = {
-      threadId: contribution._id.toString(),
-      responses: [
-        {
-          responseMessage,
-          read: false,
-          timestamp: formatDate(timestamp),
-          team: ["user"],
-        },
-      ],
-      timestamp: formatDate(timestamp),
-    };
-
-    const updateResult = await collection.updateOne(
-      { _id: contribution._id },
-      { $set: { threads: [...existingThreads, response] } }
-    );
-
-    if (updateResult.modifiedCount > 0) {
-      console.log(`Mise à jour réussie pour l'ID de référence: ${referenceId}`);
-      await sendNotificationEmail(
-        referenceId,
-        contribution,
-        responseMessage,
-        collectionName
-      );
+      if (updateResult.modifiedCount > 0) {
+        console.log(
+          `Mise à jour réussie pour l'ID de référence: ${referenceId}`
+        );
+        await sendNotificationEmail(referenceId, contribution, collectionName);
+      }
     } else {
       console.log(`Aucune mise à jour pour l'ID: ${referenceId}`);
     }
@@ -93,7 +90,6 @@ async function updateContribution(
 async function sendNotificationEmail(
   referenceId: string,
   contribution: any,
-  responseMessage: string,
   collectionName: string
 ) {
   const recipients = process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [];
@@ -124,7 +120,6 @@ async function sendNotificationEmail(
       url: contributionLink,
     },
   };
-
   const response = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -227,28 +222,34 @@ export async function fetchEmails() {
     });
 
     for await (let message of messages) {
-      if (!message.envelope || !message.source) continue;
+      try {
+        if (!message.envelope || !message.source) continue;
 
-      const messageSource = message.source.toString();
-      const date = formatDate(message.envelope.date?.toISOString() || null);
-      const subject = message.envelope.subject || "";
+        const messageSource = message.source.toString();
+        const date = formatDate(message.envelope.date?.toISOString() || null);
+        const subject = message.envelope.subject || "";
 
-      const referenceMatch = subject.match(
-        /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
-      );
-      let referenceId = referenceMatch ? referenceMatch[2] : null;
-      let collectionPrefix = referenceMatch ? referenceMatch[1] : "contacts";
+        const referenceMatch = subject.match(
+          /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
+        );
+        let referenceId = referenceMatch ? referenceMatch[2] : null;
+        let collectionPrefix = referenceMatch ? referenceMatch[1] : "contacts";
 
-      const extractedContent = await processEmailContent(messageSource);
-      if (!extractedContent) continue;
+        const extractedContent = await processEmailContent(messageSource);
+        if (!extractedContent) continue;
 
-      const collectionName = determineCollectionName(collectionPrefix);
-      await updateContribution(
-        referenceId!,
-        extractedContent,
-        date,
-        collectionName
-      );
+        const collectionName = determineCollectionName(collectionPrefix);
+
+        await updateContribution(
+          referenceId!,
+          extractedContent,
+          date,
+          collectionName
+        );
+      } catch (err) {
+        console.error(`Erreur lors du traitement de l'email : ${err}`);
+        continue;
+      }
     }
   } finally {
     lock.release();

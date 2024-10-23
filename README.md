@@ -28,6 +28,9 @@ created a .env.local (ask me mine)
 --you might have issues with imap server if you start localy (especialy on work wifi), if needed, disable the function called : "fetchEmails"
 
 --you also might have issues if you install a new dependencie, check if all dependencies are in package.json (especially in server)
+if you have and 503 issue, check error on pod
+--`kubectl get pods -n ticket-office`
+--`kubectl logs ticket-office-xxxxxxx-yyyyyy -n ticket-office`
 
 # Links
 

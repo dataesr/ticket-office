@@ -162,7 +162,9 @@ const StaffActions = ({
                     <br />
                     <small>
                       Répondu le {responseDate} à {responseTime} par{" "}
-                      {response.team}
+                      {response.team.includes("user")
+                        ? data.name || response.team
+                        : response.team}
                     </small>
                   </Text>
                 </div>
