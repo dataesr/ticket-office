@@ -13,14 +13,15 @@
     "@types/imap-simple": "^4.2.9",
     "@types/imapflow": "^1.0.19",
     "@types/mongodb": "^4.0.7",
+    "cheerio": "^1.0.0",
     "dotenv": "^16.4.5",
     "elysia": "~1.0.27",
     "imap": "^0.8.19",
     "imap-simple": "^5.1.0",
     "imapflow": "^1.0.164",
+    "mailparser": "^3.7.1",
     "mongodb": "^6.9.0",
-    "uuid": "^10.0.0",
-    "cheerio": "^1.0.0"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.25.3",
