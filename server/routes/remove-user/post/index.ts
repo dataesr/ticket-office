@@ -108,7 +108,7 @@ postRemoveUserRoutes.post(
       summary: "Créer une nouvelle demande de suppression de profil",
       description:
         "Cette route permet de créer une nouvelle contribution soumise via le formulaire de contact.",
-      tags: ["Supression de profil"],
+      tags: ["Suppression de profil"],
     },
   }
 );

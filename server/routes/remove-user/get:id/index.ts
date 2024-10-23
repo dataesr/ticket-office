@@ -29,10 +29,10 @@ getRemoveUserByIdRoutes.get(
     },
     detail: {
       summary:
-        "Obtenir une contribution via formulaire de supression de profil par ID",
+        "Obtenir une contribution via formulaire de suppression de profil par ID",
       description:
         "Cette route retourne les détails d'une contribution spécifique via l'ID fourni.",
-      tags: ["Supression de profil"],
+      tags: ["Suppression de profil"],
     },
   }
 );
