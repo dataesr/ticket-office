@@ -125,6 +125,13 @@ const StaffActions = ({
       .replace(/De:.*$/s, "")
       .replace(/Objet :.*$/s, "")
       .replace(/Envoyé :.*$/s, "")
+      .replace(/Le lun.*$/s, "")
+      .replace(/Le mar.*$/s, "")
+      .replace(/Le mer.*$/s, "")
+      .replace(/Le jeu.*$/s, "")
+      .replace(/Le ven.*$/s, "")
+      .replace(/Le sam.*$/s, "")
+      .replace(/Le dim.*$/s, "")
       .trim();
   };
 
