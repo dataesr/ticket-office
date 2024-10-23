@@ -12,6 +12,7 @@
     "@types/imap": "^0.8.40",
     "@types/imap-simple": "^4.2.9",
     "@types/imapflow": "^1.0.19",
+    "@types/mailparser": "^3.4.5",
     "@types/mongodb": "^4.0.7",
     "cheerio": "^1.0.0",
     "dotenv": "^16.4.5",
