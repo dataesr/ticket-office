@@ -10,14 +10,17 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
 }) => {
   return (
     <Modal isOpen={isOpen} hide={onClose}>
-      <ModalTitle>Hello ! Selectionne ton profil</ModalTitle>
+      <ModalTitle>Hello ! Sélectionne ton profil</ModalTitle>
       <ModalContent className="profile-modal-content">
         <div className="profile-buttons">
           {profiles.map((profile, index) => (
             <button
               key={index}
               className={`profile-button profile${index + 1}`}
-              onClick={() => onSelectProfile(profile)}
+              onClick={() => {
+                onSelectProfile(profile);
+                onClose();
+              }}
             >
               {profile}
             </button>

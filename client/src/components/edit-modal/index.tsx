@@ -13,8 +13,8 @@ import {
 import { EditModalProps, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
-import ProfileModal from "../profil-modal";
 import TagSelectionModal from "./modal-select-tags";
+import ProfileModal from "../profil-modal";
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -24,7 +24,9 @@ const EditModal: React.FC<EditModalProps> = ({
   allTags,
 }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
-  const [selectedProfile] = useState(localStorage.getItem("selectedProfile"));
+  const [selectedProfile, setSelectedProfile] = useState(
+    localStorage.getItem("selectedProfile")
+  );
   const [showTagModal, setShowTagModal] = useState(false);
 
   const [inputs, setInputs] = useState<Inputs>({
@@ -36,7 +38,6 @@ const EditModal: React.FC<EditModalProps> = ({
   });
   const [filteredTags, setFilteredTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
-
   let basePath = "contacts";
 
   if (window.location.pathname.includes("contributionPage")) {
@@ -105,7 +106,6 @@ const EditModal: React.FC<EditModalProps> = ({
       setShowProfileModal(true);
       return;
     }
-
     try {
       const extraEntries = inputs.extra.split("\n").reduce((acc, line) => {
         const [key, value] = line.split(":").map((part) => part.trim());
@@ -164,7 +164,7 @@ const EditModal: React.FC<EditModalProps> = ({
   return (
     <>
       <Modal isOpen={isOpen} hide={onClose}>
-        <ModalTitle>Modifier la contribution</ModalTitle>
+        <ModalTitle>Édition</ModalTitle>
         <ModalContent>
           <Col className="fr-mb-1w">
             <label htmlFor="statusInput">Statut</label>
@@ -248,14 +248,16 @@ const EditModal: React.FC<EditModalProps> = ({
           </Row>
         </ModalContent>
       </Modal>
-      {showProfileModal && (
-        <ProfileModal
-          isOpen={showProfileModal}
-          selectedProfile={selectedProfile}
-          onClose={() => setShowProfileModal(false)}
-          onSelectProfile={(profile) => handleInputChange("team", [profile])}
-        />
-      )}
+      <ProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        onSelectProfile={(profile) => {
+          setSelectedProfile(profile);
+          localStorage.setItem("selectedProfile", profile);
+          setShowProfileModal(false);
+        }}
+        selectedProfile={selectedProfile}
+      />
       <TagSelectionModal
         isOpen={showTagModal}
         allTags={filteredTags}
