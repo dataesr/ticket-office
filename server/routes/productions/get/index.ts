@@ -48,7 +48,7 @@ getProductionsRoutes.get(
       organisation: production.organisation || "",
       fonction: production.position || "",
       treated_at: production.treated_at || new Date(),
-      created_at: production.created_at_at || new Date(),
+      created_at: production.created_at || new Date(),
       modified_at: production.modified_at || new Date(),
       email: production.email || "",
       name: production.name || "",
