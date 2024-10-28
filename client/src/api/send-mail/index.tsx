@@ -109,7 +109,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
       <ProfileModal
         isOpen={showProfileModal}
         onClose={() => setShowProfileModal(false)}
-        onSelectProfile={handleProfileSelect} // Passer la fonction pour sélectionner le profil
+        onSelectProfile={handleProfileSelect}
         selectedProfile={selectedProfile}
       />
       <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>

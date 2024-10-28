@@ -157,6 +157,12 @@ const Header: React.FC = () => {
           >
             Works magnet
           </Link>
+          <Link
+            current={pathname.startsWith("/last-mails-sent")}
+            href="/last-mails-sent"
+          >
+            Dernier mails envoyés
+          </Link>
         </Nav>
       </HeaderWrapper>
     </>
