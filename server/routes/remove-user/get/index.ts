@@ -76,10 +76,10 @@ getRemoveUserRoutes.get(
     },
     detail: {
       summary:
-        "Obtenir toutes les contributions via formulaire de supression de donnée",
+        "Obtenir toutes les contributions via formulaire de suppression de donnée",
       description:
         "Cette route retourne une liste de toutes les contributions soumises via le formulaire de contact.",
-      tags: ["Supression de profil"],
+      tags: ["Suppression de profil"],
     },
   }
 );

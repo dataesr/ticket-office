@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import {
   Header as HeaderWrapper,
@@ -56,10 +56,18 @@ const Header: React.FC = () => {
 
   const handleProfileSelect = (profile: string) => {
     setSelectedProfile(profile);
+    localStorage.setItem("selectedProfile", profile);
     setShowModal(false);
   };
 
   const handleCloseModal = () => setShowModal(false);
+
+  useEffect(() => {
+    const profileFromStorage = localStorage.getItem("selectedProfile");
+    if (profileFromStorage) {
+      setSelectedProfile(profileFromStorage);
+    }
+  }, []);
 
   return (
     <>
@@ -89,6 +97,7 @@ const Header: React.FC = () => {
           >
             {selectedProfile ? `Salut ${selectedProfile} !` : "Mon profil"}
           </Button>
+
           <ProfileModal
             isOpen={showModal}
             selectedProfile={selectedProfile}

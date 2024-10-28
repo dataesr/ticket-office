@@ -200,6 +200,10 @@ async function processEmailContent(messageSource: string) {
 
   return cleanedText;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/staging
 export async function fetchEmails() {
   const client = new ImapFlow({
     host: mailHost!,
@@ -272,4 +276,8 @@ function determineCollectionName(collectionPrefix: string) {
 setInterval(() => {
   console.log("Vérification des emails...");
   fetchEmails().catch(console.error);
+<<<<<<< HEAD
 }, 10 * 1000);
+=======
+}, 60 * 1000);
+>>>>>>> origin/staging

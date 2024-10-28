@@ -36,8 +36,8 @@ const StaffActions = ({
 
   const [isAllRead, setIsAllRead] = useState(() => {
     return (
-      data?.threads.every((thread) =>
-        thread.responses.every((response) => response.read)
+      data?.threads?.every((thread) =>
+        thread.responses?.every((response) => response.read)
       ) || false
     );
   });
@@ -114,14 +114,15 @@ const StaffActions = ({
 
   useEffect(() => {
     const allRead =
-      data?.threads.every((thread) =>
-        thread.responses.every((response) => response.read)
+      data?.threads?.every((thread) =>
+        thread.responses?.every((response) => response.read)
       ) || false;
     setIsAllRead(allRead);
   }, [data]);
 
   const cleanResponseMessage = (message: string) => {
     return message
+<<<<<<< HEAD
       .replace(/De:.*$/s, "")
       .replace(/Objet :.*$/s, "")
       .replace(/Envoyé :.*$/s, "")
@@ -133,6 +134,19 @@ const StaffActions = ({
       .replace(/Le sam.*$/s, "")
       .replace(/Le dim.*$/s, "")
       .trim();
+=======
+      ?.replace(/De:.*$/s, "")
+      ?.replace(/Objet :.*$/s, "")
+      ?.replace(/Envoyé :.*$/s, "")
+      ?.replace(/Le lun.*$/s, "")
+      ?.replace(/Le mar.*$/s, "")
+      ?.replace(/Le mer.*$/s, "")
+      ?.replace(/Le jeu.*$/s, "")
+      ?.replace(/Le ven.*$/s, "")
+      ?.replace(/Le sam.*$/s, "")
+      ?.replace(/Le dim.*$/s, "")
+      ?.trim();
+>>>>>>> origin/staging
   };
 
   return (
@@ -160,6 +174,7 @@ const StaffActions = ({
               const className = isStaffResponse ? "staffSide" : "user-side";
 
               return (
+<<<<<<< HEAD
                 <div key={`${threadIndex}-${index}`} className={className}>
                   <Text size="sm">
                     {cleanResponseMessage(response.responseMessage).replaceAll(
@@ -175,6 +190,24 @@ const StaffActions = ({
                     </small>
                   </Text>
                 </div>
+=======
+                response.responseMessage && (
+                  <div key={`${threadIndex}-${index}`} className={className}>
+                    <Text size="sm">
+                      {cleanResponseMessage(
+                        response.responseMessage
+                      )?.replaceAll("<br/>", "\n")}
+                      <br />
+                      <small>
+                        Répondu le {responseDate} à {responseTime} par{" "}
+                        {response.team.includes("user")
+                          ? data.name || response.team
+                          : response.team}
+                      </small>
+                    </Text>
+                  </div>
+                )
+>>>>>>> origin/staging
               );
             })
           )}

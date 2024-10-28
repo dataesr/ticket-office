@@ -31,9 +31,12 @@ created a .env.local (ask me mine)
 if you have and 503 issue, check error on pod
 --`kubectl get pods -n ticket-office`
 --`kubectl logs ticket-office-xxxxxxx-yyyyyy -n ticket-office`
+<<<<<<< HEAD
 
 # Links
 
 https://ticket-office.dataesr.ovh/
 https://ticket-office.staging.dataesr.ovh/
 API DOC : https://ticket-office.dataesr.ovh/swagger
+=======
+>>>>>>> origin/staging

@@ -40,8 +40,8 @@ app
           { name: "Productions", description: "Gestion des productions" },
           { name: "Envoi de mails", description: "Envoi de mails" },
           {
-            name: "Supressions de profil",
-            description: "Gestion des demandes supression de profil",
+            name: "Suppressions de profil",
+            description: "Gestion des demandes suppression de profil",
           },
           {
             name: "Mise à jour de données utilisateurs",
