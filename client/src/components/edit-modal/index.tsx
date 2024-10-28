@@ -216,7 +216,7 @@ const EditModal: React.FC<EditModalProps> = ({
             onClick={handleOpenTagModal}
             variant="secondary"
             size="sm"
-            className="fr-mt-2w"
+            className="fr-mt-2w fr-mb-2w"
           >
             Sélectionner des tags
           </Button>

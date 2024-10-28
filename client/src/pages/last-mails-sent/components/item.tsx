@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Badge, Col, Text, Title } from "@dataesr/dsfr-plus";
+import { Badge, Col, Link, Text } from "@dataesr/dsfr-plus";
 import { FaCopy } from "react-icons/fa";
 import "./styles.scss";
 import { LastMailsSentProps } from "../../../types";
@@ -54,16 +54,22 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
             </div>
 
             <div className="email-content">
-              <Title look="h6" as="h3" className="fr-mb-0">
-                Réponse de <i>{email.selectedProfile}</i> à{" "}
-                <i>
-                  {email?.name} ({email?.to})
-                </i>
-              </Title>
+              <Text className="fr-mb-0">
+                Réponse de{" "}
+                <strong>
+                  <i>{email.selectedProfile}</i>
+                </strong>{" "}
+                à{" "}
+                <strong>
+                  <i>
+                    {email?.name} ({email?.to})
+                  </i>
+                </strong>
+              </Text>
               <Text size="sm">
-                <a href={link} target="_blank" rel="noopener noreferrer">
-                  <i>{email?.contributionId}</i>
-                </a>
+                <Link href={link} rel="noopener noreferrer">
+                  Voir la contribution <i>{email?.contributionId}</i>
+                </Link>
                 <button
                   className={`copy-button ${
                     copiedId === email.contributionId ? "copied" : ""
