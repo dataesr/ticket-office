@@ -6,6 +6,7 @@ import Layout from "./src/layout";
 import React from "react";
 import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";
 import LocalBSO from "./src/pages/bso/index";
+import LastMailSent from "./src/pages/last-mails-sent";
 
 export default function Router() {
   return (
@@ -43,6 +44,7 @@ export default function Router() {
           path="/datasupr-contact"
           element={<ContactAndContributionPage fromApplication="datasupr" />}
         />
+        <Route path="/last-mails-sent" element={<LastMailSent />} />
         <Route path="/scanr-apioperations" element={<ApiOperationPage />} />
         <Route
           path="/scanr-removeuser"

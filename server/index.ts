@@ -11,6 +11,7 @@ import updateUserDataRoutes from "./routes/update-user-data";
 import contactsRoutes from "./routes/contacts";
 import sendMail from "./routes/reply/replyRoutes";
 import { fetchEmails } from "./routes/receive-email";
+import getLastMailsSentRoutes from "./routes/last-mails-sent";
 
 dotenv.config();
 
@@ -62,6 +63,7 @@ app
     app.use(removeUserRoutes);
     app.use(updateUserDataRoutes);
     app.use(sendMail);
+    app.use(getLastMailsSentRoutes);
     return app;
   })
   .use(

@@ -92,6 +92,32 @@ sendMail.post(
         error: `Erreur d'envoi: ${response.statusText}`,
       };
     }
+
+    let fromApplication = null;
+    if (collectionName === "contacts") {
+      const contactDoc = await db.collection("contacts").findOne({
+        _id: new ObjectId(contributionId),
+      });
+      if (contactDoc && contactDoc.fromApplication) {
+        fromApplication = contactDoc.fromApplication;
+      }
+    }
+
+    const sentEmailsCollection = db.collection("sent_emails");
+    await sentEmailsCollection.insertOne({
+      to,
+      name,
+      subject,
+      userResponse,
+      selectedProfile,
+      message,
+      sentAt: new Date(),
+      contributionId,
+      collectionName,
+      status: "sent",
+      ...(fromApplication && { fromApplication }),
+    });
+
     const collection = db.collection(collectionName);
     const existingDoc = await collection.findOne({
       _id: new ObjectId(contributionId),
@@ -127,7 +153,8 @@ sendMail.post(
 
     return {
       success: true,
-      message: "E-mail envoyé et réponse enregistrée",
+      message:
+        "E-mail envoyé, réponse enregistrée et email loggé dans sent_emails",
       collection: collectionName,
     };
   },
@@ -139,7 +166,7 @@ sendMail.post(
     detail: {
       summary: "Envoi d'un e-mail",
       description:
-        "Cette route permet d'envoyer un e-mail à un destinataire et d'enregistrer la réponse dans MongoDB dans une collection spécifique",
+        "Cette route permet d'envoyer un e-mail à un destinataire et d'enregistrer la réponse dans MongoDB dans une collection spécifique. Elle log également les emails envoyés dans une nouvelle collection 'sent_emails'.",
       tags: ["Envoi de mails"],
     },
   }

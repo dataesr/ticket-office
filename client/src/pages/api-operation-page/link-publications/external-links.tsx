@@ -8,6 +8,12 @@ export const ExternalLinks = ({ productionId, name }) => {
   const [scanRClicked, setScanRClicked] = useState(false);
   const [landingPageClicked, setLandingPageClicked] = useState(false);
   const { landingPage } = LandingPage(productionId);
+
+  const scanRPath =
+    formattedProductionId.length >= 7 && formattedProductionId.length <= 9
+      ? "patents"
+      : "publications";
+
   return (
     <>
       <Link
@@ -16,7 +22,7 @@ export const ExternalLinks = ({ productionId, name }) => {
         }`}
         target="_blank"
         rel="noreferrer noopener external"
-        href={`https://scanr.enseignementsup-recherche.gouv.fr/publications/${formattedProductionId}`}
+        href={`https://scanr.enseignementsup-recherche.gouv.fr/${scanRPath}/${formattedProductionId}`}
         onClick={() => setScanRClicked(true)}
       >
         scanR
@@ -34,7 +40,6 @@ export const ExternalLinks = ({ productionId, name }) => {
           Editeur
         </Link>
       )}
-
       <Link
         className={`fr-ml-2w fr-footer__content-link ${
           google ? "clicked-link" : ""

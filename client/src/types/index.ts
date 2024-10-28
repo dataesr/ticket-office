@@ -17,6 +17,10 @@ export interface Contribution {
   threads?: Thread[];
   fromApplication: string;
 }
+
+export interface LastMailsSentProps {
+  data: Contribution;
+}
 export interface ContributorSummaryProps {
   contributions: Contribution[];
   onSelectContribution: (id: string) => void;
