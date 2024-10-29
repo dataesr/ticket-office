@@ -7,7 +7,6 @@ const collectionNameMapping: { [key: string]: string } = {
 };
 
 export default collectionNameMapping;
-// utils/generateLink.ts
 export function generateLink(
   collectionName: string,
   fromApplication?: string,
