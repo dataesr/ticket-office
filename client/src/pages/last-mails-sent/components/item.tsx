@@ -93,7 +93,7 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
                     Envoyé le {formattedDate} à {formattedTime}
                   </i>
                 </Text>
-                <Text>{email.userResponse}</Text>
+                <Text>{email.userResponse.replaceAll("<br/>", " ")}</Text>
               </div>
             </Col>
           );

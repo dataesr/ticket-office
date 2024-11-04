@@ -28,7 +28,6 @@ function EmailForm({
 
     if (value === "api") {
       setUserResponse(`Bonjour, 
-        Nous nous réjouissons que les données de scanR suscitent l'intérêt de l'ISC dont nous suivons les travaux. 
         L'accès aux API scanR est possible avec le compte [Identifiant] et le mot de passe [Mot de passe]. 
         Les API sont documentées ici https://scanr.enseignementsup-recherche.gouv.fr/docs/overview. 
         N'hésitez pas à nous solliciter pour des compléments d'informations.
