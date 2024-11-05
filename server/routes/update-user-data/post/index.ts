@@ -24,7 +24,7 @@ postUpdateUserDataRoutes.post(
         ...acc,
         [key]: body.extra ? body.extra[key].toLowerCase() : "",
       }),
-      {}
+      {} as { [key: string]: string }
     );
 
     const _id = new ObjectId();
@@ -64,6 +64,7 @@ postUpdateUserDataRoutes.post(
     const recipients = emailRecipients["update-user-data"] || {
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
     };
+    const fonction = finalContribution.extra.fonction || "non renseigné";
 
     const dataForBrevo = {
       sender: {
@@ -82,6 +83,9 @@ postUpdateUserDataRoutes.post(
         title: "Nouvelle demande de modification de profil",
         id: finalContribution.id,
         link: contributionLink,
+        name: finalContribution.name,
+        email: finalContribution.email,
+        fonction: fonction,
         message: `${finalContribution.message}`,
       },
     };
