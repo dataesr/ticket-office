@@ -18,7 +18,7 @@ postRemoveUserRoutes.post(
         ...acc,
         [key]: body.extra ? body.extra[key].toLowerCase() : "",
       }),
-      {}
+      {} as { [key: string]: string }
     );
 
     const _id = new ObjectId();
@@ -58,6 +58,7 @@ postRemoveUserRoutes.post(
     const recipients = emailRecipients["remove-user"] || {
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
     };
+    const fonction = finalContribution.extra.fonction || "non renseigné";
 
     const dataForBrevo = {
       sender: {
@@ -76,6 +77,9 @@ postRemoveUserRoutes.post(
         title: "Nouvelle demande de suppression de profil",
         id: finalContribution.id,
         link: contributionLink,
+        name: finalContribution.name,
+        email: finalContribution.email,
+        fonction: fonction,
         message: `${finalContribution.message}`,
       },
     };

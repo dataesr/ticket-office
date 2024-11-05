@@ -26,7 +26,7 @@ postContributionObjectRoutes.post(
         ...acc,
         [key]: body.extra ? body.extra[key].toLowerCase() : "",
       }),
-      {}
+      {} as { [key: string]: string }
     );
 
     const _id = new ObjectId();
@@ -68,6 +68,7 @@ postContributionObjectRoutes.post(
     const recipients = emailRecipients["contribute"] || {
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
     };
+    const fonction = finalContribution.extra.fonction || "non renseigné";
 
     const dataForBrevo = {
       sender: {
@@ -86,6 +87,9 @@ postContributionObjectRoutes.post(
         title: "Nouvelle contribution créée concernant un objet",
         id: finalContribution.id,
         link: contributionLink,
+        name: finalContribution.name,
+        fonction: fonction,
+        email: finalContribution.email,
         message: `${finalContribution.message}`,
       },
     };

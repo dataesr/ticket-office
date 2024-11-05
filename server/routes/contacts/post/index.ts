@@ -33,7 +33,7 @@ postContactsRoutes.post(
         ...acc,
         [key]: body.extra ? body.extra[key].toLowerCase() : "",
       }),
-      {}
+      {} as { [key: string]: string }
     );
     const _id = new ObjectId();
     const newContribution = {
@@ -75,7 +75,7 @@ postContactsRoutes.post(
         code: "NO_RECIPIENTS_FOUND",
       });
     }
-
+    const fonction = finalContribution.extra.fonction || "non renseigné";
     const dataForBrevo = {
       sender: {
         email: process.env.MAIL_SENDER,
@@ -88,6 +88,9 @@ postContactsRoutes.post(
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
         title: "Nouvelle contribution créée via formulaire de contact",
+        name: finalContribution.name,
+        email: finalContribution.email,
+        fonction: fonction,
         id: finalContribution.id,
         link: contributionLink,
         message: `${finalContribution.message}`,
