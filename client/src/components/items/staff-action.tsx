@@ -1,16 +1,16 @@
-import { Col, Text, Toggle } from "@dataesr/dsfr-plus";
+import { Col, Text } from "@dataesr/dsfr-plus";
 import EmailSender from "../../api/send-mail";
 import type { Contribution } from "../../types";
 import { useLocation } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+// import { useMutation, useQueryClient } from "@tanstack/react-query";
 import "./styles.scss";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 const StaffActions = ({
   data,
   refetch,
-  url,
-}: {
+}: // url,
+{
   data: Contribution;
   refetch: () => void;
   url: string;
@@ -32,93 +32,93 @@ const StaffActions = ({
     ? "staffSide"
     : "staffSideContact";
 
-  const queryClient = useQueryClient();
+  // const queryClient = useQueryClient();
 
-  const [isAllRead, setIsAllRead] = useState(() => {
-    return (
-      data?.threads?.every((thread) =>
-        thread.responses?.every((response) => response.read)
-      ) || false
-    );
-  });
+  // const [isAllRead, setIsAllRead] = useState(() => {
+  //   return (
+  //     data?.threads?.every((thread) =>
+  //       thread.responses?.every((response) => response.read)
+  //     ) || false
+  //   );
+  // });
 
-  const mutation = useMutation(
-    async (isRead: boolean) => {
-      return fetch(`api/${baseUrl}/${data.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          threads: data.threads.map((thread) => ({
-            ...thread,
-            responses: thread.responses.map((response) => ({
-              ...response,
-              read: isRead,
-            })),
-          })),
-        }),
-      });
-    },
-    {
-      onMutate: async (isRead: boolean) => {
-        await queryClient.cancelQueries([url]);
+  // const mutation = useMutation(
+  //   async (isRead: boolean) => {
+  //     return fetch(`api/${baseUrl}/${data.id}`, {
+  //       method: "PATCH",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         threads: data.threads.map((thread) => ({
+  //           ...thread,
+  //           responses: thread.responses.map((response) => ({
+  //             ...response,
+  //             read: isRead,
+  //           })),
+  //         })),
+  //       }),
+  //     });
+  //   },
+  //   {
+  //     onMutate: async (isRead: boolean) => {
+  //       await queryClient.cancelQueries([url]);
 
-        const previousData = queryClient.getQueryData<{ data: Contribution[] }>(
-          [url]
-        ) || { data: [] };
+  //       const previousData = queryClient.getQueryData<{ data: Contribution[] }>(
+  //         [url]
+  //       ) || { data: [] };
 
-        if (Array.isArray(previousData.data)) {
-          const updatedThreads = previousData.data.map((thread) => ({
-            ...thread,
-            responses: Array.isArray(thread.responses)
-              ? thread.responses.map((response) => ({
-                  ...response,
-                  read: isRead,
-                }))
-              : [],
-          }));
+  //       if (Array.isArray(previousData.data)) {
+  //         const updatedThreads = previousData.data.map((thread) => ({
+  //           ...thread,
+  //           responses: Array.isArray(thread.responses)
+  //             ? thread.responses.map((response) => ({
+  //                 ...response,
+  //                 read: isRead,
+  //               }))
+  //             : [],
+  //         }));
 
-          queryClient.setQueryData([url], {
-            ...previousData,
-            data: updatedThreads,
-          });
-        } else {
-          console.error("previousData.data n'est pas un tableau", previousData);
-        }
+  //         queryClient.setQueryData([url], {
+  //           ...previousData,
+  //           data: updatedThreads,
+  //         });
+  //       } else {
+  //         console.error("previousData.data n'est pas un tableau", previousData);
+  //       }
 
-        return { previousData };
-      },
+  //       return { previousData };
+  //     },
 
-      onSuccess: () => {
-        queryClient.invalidateQueries([url]);
-        const updatedData = queryClient.getQueryData<{ data: Contribution[] }>([
-          url,
-        ]);
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries([url]);
+  //       const updatedData = queryClient.getQueryData<{ data: Contribution[] }>([
+  //         url,
+  //       ]);
 
-        if (updatedData?.data) {
-          const allRead = updatedData.data.every((thread) =>
-            thread.responses.every((response) => response.read)
-          );
-          setIsAllRead(allRead);
-        }
-      },
-    }
-  );
+  //       if (updatedData?.data) {
+  //         const allRead = updatedData.data.every((thread) =>
+  //           thread.responses.every((response) => response.read)
+  //         );
+  //         setIsAllRead(allRead);
+  //       }
+  //     },
+  //   }
+  // );
 
-  const handleToggleChange = () => {
-    const newState = !isAllRead;
-    setIsAllRead(newState);
-    mutation.mutate(newState);
-  };
+  // const handleToggleChange = () => {
+  //   const newState = !isAllRead;
+  //   setIsAllRead(newState);
+  //   mutation.mutate(newState);
+  // };
 
-  useEffect(() => {
-    const allRead =
-      data?.threads?.every((thread) =>
-        thread.responses?.every((response) => response.read)
-      ) || false;
-    setIsAllRead(allRead);
-  }, [data]);
+  // useEffect(() => {
+  //   const allRead =
+  //     data?.threads?.every((thread) =>
+  //       thread.responses?.every((response) => response.read)
+  //     ) || false;
+  //   setIsAllRead(allRead);
+  // }, [data]);
 
   const cleanResponseMessage = (message: string) => {
     return message
@@ -139,13 +139,13 @@ const StaffActions = ({
     <>
       {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
-          {data.threads.length > 2 && (
+          {/* {data.threads.length > 2 && (
             <Toggle
               label="Marquer toutes les réponses comme lues"
               checked={isAllRead}
               onChange={handleToggleChange}
             />
-          )}
+          )} */}
 
           {data.threads.map((thread, threadIndex) =>
             thread.responses.map((response, index) => {
