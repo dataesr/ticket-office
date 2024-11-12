@@ -132,6 +132,17 @@ const StaffActions = ({
       ?.replace(/Le ven.*$/s, "")
       ?.replace(/Le sam.*$/s, "")
       ?.replace(/Le dim.*$/s, "")
+
+      ?.replace(/--[a-fA-F0-9_-]+--/g, "")
+
+      .replace(/Content-Type:.*$/gs, "")
+      .replace(/Content-Disposition:.*$/gs, "")
+      .replace(/Content-Transfer-Encoding:.*$/gs, "")
+
+      .replace(/base64[^ ]+/gs, "[Image ou fichier ignoré]")
+
+      ?.replace(/<br\s*\/?>/g, "\n")
+
       ?.trim();
   };
 
