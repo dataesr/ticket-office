@@ -33,65 +33,66 @@ async function updateContribution(
     const collection = database.collection(collectionName);
 
     const contribution = await collection.findOne({ id: referenceId });
-    if (contribution) {
-      const existingThreads = Array.isArray(contribution.threads)
-        ? contribution.threads
-        : [];
 
-      const isDuplicate = existingThreads.some(
-        (thread) =>
-          thread.timestamp === formatDate(timestamp) &&
-          thread.responses.some(
-            (response: { responseMessage: string }) =>
-              response.responseMessage === responseMessage
-          )
-      );
+    if (!contribution) {
+      console.log(`Aucune contribution trouvée pour l'ID: ${referenceId}`);
+      return;
+    }
 
-      if (isDuplicate) {
-        console.log(
-          "Un thread avec la même date et réponse existe déjà, mise à jour annulée pour la contribution:",
-          referenceId
-        );
-        return;
-      }
+    const existingThreads = Array.isArray(contribution.threads)
+      ? contribution.threads
+      : [];
 
-      const response = {
-        threadId: contribution._id.toString(),
-        responses: [
-          {
-            responseMessage,
-            read: false,
-            timestamp: formatDate(timestamp),
-            team: ["user"],
-          },
-        ],
-        timestamp: formatDate(timestamp),
-      };
+    const isDuplicate = existingThreads.some(
+      (thread) =>
+        thread.timestamp === formatDate(timestamp) &&
+        thread.responses.some(
+          (response: { responseMessage: string }) =>
+            response.responseMessage === responseMessage
+        )
+    );
 
-      const updateResult = await collection.updateOne(
-        { _id: contribution._id },
-        { $set: { threads: [...existingThreads, response] } }
-      );
+    if (isDuplicate) {
+      console.log("Réponse déjà enregistrée, aucune mise à jour effectuée.");
+      return;
+    }
 
-      if (updateResult.modifiedCount > 0) {
-        console.log(
-          `Mise à jour réussie pour l'ID de référence: ${referenceId}`
-        );
-        await sendNotificationEmail(referenceId, contribution, collectionName);
-      }
-    } else {
-      console.log(`Aucune mise à jour pour l'ID: ${referenceId}`);
+    const response = {
+      threadId: contribution._id.toString(),
+      responses: [
+        {
+          responseMessage,
+          read: false,
+          timestamp: formatDate(timestamp),
+          team: ["user"],
+        },
+      ],
+      timestamp: formatDate(timestamp),
+    };
+
+    const updateResult = await collection.updateOne(
+      { _id: contribution._id },
+      { $set: { threads: [...existingThreads, response] } }
+    );
+
+    if (updateResult.modifiedCount > 0) {
+      console.log(`Mise à jour réussie pour l'ID de référence: ${referenceId}`);
+      await sendNotificationEmail(referenceId, contribution, collectionName);
     }
   } finally {
     await client.close();
   }
 }
-
 async function sendNotificationEmail(
   referenceId: string,
   contribution: any,
   collectionName: string
 ) {
+  if (!contribution.email || !contribution.id) {
+    console.error(`Invalid contribution data for ID: ${referenceId}`);
+    return;
+  }
+
   const recipients = process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [];
   const BREVO_API_KEY = process.env.BREVO_API_KEY;
 
@@ -120,6 +121,7 @@ async function sendNotificationEmail(
       url: contributionLink,
     },
   };
+
   const response = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -184,6 +186,11 @@ async function processEmailContent(messageSource: string) {
   const $ = cheerio.load(bodyText);
   let cleanedText = $("body").text().trim();
 
+  const base64Pattern = /([A-Za-z0-9+/=]{100,})(?=\s|$)/g;
+  if (base64Pattern.test(cleanedText)) {
+    cleanedText = "[Contenu binaire ignoré]";
+  }
+
   cleanedText = cleanedText
     .split("\n")
     .filter((line) => {
@@ -222,34 +229,54 @@ export async function fetchEmails() {
       envelope: true,
     });
 
+    const messageList: {
+      date: string;
+      source: string;
+      envelope: any;
+      referenceId: string | null;
+      collectionPrefix: string;
+    }[] = [];
+
     for await (let message of messages) {
-      try {
-        if (!message.envelope || !message.source) continue;
+      if (!message.envelope || !message.source) continue;
 
-        const messageSource = message.source.toString();
-        const date = formatDate(message.envelope.date?.toISOString() || null);
-        const subject = message.envelope.subject || "";
+      const messageSource = message.source.toString();
+      const date = formatDate(message.envelope.date?.toISOString() || null);
+      const subject = message.envelope.subject || "";
 
-        const referenceMatch = subject.match(
-          /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
-        );
-        let referenceId = referenceMatch ? referenceMatch[2] : null;
-        let collectionPrefix = referenceMatch ? referenceMatch[1] : "contacts";
+      const referenceMatch = subject.match(
+        /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
+      );
+      let referenceId = referenceMatch ? referenceMatch[2] : null;
+      let collectionPrefix = referenceMatch ? referenceMatch[1] : "contacts";
 
-        const extractedContent = await processEmailContent(messageSource);
-        if (!extractedContent) continue;
+      const extractedContent = await processEmailContent(messageSource);
+      if (!extractedContent) continue;
 
-        const collectionName = determineCollectionName(collectionPrefix);
+      messageList.push({
+        date,
+        source: messageSource,
+        envelope: message.envelope,
+        referenceId,
+        collectionPrefix,
+      });
+    }
 
+    const sortedMessages = messageList.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+
+    for (let message of sortedMessages) {
+      const { referenceId, collectionPrefix, source } = message;
+      const collectionName = determineCollectionName(collectionPrefix);
+
+      if (referenceId) {
         await updateContribution(
-          referenceId!,
-          extractedContent,
-          date,
+          referenceId,
+          await processEmailContent(source),
+          message.date,
           collectionName
         );
-      } catch (err) {
-        console.error(`Erreur lors du traitement de l'email : ${err}`);
-        continue;
       }
     }
   } finally {
@@ -273,4 +300,4 @@ function determineCollectionName(collectionPrefix: string) {
 setInterval(() => {
   console.log("Vérification des emails...");
   fetchEmails().catch(console.error);
-}, 60 * 1000);
+}, 120 * 1000);
