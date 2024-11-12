@@ -1,6 +1,6 @@
 import { Col, Text } from "@dataesr/dsfr-plus";
-import EmailSender from "../../api/send-mail";
-import type { Contribution } from "../../types";
+import EmailSender from "../../../api/send-mail";
+import type { Contribution } from "../../../types";
 import { useLocation } from "react-router-dom";
 // import { useMutation, useQueryClient } from "@tanstack/react-query";
 import "./styles.scss";
@@ -17,16 +17,16 @@ const StaffActions = ({
 }) => {
   const location = useLocation();
 
-  let baseUrl = "contacts";
-  if (location?.pathname?.includes("scanr-contributionpage")) {
-    baseUrl = "contribute";
-  } else if (location?.pathname?.includes("removeuser")) {
-    baseUrl = "remove-user";
-  } else if (location?.pathname?.includes("namechange")) {
-    baseUrl = "update-user-data";
-  } else if (location?.pathname?.includes("apioperations")) {
-    baseUrl = "production";
-  }
+  // let baseUrl = "contacts";
+  // if (location?.pathname?.includes("scanr-contributionpage")) {
+  //   baseUrl = "contribute";
+  // } else if (location?.pathname?.includes("removeuser")) {
+  //   baseUrl = "remove-user";
+  // } else if (location?.pathname?.includes("namechange")) {
+  //   baseUrl = "update-user-data";
+  // } else if (location?.pathname?.includes("apioperations")) {
+  //   baseUrl = "production";
+  // }
 
   const contributorClassName = location.pathname.includes("contributionpage")
     ? "staffSide"

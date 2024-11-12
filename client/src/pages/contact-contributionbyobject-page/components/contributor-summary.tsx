@@ -6,7 +6,7 @@ import {
   SideMenuItem,
   Text,
 } from "@dataesr/dsfr-plus";
-import { ContributorSummaryProps } from "../../types";
+import { ContributorSummaryProps } from "../../../types";
 import {
   BadgeColor,
   BadgeStatus,

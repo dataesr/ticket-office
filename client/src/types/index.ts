@@ -19,7 +19,7 @@ export interface Contribution {
 }
 
 export interface LastMailsSentProps {
-  data: Contribution;
+  data: { emails: Contribution[] };
 }
 export interface ContributorSummaryProps {
   contributions: Contribution[];

@@ -11,10 +11,10 @@ import Selectors from "./components/selectors";
 const LastMailsSent: React.FC = () => {
   const location = useLocation();
   const [sort, setSort] = useState("DESC");
-  const [status, setStatus] = useState("choose");
+  const [status, setStatus] = useState("all");
   const [query, setQuery] = useState<string[]>([]);
   const [page, setPage] = useState(1);
-  const [searchInMessage, setSearchInMessage] = useState(false);
+  const [searchInMessage, setSearchInMessage] = useState(true);
 
   const { data, isLoading, isError } = useSentEmails();
   const sentEmails: Contribution[] = data ? data.emails : [];
@@ -23,6 +23,11 @@ const LastMailsSent: React.FC = () => {
   const uniqueProfiles = Array.from(
     new Set(sentEmails.map((email) => email.selectedProfile))
   );
+
+  const filteredEmails =
+    status === "all"
+      ? sentEmails
+      : sentEmails.filter((email) => email.selectedProfile === status);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -39,7 +44,7 @@ const LastMailsSent: React.FC = () => {
     newSearchParams.set("query", query.join(","));
     newSearchParams.set("searchInMessage", searchInMessage.toString());
     newSearchParams.set("sort", sort);
-    if (status !== "choose") {
+    if (status !== "all") {
       newSearchParams.set("status", status);
     }
     const newURL = `${window.location.pathname}?${newSearchParams.toString()}`;
@@ -66,7 +71,7 @@ const LastMailsSent: React.FC = () => {
       <Row gutters className="fr-mb-3w">
         <Col>
           <TopPaginationButtons
-            meta={{ total: sentEmails.length }}
+            meta={{ total: filteredEmails.length }}
             page={page}
             maxPage={maxPage}
             setPage={setPage}
@@ -78,7 +83,7 @@ const LastMailsSent: React.FC = () => {
       </Row>
       <Row>
         <Col>
-          <LastMailsSentItem data={data} />
+          <LastMailsSentItem data={{ emails: filteredEmails }} />
         </Col>
       </Row>
       <BottomPaginationButtons

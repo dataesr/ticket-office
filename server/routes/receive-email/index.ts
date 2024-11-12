@@ -300,4 +300,4 @@ function determineCollectionName(collectionPrefix: string) {
 setInterval(() => {
   console.log("Vérification des emails...");
   fetchEmails().catch(console.error);
-}, 120 * 1000);
+}, 200 * 1000);

@@ -46,7 +46,18 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
                 >
                   {collectionNameMapping[email.collectionName]}
                 </Badge>
-
+                {(collectionNameMapping[email.collectionName] ===
+                  "Changement de nom" ||
+                  collectionNameMapping[email.collectionName] ===
+                    "Lier des publications") && (
+                  <Badge
+                    size="sm"
+                    color="blue-ecume"
+                    className="fr-mr-1w fr-mb-1w"
+                  >
+                    Scanr
+                  </Badge>
+                )}
                 {email.fromApplication && (
                   <Badge
                     size="sm"

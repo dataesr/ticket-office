@@ -15,8 +15,8 @@ import { Contribution, ContributionPageProps } from "../../types";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
-import ContributionItem from "../../components/items/contribution-item";
-import ContributorSummary from "../../components/items/contributor-summary";
+import ContributionItem from "./components/contribution-item";
+import ContributorSummary from "./components/contributor-summary";
 import { contactUrl, contributionUrl } from "../../config/api";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
@@ -26,7 +26,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);
   const [page, setPage] = useState(1);
-  const [searchInMessage, setSearchInMessage] = useState(true);
+  const [searchInMessage, setSearchInMessage] = useState(false);
   const [highlightedQuery, setHighlightedQuery] = useState("");
   const [selectedContribution, setSelectedContribution] = useState<string>("");
   const location = useLocation();

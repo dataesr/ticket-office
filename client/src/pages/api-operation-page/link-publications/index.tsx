@@ -141,7 +141,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
             status={status}
             setSort={setSort}
             setStatus={setStatus}
-            searchInMessage={""}
+            searchInMessage={true}
             setSearchInMessage={""}
           />
         </Col>
