@@ -58,7 +58,6 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
   };
 
   const handleExportClick = async () => {
-    console.log(dataList);
     const dataToExport = dataList
       .filter((item) => item.export === true)
       .map((item) => ({

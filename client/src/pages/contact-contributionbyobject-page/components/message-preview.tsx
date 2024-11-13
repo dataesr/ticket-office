@@ -1,11 +1,11 @@
 import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
-import type { Contribution } from "../../types";
-import HighlightedMessage from "../highlighted-message";
+import type { Contribution } from "../../../types";
+import HighlightedMessage from "../../../components/highlighted-message";
 import { useLocation } from "react-router-dom";
-import EditModal from "../edit-modal";
+import EditModal from "../../../components/edit-modal";
 import { useState, useCallback } from "react";
-import { capitalizeFirstLetter } from "./utils/capitalize";
-import { CopyButton } from "./utils/copy-button";
+import { capitalizeFirstLetter } from "../../../utils/capitalize";
+import { CopyButton } from "../../../utils/copy-button";
 
 const MessagePreview = ({
   data,

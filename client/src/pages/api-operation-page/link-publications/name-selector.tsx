@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import NameFromScanr from "../../../api/contribution-api/getNames";
-import { levenshteinDistance } from "../utils/compare";
 import { Col, Row } from "@dataesr/dsfr-plus";
 import { useDataList } from "./data-list-context";
 import ReactSelect from "react-select";
+import { levenshteinDistance } from "../../../utils/compare";
 
 export default function SelectWithNames({
   contributionId,

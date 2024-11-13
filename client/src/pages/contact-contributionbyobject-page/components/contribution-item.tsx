@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
 import ContributorInfo from "./contributor-info";
 import StaffActions from "./staff-action";
-import { ContributionItemProps } from "../../types";
+import { ContributionItemProps } from "../../../types";
 import {
   BadgeColor,
   BadgeStatus,
   StatusLabel,
   TypeLabel,
   typeIcon,
-} from "./utils";
+} from "../../../utils";
 import "./styles.scss";
 import { FaCopy } from "react-icons/fa";
 

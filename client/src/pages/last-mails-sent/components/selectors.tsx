@@ -1,5 +1,4 @@
 import { Col } from "@dataesr/dsfr-plus";
-
 const Selectors = ({ uniqueProfiles, setStatus }) => {
   const handleProfileChange = (event) => {
     setStatus(event.target.value);
@@ -9,7 +8,7 @@ const Selectors = ({ uniqueProfiles, setStatus }) => {
     <Col>
       <Col className="fr-mb-1w">
         <select onChange={handleProfileChange} className="fr-select">
-          <option value="choose">Par</option>
+          <option value="all">Tout le monde</option>
           {uniqueProfiles.map((profile, index) => (
             <option key={index} value={profile}>
               {profile}

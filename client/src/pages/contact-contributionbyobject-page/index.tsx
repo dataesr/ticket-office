@@ -1,23 +1,17 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import {
-  Col,
-  Container,
-  Row,
-  Text,
-  Title,
-  SearchBar,
-  DismissibleTag,
-} from "@dataesr/dsfr-plus";
+import { Col, Container, Row, Text } from "@dataesr/dsfr-plus";
 import ContributionData from "../../api/contribution-api/getData";
 import { buildURL } from "../../api/utils/buildURL";
 import { Contribution, ContributionPageProps } from "../../types";
-import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
-import ContributionItem from "../../components/items/contribution-item";
-import ContributorSummary from "../../components/items/contributor-summary";
-import { contactUrl, contributionUrl } from "../../config/api";
+import ContributorSummary from "./components/contributor-summary";
+import PageTitle from "./components/page-title";
+import SearchSection from "./components/search-section";
+import ContributionDetails from "./components/contribution-details";
+import TopPaginationButtons from "../../components/pagination/top-buttons";
+import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
+import { getUrlToSend } from "../../config/urlHelper";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
@@ -34,7 +28,6 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     setPage(parseInt(params.get("page") || "1"));
-    setSearchInMessage(params.get("searchInMessage") === "true");
     const queryParam = params.get("query") || "";
     setQuery(queryParam ? queryParam.split(",") : []);
     setSort(params.get("sort") || "DESC");
@@ -61,14 +54,8 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     searchInMessage,
     fromApplication
   );
-  let urlToSend;
-  if (location.pathname.includes("contributionPage")) {
-    urlToSend = contributionUrl;
-  } else if (location.pathname.includes("-contact")) {
-    urlToSend = contactUrl;
-  } else {
-    urlToSend = "";
-  }
+  const urlToSend = getUrlToSend(window.location.pathname);
+
   const { data, isLoading, isError, refetch } = ContributionData(url);
 
   const contributions: Contribution[] = data ? data.data : [];
@@ -77,6 +64,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
 
   const getTags = ContributionData(urlToSend);
   const allTags = getTags?.data?.data?.map((tag) => tag?.tags);
+
   useEffect(() => {
     if (contributions && contributions.length > 0) {
       setSelectedContribution((prevSelectedContribution) => {
@@ -139,43 +127,14 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
 
   return (
     <Container className="fr-my-5w">
-      <Title as="h1">
-        {(() => {
-          switch (true) {
-            case location.pathname.includes("contributionPage"):
-              return "Contribution par objets";
-            case location.pathname.includes("removeuser"):
-              return "Demande de suppression";
-            case location.pathname.includes("namechange"):
-              return "Demande de changement de nom";
-            default:
-              return "Contribution via formulaire de contact";
-          }
-        })()}
-      </Title>
+      <PageTitle pathname={location.pathname} />
       <Row gutters className="fr-mb-3w">
         <Col md="8" xs="12">
-          <SearchBar
-            className="fr-mb-1w"
-            onSearch={(value) => handleSearch(value || "")}
-            isLarge
-            buttonLabel="Rechercher"
-            placeholder="Rechercher par nom ou ID"
+          <SearchSection
+            query={query}
+            handleSearch={handleSearch}
+            handleRemoveQueryItem={handleRemoveQueryItem}
           />
-          <div className="fr-mb-1w">
-            {query
-              .filter((item) => item.trim() !== "")
-              .map((item, index) => (
-                <DismissibleTag
-                  key={index}
-                  color="purple-glycine"
-                  className="fr-mr-1w"
-                  onClick={() => handleRemoveQueryItem(item)}
-                >
-                  {item}
-                </DismissibleTag>
-              ))}
-          </div>
           <TopPaginationButtons
             meta={meta}
             page={page}
@@ -202,18 +161,14 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
           />
         </Col>
         <Col md="7">
-          {filteredContributions && filteredContributions.length > 0 && (
-            <ContributionItem
-              allTags={allTags}
-              key={selectedContribution}
-              data={filteredContributions.find(
-                (contribution) => contribution?.id === selectedContribution
-              )}
-              refetch={refetch}
-              highlightedQuery={highlightedQuery}
-              url={url}
-            />
-          )}
+          <ContributionDetails
+            filteredContributions={filteredContributions}
+            selectedContribution={selectedContribution}
+            refetch={refetch}
+            highlightedQuery={highlightedQuery}
+            allTags={allTags}
+            url={url}
+          />
         </Col>
       </Row>
       <BottomPaginationButtons

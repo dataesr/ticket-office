@@ -16,7 +16,6 @@ const useSentEmails = () => {
     ["sentEmails"],
     fetchSentEmails
   );
-  console.log(data);
   return { data, isLoading, isError, refetch };
 };
 
