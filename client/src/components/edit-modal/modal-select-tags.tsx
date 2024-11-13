@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Modal,
   ModalTitle,
@@ -23,7 +23,6 @@ const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
       setSelectedTags([...selectedTags, tag]);
     }
   };
-
   const handleConfirm = () => {
     onClose(selectedTags);
   };

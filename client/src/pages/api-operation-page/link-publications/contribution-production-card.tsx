@@ -13,10 +13,7 @@ import StaffProductionActions from "./staff-production-action";
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import { Contribute_Production } from "../../../types";
-import {
-  BadgeStatus,
-  StatusLabel,
-} from "../../contact-contributionbyobject-page/components/utils";
+import { BadgeStatus, StatusLabel } from "../../../utils/index";
 
 const ContributionProductionItem = ({
   data,

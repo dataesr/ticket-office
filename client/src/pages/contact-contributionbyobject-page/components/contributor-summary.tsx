@@ -13,7 +13,7 @@ import {
   StatusLabel,
   TypeLabel,
   typeIcon,
-} from "./utils";
+} from "../../../utils";
 
 const ContributorSummary: React.FC<ContributorSummaryProps> = ({
   contributions,

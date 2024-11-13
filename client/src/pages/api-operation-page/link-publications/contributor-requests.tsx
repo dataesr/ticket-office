@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaShoppingCart, FaCopy } from "react-icons/fa";
 import SelectWithNames from "./name-selector";
 import { ExternalLinks } from "./external-links";

@@ -61,7 +61,6 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
 
   const meta = fetchedData?.meta || {};
   const maxPage = meta.total ? Math.ceil(meta.total / 10) : 1;
-
   const handleSearch = (value: string) => {
     const trimmedValue = value.trim();
     if (trimmedValue !== "" && !query.includes(trimmedValue)) {
