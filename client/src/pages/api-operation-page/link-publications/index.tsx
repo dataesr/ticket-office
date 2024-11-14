@@ -102,7 +102,7 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
   return (
     <Container className="fr-my-5w">
       <Row gutters className="fr-mb-3w">
-        <Col md="12">
+        <Col md="12" xs="12">
           <Title as="h1">Lier des publications</Title>
         </Col>
         <Col md="8" xs="12">

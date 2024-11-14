@@ -24,7 +24,7 @@ const BottomPaginationButtons = ({ page, maxPage, setPage }) => {
       <span>{`${page} sur ${maxPage}`}</span>
       <Button
         onClick={() => setPage(page + 1)}
-        disabled={page >= maxPage} // Changement ici
+        disabled={page >= maxPage}
         title="Page suivante"
         className="fr-ml-2w"
       >

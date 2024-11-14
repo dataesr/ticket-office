@@ -1,20 +1,14 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { Col, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus";
 import { ClipLoader } from "react-spinners";
+import "./styles.scss";
 
-const ContributionsGraphByYear = ({
-  contributions,
-  isLoading,
-  isError,
-  filter,
-  setFilter,
-}) => {
+const ContributionsGraphByTime = ({ contributions, isLoading, isError }) => {
   if (isLoading) {
     return (
-      <Col className="comment">
+      <div className="loading-container">
         <ClipLoader color="#123abc" size={50} />
-      </Col>
+      </div>
     );
   }
 
@@ -26,77 +20,118 @@ const ContributionsGraphByYear = ({
     return <div>Les données ne sont pas disponibles</div>;
   }
 
-  const contributionsByMonth = (
-    contributions as { created_at: string }[]
-  ).reduce((acc, contribution) => {
-    const date = new Date(contribution.created_at);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
+  const months = [
+    "Janv",
+    "Févr",
+    "Mars",
+    "Avril",
+    "Mai",
+    "Juin",
+    "Juil",
+    "Août",
+    "Sept",
+    "Oct",
+    "Nov",
+    "Déc",
+  ];
 
-    if (!acc[year]) {
-      acc[year] = Array(12).fill(0);
+  const contributionsByMonth = {};
+
+  contributions.forEach((contact) => {
+    const createdAt = contact.created_at;
+    if (createdAt) {
+      const date = new Date(createdAt);
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const yearMonth = `${year}-${(month + 1).toString().padStart(2, "0")}`;
+
+      if (!contributionsByMonth[yearMonth]) {
+        contributionsByMonth[yearMonth] = 0;
+      }
+      contributionsByMonth[yearMonth] += 1;
     }
+  });
 
-    acc[year][month - 1]++;
-
-    return acc;
-  }, {});
+  const chartData = Object.entries(contributionsByMonth)
+    .sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime())
+    .map(([yearMonth, y]) => {
+      const [year, month] = yearMonth.split("-");
+      const formattedMonth = months[parseInt(month, 10) - 1];
+      const formattedDate = `${formattedMonth} ${year}`;
+      return { name: formattedDate, y };
+    });
 
   const options = {
     chart: {
-      type: "column",
+      type: "spline",
+      backgroundColor: "#fff",
+      borderWidth: 0,
+      plotBackgroundColor: "#f5f5f5",
     },
     title: {
-      text: `Nombre de contributions ${
-        filter === "object" ? "par objet" : "via formulaire contact"
-      } par mois et par année`,
+      text: "Évolution des Contributions par Mois",
+      style: {
+        fontSize: "20px",
+        fontWeight: "300",
+        color: "#333",
+      },
     },
     xAxis: {
-      categories: [
-        "Jan",
-        "Fev",
-        "Mar",
-        "Avr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Aou",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: chartData.map((item) => item.name),
+      title: {
+        text: "Mois",
+        style: {
+          fontSize: "14px",
+          color: "#333",
+        },
+      },
+      tickLength: 0,
     },
-    series: Object.entries(contributionsByMonth).map(
-      ([year, contributions]) => ({
-        name: year,
-        data: contributions,
-      })
-    ),
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Nombre de Contributions",
+        style: {
+          fontSize: "14px",
+          color: "#333",
+        },
+      },
+      gridLineWidth: 0,
+    },
+    tooltip: {
+      pointFormat: "{point.name}: <b>{point.y}</b> contributions",
+      borderRadius: 5,
+      backgroundColor: "#f8f8f8",
+      style: {
+        color: "#333",
+        fontSize: "14px",
+      },
+    },
+    plotOptions: {
+      spline: {
+        marker: {
+          enabled: false,
+        },
+      },
+    },
+    series: [
+      {
+        name: "Contributions",
+        data: chartData,
+        color: "#a94645",
+        lineWidth: 7,
+      },
+    ],
+    legend: {
+      enabled: false,
+    },
   };
 
   return (
-    <>
-      <SegmentedControl name={""} className="fr-mb-5w">
-        <SegmentedElement
-          onClick={() => setFilter("object")}
-          name="Par Objet"
-          label={"Par Objet"}
-          value={""}
-          icon="fr-fi-eye-line"
-          checked={filter === "object"}
-        />
-        <SegmentedElement
-          onClick={() => setFilter("contact")}
-          name="Par Objet"
-          label={"Via formulaire contact"}
-          value={""}
-          checked={filter === "contact"}
-        />
-      </SegmentedControl>
+    <div className="graph-container">
       <HighchartsReact highcharts={Highcharts} options={options} />
-    </>
+    </div>
   );
 };
 
-export default ContributionsGraphByYear;
+export default ContributionsGraphByTime;

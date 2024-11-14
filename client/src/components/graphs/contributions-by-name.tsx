@@ -1,21 +1,18 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { Contribution } from "../../types";
-import { Col, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus";
 import { ClipLoader } from "react-spinners";
+import "./styles.scss";
 
-const ContributionsGraphByName = ({
+const ContributionsGraphByTopContributors = ({
   contributions,
   isLoading,
   isError,
-  filter,
-  setFilter,
 }) => {
   if (isLoading) {
     return (
-      <Col className="comment">
+      <div className="loading-container">
         <ClipLoader color="#123abc" size={50} />
-      </Col>
+      </div>
     );
   }
 
@@ -27,144 +24,84 @@ const ContributionsGraphByName = ({
     return <div>Les données ne sont pas disponibles</div>;
   }
 
-  const contributionsByName = contributions.reduce(
-    (acc: Record<string, number>, contribution: Contribution) => {
-      const name = contribution.name;
+  const contributionsByPerson = {};
 
-      if (!acc[name]) {
-        acc[name] = 0;
+  contributions.forEach((contact) => {
+    const name = contact.name?.trim().toLowerCase();
+    if (name) {
+      if (!contributionsByPerson[name]) {
+        contributionsByPerson[name] = 0;
       }
+      contributionsByPerson[name] += 1;
+    }
+  });
 
-      acc[name]++;
+  const topContributors = Object.entries(contributionsByPerson)
+    .sort(([, a], [, b]) => (b as number) - (a as number))
+    .slice(0, 15);
 
-      return acc;
-    },
-    {}
-  );
-
-  const newContributionsByName = contributions.reduce(
-    (acc: Record<string, number>, contribution: Contribution) => {
-      if (contribution.status === "new") {
-        const name = contribution.name;
-
-        if (!acc[name]) {
-          acc[name] = 0;
-        }
-
-        acc[name]++;
-      }
-
-      return acc;
-    },
-    {}
-  );
-
-  let names: string[] = Object.keys(contributionsByName);
-  let contributionCounts: number[] = Object.values(contributionsByName);
-  let newContributionCounts: number[] = names.map(
-    (name) => newContributionsByName[name] || 0
-  );
-
-  let pairs: [string, number, number][] = names.map((name, index) => [
+  const chartData = topContributors.map(([name, y]) => ({
     name,
-    contributionCounts[index],
-    newContributionCounts[index],
-  ]);
-
-  pairs.sort((a, b) => b[1] - a[1]);
-  pairs = pairs.slice(0, 15);
-
-  names = pairs.map((pair) => pair[0]);
-  contributionCounts = pairs.map((pair) => pair[1]);
-  newContributionCounts = pairs.map((pair) => pair[2]);
+    y,
+  }));
 
   const options = {
     chart: {
       type: "bar",
+      plotBorderWidth: 1,
+      plotBackgroundColor: "#f5f5f5",
     },
     title: {
-      text: `Top 15 des contributeurs ${
-        filter === "object" ? "par objet" : "via formulaire contact"
-      }`,
+      text: "Top 15 des contributeurs",
+      style: {
+        fontSize: "24px",
+        fontWeight: "bold",
+      },
     },
     xAxis: {
-      categories: names,
+      categories: chartData.map((item) => item.name),
       title: {
-        text: "Noms",
+        text: "Contributeurs",
       },
     },
     yAxis: {
       min: 0,
       title: {
-        text: "Nombre de contributions",
+        text: "Nombre de Contributions",
       },
-      stackLabels: {
-        enabled: true,
-        style: {
-          fontWeight: "bold",
-        },
-      },
-    },
-    legend: {
-      align: "right",
-      x: -30,
-      verticalAlign: "middle",
-      layout: "vertical",
-      floating: false,
-      backgroundColor:
-        Highcharts.defaultOptions.legend.backgroundColor || "white",
-      borderColor: "#CCC",
-      borderWidth: 1,
-      shadow: false,
     },
     tooltip: {
-      headerFormat: "<b>{point.x}</b><br/>",
-      pointFormat: "{series.name}: {point.y}<br/>Total: {point.stackTotal}",
+      pointFormat: "{point.name}: <b>{point.y}</b> contributions",
+      borderRadius: 5,
     },
     plotOptions: {
-      series: {
-        stacking: "normal",
+      bar: {
         dataLabels: {
           enabled: true,
+          style: {
+            color: "#333",
+            fontSize: "16px",
+          },
         },
       },
     },
     series: [
       {
-        name: "Toutes Contributions",
-        data: contributionCounts,
-        color: "#007bff",
-      },
-      {
-        name: "Contributions non traitées",
-        data: newContributionCounts,
-        color: "#ff4d4d",
+        name: "Contributions",
+        data: chartData,
+        colorByPoint: true,
       },
     ],
+    legend: {
+      enabled: false,
+    },
   };
 
   return (
-    <>
-      <SegmentedControl name={""} className="fr-mb-5w">
-        <SegmentedElement
-          onClick={() => setFilter("object")}
-          name="Par Objet"
-          label={"Par Objet"}
-          value={""}
-          icon="fr-fi-eye-line"
-          checked={filter === "object"}
-        />
-        <SegmentedElement
-          onClick={() => setFilter("contact")}
-          name="Par Objet"
-          label={"Via formulaire contact"}
-          value={""}
-          checked={filter === "contact"}
-        />
-      </SegmentedControl>
+    <div className="graph-container">
       <HighchartsReact highcharts={Highcharts} options={options} />
-    </>
+    </div>
   );
 };
 
-export default ContributionsGraphByName;
+export default ContributionsGraphByTopContributors;

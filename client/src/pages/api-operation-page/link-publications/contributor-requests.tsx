@@ -42,6 +42,7 @@ const ContributorRequests: React.FC<{
             className="contributorProductionContent fr-mr-1v"
             key={production?.id}
             style={{ position: "relative" }}
+            xs="12"
           >
             <div style={{ flex: 2, display: "flex", alignItems: "center" }}>
               ID de la publication : {production.id}

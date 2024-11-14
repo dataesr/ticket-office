@@ -32,11 +32,10 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
   };
 
   const firstThread = data?.threads?.[0];
-  const firstResponse = firstThread?.responses?.[1];
-
+  const firstResponse = firstThread?.responses?.[0];
   return (
     <>
-      <Row>
+      <Row className="fr-mt-3w">
         {data?.tags?.length > 0 && (
           <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
             {data.tags.join(", ")}

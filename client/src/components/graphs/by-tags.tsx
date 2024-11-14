@@ -1,21 +1,15 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { Col, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus";
-import { ContributionDataType } from "../../types";
 import { ClipLoader } from "react-spinners";
+import { ContributionDataType } from "../../types";
+import "./styles.scss";
 
-const ContributionsGraphByTags = ({
-  contributions,
-  isLoading,
-  isError,
-  filter,
-  setFilter,
-}) => {
+const ContributionsGraphByTags = ({ contributions, isLoading, isError }) => {
   if (isLoading) {
     return (
-      <Col className="comment">
+      <div className="loading-container">
         <ClipLoader color="#123abc" size={50} />
-      </Col>
+      </div>
     );
   }
 
@@ -32,68 +26,113 @@ const ContributionsGraphByTags = ({
       const { tags } = contribution;
       if (tags) {
         tags.forEach((tag: string) => {
-          if (!acc[tag]) {
-            acc[tag] = 1;
+          const normalizedTag = tag.toUpperCase();
+          if (!acc[normalizedTag]) {
+            acc[normalizedTag] = 1;
           } else {
-            acc[tag] += 1;
+            acc[normalizedTag] += 1;
           }
         });
       }
-
       return acc;
     },
     {}
   );
 
-  const chartData = Object.entries(contributionsByTag).map(([name, y]) => ({
+  const sortedTags = Object.entries(contributionsByTag)
+    .sort(([, a]: [string, number], [, b]: [string, number]) => b - a)
+    .slice(0, 10);
+
+  const otherTagsCount =
+    Object.entries(contributionsByTag).length - sortedTags.length;
+  if (otherTagsCount > 0) {
+    const otherTagSum = Object.entries(contributionsByTag)
+      .slice(10)
+      .reduce((acc, [, count]: [string, number]) => acc + count, 0);
+
+    sortedTags.push(["Autres", otherTagSum]);
+  }
+
+  const chartData = sortedTags.map(([name, y]) => ({
     name,
     y,
   }));
 
   const options = {
     chart: {
-      type: "pie",
+      type: "column",
+      backgroundColor: "#ffffff",
+      borderWidth: 0,
+      plotBackgroundColor: "#f5f5f5",
     },
     title: {
       text: "Contributions par tag",
+      style: {
+        fontSize: "24px",
+        fontWeight: "600",
+        color: "#333",
+      },
     },
     xAxis: {
-      type: "category",
+      categories: chartData.map((item) => item.name),
+      title: {
+        style: {
+          fontSize: "14px",
+          color: "#666",
+        },
+      },
+      labels: {
+        style: {
+          color: "#888",
+        },
+      },
     },
     yAxis: {
+      min: 0,
       title: {
         text: "Nombre de contributions",
+        style: {
+          color: "#666",
+        },
+      },
+    },
+    tooltip: {
+      pointFormat: "{point.name}: <b>{point.y}</b> contributions",
+      borderRadius: 5,
+      backgroundColor: "#f8f8f8",
+      style: {
+        color: "#333",
+        fontSize: "14px",
+      },
+    },
+    plotOptions: {
+      column: {
+        dataLabels: {
+          enabled: true,
+          format: "{point.y}",
+          style: {
+            color: "#333",
+            fontSize: "14px",
+            fontWeight: "bold",
+          },
+        },
       },
     },
     series: [
       {
-        name: "Tag",
         data: chartData,
+        colorByPoint: true,
       },
     ],
+    legend: {
+      enabled: false,
+    },
   };
 
   return (
-    <>
-      <SegmentedControl name={""} className="fr-mb-5w">
-        <SegmentedElement
-          onClick={() => setFilter("object")}
-          name="Par Objet"
-          label={"Par Objet"}
-          value={""}
-          icon="fr-fi-eye-line"
-          checked={filter === "object"}
-        />
-        <SegmentedElement
-          onClick={() => setFilter("contact")}
-          name="Par Objet"
-          label={"Via formulaire contact"}
-          value={""}
-          checked={filter === "contact"}
-        />
-      </SegmentedControl>
+    <div className="graph-container">
       <HighchartsReact highcharts={Highcharts} options={options} />
-    </>
+    </div>
   );
 };
 

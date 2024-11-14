@@ -1,22 +1,14 @@
-import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
-
-import { Col, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus";
-import { ContributionDataType } from "../../types";
+import HighchartsReact from "highcharts-react-official";
 import { ClipLoader } from "react-spinners";
+import "./styles.scss";
 
-const AdminResponseGraph = ({
-  contributions,
-  isLoading,
-  isError,
-  filter,
-  setFilter,
-}) => {
+const ContributionsGraphByTeam = ({ contributions, isLoading, isError }) => {
   if (isLoading) {
     return (
-      <Col className="comment">
+      <div className="loading-container">
         <ClipLoader color="#123abc" size={50} />
-      </Col>
+      </div>
     );
   }
 
@@ -28,72 +20,87 @@ const AdminResponseGraph = ({
     return <div>Les données ne sont pas disponibles</div>;
   }
 
-  const occurrencesByUser = contributions.reduce(
-    (acc: Record<string, number>, contribution: ContributionDataType) => {
-      const { responseFrom } = contribution;
-      if (responseFrom) {
-        if (!acc[responseFrom]) {
-          acc[responseFrom] = 1;
-        } else {
-          acc[responseFrom] += 1;
+  const responsesByTeamMember = {};
+
+  contributions.forEach((contact) => {
+    contact.threads?.forEach((thread) => {
+      thread.responses?.forEach((response) => {
+        if (response.team) {
+          response.team.forEach((member) => {
+            if (member !== "user") {
+              if (!responsesByTeamMember[member]) {
+                responsesByTeamMember[member] = 0;
+              }
+              responsesByTeamMember[member] += 1;
+            }
+          });
         }
-      }
+      });
+    });
+  });
 
-      return acc;
-    },
-    {}
-  );
-
-  const chartData = Object.entries(occurrencesByUser).map(([name, y]) => ({
+  const chartData = Object.entries(responsesByTeamMember).map(([name, y]) => ({
     name,
     y,
   }));
 
   const options = {
     chart: {
-      type: "pie",
+      type: "bar",
+      plotBorderWidth: 1,
+      plotBackgroundColor: "#f5f5f5",
     },
     title: {
-      text: "Nombre de mail envoyé",
+      text: "Réponses par membre de l'équipe",
+      style: {
+        fontSize: "24px",
+        fontWeight: "bold",
+      },
+    },
+    xAxis: {
+      categories: chartData.map((item) => item.name),
+      title: {
+        text: "Membres de l'équipe",
+      },
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: "Nombre de réponses",
+      },
+    },
+    tooltip: {
+      pointFormat: "{point.name}: <b>{point.y}</b> réponses",
+      borderRadius: 5,
     },
     plotOptions: {
-      pie: {
+      bar: {
         dataLabels: {
           enabled: true,
-          format: "{point.name}: {point.y}",
+          style: {
+            color: "#333",
+            fontSize: "16px",
+          },
         },
       },
     },
     series: [
       {
-        name: "Mail de réponse depuis le guichet",
+        name: "Réponses",
         data: chartData,
+        colorByPoint: true,
       },
     ],
+    legend: {
+      enabled: false,
+    },
   };
 
   return (
-    <>
-      <SegmentedControl name={""} className="fr-mb-5w">
-        <SegmentedElement
-          onClick={() => setFilter("object")}
-          name="Par Objet"
-          label={"Par Objet"}
-          value={""}
-          icon="fr-fi-eye-line"
-          checked={filter === "object"}
-        />
-        <SegmentedElement
-          onClick={() => setFilter("contact")}
-          name="Par Objet"
-          label={"Via formulaire contact"}
-          value={""}
-          checked={filter === "contact"}
-        />
-      </SegmentedControl>
+    <div className="graph-container">
       <HighchartsReact highcharts={Highcharts} options={options} />
-    </>
+    </div>
   );
 };
 
-export default AdminResponseGraph;
+export default ContributionsGraphByTeam;

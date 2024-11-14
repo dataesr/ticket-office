@@ -6,8 +6,35 @@
 }
 
 .email-content {
-  max-width: 100%;
   overflow: hidden;
   word-wrap: break-word;
-  overflow: hidden;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+.copy-button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.copied-text {
+  color: #4caf50;
+  margin-right: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .email-item {
+    padding: 1rem;
+  }
+  .email-content {
+    font-size: 0.9rem;
+  }
+  .copy-icon {
+    display: inline-block;
+    margin-left: 0.5rem;
+  }
+  .test {
+    background-color: red;
+  }
 }

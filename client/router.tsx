@@ -7,6 +7,7 @@ import React from "react";
 import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";
 import LocalBSO from "./src/pages/bso/index";
 import LastMailSent from "./src/pages/last-mails-sent";
+import GetStats from "./src/pages/stats";
 
 export default function Router() {
   return (
@@ -54,6 +55,7 @@ export default function Router() {
           path="/scanr-namechange"
           element={<ContactAndContributionPage />}
         />
+        <Route path="/statistiques" element={<GetStats />} />
       </Route>
     </Routes>
   );

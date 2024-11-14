@@ -5,8 +5,8 @@ import { Contribution } from "../../types";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import useSentEmails from "../../api/contribution-api/getSentMails";
-import LastMailsSentItem from "./components/item";
 import Selectors from "./components/selectors";
+import LastMailsSentItem from "./components/item";
 
 const LastMailsSent: React.FC = () => {
   const location = useLocation();
@@ -69,7 +69,7 @@ const LastMailsSent: React.FC = () => {
     <Container className="fr-my-5w">
       <Title as="h1">Derniers mails envoyés</Title>
       <Row gutters className="fr-mb-3w">
-        <Col>
+        <Col md="6" lg="10">
           <TopPaginationButtons
             meta={{ total: filteredEmails.length }}
             page={page}
@@ -77,15 +77,13 @@ const LastMailsSent: React.FC = () => {
             setPage={setPage}
           />
         </Col>
-        <Col offsetLg="6">
+        <Col md="6" lg="2" xs="12">
           <Selectors setStatus={setStatus} uniqueProfiles={uniqueProfiles} />
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <LastMailsSentItem data={{ emails: filteredEmails }} />
-        </Col>
-      </Row>
+      <Col md="6" xs="12" lg="12">
+        <LastMailsSentItem data={{ emails: filteredEmails }} />
+      </Col>
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}

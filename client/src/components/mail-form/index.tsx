@@ -143,7 +143,7 @@ function EmailForm({
     <>
       {contribution?.email && (
         <Row gutters>
-          <Col offsetMd="2" md="10">
+          <Col offsetMd="2" md="10" xs="12">
             <label htmlFor="templateSelect">
               Choisissez un template de réponse
             </label>
@@ -167,7 +167,7 @@ function EmailForm({
               rows={5}
             />
           </Col>
-          <Col offsetMd="10" md="2">
+          <Col offsetMd="10" md="2" xs="12">
             <ButtonGroup size="sm">
               <Button
                 className="fr-mt-1w"

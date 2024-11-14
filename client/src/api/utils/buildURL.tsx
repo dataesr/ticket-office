@@ -4,8 +4,9 @@ export const buildURL = (
   status: string,
   query: string,
   page: number,
-  searchInMessages: boolean = false,
-  fromApplication?: string
+  searchInMessages: boolean = true,
+  fromApplication?: string,
+  max_results: string = "20"
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
@@ -43,6 +44,7 @@ export const buildURL = (
       }
     }
   }
+
   const fromAppQuery = fromApplication
     ? `&fromApplication=${fromApplication.toLocaleLowerCase()}`
     : "";
@@ -53,5 +55,35 @@ export const buildURL = (
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
-  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=20${whereQuery}${fromAppQuery}`;
+  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
+};
+export const buildStatsURL = (
+  filter: string,
+  sort: string = "ASC",
+  page: number = 1,
+  maxResults: string = "3000"
+): string => {
+  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const url = import.meta.env.VITE_BASE_API_URL;
+  const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : `${url}/api`;
+
+  let baseUrl = "contacts";
+
+  switch (filter) {
+    case "object":
+      baseUrl = "contribute";
+      break;
+    case "removeuser":
+      baseUrl = "remove-user";
+      break;
+    case "namechange":
+      baseUrl = "update-user-data";
+      break;
+    default:
+      baseUrl = "contacts";
+  }
+
+  const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
+
+  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=${maxResults}`;
 };
