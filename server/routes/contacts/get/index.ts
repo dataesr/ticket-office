@@ -25,7 +25,7 @@ getContactRoutes.get(
       filters.fromApplication = fromApplication;
     }
 
-    const limit = parseInt(max_results as string, 10) || 20;
+    const limit = parseInt(max_results as string, 10) || 2000;
     const skip = (parseInt(page as string, 10) - 1) * limit;
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
