@@ -16,7 +16,7 @@ getContactRoutes.get(
       where = "{}",
       sort = "created_at",
       page = 1,
-      max_results = 20,
+      max_results = "",
       fromApplication,
     } = query;
 
@@ -76,7 +76,7 @@ getContactRoutes.get(
     query: t.Object({
       sort: t.Optional(t.String()),
       page: t.Optional(t.Numeric()),
-      max_results: t.Optional(t.Numeric()),
+      max_results: t.Optional(t.String()),
       where: t.Optional(t.String()),
       fromApplication: t.Optional(t.String()),
     }),

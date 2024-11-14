@@ -163,6 +163,12 @@ const Header: React.FC = () => {
           >
             Dernier mails envoyés
           </Link>
+          <Link
+            current={pathname.startsWith("/statistiques")}
+            href="/statistiques"
+          >
+            Les stats
+          </Link>
         </Nav>
       </HeaderWrapper>
     </>

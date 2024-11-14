@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Badge, Col, Container, Link, Text } from "@dataesr/dsfr-plus";
+import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import { FaCopy } from "react-icons/fa";
 import "./styles.scss";
 import { LastMailsSentProps } from "../../../types";
@@ -16,7 +16,7 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
   };
 
   return (
-    <>
+    <Container fluid>
       {data.emails
         .slice()
         .sort(
@@ -37,8 +37,8 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
           });
 
           return (
-            <Container>
-              <Col key={index} className="email-item fr-mb-2w">
+            <Row gutters key={index} className="email-row">
+              <Col lg="12" md="10" sm="12" className="email-item fr-mb-2w">
                 <div className="badges">
                   <Badge
                     size="sm"
@@ -69,7 +69,6 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
                     </Badge>
                   )}
                 </div>
-
                 <div>
                   <Text className="fr-mb-0">
                     Réponse de{" "}
@@ -110,10 +109,10 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
                   </Text>
                 </div>
               </Col>
-            </Container>
+            </Row>
           );
         })}
-    </>
+    </Container>
   );
 };
 

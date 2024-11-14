@@ -98,7 +98,7 @@ const MessagePreview = ({
     <Container fluid>
       {data.comment && (
         <Row className="fr-grid-row--center">
-          <Col md="8" className="comment">
+          <Col md="8" xs="12" className="comment">
             <Text size="sm">
               Commentaire ({data?.team ? data.team[0] : ""}){" "}
               <strong> : {data.comment}</strong>

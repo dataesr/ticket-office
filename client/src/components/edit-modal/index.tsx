@@ -181,7 +181,7 @@ const EditModal: React.FC<EditModalProps> = ({
             </select>
           </Col>
           <Row gutters>
-            <Col md="6">
+            <Col md="6" xs="12">
               <TextArea
                 label="Ajouter des tags"
                 hint="Séparez les tags par des virgules"
@@ -198,7 +198,7 @@ const EditModal: React.FC<EditModalProps> = ({
                 </Button>
               )}
             </Col>
-            <Col md="6">
+            <Col md="6" xs="12">
               {inputs.tags.map((tag, index) => (
                 <span key={index}>
                   <DismissibleTag
@@ -221,7 +221,7 @@ const EditModal: React.FC<EditModalProps> = ({
             Sélectionner des tags
           </Button>
           <Row gutters>
-            <Col md="6">
+            <Col md="6" xs="12">
               <TextArea
                 label="Ajouter des extra"
                 value={inputs.extra}
@@ -229,7 +229,7 @@ const EditModal: React.FC<EditModalProps> = ({
                 hint="Exemple : clé: valeur"
               />
             </Col>
-            <Col md="6">
+            <Col md="6" xs="12">
               <TextArea
                 label="Commentaire"
                 value={inputs.comment}

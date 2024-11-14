@@ -1,21 +1,15 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { Col, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus";
-import { ContributionDataType } from "../../types";
 import { ClipLoader } from "react-spinners";
+import { ContributionDataType } from "../../types";
+import "./styles.scss";
 
-const ContributionsGraphByStatus = ({
-  contributions,
-  isLoading,
-  isError,
-  filter,
-  setFilter,
-}) => {
+const ContributionsGraphByStatus = ({ contributions, isLoading, isError }) => {
   if (isLoading) {
     return (
-      <Col className="comment">
+      <div className="loading-container">
         <ClipLoader color="#123abc" size={50} />
-      </Col>
+      </div>
     );
   }
 
@@ -30,65 +24,95 @@ const ContributionsGraphByStatus = ({
   const contributionsByStatus = contributions.reduce(
     (acc: Record<string, number>, contribution: ContributionDataType) => {
       const { status } = contribution;
-      if (!acc[status]) {
-        acc[status] = 1;
-      } else {
-        acc[status] += 1;
+      if (status) {
+        const normalizedStatus = status.toLowerCase();
+        if (!acc[normalizedStatus]) {
+          acc[normalizedStatus] = 1;
+        } else {
+          acc[normalizedStatus] += 1;
+        }
       }
-
       return acc;
     },
     {}
   );
-  const chartData = Object.entries(contributionsByStatus).map(([name, y]) => ({
-    name,
-    y,
-  }));
 
+  const sortedStatuses = Object.entries(contributionsByStatus).sort(
+    ([, a]: [string, number], [, b]: [string, number]) => b - a
+  );
+
+  const chartData = sortedStatuses.map(([name, y]) => {
+    let color;
+    switch (name) {
+      case "new":
+        color = "#a94645";
+        break;
+      case "treated":
+        color = "#c9fcac";
+        break;
+      case "ongoing":
+        color = "#D1B781";
+        break;
+      default:
+        color = "#808080";
+    }
+    return {
+      name,
+      y,
+      color,
+    };
+  });
   const options = {
     chart: {
       type: "column",
+      backgroundColor: "#ffffff",
+      borderWidth: 0,
+      plotBackgroundColor: "#f5f5f5",
     },
     title: {
-      text: "Les status des contributions",
+      text: "Status des Contributions",
+      style: {
+        fontSize: "24px",
+        fontWeight: "600",
+        color: "#333",
+      },
     },
-    xAxis: {
-      type: "category",
+    tooltip: {
+      pointFormat: "{point.name}: <b>{point.y}</b> contributions",
+      borderRadius: 5,
+      backgroundColor: "#f8f8f8",
+      style: {
+        color: "#333",
+        fontSize: "14px",
+      },
     },
-    yAxis: {
-      title: {
-        text: "Nombre de contributions",
+    plotOptions: {
+      pie: {
+        dataLabels: {
+          enabled: true,
+          format: "{point.y}",
+          style: {
+            color: "#333",
+            fontSize: "14px",
+            fontWeight: "bold",
+          },
+        },
       },
     },
     series: [
       {
-        name: "Statut",
         data: chartData,
       },
     ],
+    legend: {
+      enabled: false,
+    },
   };
 
   return (
-    <>
-      <SegmentedControl name={""} className="fr-mb-5w">
-        <SegmentedElement
-          onClick={() => setFilter("object")}
-          name="Par Objet"
-          label={"Par Objet"}
-          value={""}
-          icon="fr-fi-eye-line"
-          checked={filter === "object"}
-        />
-        <SegmentedElement
-          onClick={() => setFilter("contact")}
-          name="Par Objet"
-          label={"Via formulaire contact"}
-          value={""}
-          checked={filter === "contact"}
-        />
-      </SegmentedControl>
+    <div className="graph-container">
       <HighchartsReact highcharts={Highcharts} options={options} />
-    </>
+    </div>
   );
 };
 

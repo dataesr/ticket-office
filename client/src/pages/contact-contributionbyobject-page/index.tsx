@@ -154,13 +154,13 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
         </Col>
       </Row>
       <Row>
-        <Col md="4">
+        <Col md="4" xs="12">
           <ContributorSummary
             contributions={filteredContributions}
             onSelectContribution={onSelectContribution}
           />
         </Col>
-        <Col md="7">
+        <Col md="7" xs="12">
           <ContributionDetails
             filteredContributions={filteredContributions}
             selectedContribution={selectedContribution}
