@@ -34,7 +34,8 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
             email.fromApplication,
             email.id,
             email.objectId,
-            email.productions
+            email.productions,
+            email.message
           );
           const creationDate = new Date(email.created_at);
           const formattedDate = creationDate.toLocaleDateString("fr-FR");
@@ -44,7 +45,7 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
           });
 
           let badgeContent = "";
-          if (email.productions?.length > 1) {
+          if (email.productions?.length > 0) {
             badgeContent = "Lier des publications";
           } else if (email.objectId && !email.productions) {
             badgeContent = "Contribution par objet";

@@ -3,7 +3,8 @@ export function generateLinkFromAllDatas(
   fromApplication?: string,
   id?: string,
   objectId?: boolean,
-  productions?: Array<any>
+  productions?: Array<any>,
+  message?: string
 ): string {
   const basePathMap: { [key: string]: { [key: string]: string } | string } = {
     contacts: {
@@ -21,8 +22,7 @@ export function generateLinkFromAllDatas(
   };
 
   let basePath = "";
-
-  if (productions?.length > 1) {
+  if (productions?.length > 0 && message === undefined) {
     basePath = "/scanr-apioperations";
   } else if (objectId) {
     basePath = "/scanr-contributionPage";
