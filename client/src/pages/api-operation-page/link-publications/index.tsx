@@ -22,7 +22,7 @@ import { useDataList } from "./data-list-context";
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
   const [sort, setSort] = useState("DESC");
-  const [status, setStatus] = useState("new");
+  const [status, setStatus] = useState("choose");
   const [query, setQuery] = useState<string[]>([]);
   const [page, setPage] = useState(1);
   const location = useLocation();
