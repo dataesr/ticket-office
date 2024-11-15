@@ -26,7 +26,7 @@ export const buildURL = (
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
 
   const where: any = {};
-  if (query.trim() !== "") {
+  if (typeof query === "string" && query.trim() !== "") {
     const isObjectId = /^[0-9a-fA-F]{24}$/.test(query);
 
     if (isObjectId) {
@@ -57,6 +57,7 @@ export const buildURL = (
 
   return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
 };
+
 export const buildStatsURL = (
   filter: string,
   sort: string = "ASC",

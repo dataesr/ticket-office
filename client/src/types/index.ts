@@ -16,10 +16,21 @@ export interface Contribution {
   modified_at?: string;
   threads?: Thread[];
   fromApplication: string;
+  emails?: any;
 }
 
 export interface LastMailsSentProps {
-  data: { emails: Contribution[] };
+  data: {
+    length: number;
+    map(
+      arg0: (email: any, index: any) => import("react/jsx-runtime").JSX.Element
+    ): import("react").ReactNode;
+    emails: Contribution[];
+  };
+}
+
+export interface AllContributionsProps {
+  data: Contribution[];
 }
 export interface ContributorSummaryProps {
   contributions: Contribution[];

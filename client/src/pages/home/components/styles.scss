@@ -6,7 +6,6 @@
 }
 
 .email-content {
-  overflow: hidden;
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;
@@ -34,7 +33,8 @@
     display: inline-block;
     margin-left: 0.5rem;
   }
-  .test {
-    background-color: red;
-  }
+}
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
 }

@@ -11,12 +11,12 @@ const SearchSection: React.FC<{
       onSearch={(value) => handleSearch(value || "")}
       isLarge
       buttonLabel="Rechercher"
-      placeholder="Rechercher par nom ou ID"
+      placeholder="Rechercher par nom, ID ou mot clé"
     />
     <div className="fr-mb-1w">
       {query
-        .filter((item) => item.trim() !== "")
-        .map((item, index) => (
+        ?.filter((item) => item.trim() !== "")
+        ?.map((item, index) => (
           <DismissibleTag
             key={index}
             color="purple-glycine"

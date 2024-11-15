@@ -14,6 +14,9 @@
   margin-bottom: 5px;
   margin-right: 250px;
   padding: 15px;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-all;
 }
 
 .user-side {
@@ -24,7 +27,6 @@
   margin-right: 50px;
   margin-top: 10px;
   margin-bottom: 10px;
-  word-wrap: break-word;
 }
 
 .staffSide {
