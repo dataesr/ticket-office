@@ -51,8 +51,12 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
           } else badgeContent = "Contact";
 
           return (
-            <Row gutters key={index} className="email-row">
-              <Link href={link} rel="noopener noreferrer">
+            <Row gutters key={index}>
+              <Link
+                href={link}
+                rel="noopener noreferrer"
+                className="email-content"
+              >
                 <Col lg="12" md="10" sm="12" className="email-item fr-mb-2w">
                   <div>
                     {badgeContent && (
@@ -133,7 +137,6 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
                       </i>
                     </Text>
                     <Text
-                      className="email-content"
                       size="sm"
                       dangerouslySetInnerHTML={{
                         __html: highlightQuery(email?.message, query),
