@@ -1,12 +1,11 @@
 .email-item {
-  background-color: #f1f4f8;
   padding: 1.5rem;
   border-radius: 8px;
   margin-top: 1rem;
+  border-bottom: 3px solid #f0f0f0;
 }
 
 .email-content {
-  overflow: hidden;
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;

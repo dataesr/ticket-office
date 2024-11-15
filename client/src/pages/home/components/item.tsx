@@ -1,6 +1,4 @@
-import React, { useState } from "react";
 import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
-import { FaCopy } from "react-icons/fa";
 import "./styles.scss";
 import { AllContributionsProps } from "../../../types";
 import { generateLinkFromAllDatas } from "./generate-links";
@@ -16,18 +14,12 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
   data,
   query,
 }) => {
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedId(text);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
-  };
-
   const highlightQuery = (text: string, query: string) => {
     if (!query) return text;
-    const regex = new RegExp(`(${query})`, "gi");
+
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${escapedQuery})`, "gi");
+
     return text?.replace(regex, '<span class="highlight">$1</span>');
   };
 
@@ -60,92 +52,96 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
 
           return (
             <Row gutters key={index} className="email-row">
-              <Col lg="12" md="10" sm="12" className="email-item fr-mb-2w">
-                <div className="badges">
-                  {badgeContent && (
-                    <Badge
-                      size="sm"
-                      color="blue-ecume"
-                      className="fr-mr-1w fr-mb-1w"
-                    >
-                      {badgeContent}
-                    </Badge>
-                  )}
-                  {email.fromApplication && (
-                    <Badge
-                      size="sm"
-                      color="blue-ecume"
-                      className="fr-mr-1w fr-mb-1w"
-                    >
-                      {email.fromApplication}
-                    </Badge>
-                  )}
-                  <Badge
-                    size="sm"
-                    color={BadgeStatus({ status: email?.status })}
-                    className="fr-mr-1w fr-mb-1w"
-                  >
-                    {StatusLabel({ status: email.status })}
-                  </Badge>
-                  {email?.type && (
-                    <Badge
-                      size="sm"
-                      icon={typeIcon({ icon: email.type })}
-                      color={BadgeColor({ type: email.type })}
-                      className="fr-mr-1w fr-mb-1w"
-                    >
-                      {TypeLabel({ type: email.type })}
-                    </Badge>
-                  )}
-                  {email?.comment ||
-                    (email?.team?.length > 0 && (
+              <Link href={link} rel="noopener noreferrer">
+                <Col lg="12" md="10" sm="12" className="email-item fr-mb-2w">
+                  <div>
+                    {badgeContent && (
                       <Badge
                         size="sm"
-                        color="green-emeraude"
+                        color="blue-ecume"
                         className="fr-mr-1w fr-mb-1w"
                       >
-                        {`Traité par ${email.team[0]}`}
+                        {badgeContent}
                       </Badge>
-                    ))}
-                </div>
-                <div>
-                  <Text className="fr-mb-0">
-                    Contribution de{" "}
-                    <i>
-                      {email?.name} - {email?.email}
-                    </i>
-                  </Text>
-                  <Text size="sm">
-                    <Link href={link} rel="noopener noreferrer">
-                      Voir la contribution <i>{email?.id}</i>
-                    </Link>
-                    <button
-                      className={`copy-button ${
-                        copiedId === email.id ? "copied" : ""
-                      }`}
-                      onClick={() => copyToClipboard(email.id)}
-                      title="Copier l'ID"
+                    )}
+                    {badgeContent === "Lier des publications" && (
+                      <Badge
+                        size="sm"
+                        className="fr-mr-1w fr-mb-1w"
+                        color="blue-ecume"
+                      >
+                        scanR
+                      </Badge>
+                    )}
+                    {email.fromApplication && (
+                      <Badge
+                        size="sm"
+                        color="blue-ecume"
+                        className="fr-mr-1w fr-mb-1w"
+                      >
+                        {email.fromApplication}
+                      </Badge>
+                    )}
+                    <Badge
+                      size="sm"
+                      color={BadgeStatus({ status: email?.status })}
+                      className="fr-mr-1w fr-mb-1w"
                     >
-                      {copiedId === email.id && (
-                        <span className="copied-text">Copié</span>
-                      )}
-                      <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                    </button>
-                  </Text>
-                  <Text size="sm">
-                    <i>
-                      Date de la contribution : {formattedDate} à{" "}
-                      {formattedTime}
-                    </i>
-                  </Text>
-                  <Text
-                    size="sm"
-                    dangerouslySetInnerHTML={{
-                      __html: highlightQuery(email?.message, query),
-                    }}
-                  />
-                </div>
-              </Col>
+                      {StatusLabel({ status: email.status })}
+                    </Badge>
+                    {email?.objectType && (
+                      <>
+                        <Badge
+                          size="sm"
+                          icon={typeIcon({ icon: email.objectType })}
+                          color={BadgeColor({ type: email.objectType })}
+                          className="fr-mr-1w fr-mb-1w"
+                        >
+                          {TypeLabel({ type: email.objectType })}
+                        </Badge>
+                        <Badge
+                          size="sm"
+                          className="fr-mr-1w fr-mb-1w"
+                          color="blue-ecume"
+                        >
+                          scanR
+                        </Badge>
+                      </>
+                    )}
+                    {email?.comment ||
+                      (email?.team?.length > 0 && (
+                        <Badge
+                          size="sm"
+                          color="green-emeraude"
+                          className="fr-mr-1w fr-mb-1w"
+                        >
+                          {`Traité par ${email.team[0]}`}
+                        </Badge>
+                      ))}
+                  </div>
+                  <div>
+                    <Text className="fr-mb-0 ">
+                      Contribution de{" "}
+                      <i>
+                        {email?.name} - {email?.email}
+                      </i>
+                    </Text>
+                    <Text size="sm">
+                      <i>
+                        Date de la contribution : {formattedDate} à{" "}
+                        {formattedTime}
+                      </i>
+                    </Text>
+                    <Text
+                      className="email-content"
+                      size="sm"
+                      dangerouslySetInnerHTML={{
+                        __html: highlightQuery(email?.message, query),
+                      }}
+                    />
+                  </div>
+                </Col>
+              </Link>
             </Row>
           );
         })
