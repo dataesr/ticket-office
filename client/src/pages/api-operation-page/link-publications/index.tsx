@@ -18,6 +18,7 @@ import ContributionData from "../../../api/contribution-api/getData";
 import { buildURL } from "../../../api/utils/buildURL";
 import ExcelExportButton from "./export-to-xlsx";
 import { useDataList } from "./data-list-context";
+import { ClipLoader } from "react-spinners";
 
 const ContributionPage: React.FC<ContributionPageProps> = () => {
   const [reload] = useState(0);
@@ -86,12 +87,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     return nameMatches || idMatches;
   });
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <Container className="fr-my-5w">
-        <Text>Chargement</Text>
-      </Container>
+      <div className="loading-container">
+        <ClipLoader color="#123abc" size={50} />
+      </div>
     );
+  }
   if (isError)
     return (
       <Container className="fr-my-5w">

@@ -7,6 +7,7 @@ import ContributionsGraphByTeam from "../../components/graphs/response-by-admin"
 import ContributionsGraphByStatus from "../../components/graphs/by-status";
 import ContributionsGraphByTopContributors from "../../components/graphs/contributions-by-name";
 import ContributionsGraphByTime from "../../components/graphs/contributions-by-year";
+import { ClipLoader } from "react-spinners";
 
 const GetStats = () => {
   const [filter, setFilter] = useState("contacts");
@@ -20,9 +21,12 @@ const GetStats = () => {
   const { data, isLoading, isError } = ContributionData(url);
 
   if (isLoading) {
-    return <div>Chargement...</div>;
+    return (
+      <div className="loading-container">
+        <ClipLoader color="#123abc" size={50} />
+      </div>
+    );
   }
-
   if (isError) {
     return <div>Une erreur s'est produite</div>;
   }

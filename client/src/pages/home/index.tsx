@@ -3,6 +3,7 @@ import SearchSection from "../contact-contributionbyobject-page/components/searc
 import { useState, useEffect } from "react";
 import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
 import AllContributions from "./components/item";
+import { ClipLoader } from "react-spinners";
 
 const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 const prodUrl = import.meta.env.VITE_BASE_API_URL;
@@ -97,7 +98,11 @@ const Home = () => {
         )
       )}
 
-      {isLoading && <p>Loading...</p>}
+      {isLoading && (
+        <div className="loading-container">
+          <ClipLoader color="#123abc" size={50} />
+        </div>
+      )}
       {isError && <p>Oops...</p>}
     </Container>
   );

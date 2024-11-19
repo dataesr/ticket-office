@@ -16,7 +16,6 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
 }) => {
   const highlightQuery = (text: string, query: string) => {
     if (!query) return text;
-
     const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
     const regex = new RegExp(`(${escapedQuery})`, "gi");
 
@@ -28,16 +27,16 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
       {data.length === 0 ? (
         <p>Pas de résultat</p>
       ) : (
-        data?.map((email, index) => {
+        data?.map((contribution, index) => {
           const link = generateLinkFromAllDatas(
-            email.collectionName,
-            email.fromApplication,
-            email.id,
-            email.objectId,
-            email.productions,
-            email.message
+            contribution.collectionName,
+            contribution.fromApplication,
+            contribution.id,
+            contribution.objectId,
+            contribution.productions,
+            contribution.message
           );
-          const creationDate = new Date(email.created_at);
+          const creationDate = new Date(contribution.created_at);
           const formattedDate = creationDate.toLocaleDateString("fr-FR");
           const formattedTime = creationDate.toLocaleTimeString("fr-FR", {
             hour: "2-digit",
@@ -45,9 +44,9 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
           });
 
           let badgeContent = "";
-          if (email.productions?.length > 0) {
+          if (contribution.productions?.length > 0) {
             badgeContent = "Lier des publications";
-          } else if (email.objectId && !email.productions) {
+          } else if (contribution.objectId && !contribution.productions) {
             badgeContent = "Contribution par objet";
           } else badgeContent = "Contact";
 
@@ -56,9 +55,9 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
               <Link
                 href={link}
                 rel="noopener noreferrer"
-                className="email-content"
+                className="contribution-content"
               >
-                <Col lg="12" md="10" sm="12" className="email-item fr-mb-2w">
+                <Col lg="12" md="10" sm="12">
                   <div>
                     {badgeContent && (
                       <Badge
@@ -78,31 +77,31 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
                         scanR
                       </Badge>
                     )}
-                    {email.fromApplication && (
+                    {contribution.fromApplication && (
                       <Badge
                         size="sm"
                         color="blue-ecume"
                         className="fr-mr-1w fr-mb-1w"
                       >
-                        {email.fromApplication}
+                        {contribution.fromApplication}
                       </Badge>
                     )}
                     <Badge
                       size="sm"
-                      color={BadgeStatus({ status: email?.status })}
+                      color={BadgeStatus({ status: contribution?.status })}
                       className="fr-mr-1w fr-mb-1w"
                     >
-                      {StatusLabel({ status: email.status })}
+                      {StatusLabel({ status: contribution.status })}
                     </Badge>
-                    {email?.objectType && (
+                    {contribution?.objectType && (
                       <>
                         <Badge
                           size="sm"
-                          icon={typeIcon({ icon: email.objectType })}
-                          color={BadgeColor({ type: email.objectType })}
+                          icon={typeIcon({ icon: contribution.objectType })}
+                          color={BadgeColor({ type: contribution.objectType })}
                           className="fr-mr-1w fr-mb-1w"
                         >
-                          {TypeLabel({ type: email.objectType })}
+                          {TypeLabel({ type: contribution.objectType })}
                         </Badge>
                         <Badge
                           size="sm"
@@ -113,14 +112,14 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
                         </Badge>
                       </>
                     )}
-                    {email?.comment ||
-                      (email?.team?.length > 0 && (
+                    {contribution?.comment ||
+                      (contribution?.team?.length > 0 && (
                         <Badge
                           size="sm"
                           color="green-emeraude"
                           className="fr-mr-1w fr-mb-1w"
                         >
-                          {`Traité par ${email.team[0]}`}
+                          {`Traité par ${contribution.team[0]}`}
                         </Badge>
                       ))}
                   </div>
@@ -128,7 +127,7 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
                     <Text className="fr-mb-0 ">
                       Contribution de{" "}
                       <i>
-                        {email?.name} - {email?.email}
+                        {contribution?.name} - {contribution?.email}
                       </i>
                     </Text>
                     <Text size="sm">
@@ -140,7 +139,7 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
                     <Text
                       size="sm"
                       dangerouslySetInnerHTML={{
-                        __html: highlightQuery(email?.message, query),
+                        __html: highlightQuery(contribution?.message, query),
                       }}
                     />
                   </div>

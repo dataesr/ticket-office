@@ -12,6 +12,7 @@ import ContributionDetails from "./components/contribution-details";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import { getUrlToSend } from "../../config/urlHelper";
+import { ClipLoader } from "react-spinners";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
@@ -111,12 +112,13 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     return nameMatches || idMatches;
   });
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <Container className="fr-my-5w">
-        <Text>Chargement...</Text>
-      </Container>
+      <div className="loading-container">
+        <ClipLoader color="#123abc" size={50} />
+      </div>
     );
+  }
 
   if (isError)
     return (
