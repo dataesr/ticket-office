@@ -15,7 +15,6 @@ const ContributionsGraphByTopContributors = ({
       </div>
     );
   }
-
   if (isError) {
     return <div>Une erreur s'est produite</div>;
   }

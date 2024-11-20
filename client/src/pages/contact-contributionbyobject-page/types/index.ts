@@ -9,6 +9,7 @@ export interface Contribution {
   comment: string;
   team: string[];
   created_at: string;
+  phone?: string;
   type: string;
   tags: string[];
   objectId: string;
@@ -123,13 +124,12 @@ export interface StaffActionsProps {
   url: string;
 }
 
-export interface Response {
-  team: string;
-
-  responseMessage: string;
-
+export interface ThreadResponse {
+  team: string[];
   timestamp: string;
+  responseMessage: string;
 }
+
 export interface Thread {
-  responses: Response[];
+  responses: ThreadResponse[];
 }

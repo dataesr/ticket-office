@@ -1,9 +1,11 @@
+import { Thread } from "../pages/api-operation-page/types";
+
 export interface Contribution {
   [x: string]: any;
   id: string;
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   tags: string[];
   status: string;
   comment?: string;
@@ -94,14 +96,6 @@ export interface ChangeNameContribution {
   threads?: Thread[];
 }
 
-export interface Thread {
-  team: [string];
-  responseMessage: string;
-  threadId: string;
-  responses?: Response[];
-  timestamp: string;
-}
-
 export interface Response {
   read: boolean;
   responseMessage: string;
@@ -151,6 +145,7 @@ export type Contribute_Production = {
   tag: string;
   id: string;
   team: string[];
+  phone: string;
   modified_at: string | number | Date;
   comment: string;
   treated_at: Date;
@@ -164,6 +159,12 @@ export type Contribute_Production = {
   fromApplication: string;
 };
 
+export type TagSelectionModalProps = {
+  isOpen: boolean;
+  allTags: string[];
+  onClose: (selectedTags: string[]) => void;
+};
+
 export type EditModalProps = {
   isOpen: boolean;
   dataProduction: Contribute_Production[];
@@ -171,12 +172,6 @@ export type EditModalProps = {
   data: Contribution | Contribute_Production;
   refetch: () => void;
   allTags: string[];
-};
-
-export type TagSelectionModalProps = {
-  isOpen: boolean;
-  allTags: string[];
-  onClose: (selectedTags: string[]) => void;
 };
 
 export type Production = {
