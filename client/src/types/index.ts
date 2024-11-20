@@ -22,9 +22,7 @@ export interface Contribution {
 export interface LastMailsSentProps {
   data: {
     length: number;
-    map(
-      arg0: (email: any, index: any) => import("react/jsx-runtime").JSX.Element
-    ): import("react").ReactNode;
+
     emails: Contribution[];
   };
 }

@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import Home from "./src/pages/home";
-import ApiOperationPage from "./src/pages/api-operation-page/link-publications";
+import ApiOperationPage from "./src/pages/api-operation-page/index";
 import Layout from "./src/layout";
 import React from "react";
 import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";

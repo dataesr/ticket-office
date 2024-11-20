@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
 import ContributorInfo from "./contributor-info";
 import StaffActions from "./staff-action";
-import { ContributionItemProps } from "../../../types";
 import {
   BadgeColor,
   BadgeStatus,
@@ -10,8 +9,9 @@ import {
   TypeLabel,
   typeIcon,
 } from "../../../utils";
-import "./styles.scss";
 import { FaCopy } from "react-icons/fa";
+import "./styles.scss";
+import { ContributionItemProps } from "../types";
 
 const ContributionItem: React.FC<ContributionItemProps> = ({
   data,
@@ -33,6 +33,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
 
   const firstThread = data?.threads?.[0];
   const firstResponse = firstThread?.responses?.[0];
+
   return (
     <>
       <Row className="fr-mt-3w">
@@ -52,7 +53,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
         )}
         {firstResponse?.team && (
           <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
-            {`Réponse envoyée par ${firstResponse.team.join(", ")}`}
+            {`Réponse envoyée par ${firstResponse.team}`}
           </Badge>
         )}
         {data?.comment && data?.team?.length > 0 && (

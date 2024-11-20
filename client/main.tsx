@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Link } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -8,7 +8,8 @@ import "react-toastify/dist/ReactToastify.min.css";
 
 import Router from "./router";
 import { DSFRConfig } from "@dataesr/dsfr-plus";
-import { DataListProvider } from "./src/pages/api-operation-page/link-publications/data-list-context";
+import { DataListProvider } from "./src/pages/api-operation-page/data-list-context";
+import { RouterLinkProps } from "./types";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,13 +20,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-
-type RouterLinkProps = {
-  href: string;
-  replace?: boolean;
-  target?: string;
-  children?: ReactNode;
-};
 
 const RouterLink = ({ href, replace, target, ...props }: RouterLinkProps) => {
   if (target === "_blank") return <a href={href} target={target} {...props} />;

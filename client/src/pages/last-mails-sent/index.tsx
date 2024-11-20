@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus";
-import { Contribution } from "../../types";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import useSentEmails from "../../api/contribution-api/getSentMails";
 import Selectors from "./components/selectors";
 import LastMailsSentItem from "./components/item";
 import { ClipLoader } from "react-spinners";
+import { Contribution } from "../../types";
 
 const LastMailsSent: React.FC = () => {
   const location = useLocation();
@@ -88,7 +88,6 @@ const LastMailsSent: React.FC = () => {
           data={{
             emails: filteredEmails,
             length: filteredEmails.length,
-            map: filteredEmails.map,
           }}
         />
       </Col>

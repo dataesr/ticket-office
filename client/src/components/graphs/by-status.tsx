@@ -1,8 +1,8 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { ClipLoader } from "react-spinners";
-import { ContributionDataType } from "../../types";
 import "./styles.scss";
+import { ContributionDataType } from "../../types";
 
 const ContributionsGraphByStatus = ({ contributions, isLoading, isError }) => {
   if (isLoading) {

@@ -1,8 +1,8 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import { Col, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus";
-import { ContributionDataType } from "../../types";
 import { ClipLoader } from "react-spinners";
+import { ContributionDataType } from "../../types";
 
 const ContributionsGraphByDomains = ({
   contributions,

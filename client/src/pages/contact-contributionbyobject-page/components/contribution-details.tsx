@@ -1,15 +1,8 @@
 import { Text } from "@dataesr/dsfr-plus";
-import { Contribution } from "../../../types";
 import ContributionItem from "./contribution-item";
+import { ContributionDetailsProps } from "../types";
 
-const ContributionDetails: React.FC<{
-  filteredContributions: Contribution[];
-  selectedContribution: string;
-  refetch: () => void;
-  highlightedQuery: string;
-  allTags: string[];
-  url: string;
-}> = ({
+const ContributionDetails: React.FC<ContributionDetailsProps> = ({
   filteredContributions,
   selectedContribution,
   refetch,

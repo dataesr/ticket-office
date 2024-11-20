@@ -1,6 +1,5 @@
 import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { AllContributionsProps } from "../../../types";
 import { generateLinkFromAllDatas } from "./generate-links";
 import {
   BadgeColor,
@@ -9,6 +8,7 @@ import {
   typeIcon,
   TypeLabel,
 } from "../../../utils";
+import { AllContributionsProps } from "../../../types";
 
 const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
   data,

@@ -8,6 +8,7 @@ import ContributionsGraphByStatus from "../../components/graphs/by-status";
 import ContributionsGraphByTopContributors from "../../components/graphs/contributions-by-name";
 import ContributionsGraphByTime from "../../components/graphs/contributions-by-year";
 import { ClipLoader } from "react-spinners";
+import "./styles.scss";
 
 const GetStats = () => {
   const [filter, setFilter] = useState("contacts");
@@ -114,13 +115,13 @@ const GetStats = () => {
             isError={isError}
           />
         </Col>
-        <Col md="6">
+        {/* <Col md="6">
           <ContributionsGraphByTopContributors
             contributions={data?.data}
             isLoading={isLoading}
             isError={isError}
           />
-        </Col>
+        </Col> */}
       </Row>
     </Container>
   );

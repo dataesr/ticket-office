@@ -1,8 +1,8 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import { ContributionDataType } from "../../types";
 import { ClipLoader } from "react-spinners";
 import { Col } from "@dataesr/dsfr-plus";
+import { ContributionDataType } from "../../types";
 
 const ContributionsGraphByTypes = ({ contributions, isLoading, isError }) => {
   if (isLoading) {

@@ -9,24 +9,16 @@ import {
   Row,
   Text,
 } from "@dataesr/dsfr-plus";
-import type { Contribute_Production } from "../../../types";
-import EditModal from "../../../components/edit-modal";
 import { useState, useCallback } from "react";
-import ContributorRequests from "./contributor-requests";
-import "./styles.scss";
-import NameFromIdref from "../../../api/contribution-api/getNamesFromIdref";
-import { useDataList } from "./data-list-context";
 import { FaCopy } from "react-icons/fa";
+import EditModal from "../../components/edit-modal";
+import ContributorRequests from "./contributor-requests";
+import NameFromIdref from "../../api/contribution-api/getNamesFromIdref";
+import { useDataList } from "./data-list-context";
+import "./styles.scss";
+import { MessagePreviewProps } from "./types";
 
-const MessagePreview = ({
-  data,
-  refetch,
-  allTags,
-}: {
-  data: Contribute_Production;
-  refetch: () => void;
-  allTags: string[];
-}) => {
+const MessagePreview = ({ data, refetch, allTags }: MessagePreviewProps) => {
   const [showModal, setShowModal] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [idRefClicked, setIdRefClicked] = useState(false);
@@ -92,6 +84,7 @@ const MessagePreview = ({
       return updatedList;
     });
   };
+
   const formattedProductionId = data.objectId.replace(/\//g, "%2f");
 
   return (
