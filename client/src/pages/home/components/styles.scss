@@ -33,3 +33,12 @@
   background-color: yellow;
   font-weight: bold;
 }
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(62, 111, 225, 0.6), 0 0 50px rgba(62, 111, 225, 0.4);
+  animation: neon-glow 1.5s ease-in-out infinite alternate;
+}

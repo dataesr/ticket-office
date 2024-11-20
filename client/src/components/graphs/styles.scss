@@ -4,16 +4,16 @@
   align-items: center;
   height: 100vh;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 50px rgba(0, 255, 255, 0.4);
+  box-shadow: 0 0 20px rgba(62, 111, 225, 0.6), 0 0 50px rgba(62, 111, 225, 0.4);
   animation: neon-glow 1.5s ease-in-out infinite alternate;
 }
 
 @keyframes neon-glow {
   from {
-    box-shadow: 0 0 20px rgba(0, 255, 255, 0.6), 0 0 50px rgba(0, 255, 255, 0.4);
+    box-shadow: 0 0 20px rgba(62, 111, 225, 0.6), 0 0 50px rgba(17, 0, 255, 0.4);
   }
   to {
-    box-shadow: 0 0 30px rgba(0, 255, 255, 0.8), 0 0 60px rgba(0, 255, 255, 0.6);
+    box-shadow: 0 0 30px rgba(62, 111, 225, 0.6), 0 0 60px rgba(17, 0, 255, 0.4);
   }
 }
 
