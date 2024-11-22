@@ -8,6 +8,7 @@ import ContactAndContributionPage from "./src/pages/contact-contributionbyobject
 import LocalBSO from "./src/pages/bso/index";
 import LastMailSent from "./src/pages/last-mails-sent";
 import GetStats from "./src/pages/stats";
+import Error404 from "./src/components/errors";
 
 export default function Router() {
   return (
@@ -56,6 +57,7 @@ export default function Router() {
           element={<ContactAndContributionPage />}
         />
         <Route path="/statistiques" element={<GetStats />} />
+        <Route path="*" element={<Error404 error={null} />} />
       </Route>
     </Routes>
   );
