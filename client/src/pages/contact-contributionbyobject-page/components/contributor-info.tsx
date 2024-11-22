@@ -1,16 +1,11 @@
-import { Contribution } from "../../../types";
+import { ContributorInfoProps } from "../types";
 import MessagePreview from "./message-preview";
 
-const ContributorInfo = ({
+const ContributorInfo: React.FC<ContributorInfoProps> = ({
   data,
   highlightedQuery,
   refetch,
   allTags,
-}: {
-  data: Contribution;
-  highlightedQuery: string;
-  refetch;
-  allTags: string[];
 }) => {
   return (
     <MessagePreview

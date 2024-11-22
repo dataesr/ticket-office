@@ -10,11 +10,11 @@ import {
   DismissibleTag,
   Text,
 } from "@dataesr/dsfr-plus";
-import { EditModalProps, Inputs } from "../../types";
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 import TagSelectionModal from "./modal-select-tags";
 import ProfileModal from "../profil-modal";
+import { EditModalProps, Inputs } from "../../types";
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,

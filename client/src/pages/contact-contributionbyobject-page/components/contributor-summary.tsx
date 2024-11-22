@@ -6,7 +6,6 @@ import {
   SideMenuItem,
   Text,
 } from "@dataesr/dsfr-plus";
-import { ContributorSummaryProps } from "../../../types";
 import {
   BadgeColor,
   BadgeStatus,
@@ -14,6 +13,7 @@ import {
   TypeLabel,
   typeIcon,
 } from "../../../utils";
+import { ContributorSummaryProps } from "../types";
 
 const ContributorSummary: React.FC<ContributorSummaryProps> = ({
   contributions,

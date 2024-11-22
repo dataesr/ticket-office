@@ -1,22 +1,18 @@
-import { Key, useState } from "react";
+import { useState, Key } from "react";
 import { Badge, Button, ButtonGroup, Text, Title } from "@dataesr/dsfr-plus";
 import * as XLSX from "xlsx";
 import { AiOutlineDelete } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { useDataList } from "./data-list-context";
 import "./styles.scss";
-import { postHeaders } from "../../../config/api";
-
-interface ExcelExportButtonProps {
-  refetch: () => void;
-}
+import { postHeaders } from "../../config/api";
+import { ContributionData, ExcelExportButtonProps } from "./types";
 
 const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
   const { dataList, setDataList } = useDataList();
   const [isMinimized, setIsMinimized] = useState(false);
-  const markAsTreated = async (
-    contributionIds: any[] | Iterable<unknown> | null | undefined
-  ) => {
+
+  const markAsTreated = async (contributionIds: string[]) => {
     const basePath = window.location.pathname.includes("contributionpage")
       ? "contribute"
       : window.location.pathname.includes("apioperations")
@@ -58,15 +54,16 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
   };
 
   const handleExportClick = async () => {
-    const dataToExport = dataList
+    const dataToExport: ContributionData[] = dataList
       .filter((item) => item.export === true)
       .map((item) => ({
         person_id: item.person_id || "",
         publi_id: item.publi_id || "",
         contribution_id: item.contribution_id || "",
-        full_name: item.fullName || "",
+        fullName: item.fullName || "",
         first_name: item.first_name || "",
         last_name: item.last_name || "",
+        export: false,
       }));
 
     if (dataToExport.length === 0) {

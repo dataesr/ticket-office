@@ -1,12 +1,13 @@
 import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../../components/pagination/top-buttons";
+import { PaginationProps, TopPaginationProps } from "../types";
 
-const TopPaginationSection: React.FC<{
-  meta: any;
-  page: number;
-  maxPage: number;
-  setPage: (page: number) => void;
-}> = ({ meta, page, maxPage, setPage }) => (
+const TopPaginationSection: React.FC<TopPaginationProps> = ({
+  meta,
+  page,
+  maxPage,
+  setPage,
+}) => (
   <TopPaginationButtons
     meta={meta}
     page={page}
@@ -15,11 +16,11 @@ const TopPaginationSection: React.FC<{
   />
 );
 
-const BottomPaginationSection: React.FC<{
-  page: number;
-  maxPage: number;
-  setPage: (page: number) => void;
-}> = ({ page, maxPage, setPage }) => (
+const BottomPaginationSection: React.FC<PaginationProps> = ({
+  page,
+  maxPage,
+  setPage,
+}) => (
   <BottomPaginationButtons page={page} maxPage={maxPage} setPage={setPage} />
 );
 

@@ -8,11 +8,11 @@ import {
   Row,
   Col,
 } from "@dataesr/dsfr-plus";
-import { EmailSenderProps } from "../../types";
 import { toast } from "react-toastify";
 import ProfileModal from "../../components/profil-modal";
 import EmailForm from "../../components/mail-form";
 import { getCollectionNameFromUrl } from "../utils/collectionName";
+import { EmailSenderProps } from "../../types";
 
 function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);

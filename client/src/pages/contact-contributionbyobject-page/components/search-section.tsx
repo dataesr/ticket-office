@@ -1,10 +1,11 @@
 import { DismissibleTag, SearchBar } from "@dataesr/dsfr-plus";
+import { SearchSectionProps } from "../types";
 
-const SearchSection: React.FC<{
-  query: string[];
-  handleSearch: (value: string) => void;
-  handleRemoveQueryItem: (item: string) => void;
-}> = ({ query, handleSearch, handleRemoveQueryItem }) => (
+const SearchSection: React.FC<SearchSectionProps> = ({
+  query,
+  handleSearch,
+  handleRemoveQueryItem,
+}) => (
   <>
     <SearchBar
       className="fr-mb-1w"

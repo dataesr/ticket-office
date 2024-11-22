@@ -1,15 +1,9 @@
-.email-item {
-  padding: 1.5rem;
-  border-radius: 8px;
+.contribution-content {
   margin-top: 1rem;
-}
-
-.email-content {
   word-wrap: break-word;
   overflow-wrap: break-word;
   word-break: break-all;
   width: 100%;
-  border-bottom: 13px solid #f0f0f0;
 }
 
 .copy-button {
@@ -38,4 +32,13 @@
 .highlight {
   background-color: yellow;
   font-weight: bold;
+}
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(62, 111, 225, 0.6), 0 0 50px rgba(62, 111, 225, 0.4);
+  animation: neon-glow 1.5s ease-in-out infinite alternate;
 }

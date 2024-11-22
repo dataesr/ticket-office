@@ -1,6 +1,7 @@
 import { Title } from "@dataesr/dsfr-plus";
+import { PageTitleProps } from "../types";
 
-const PageTitle: React.FC<{ pathname: string }> = ({ pathname }) => {
+const PageTitle: React.FC<PageTitleProps> = ({ pathname }) => {
   const getTitle = () => {
     if (pathname.includes("contributionPage")) return "Contribution par objets";
     if (pathname.includes("removeuser")) return "Demande de suppression";

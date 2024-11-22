@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 import { Col, Container, Row, Text } from "@dataesr/dsfr-plus";
 import ContributionData from "../../api/contribution-api/getData";
 import { buildURL } from "../../api/utils/buildURL";
-import { Contribution, ContributionPageProps } from "../../types";
 import Selectors from "../../components/selectors";
 import ContributorSummary from "./components/contributor-summary";
 import PageTitle from "./components/page-title";
@@ -12,16 +11,18 @@ import ContributionDetails from "./components/contribution-details";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import { getUrlToSend } from "../../config/urlHelper";
+import { ClipLoader } from "react-spinners";
+import { Contribution, ContributionPageProps } from "./types";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
 }) => {
-  const [sort, setSort] = useState("DESC");
-  const [status, setStatus] = useState("choose");
+  const [sort, setSort] = useState<string>("DESC");
+  const [status, setStatus] = useState<string>("choose");
   const [query, setQuery] = useState<string[]>([]);
-  const [page, setPage] = useState(1);
-  const [searchInMessage, setSearchInMessage] = useState(true);
-  const [highlightedQuery, setHighlightedQuery] = useState("");
+  const [page, setPage] = useState<number>(1);
+  const [searchInMessage, setSearchInMessage] = useState<boolean>(true);
+  const [highlightedQuery, setHighlightedQuery] = useState<string>("");
   const [selectedContribution, setSelectedContribution] = useState<string>("");
   const location = useLocation();
 
@@ -91,6 +92,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   const onSelectContribution = (id: string) => {
     setSelectedContribution(id);
   };
+
   const filteredContributions = contributions?.filter((contribution) => {
     if (query.length === 0) {
       return true;
@@ -111,12 +113,13 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     return nameMatches || idMatches;
   });
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <Container className="fr-my-5w">
-        <Text>Chargement...</Text>
-      </Container>
+      <div className="loading-container">
+        <ClipLoader color="#123abc" size={50} />
+      </div>
     );
+  }
 
   if (isError)
     return (

@@ -12,17 +12,13 @@ import ContributorProductionInfo from "./contributor-production-info";
 import StaffProductionActions from "./staff-production-action";
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
-import { Contribute_Production } from "../../../types";
-import { BadgeStatus, StatusLabel } from "../../../utils/index";
+import { BadgeStatus, StatusLabel } from "../../utils/index";
+import { ContributionProductionItemProps } from "./types";
 
-const ContributionProductionItem = ({
+const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
   data,
   refetch,
   allTags,
-}: {
-  data: Contribute_Production;
-  refetch: any;
-  allTags: string[];
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -34,6 +30,7 @@ const ContributionProductionItem = ({
       }, 2000);
     });
   };
+
   const renderAccordion = () => (
     <Container fluid className="accordion">
       <Row>

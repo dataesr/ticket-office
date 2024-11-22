@@ -1,12 +1,17 @@
 import { Link } from "@dataesr/dsfr-plus";
 import { useState } from "react";
-import LandingPage from "../../../api/contribution-api/getLandingPage";
+import LandingPage from "../../api/contribution-api/getLandingPage";
+import { ExternalLinksProps } from "./types";
 
-export const ExternalLinks = ({ productionId, name }) => {
+export const ExternalLinks: React.FC<ExternalLinksProps> = ({
+  productionId,
+  name,
+}) => {
   const formattedProductionId = productionId.replace(/\//g, "%2f");
-  const [google, setGoogleClicked] = useState(false);
+  const [googleClicked, setGoogleClicked] = useState(false);
   const [scanRClicked, setScanRClicked] = useState(false);
   const [landingPageClicked, setLandingPageClicked] = useState(false);
+
   const { landingPage } = LandingPage(productionId);
 
   const scanRPath =
@@ -17,7 +22,7 @@ export const ExternalLinks = ({ productionId, name }) => {
   return (
     <>
       <Link
-        className={` fr-ml-2w  fr-footer__content-link ${
+        className={` fr-ml-2w fr-footer__content-link ${
           scanRClicked ? "clicked-link" : ""
         }`}
         target="_blank"
@@ -27,6 +32,7 @@ export const ExternalLinks = ({ productionId, name }) => {
       >
         scanR
       </Link>
+
       {landingPage && (
         <Link
           className={` fr-ml-2w fr-mr-2w fr-footer__content-link ${
@@ -40,9 +46,10 @@ export const ExternalLinks = ({ productionId, name }) => {
           Editeur
         </Link>
       )}
+
       <Link
         className={`fr-ml-2w fr-footer__content-link ${
-          google ? "clicked-link" : ""
+          googleClicked ? "clicked-link" : ""
         }`}
         target="_blank"
         rel="noreferrer noopener external"

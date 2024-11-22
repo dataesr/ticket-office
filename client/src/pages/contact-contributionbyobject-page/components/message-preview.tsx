@@ -1,22 +1,17 @@
 import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
-import type { Contribution } from "../../../types";
 import HighlightedMessage from "../../../components/highlighted-message";
 import { useLocation } from "react-router-dom";
 import EditModal from "../../../components/edit-modal";
 import { useState, useCallback } from "react";
 import { capitalizeFirstLetter } from "../../../utils/capitalize";
 import { CopyButton } from "../../../utils/copy-button";
+import { MessagePreviewProps } from "../types";
 
-const MessagePreview = ({
+const MessagePreview: React.FC<MessagePreviewProps> = ({
   data,
   highlightedQuery,
   refetch,
   allTags,
-}: {
-  data: Contribution;
-  highlightedQuery: string;
-  refetch: () => void;
-  allTags: string[];
 }) => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);

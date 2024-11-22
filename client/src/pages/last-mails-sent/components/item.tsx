@@ -1,20 +1,9 @@
-import React, { useState } from "react";
 import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
-import { FaCopy } from "react-icons/fa";
 import "./styles.scss";
-import { LastMailsSentProps } from "../../../types";
 import collectionNameMapping, { generateLink } from "./generate-links";
+import { LastMailsSentProps } from "../../../types";
 
 const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedId(text);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
-  };
-
   return (
     <Container fluid>
       {data.emails
@@ -22,94 +11,86 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
         .sort(
           (a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime()
         )
-        .map((email, index) => {
+        .map((lastMailSent, index) => {
           const link = generateLink(
-            email.collectionName,
-            email.fromApplication,
-            email.contributionId
+            lastMailSent.collectionName,
+            lastMailSent.fromApplication,
+            lastMailSent.contributionId
           );
 
-          const sentDate = new Date(email.sentAt);
+          const sentDate = new Date(lastMailSent.sentAt);
           const formattedDate = sentDate.toLocaleDateString("fr-FR");
           const formattedTime = sentDate.toLocaleTimeString("fr-FR", {
             hour: "2-digit",
             minute: "2-digit",
           });
 
+          const showScanrBadge = [
+            "Changement de nom",
+            "Lier des publications",
+            "Contribution par objets",
+          ].includes(collectionNameMapping[lastMailSent.collectionName]);
+
           return (
-            <Row gutters key={index} className="email-row">
-              <Col lg="12" md="10" sm="12" className="email-item fr-mb-2w">
-                <div className="badges">
-                  <Badge
-                    size="sm"
-                    color="green-menthe"
-                    className="fr-mr-1w fr-mb-1w"
-                  >
-                    {collectionNameMapping[email.collectionName]}
-                  </Badge>
-                  {(collectionNameMapping[email.collectionName] ===
-                    "Changement de nom" ||
-                    collectionNameMapping[email.collectionName] ===
-                      "Lier des publications") && (
+            <Link href={link} rel="noopener noreferrer" key={index}>
+              <Row gutters className="email-row">
+                <Col lg="12" md="10" sm="12" className="fr-mb-1w fr-mt-2w">
+                  <div className="badges">
                     <Badge
                       size="sm"
-                      color="blue-ecume"
+                      color="green-menthe"
                       className="fr-mr-1w fr-mb-1w"
                     >
-                      Scanr
+                      {collectionNameMapping[lastMailSent.collectionName]}
                     </Badge>
-                  )}
-                  {email.fromApplication && (
-                    <Badge
-                      size="sm"
-                      color="blue-ecume"
-                      className="fr-mr-1w fr-mb-1w"
-                    >
-                      {email.fromApplication}
-                    </Badge>
-                  )}
-                </div>
-                <div>
-                  <Text className="fr-mb-0">
-                    Réponse de{" "}
-                    <strong>
-                      <i>{email.selectedProfile}</i>
-                    </strong>{" "}
-                    à{" "}
-                    <strong>
-                      <i>
-                        {email?.name} ({email?.to})
-                      </i>
-                    </strong>
-                  </Text>
-                  <Text size="sm">
-                    <Link href={link} rel="noopener noreferrer">
-                      Voir la contribution <i>{email?.contributionId}</i>
-                    </Link>
-                    <button
-                      className={`copy-button ${
-                        copiedId === email.contributionId ? "copied" : ""
-                      }`}
-                      onClick={() => copyToClipboard(email.contributionId)}
-                      title="Copier l'ID"
-                    >
-                      {copiedId === email.contributionId && (
-                        <span className="copied-text">Copié</span>
-                      )}
-                      <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                    </button>
-                  </Text>
-                  <Text size="sm">
-                    <i>
-                      Envoyé le {formattedDate} à {formattedTime}
-                    </i>
-                  </Text>
+                    {showScanrBadge && (
+                      <Badge
+                        size="sm"
+                        color="blue-ecume"
+                        className="fr-mr-1w fr-mb-1w"
+                      >
+                        Scanr
+                      </Badge>
+                    )}
+                    {lastMailSent.fromApplication && (
+                      <Badge
+                        size="sm"
+                        color="blue-ecume"
+                        className="fr-mr-1w fr-mb-1w"
+                      >
+                        {lastMailSent.fromApplication}
+                      </Badge>
+                    )}
+                  </div>
+                  <Row>
+                    <Col md="10" xs="12" lg="10">
+                      <Text className="fr-mb-0">
+                        Réponse de{" "}
+                        <strong>
+                          <i>{lastMailSent.selectedProfile}</i>
+                        </strong>{" "}
+                        à{" "}
+                        <strong>
+                          <i>
+                            {lastMailSent?.name} ({lastMailSent?.to})
+                          </i>
+                        </strong>
+                      </Text>
+                    </Col>
+                    <Col>
+                      <Text size="sm">
+                        <i>
+                          Envoyé le {formattedDate} à {formattedTime}
+                        </i>
+                      </Text>
+                    </Col>
+                  </Row>
                   <Text className="email-content">
-                    {email.userResponse.replaceAll("<br/>", " ")}
+                    {lastMailSent.userResponse.replaceAll("<br/>", " ")}
                   </Text>
-                </div>
-              </Col>
-            </Row>
+                </Col>
+              </Row>
+            </Link>
           );
         })}
     </Container>

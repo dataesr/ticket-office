@@ -7,27 +7,51 @@ import ContributionsGraphByTeam from "../../components/graphs/response-by-admin"
 import ContributionsGraphByStatus from "../../components/graphs/by-status";
 import ContributionsGraphByTopContributors from "../../components/graphs/contributions-by-name";
 import ContributionsGraphByTime from "../../components/graphs/contributions-by-year";
+import { ClipLoader } from "react-spinners";
+import "./styles.scss";
+import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
 
 const GetStats = () => {
-  const [filter, setFilter] = useState("contacts");
+  const [filter, setFilter] = useState("contact");
   const [url, setUrl] = useState(() => buildStatsURL(filter));
 
+  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const prodUrl = import.meta.env.VITE_BASE_API_URL;
+  const baseUrl = isDevelopment
+    ? "http://localhost:3000/api"
+    : `${prodUrl}/api`;
+
   useEffect(() => {
-    const newUrl = buildStatsURL(filter);
-    setUrl(newUrl);
+    if (filter !== "global") {
+      setUrl(buildStatsURL(filter));
+    }
   }, [filter]);
 
   const { data, isLoading, isError } = ContributionData(url);
+  const {
+    data: allData,
+    isLoading: isLoadingAllData,
+    isError: isErrorAllData,
+  } = ContributionAllDatas(baseUrl);
 
-  if (isLoading) {
-    return <div>Chargement...</div>;
+  const isGlobal = filter === "global";
+  const contributions = isGlobal
+    ? allData?.flatMap((item) => item.data || [])
+    : data?.data;
+  const isLoadingGraphs = isGlobal ? isLoadingAllData : isLoading;
+  const isErrorGraphs = isGlobal ? isErrorAllData : isError;
+
+  if (isLoadingGraphs) {
+    return (
+      <div className="loading-container">
+        <ClipLoader color="#123abc" size={50} />
+      </div>
+    );
   }
-
-  if (isError) {
+  if (isErrorGraphs) {
     return <div>Une erreur s'est produite</div>;
   }
-
-  if (!Array.isArray(data?.data)) {
+  if (!Array.isArray(contributions)) {
     return <div>Les données ne sont pas disponibles</div>;
   }
 
@@ -36,8 +60,8 @@ const GetStats = () => {
       <Col md="12">
         <Title look="h5">Choisissez la table de données à afficher</Title>
         <i>
-          Les boutons si dessous filtrent sur les différentes collection, par
-          objet étant les contributions visant un objet de scanR
+          Les boutons ci-dessous filtrent sur les différentes collections, par
+          objet étant les contributions visant un objet de scanR.
         </i>
         <div className="filter-buttons-container fr-mt-5w">
           <button
@@ -68,53 +92,52 @@ const GetStats = () => {
           >
             Changement de nom
           </button>
+          <button
+            className={`filter-button ${filter === "global" ? "active" : ""}`}
+            onClick={() => setFilter("global")}
+          >
+            Global
+          </button>
         </div>
       </Col>
       <Row gutters>
         <Col md="6">
           <ContributionsGraphByTags
-            contributions={data?.data}
-            isLoading={isLoading}
-            isError={isError}
+            contributions={contributions}
+            isLoading={isLoadingGraphs}
+            isError={isErrorGraphs}
           />
         </Col>
         <Col md="6">
           <ContributionsGraphByTeam
-            contributions={data?.data}
-            isLoading={isLoading}
-            isError={isError}
+            contributions={contributions}
+            isLoading={isLoadingGraphs}
+            isError={isErrorGraphs}
           />
         </Col>
       </Row>
       <Row gutters>
         <Col md="6">
           <ContributionsGraphByStatus
-            contributions={data?.data}
-            isLoading={isLoading}
-            isError={isError}
+            contributions={contributions}
+            isLoading={isLoadingGraphs}
+            isError={isErrorGraphs}
           />
         </Col>
         <Col md="6">
           <ContributionsGraphByTopContributors
-            contributions={data?.data}
-            isLoading={isLoading}
-            isError={isError}
+            contributions={contributions}
+            isLoading={isLoadingGraphs}
+            isError={isErrorGraphs}
           />
         </Col>
       </Row>
       <Row gutters>
         <Col md="6">
           <ContributionsGraphByTime
-            contributions={data?.data}
-            isLoading={isLoading}
-            isError={isError}
-          />
-        </Col>
-        <Col md="6">
-          <ContributionsGraphByTopContributors
-            contributions={data?.data}
-            isLoading={isLoading}
-            isError={isError}
+            contributions={contributions}
+            isLoading={isLoadingGraphs}
+            isError={isErrorGraphs}
           />
         </Col>
       </Row>

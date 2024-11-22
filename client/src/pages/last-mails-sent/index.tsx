@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus";
-import { Contribution } from "../../types";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import useSentEmails from "../../api/contribution-api/getSentMails";
 import Selectors from "./components/selectors";
 import LastMailsSentItem from "./components/item";
+import { ClipLoader } from "react-spinners";
+import { Contribution } from "../../types";
 
 const LastMailsSent: React.FC = () => {
   const location = useLocation();
@@ -51,12 +52,13 @@ const LastMailsSent: React.FC = () => {
     window.history.pushState({}, "", newURL);
   }, [page, query, searchInMessage, sort, status]);
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <Container className="fr-my-5w">
-        <Text>Chargement...</Text>
-      </Container>
+      <div className="loading-container">
+        <ClipLoader color="#123abc" size={50} />
+      </div>
     );
+  }
 
   if (isError)
     return (
@@ -82,7 +84,12 @@ const LastMailsSent: React.FC = () => {
         </Col>
       </Row>
       <Col md="6" xs="12" lg="12">
-        <LastMailsSentItem data={{ emails: filteredEmails }} />
+        <LastMailsSentItem
+          data={{
+            emails: filteredEmails,
+            length: filteredEmails.length,
+          }}
+        />
       </Col>
       <BottomPaginationButtons
         page={page}

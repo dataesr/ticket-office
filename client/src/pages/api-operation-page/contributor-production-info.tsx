@@ -1,14 +1,10 @@
-import { Contribute_Production } from "../../../types";
 import MessagePreview from "./message-preview";
+import { ContributorProductionInfoProps } from "./types";
 
-const ContributorProductionInfo = ({
+const ContributorProductionInfo: React.FC<ContributorProductionInfoProps> = ({
   data,
   refetch,
   allTags,
-}: {
-  data: Contribute_Production;
-  refetch: any;
-  allTags: any;
 }) => {
   return <MessagePreview allTags={allTags} data={data} refetch={refetch} />;
 };

@@ -2,8 +2,8 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
 import { Col, SegmentedControl, SegmentedElement } from "@dataesr/dsfr-plus";
-import { ContributionDataType } from "../../types";
 import { ClipLoader } from "react-spinners";
+import { ContributionDataType } from "../../types";
 
 const AdminTreatmentGraph = ({
   contributions,

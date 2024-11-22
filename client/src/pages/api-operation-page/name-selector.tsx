@@ -1,26 +1,30 @@
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import NameFromScanr from "../../../api/contribution-api/getNames";
+import NameFromScanr from "../../api/contribution-api/getNames";
 import { Col, Row } from "@dataesr/dsfr-plus";
-import { useDataList } from "./data-list-context";
 import ReactSelect from "react-select";
-import { levenshteinDistance } from "../../../utils/compare";
+import { levenshteinDistance } from "../../utils/compare";
+
+import { useDataList } from "./data-list-context";
+import { ContributionData, SelectOption, SelectWithNamesProps } from "./types";
 
 export default function SelectWithNames({
   contributionId,
   productionId,
   idRef,
   coloredName,
-}) {
+}: SelectWithNamesProps) {
   const { fullName, firstName, lastName } = NameFromScanr(productionId);
   const { setDataList } = useDataList();
+
   const customStyles = {
-    option: (provided, state) => ({
+    option: (provided: any, state: { data: SelectOption }) => ({
       ...provided,
       color: state.data.isColored ? "#1f8d49" : "black",
     }),
   };
+
   const threshold = 7;
 
   useEffect(() => {
@@ -43,7 +47,7 @@ export default function SelectWithNames({
         lastName: lastName[closestIndex],
       };
 
-      const newElement = {
+      const newElement: ContributionData = {
         fullName: closestName,
         person_id: idRef,
         publi_id: productionId,
@@ -80,7 +84,7 @@ export default function SelectWithNames({
     setDataList,
   ]);
 
-  const handleChange = (option) => {
+  const handleChange = (option: SelectOption) => {
     const selectedIndex = fullName.indexOf(option.value);
 
     setDataList((prevState) => {

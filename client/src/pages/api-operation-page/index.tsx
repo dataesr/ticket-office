@@ -8,18 +8,20 @@ import {
   Text,
   Title,
 } from "@dataesr/dsfr-plus";
-import { Contribute_Production, ContributionPageProps } from "../../../types";
 import { useLocation } from "react-router-dom";
-import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
-import Selectors from "../../../components/selectors";
-import TopPaginationButtons from "../../../components/pagination/top-buttons";
-import ContributionProductionItem from "./contribution-production-card";
-import ContributionData from "../../../api/contribution-api/getData";
-import { buildURL } from "../../../api/utils/buildURL";
-import ExcelExportButton from "./export-to-xlsx";
-import { useDataList } from "./data-list-context";
 
-const ContributionPage: React.FC<ContributionPageProps> = () => {
+import ExcelExportButton from "./export-to-xlsx";
+import { ClipLoader } from "react-spinners";
+import { useDataList } from "./data-list-context";
+import { buildURL } from "../../api/utils/buildURL";
+import { Contribution_Production, ContributionDataHookResponse } from "./types";
+import ContributionData from "../../api/contribution-api/getData";
+import TopPaginationButtons from "../../components/pagination/top-buttons";
+import Selectors from "../../components/selectors";
+import ContributionProductionItem from "./contribution-production-card";
+import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
+
+const ContributionPage: React.FC = () => {
   const [reload] = useState(0);
   const [sort, setSort] = useState("DESC");
   const [status, setStatus] = useState("choose");
@@ -55,12 +57,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     isLoading,
     isError,
     refetch,
-  } = ContributionData(url);
+  }: ContributionDataHookResponse = ContributionData(url);
 
-  const contrib: Contribute_Production[] = fetchedData?.data || [];
+  const contrib: Contribution_Production[] = fetchedData?.data || [];
 
-  const meta = fetchedData?.meta || {};
+  const meta: { total?: number } = fetchedData?.meta || {};
   const maxPage = meta.total ? Math.ceil(meta.total / 10) : 1;
+
   const handleSearch = (value: string) => {
     const trimmedValue = value.trim();
     if (trimmedValue !== "" && !query.includes(trimmedValue)) {
@@ -86,12 +89,13 @@ const ContributionPage: React.FC<ContributionPageProps> = () => {
     return nameMatches || idMatches;
   });
 
-  if (isLoading)
+  if (isLoading) {
     return (
-      <Container className="fr-my-5w">
-        <Text>Chargement</Text>
-      </Container>
+      <div className="loading-container">
+        <ClipLoader color="#123abc" size={50} />
+      </div>
     );
+  }
   if (isError)
     return (
       <Container className="fr-my-5w">

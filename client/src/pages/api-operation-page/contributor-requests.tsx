@@ -5,17 +5,12 @@ import { ExternalLinks } from "./external-links";
 import { useDataList } from "./data-list-context";
 import { Col } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { Production } from "../../../types";
+import { ContributorRequestsProps } from "./types";
 
-const ContributorRequests: React.FC<{
-  data: {
-    objectId: string;
-    id: string;
-    name: string;
-    productions: Production[];
-  };
-  coloredName: string;
-}> = ({ data, coloredName }) => {
+const ContributorRequests: React.FC<ContributorRequestsProps> = ({
+  data,
+  coloredName,
+}) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const { dataList } = useDataList();
 
