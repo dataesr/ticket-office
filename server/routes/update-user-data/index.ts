@@ -1,5 +1,5 @@
 import getUpdateUserDataRoutes from "./get";
-import getUpdateUserDataByIdRoutes from "./get:id";
+import getUpdateUserDataByIdRoutes from "./get_id";
 import postUpdateUserDataRoutes from "./post";
 import updateUserDataPutRoutes from "./patch";
 

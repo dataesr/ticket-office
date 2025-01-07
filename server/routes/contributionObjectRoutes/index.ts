@@ -1,5 +1,5 @@
 import getContributionObjectRoutes from "./get";
-import getContributionObjectByIdRoutes from "./get:id";
+import getContributionObjectByIdRoutes from "./get_id";
 import postContributionObjectRoutes from "./post";
 import contributionObjectPutRoutes from "./patch";
 

@@ -1,5 +1,5 @@
 import getContactRoutes from "./get";
-import getContactByIdRoutes from "./get:id";
+import getContactByIdRoutes from "./get_id";
 import postContactRoutes from "./post";
 import contactPutRoutes from "./patch";
 

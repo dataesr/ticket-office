@@ -1,5 +1,5 @@
 import getRemoveUserRoutes from "./get";
-import getRemoveUserByIdRoutes from "./get:id";
+import getRemoveUserByIdRoutes from "./get_id";
 import postRemoveUserRoutes from "./post";
 import removeUserPutRoutes from "./patch";
 

@@ -1,7 +1,7 @@
 import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
 import { ObjectId } from "mongodb";
-import { contactSchema } from "../../../schemas/get:id/contactSchema";
+import { contactSchema } from "../../../schemas/get_id/contactSchema";
 
 type contributionObjectType = Static<typeof contactSchema>;
 
