@@ -108,7 +108,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
             </Text>
           )}
         </Col>
-        {["structures", "publications", "persons"].includes(
+        {["structures", "publications", "persons", "network"].includes(
           data?.objectType
         ) && (
           <Row>
@@ -171,6 +171,15 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
                   Sur dataESR
                 </Link>
               </>
+            )}
+            {data.objectType === "network" && (
+              <Link
+                size="sm"
+                target="_blank"
+                href={`https://scanr.enseignementsup-recherche.gouv.fr/networks?${data.objectId}`}
+              >
+                Sur scanR
+              </Link>
             )}
           </Row>
         )}
