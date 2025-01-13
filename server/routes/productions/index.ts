@@ -1,5 +1,5 @@
 import getProductionsRoutes from "./get";
-import getProductionByIdRoutes from "./get:id";
+import getProductionByIdRoutes from "./get_id";
 import postProductionRoutes from "./post";
 import productionsPutRoutes from "./patch";
 

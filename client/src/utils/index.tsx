@@ -16,6 +16,9 @@ export const BadgeColor = ({ type }) => {
     case "patent":
       badgeColor = "green-tilleul-verveine";
       break;
+    case "network":
+      badgeColor = "orange-terre-battue";
+      break;
     default:
       badgeColor = "purple-glycine";
   }
@@ -78,7 +81,9 @@ export const TypeLabel = ({ type }) => {
     case "projects":
       typeLabel = "Projets";
       break;
-
+    case "network":
+      typeLabel = "Network";
+      break;
     default:
       typeLabel = "";
   }
@@ -103,7 +108,9 @@ export const typeIcon = ({ icon }) => {
     case "projects":
       typeIcon = "recycle-fill";
       break;
-
+    case "network":
+      typeIcon = "git-branch-line";
+      break;
     default:
       typeIcon = "";
   }

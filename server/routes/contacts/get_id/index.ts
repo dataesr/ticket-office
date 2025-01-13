@@ -1,5 +1,5 @@
 import Elysia, { Static } from "elysia";
-import { contactSchema } from "../../../schemas/get:id/contactSchema";
+import { contactSchema } from "../../../schemas/get_id/contactSchema";
 import db from "../../../libs/mongo";
 import { ObjectId } from "mongodb";
 import { errorSchema } from "../../../schemas/errors/errorSchema";

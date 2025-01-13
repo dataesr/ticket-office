@@ -13,8 +13,9 @@ export const postContributionObjectSchema = t.Object(
       publications: "publications",
       project: "project",
       patent: "patent",
+      network: "network",
     }),
     extra: t.Optional(t.Record(t.String(), t.String())),
   },
   { additionalProperties: false }
-);
+)
