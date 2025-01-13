@@ -74,7 +74,7 @@ const Header: React.FC = () => {
       <HeaderWrapper>
         <Logo
           splitCharacter="|"
-          text="Ministère|de l'enseignement|supérieur|et de la recherche"
+          text="Ministère|chargé|de l'enseignement|supérieur|et de la recherche"
         />
         <Service
           name="Le Guichet numérique"
