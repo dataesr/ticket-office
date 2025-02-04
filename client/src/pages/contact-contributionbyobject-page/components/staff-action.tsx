@@ -2,7 +2,8 @@ import { Col, Text } from "@dataesr/dsfr-plus";
 import EmailSender from "../../../api/send-mail";
 import { useLocation } from "react-router-dom";
 import "./styles.scss";
-import { Response, StaffActionsProps, Thread } from "../types";
+import { StaffActionsProps, Thread, ThreadResponse } from "../types";
+import { makeLinksClickable } from "../../../utils/make-links-clickable";
 
 const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
   const location = useLocation();
@@ -23,17 +24,12 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
       ?.replace(/Le ven.*$/s, "")
       ?.replace(/Le sam.*$/s, "")
       ?.replace(/Le dim.*$/s, "")
-
       ?.replace(/--[a-fA-F0-9_-]+--/g, "")
-
       .replace(/Content-Type:.*$/gs, "")
       .replace(/Content-Disposition:.*$/gs, "")
       .replace(/Content-Transfer-Encoding:.*$/gs, "")
-
       .replace(/base64[^ ]+/gs, "[Image ou fichier ignoré]")
-
       ?.replace(/<br\s*\/?>/g, "\n")
-
       ?.trim();
   };
 
@@ -42,7 +38,7 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
       {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
           {data.threads.map((thread: Thread, threadIndex) =>
-            thread.responses.map((response: Response, index) => {
+            thread.responses.map((response: ThreadResponse, index) => {
               const responseDate = new Date(
                 response.timestamp
               ).toLocaleDateString();
@@ -57,9 +53,13 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
                 response.responseMessage && (
                   <div key={`${threadIndex}-${index}`} className={className}>
                     <Text size="sm">
-                      {cleanResponseMessage(
-                        response.responseMessage
-                      )?.replaceAll("<br/>", "\n")}
+                      <span
+                        dangerouslySetInnerHTML={{
+                          __html: makeLinksClickable(
+                            cleanResponseMessage(response.responseMessage)
+                          ),
+                        }}
+                      />
                       <br />
                       <small>
                         Répondu le {responseDate} à {responseTime} par{" "}
