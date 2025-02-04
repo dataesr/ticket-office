@@ -228,7 +228,6 @@ export async function fetchEmails() {
       source: true,
       envelope: true,
     });
-
     const messageList: {
       date: string;
       source: string;
@@ -243,10 +242,14 @@ export async function fetchEmails() {
       const messageSource = message.source.toString();
       const date = formatDate(message.envelope.date?.toISOString() || null);
       const subject = message.envelope.subject || "";
+      const cleanSubject = subject
+        .replace(/Re:\s*|\[?[*]?PUB[*]?\]?/gi, "")
+        .trim();
 
-      const referenceMatch = subject.match(
-        /référence\s+([a-zA-Z0-9_-]+)-([a-zA-Z0-9]+)/
+      const referenceMatch = cleanSubject.match(
+        /référence[\s:]+([a-zA-Z0-9_-]+)-([a-fA-F0-9]{24})/i
       );
+
       let referenceId = referenceMatch ? referenceMatch[2] : null;
       let collectionPrefix = referenceMatch ? referenceMatch[1] : "contacts";
 
@@ -269,7 +272,6 @@ export async function fetchEmails() {
     for (let message of sortedMessages) {
       const { referenceId, collectionPrefix, source } = message;
       const collectionName = determineCollectionName(collectionPrefix);
-
       if (referenceId) {
         await updateContribution(
           referenceId,

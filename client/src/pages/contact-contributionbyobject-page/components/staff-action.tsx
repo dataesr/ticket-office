@@ -17,6 +17,7 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
       ?.replace(/De:.*$/s, "")
       ?.replace(/Objet :.*$/s, "")
       ?.replace(/Envoyé :.*$/s, "")
+      ?.replace(/> Le.*/s, "")
       ?.replace(/Le lun.*$/s, "")
       ?.replace(/Le mar.*$/s, "")
       ?.replace(/Le mer.*$/s, "")
