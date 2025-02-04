@@ -22,12 +22,13 @@ export function generateLinkFromAllDatas(
   };
 
   let basePath = "";
+
   if (productions?.length > 0 && message === undefined) {
     basePath = "/scanr-apioperations";
   } else if (objectId) {
     basePath = "/scanr-contributionPage";
-  } else if (fromApplication) {
-    basePath = "/scanr-contact";
+  } else if (fromApplication && basePathMap.contacts[fromApplication]) {
+    basePath = basePathMap.contacts[fromApplication];
   } else {
     basePath = (basePathMap[collectionName] as string) || "";
   }
