@@ -2,6 +2,8 @@ import { ImapFlow } from "imapflow";
 import { MongoClient } from "mongodb";
 import * as cheerio from "cheerio";
 import { simpleParser } from "mailparser";
+import lastReceivedMail from "./get";
+import Elysia from "elysia";
 
 const email = process.env.MAIL_ADRESSE;
 const password = process.env.MAIL_PASSWORD;
@@ -138,6 +140,51 @@ async function sendNotificationEmail(
   }
 }
 
+async function saveReceivedEmail(
+  envelope: any,
+  messageSource: string,
+  extractedContent: string,
+  date: string
+) {
+  const client = new MongoClient(mongoUri);
+  try {
+    await client.connect();
+    const database = client.db(dbName);
+    const collection = database.collection("received_emails");
+    const existingEmail = await collection.findOne({
+      messageId: envelope.messageId,
+      date: date,
+    });
+
+    if (existingEmail) {
+      console.log(
+        `Email déjà enregistré : ${envelope.messageId} à la date ${date}`
+      );
+      return;
+    }
+
+    const emailData = {
+      messageId: envelope.messageId,
+      from: envelope.from,
+      to: envelope.to,
+      subject: envelope.subject,
+      date,
+      rawContent: messageSource,
+      extractedText: extractedContent,
+      createdAt: new Date(),
+    };
+
+    await collection.insertOne(emailData);
+    console.log(
+      `Email enregistré dans received_emails : ${envelope.messageId}`
+    );
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement de l'email :", error);
+  } finally {
+    await client.close();
+  }
+}
+
 function generateContributionLink(
   referenceId: string,
   fromApplication: string,
@@ -228,6 +275,7 @@ export async function fetchEmails() {
       source: true,
       envelope: true,
     });
+    console.log(messages);
     const messageList: {
       date: string;
       source: string;
@@ -255,6 +303,13 @@ export async function fetchEmails() {
 
       const extractedContent = await processEmailContent(messageSource);
       if (!extractedContent) continue;
+
+      await saveReceivedEmail(
+        message.envelope,
+        messageSource,
+        extractedContent,
+        date
+      );
 
       messageList.push({
         date,
@@ -303,3 +358,9 @@ setInterval(() => {
   console.log("Vérification des emails...");
   fetchEmails().catch(console.error);
 }, 200 * 1000);
+
+export const getReceivedMailsRoutes = new Elysia();
+
+getReceivedMailsRoutes.use(lastReceivedMail);
+
+export default getReceivedMailsRoutes;

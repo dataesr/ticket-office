@@ -28,6 +28,12 @@ export interface LastMailsSentProps {
     emails: Contribution[];
   };
 }
+export interface LastMailsReceivedProps {
+  data: {
+    [x: string]: any;
+    length: number;
+  };
+}
 
 export interface AllContributionsProps {
   data: Contribution[];
