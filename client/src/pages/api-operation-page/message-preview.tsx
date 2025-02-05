@@ -17,6 +17,7 @@ import NameFromIdref from "../../api/contribution-api/getNamesFromIdref";
 import { useDataList } from "./data-list-context";
 import "./styles.scss";
 import { MessagePreviewProps } from "./types";
+import { Contribute_Production } from "../../types";
 
 const MessagePreview = ({ data, refetch, allTags }: MessagePreviewProps) => {
   const [showModal, setShowModal] = useState(false);
@@ -103,7 +104,7 @@ const MessagePreview = ({ data, refetch, allTags }: MessagePreviewProps) => {
         refetch={refetch}
         isOpen={showModal}
         onClose={handleCloseModal}
-        data={data}
+        data={data as unknown as Contribute_Production}
         allTags={allTags}
         dataProduction={[]}
       />
