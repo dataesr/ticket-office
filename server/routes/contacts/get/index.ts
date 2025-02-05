@@ -18,11 +18,15 @@ getContactRoutes.get(
       page = 1,
       max_results = "",
       fromApplication,
+      status,
     } = query;
 
     let filters = JSON.parse(where as string);
     if (fromApplication) {
       filters.fromApplication = fromApplication;
+    }
+    if (status) {
+      filters.status = status;
     }
 
     const limit = parseInt(max_results as string, 10) || 2000;
@@ -79,6 +83,7 @@ getContactRoutes.get(
       max_results: t.Optional(t.String()),
       where: t.Optional(t.String()),
       fromApplication: t.Optional(t.String()),
+      status: t.Optional(t.String()),
     }),
     response: {
       200: responseSchema,
