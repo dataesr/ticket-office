@@ -91,7 +91,7 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
             Les mails non-suivis correspondent aux mails envoyés spontanément
             par un utilisateur. Ils ne sont pas en réponse à une contribution.
             Pour retrouver les contributions d'un utilisateur, rendez vous dans
-            la page accueil et renseigner son nom dans la barre de recherche.
+            la page accueil et renseignez son nom dans la barre de recherche.
           </Notice>
           {sortedUntrackedEmails.map((lastMailReceived) => {
             const sentDate = new Date(lastMailReceived.date);

@@ -161,13 +161,13 @@ const Header: React.FC = () => {
             current={pathname.startsWith("/last-mails-sent")}
             href="/last-mails-sent"
           >
-            Dernier mails envoyés
+            Derniers mails envoyés
           </Link>
           <Link
             current={pathname.startsWith("/last-mails-received")}
             href="/last-mails-received"
           >
-            Dernier mails reçu{" "}
+            Derniers mails reçu{" "}
             <span className="fr-icon-medal-fill" aria-hidden="true" />
           </Link>
           <Link
