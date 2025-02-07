@@ -275,7 +275,6 @@ export async function fetchEmails() {
       source: true,
       envelope: true,
     });
-    console.log(messages);
     const messageList: {
       date: string;
       source: string;
@@ -357,7 +356,7 @@ function determineCollectionName(collectionPrefix: string) {
 setInterval(() => {
   console.log("Vérification des emails...");
   fetchEmails().catch(console.error);
-}, 200 * 1000);
+}, 200 * 500);
 
 export const getReceivedMailsRoutes = new Elysia();
 
