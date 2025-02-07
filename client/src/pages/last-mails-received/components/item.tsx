@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Col,
   Container,
@@ -6,11 +7,44 @@ import {
   Tabs,
   Tab,
   Notice,
+  Button,
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import { LastMailsReceivedProps } from "../../../types";
 import { cleanResponseMessage } from "../../../utils/clean-response";
 import { makeLinksClickable } from "../../../utils/make-links-clickable";
+
+const EmailContent = ({ content }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const lines = cleanResponseMessage(content).split("\n");
+  const shouldTruncate = lines.length > 10;
+  console.log(cleanResponseMessage(content));
+  return (
+    <>
+      <div
+        className="email-content"
+        dangerouslySetInnerHTML={{
+          __html: makeLinksClickable(
+            cleanResponseMessage(
+              isExpanded || !shouldTruncate
+                ? content
+                : lines.slice(0, 5).join("\n") + "..."
+            )
+          ),
+        }}
+      />
+      {shouldTruncate && (
+        <Button
+          size="sm"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="fr-mt-1w"
+        >
+          {isExpanded ? "Réduire" : "Voir plus"}
+        </Button>
+      )}
+    </>
+  );
+};
 
 const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
   const emails = Array.isArray(data.emails)
@@ -57,9 +91,9 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                         </strong>
                       </Text>
                       <Text className="fr-mb-1">
-                        Adresse mail
+                        Adresse mail{" "}
                         <strong>
-                          <i> {lastMailReceived.from[0].address}</i>
+                          <i>{lastMailReceived.from[0].address}</i>
                         </strong>
                       </Text>
                     </Col>
@@ -72,14 +106,7 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                     </Col>
                   </Row>
                   <Text className="received-mail">
-                    <div
-                      className="email-content"
-                      dangerouslySetInnerHTML={{
-                        __html: makeLinksClickable(
-                          cleanResponseMessage(lastMailReceived.extractedText)
-                        ),
-                      }}
-                    />
+                    <EmailContent content={lastMailReceived.extractedText} />
                   </Text>
                 </Col>
               </Row>
@@ -113,15 +140,15 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                         </strong>
                       </Text>
                       <Text className="fr-mb-1">
-                        Adresse mail
+                        Adresse mail{" "}
                         <strong>
-                          <i> {lastMailReceived.from[0].address}</i>
+                          <i>{lastMailReceived.from[0].address}</i>
                         </strong>
                       </Text>
                       <Text className="fr-mb-1">
-                        Objet
+                        Objet{" "}
                         <strong>
-                          <i> {lastMailReceived.subject}</i>
+                          <i>{lastMailReceived.subject}</i>
                         </strong>
                       </Text>
                     </Col>
@@ -134,14 +161,7 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                     </Col>
                   </Row>
                   <Text className="received-mail">
-                    <div
-                      className="email-content"
-                      dangerouslySetInnerHTML={{
-                        __html: makeLinksClickable(
-                          cleanResponseMessage(lastMailReceived.extractedText)
-                        ),
-                      }}
-                    />
+                    <EmailContent content={lastMailReceived.extractedText} />
                   </Text>
                 </Col>
               </Row>
