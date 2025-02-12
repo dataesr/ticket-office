@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Col,
   Container,
@@ -7,41 +6,15 @@ import {
   Tabs,
   Tab,
   Notice,
-  Button,
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import { LastMailsReceivedProps } from "../../../types";
-import { cleanResponseMessage } from "../../../utils/clean-response";
-import { makeLinksClickable } from "../../../utils/make-links-clickable";
+import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 const EmailContent = ({ content }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const lines = cleanResponseMessage(content).split("\n");
-  const shouldTruncate = lines.length > 10;
-  console.log(cleanResponseMessage(content));
   return (
     <>
-      <div
-        className="email-content"
-        dangerouslySetInnerHTML={{
-          __html: makeLinksClickable(
-            cleanResponseMessage(
-              isExpanded || !shouldTruncate
-                ? content
-                : lines.slice(0, 5).join("\n") + "..."
-            )
-          ),
-        }}
-      />
-      {shouldTruncate && (
-        <Button
-          size="sm"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="fr-mt-1w"
-        >
-          {isExpanded ? "Réduire" : "Voir plus"}
-        </Button>
-      )}
+      <MarkdownRenderer content={content} />
     </>
   );
 };

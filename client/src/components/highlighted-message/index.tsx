@@ -1,4 +1,5 @@
 import { makeLinksClickable } from "../../utils/make-links-clickable";
+import MarkdownRenderer from "../../utils/markdownRenderer";
 
 const HighlightedMessage = ({
   message,
@@ -9,6 +10,7 @@ const HighlightedMessage = ({
 }) => {
   const renderHighlightedMessage = () => {
     if (!highlightedQuery) return makeLinksClickable(message);
+
     const lowerCaseMessage = message?.toLowerCase();
     const lowerCaseQuery = highlightedQuery?.toLowerCase();
     const index = lowerCaseMessage?.indexOf(lowerCaseQuery);
@@ -21,18 +23,16 @@ const HighlightedMessage = ({
     );
     const suffix = message?.substring(index + highlightedQuery.length);
 
-    return (
-      <>
-        {makeLinksClickable(prefix)}
-        <span style={{ backgroundColor: "#efcb3a" }}>{highlight}</span>
-        {makeLinksClickable(suffix)}
-      </>
-    );
+    const highlightedMessage = `${makeLinksClickable(
+      prefix
+    )}**${highlight}**${makeLinksClickable(suffix)}`;
+
+    return highlightedMessage;
   };
 
-  return (
-    <span dangerouslySetInnerHTML={{ __html: renderHighlightedMessage() }} />
-  );
+  const content = renderHighlightedMessage();
+
+  return <MarkdownRenderer content={content} />;
 };
 
 export default HighlightedMessage;

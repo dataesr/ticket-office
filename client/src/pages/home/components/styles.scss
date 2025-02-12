@@ -6,6 +6,17 @@
   width: 100%;
 }
 
+pre {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-x: auto;
+  background-color: #000;
+  max-width: 100%;
+  padding: 1em;
+  border-radius: 5px;
+  color: #fff;
+}
+
 .copy-button {
   border: none;
   background: none;

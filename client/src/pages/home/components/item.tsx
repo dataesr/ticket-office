@@ -9,25 +9,17 @@ import {
   TypeLabel,
 } from "../../../utils";
 import { AllContributionsProps } from "../../../types";
+import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
   data,
-  query,
 }) => {
-  const highlightQuery = (text: string, query: string) => {
-    if (!query) return text;
-    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const regex = new RegExp(`(${escapedQuery})`, "gi");
-
-    return text?.replace(regex, '<span class="highlight">$1</span>');
-  };
-
   return (
     <Container>
       {data.length === 0 ? (
         <p>Pas de résultat</p>
       ) : (
-        data?.map((contribution, index) => {
+        data.map((contribution, index) => {
           const link = generateLinkFromAllDatas(
             contribution.collectionName,
             contribution.fromApplication,
@@ -136,12 +128,9 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
                         {formattedTime}
                       </i>
                     </Text>
-                    <Text
-                      size="sm"
-                      dangerouslySetInnerHTML={{
-                        __html: highlightQuery(contribution?.message, query),
-                      }}
-                    />
+                    <Text size="sm">
+                      <MarkdownRenderer content={contribution?.message} />
+                    </Text>
                   </div>
                 </Col>
               </Link>

@@ -3,8 +3,7 @@ import EmailSender from "../../../api/send-mail";
 import { useLocation } from "react-router-dom";
 import "./styles.scss";
 import { StaffActionsProps, Thread, ThreadResponse } from "../types";
-import { makeLinksClickable } from "../../../utils/make-links-clickable";
-import { cleanResponseMessage } from "../../../utils/clean-response";
+import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
   const location = useLocation();
@@ -33,13 +32,7 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
                 response.responseMessage && (
                   <div key={`${threadIndex}-${index}`} className={className}>
                     <Text size="sm">
-                      <span
-                        dangerouslySetInnerHTML={{
-                          __html: makeLinksClickable(
-                            cleanResponseMessage(response.responseMessage)
-                          ),
-                        }}
-                      />
+                      <MarkdownRenderer content={response?.responseMessage} />
                       <br />
                       <small>
                         Répondu le {responseDate} à {responseTime} par{" "}
