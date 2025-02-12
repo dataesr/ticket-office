@@ -1,6 +1,4 @@
 .received-mail {
-  text-align: left;
-  background-color: var(--background-alt-pink-macaron);
   border-radius: 20px;
   padding: 20px;
   margin-right: 50px;
@@ -8,23 +6,20 @@
   margin-bottom: 10px;
   word-wrap: break-word;
   overflow: hidden;
+  background-color: var(--background-alt-green-emeraude);
 }
+
 .email-content {
-  margin: 1rem 0; /* Marge autour du contenu */
-  padding: 1rem; /* Remplissage interne */
-  border: 1px solid #ccc; /* Bordure */
-  border-radius: 4px; /* Coins arrondis */
-  background-color: #f9f9f9; /* Couleur de fond légère */
-  font-family: Arial, sans-serif; /* Police de caractère */
-  font-size: 14px; /* Taille de la police */
-  line-height: 1.6; /* Hauteur de ligne pour l'espacement */
+  padding: 1rem;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
 
   a {
-    color: #007bff; /* Couleur des liens */
-    text-decoration: underline; /* Soulignement des liens */
+    color: #007bff;
+    text-decoration: underline;
 
     &:hover {
-      text-decoration: none; /* Supprimer le soulignement au survol */
+      text-decoration: none;
     }
   }
 }

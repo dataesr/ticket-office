@@ -1,0 +1,25 @@
+export const fakeContributions = [
+  {
+    id: "1",
+    type: "type1",
+    status: "status1",
+    email: "email1@example.com",
+    tags: ["tag1"],
+    name: "name1",
+    created_at: "2021-01-01",
+    comment: "comment1",
+    team: ["team1"],
+    threads: [],
+  },
+  {
+    id: "2",
+    type: "type2",
+    status: "status2",
+    email: "email2@example.com",
+    tags: ["tag2"],
+    name: "name2",
+    created_at: "2021-02-01",
+    team: ["team2"],
+    threads: [],
+  },
+];

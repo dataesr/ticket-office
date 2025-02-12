@@ -1,4 +1,7 @@
-import { Thread } from "../pages/api-operation-page/types";
+import {
+  Contribution_Production,
+  Thread,
+} from "../pages/api-operation-page/types";
 
 export interface Contribution {
   [x: string]: any;
@@ -217,6 +220,6 @@ export type ProfileModalProps = {
 };
 
 export type EmailSenderProps = {
-  contribution: Contribution | Contribute_Production;
+  contribution: Contribution | Contribution_Production;
   refetch: () => void;
 };

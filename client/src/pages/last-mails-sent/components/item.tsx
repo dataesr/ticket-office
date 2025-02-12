@@ -2,6 +2,7 @@ import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import collectionNameMapping, { generateLink } from "./generate-links";
 import { LastMailsSentProps } from "../../../types";
+import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
   return (
@@ -85,9 +86,9 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
                       </Text>
                     </Col>
                   </Row>
-                  <Text className="email-content">
-                    {lastMailSent.userResponse.replaceAll("<br/>", " ")}
-                  </Text>
+                  <div className="received-mail">
+                    <MarkdownRenderer content={lastMailSent.userResponse} />
+                  </div>
                 </Col>
               </Row>
             </Link>

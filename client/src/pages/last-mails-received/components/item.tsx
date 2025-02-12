@@ -9,8 +9,15 @@ import {
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import { LastMailsReceivedProps } from "../../../types";
-import { cleanResponseMessage } from "../../../utils/clean-response";
-import { makeLinksClickable } from "../../../utils/make-links-clickable";
+import MarkdownRenderer from "../../../utils/markdownRenderer";
+
+const EmailContent = ({ content }) => {
+  return (
+    <>
+      <MarkdownRenderer content={content} />
+    </>
+  );
+};
 
 const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
   const emails = Array.isArray(data.emails)
@@ -57,9 +64,9 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                         </strong>
                       </Text>
                       <Text className="fr-mb-1">
-                        Adresse mail
+                        Adresse mail{" "}
                         <strong>
-                          <i> {lastMailReceived.from[0].address}</i>
+                          <i>{lastMailReceived.from[0].address}</i>
                         </strong>
                       </Text>
                     </Col>
@@ -72,14 +79,7 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                     </Col>
                   </Row>
                   <Text className="received-mail">
-                    <div
-                      className="email-content"
-                      dangerouslySetInnerHTML={{
-                        __html: makeLinksClickable(
-                          cleanResponseMessage(lastMailReceived.extractedText)
-                        ),
-                      }}
-                    />
+                    <EmailContent content={lastMailReceived.extractedText} />
                   </Text>
                 </Col>
               </Row>
@@ -113,15 +113,15 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                         </strong>
                       </Text>
                       <Text className="fr-mb-1">
-                        Adresse mail
+                        Adresse mail{" "}
                         <strong>
-                          <i> {lastMailReceived.from[0].address}</i>
+                          <i>{lastMailReceived.from[0].address}</i>
                         </strong>
                       </Text>
                       <Text className="fr-mb-1">
-                        Objet
+                        Objet{" "}
                         <strong>
-                          <i> {lastMailReceived.subject}</i>
+                          <i>{lastMailReceived.subject}</i>
                         </strong>
                       </Text>
                     </Col>
@@ -134,14 +134,7 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                     </Col>
                   </Row>
                   <Text className="received-mail">
-                    <div
-                      className="email-content"
-                      dangerouslySetInnerHTML={{
-                        __html: makeLinksClickable(
-                          cleanResponseMessage(lastMailReceived.extractedText)
-                        ),
-                      }}
-                    />
+                    <EmailContent content={lastMailReceived.extractedText} />
                   </Text>
                 </Col>
               </Row>

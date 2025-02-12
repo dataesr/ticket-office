@@ -27,11 +27,12 @@ export interface Production {
   productions: Array<any>;
 }
 
-export interface Contribution_Production {
+export type Contribution_Production = {
   id: string;
   status: string;
   created_at: string;
   productions: Production[];
+  message?: string;
   name: string;
   objectId: string;
   email?: string;
@@ -39,7 +40,7 @@ export interface Contribution_Production {
   description?: string;
   team?: string[];
   threads?: Thread[];
-}
+};
 
 export interface ContributionPageProps {}
 
