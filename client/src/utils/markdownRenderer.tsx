@@ -48,7 +48,11 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
 
   return (
     <Text size="sm">
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={renderers}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        components={renderers}
+        skipHtml
+      >
         {processedContent}
       </ReactMarkdown>
     </Text>
