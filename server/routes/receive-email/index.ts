@@ -358,8 +358,6 @@ setInterval(() => {
   fetchEmails().catch(console.error);
 }, 200 * 500);
 
-// COMMENTER LA FONCTION FETCHEMAILS
-
 export const getReceivedMailsRoutes = new Elysia();
 
 getReceivedMailsRoutes.use(lastReceivedMail);

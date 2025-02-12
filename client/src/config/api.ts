@@ -26,3 +26,7 @@ export const nameChangeUrl = isDevelopment
 export const removeUserUrl = isDevelopment
   ? "http://localhost:3000/api/remove-user?max_results=2000"
   : `${url}/api/remove-usermax_results=2000"`;
+
+export const bsoLocalVariations = isDevelopment
+  ? "http://localhost:3000/api/variations?max_results=2000"
+  : `${url}/api/variationsmax_results=2000"`;
