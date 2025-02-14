@@ -6,6 +6,9 @@
   margin-right: 250px;
   padding: 15px;
 }
+.contributorSideMessage p {
+  font-size: 0.9rem;
+}
 
 .contributorSideContactMessage {
   background-color: var(--background-alt-brown-caramel);
@@ -29,6 +32,9 @@
   word-wrap: break-word;
   overflow: hidden;
 }
+.user-side p {
+  font-size: 0.9rem;
+}
 
 .staffSide {
   text-align: right;
@@ -38,6 +44,9 @@
   margin-top: 10px;
   word-wrap: break-word;
   overflow: hidden;
+}
+.staffSide p {
+  font-size: 0.9rem;
 }
 
 .staffSideContact {

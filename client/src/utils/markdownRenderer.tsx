@@ -1,4 +1,3 @@
-import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -47,7 +46,7 @@ const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
   );
 
   return (
-    <Text size="sm">
+    <Text>
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         components={renderers}
