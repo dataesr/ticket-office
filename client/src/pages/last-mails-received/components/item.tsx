@@ -13,9 +13,9 @@ import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 const EmailContent = ({ content }) => {
   return (
-    <>
+    <Text size="sm">
       <MarkdownRenderer content={content} />
-    </>
+    </Text>
   );
 };
 

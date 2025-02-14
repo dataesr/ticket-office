@@ -61,14 +61,14 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
             {`Commenté par ${data.team[0]}`}
           </Badge>
         )}
-        {data?.type && (
+        {data?.objectType && (
           <Badge
             size="sm"
-            color={BadgeColor({ type: data.type })}
+            color={BadgeColor({ type: data.objectType })}
             className="fr-mr-1w fr-mb-1w"
-            icon={typeIcon({ icon: data.type })}
+            icon={typeIcon({ icon: data.objectType })}
           >
-            {TypeLabel({ type: data.type })}
+            {TypeLabel({ type: data.objectType })}
           </Badge>
         )}
       </Row>

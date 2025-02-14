@@ -86,9 +86,9 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
                       </Text>
                     </Col>
                   </Row>
-                  <div className="received-mail">
+                  <Text className="sent-mail">
                     <MarkdownRenderer content={lastMailSent.userResponse} />
-                  </div>
+                  </Text>
                 </Col>
               </Row>
             </Link>
