@@ -4,6 +4,13 @@
   overflow-wrap: break-word;
   border-bottom: 1px solid #f0f0f0;
 }
+.sent-mail {
+  border-radius: 20px;
+  padding: 20px;
+  word-wrap: break-word;
+  overflow: hidden;
+  background-color: var(--background-alt-blue-ecume);
+}
 
 .copy-button {
   border: none;
