@@ -10,7 +10,7 @@ type postVariationSchemaType = Static<typeof postVariationSchema>
 const postVariationRoutes = new Elysia()
 
 postVariationRoutes.post(
-  "/bso_local_variations",
+  "/variations",
   async ({ error, body }: { error: any; body: postVariationSchemaType }) => {
     const _id = new ObjectId()
     const newVariation = {
@@ -21,7 +21,7 @@ postVariationRoutes.post(
       status: "new",
     }
 
-    const result = await db.collection("bso_local_variations").insertOne(newVariation)
+    const result = await db.collection("local_variations").insertOne(newVariation)
 
     if (!result.insertedId) {
       return error(500, "Failed to create the variation")
@@ -43,9 +43,9 @@ postVariationRoutes.post(
       500: errorSchema,
     },
     detail: {
-      summary: "Créer une nouvelle déclinaison locale via le formulaire de contact",
-      description: "Cette route permet de créer une nouvelle déclinaison locale soumise via le formulaire de contact.",
-      tags: ["Déclinaisons locales du BSO"],
+      summary: "Créer une nouvelle déclinaison locale",
+      description: "Cette route permet de créer une nouvelle déclinaison locale.",
+      tags: ["Déclinaisons locales"],
     },
   }
 )

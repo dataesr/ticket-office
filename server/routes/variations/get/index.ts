@@ -7,7 +7,7 @@ import { errorSchema } from "../../../schemas/errors/errorSchema"
 const getVariationsRoutes = new Elysia()
 
 getVariationsRoutes.get(
-  "/bso_local_variations",
+  "/variations",
   async ({ query, error }: { query: any; error: any }) => {
     if (!validateQueryParams(query)) {
       return error(422, "Invalid query parameters")
@@ -23,14 +23,14 @@ getVariationsRoutes.get(
     const sortOrder = sort.startsWith("-") ? -1 : 1
 
     const totalVariations = await db
-      .collection("bso_local_variations")
+      .collection("local_variations")
       .countDocuments(filters)
       .catch((err) => {
-        return error(500, "Error fetching bso local variations count")
+        return error(500, "Error fetching variations count")
       })
 
     const variations = await db
-      .collection("bso_local_variations")
+      .collection("local_variations")
       .find(filters)
       .sort({ [sortField]: sortOrder })
       .skip(skip)
@@ -58,10 +58,9 @@ getVariationsRoutes.get(
       500: errorSchema,
     },
     detail: {
-      summary: "Obtenir toutes les déclinaisons locales via formulaire de contact",
-      description:
-        "Cette route retourne une liste de toutes les déclinaisons locales soumises via le formulaire de contact.",
-      tags: ["Déclinaisons locales du BSO"],
+      summary: "Obtenir toutes les déclinaisons locales",
+      description: "Cette route retourne une liste de toutes les déclinaisons locales.",
+      tags: ["Déclinaisons locales"],
     },
   }
 )

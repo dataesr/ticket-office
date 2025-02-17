@@ -9,14 +9,14 @@ type variationType = Static<typeof variationSchema>
 const getVariationByIdRoutes = new Elysia()
 
 getVariationByIdRoutes.get(
-  "/contacts/:id",
+  "/variations/:id",
   async ({ params: { id } }) => {
     const variation = await db
-      .collection("bso_local_variation")
+      .collection("local_variation")
       .findOne<variationType>({
         id: new ObjectId(id),
       })
-      .catch((error) => error(500, "Failed to fetch contact"))
+      .catch((error) => error(500, "Failed to fetch variation"))
     if (!variation) return { message: "Une erreur s'est produite" }
     return variation
   },
@@ -27,9 +27,9 @@ getVariationByIdRoutes.get(
       500: errorSchema,
     },
     detail: {
-      summary: "Obtenir une déclinaison locale via formulaire de contact par ID",
+      summary: "Obtenir une déclinaison locale par son ID",
       description: "Cette route retourne les détails d'une déclinaison locale spécifique via l'ID fourni.",
-      tags: ["Déclinaisons locales du BSO"],
+      tags: ["Déclinaisons locales"],
     },
   }
 )
