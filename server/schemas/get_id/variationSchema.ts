@@ -15,22 +15,19 @@ export const variationSchema = t.Object(
         ror: t.Optional(t.String()),
       }),
     }),
-    states: t.Optional(
-      t.Object({
-        file: t.Optional(t.Enum({ none: "none", uploaded: "uploaded" })),
-        code: t.Optional(t.Enum({ none: "none", staging: "staging", production: "production" })),
-        index: t.Optional(t.Enum({ none: "none", ongoing: "ongoing", error: "error", finalized: "finalized" })),
-        notification: t.Optional(t.Enum({ none: "none", ongoing: "ongoing", done: "done" })),
-      })
-    ),
+    tags: t.Object({
+      file: t.Enum({ none: "none", uploaded: "uploaded" }),
+      code: t.Enum({ none: "none", staging: "staging", production: "production" }),
+      index: t.Enum({ none: "none", ongoing: "ongoing", error: "error", finalized: "finalized" }),
+      notification: t.Enum({ none: "none", ongoing: "ongoing", done: "done" }),
+    }),
     csv: t.String(),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
-    comment: t.Optional(t.String()),
     status: t.Enum({ ongoing: "ongoing", treated: "treated", new: "new" }),
     team: t.Optional(t.Array(t.String())),
-    tags: t.Optional(t.Array(t.String())),
+    comment: t.Optional(t.String()),
   },
   { additionalProperties: false }
 )

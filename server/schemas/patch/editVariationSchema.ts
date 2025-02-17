@@ -20,7 +20,7 @@ export const editVariationSchema = t.Object(
         ),
       })
     ),
-    states: t.Optional(
+    tags: t.Optional(
       t.Object({
         file: t.Optional(t.Enum({ none: "none", uploaded: "uploaded" })),
         code: t.Optional(t.Enum({ none: "none", staging: "staging", production: "production" })),
@@ -28,13 +28,12 @@ export const editVariationSchema = t.Object(
         notification: t.Optional(t.Enum({ none: "none", ongoing: "ongoing", done: "done" })),
       })
     ),
+    status: t.Optional(t.Enum({ ongoing: "ongoing", treated: "treated", new: "new" })),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
-    comment: t.Optional(t.String()),
-    status: t.Optional(t.Enum({ ongoing: "ongoing", treated: "treated", new: "new" })),
     team: t.Optional(t.Array(t.String())),
-    tags: t.Optional(t.Array(t.String())),
+    comment: t.Optional(t.String()),
   },
   { additionalProperties: false }
 )

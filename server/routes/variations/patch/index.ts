@@ -21,21 +21,9 @@ variationPutRoutes.patch(
       }
     }
 
-    if (body.threads) {
-      body.threads = body.threads.map((thread) => {
-        thread.responses = thread.responses?.map((response) => {
-          if (response.read === false) {
-            response.read = true
-          }
-          return response
-        })
-        return thread
-      })
-    }
-
     const { acknowledged } = await db
       .collection("local_variations")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
+      .updateOne({ id }, { $set: { ...body, modified_at: new Date() } })
 
     if (!acknowledged) {
       return error(500, { message: "Erreur interne du serveur" })

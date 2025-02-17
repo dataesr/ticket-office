@@ -19,10 +19,11 @@ postVariationRoutes.post(
       id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
-      states: {
+      tags: {
         file: "none",
         code: "none",
         index: "none",
+        notification: "none",
       },
     }
 
