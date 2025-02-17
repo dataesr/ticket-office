@@ -27,7 +27,7 @@ getVariationByIdRoutes.get(
       500: errorSchema,
     },
     detail: {
-      summary: "Obtenir une déclinaison locale par son ID",
+      summary: "Obtenir une déclinaison locale via son ID",
       description: "Cette route retourne les détails d'une déclinaison locale spécifique via l'ID fourni.",
       tags: ["Déclinaisons locales"],
     },
