@@ -9,15 +9,9 @@ export const editVariationSchema = t.Object(
     ),
     structure: t.Optional(
       t.Object({
+        id: t.Optional(t.String()),
         name: t.Optional(t.String()),
         acronym: t.Optional(t.String()),
-        ids: t.Optional(
-          t.Object({
-            siren: t.Optional(t.String()),
-            rnsr: t.Optional(t.String()),
-            ror: t.Optional(t.String()),
-          })
-        ),
       })
     ),
     tags: t.Optional(

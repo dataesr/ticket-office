@@ -76,22 +76,10 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
             Nom de la structure: {variation.structure.name}
             <CopyButton text={variation.structure.name} copiedText={copiedText} onCopy={copyToClipboard} />
           </Text>
-          {variation.structure?.ids?.siren && (
+          {variation.structure?.id && (
             <Text size="sm">
-              SIREN de la structure: {variation.structure.ids.siren}
-              <CopyButton text={variation.structure.ids.siren} copiedText={copiedText} onCopy={copyToClipboard} />
-            </Text>
-          )}
-          {variation.structure?.ids?.rnsr && (
-            <Text size="sm">
-              RNSR de la structure: {variation.structure.ids.rnsr}
-              <CopyButton text={variation.structure.ids.rnsr} copiedText={copiedText} onCopy={copyToClipboard} />
-            </Text>
-          )}
-          {variation.structure?.ids?.ror && (
-            <Text size="sm">
-              ROR de la structure: {variation.structure.ids.ror}
-              <CopyButton text={variation.structure.ids.ror} copiedText={copiedText} onCopy={copyToClipboard} />
+              ID de la structure: {variation.structure.id}
+              <CopyButton text={variation.structure.id} copiedText={copiedText} onCopy={copyToClipboard} />
             </Text>
           )}
         </Col>

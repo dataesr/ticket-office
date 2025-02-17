@@ -5,11 +5,7 @@ export interface Variation {
   }
   structure: {
     name: string
-    ids: {
-      siren?: string
-      rnsr?: string
-      ror?: string
-    }
+    id?: string
   }
   tags: VariationTags
   status: string

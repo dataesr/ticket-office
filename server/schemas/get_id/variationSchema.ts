@@ -7,13 +7,9 @@ export const variationSchema = t.Object(
       email: t.String(),
     }),
     structure: t.Object({
+      id: t.Optional(t.String()),
       name: t.String(),
       acronym: t.Optional(t.String()),
-      ids: t.Object({
-        siren: t.Optional(t.String()),
-        rnsr: t.Optional(t.String()),
-        ror: t.Optional(t.String()),
-      }),
     }),
     tags: t.Object({
       file: t.Enum({ none: "none", uploaded: "uploaded" }),
