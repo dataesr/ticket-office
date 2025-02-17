@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
-import { Modal, ModalTitle, ModalContent, Col, TextArea, Button, Row, Container, ModalFooter } from "@dataesr/dsfr-plus"
+import { Modal, ModalTitle, ModalContent, Col, TextArea, Button, Row, ModalFooter } from "@dataesr/dsfr-plus"
 import { toast } from "react-toastify"
 import { postHeaders } from "../../../config/api"
 import ProfileModal from "../../../components/profil-modal"
 import VARIATION_TAGS from "../config/tags"
 import { EditModalInputs, EditModalProps } from "../types"
+import { getStatusFromTags } from "../_utils/functions"
 
 const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refetch }) => {
   const [showProfileModal, setShowProfileModal] = useState(false)
@@ -62,6 +63,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
     try {
       const body = JSON.stringify({
         ...inputs,
+        status: getStatusFromTags(inputs.tags),
         team: [selectedProfile],
       })
       console.log("body", body)
@@ -90,25 +92,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
       <Modal isOpen={isOpen} hide={onClose}>
         <ModalTitle>Éditer la demande</ModalTitle>
         <ModalContent>
-          <Container fluid className="fr-mb-2w">
-            <div className="fr-select-group">
-              <label htmlFor="statusInput" className="fr-label">
-                Statut de la demande
-              </label>
-              <select
-                id="statusInput"
-                name="status"
-                value={inputs.status}
-                onChange={(e) => handleInputChange("status", e.target.value)}
-                className="fr-select"
-              >
-                <option value="treated">Traité</option>
-                <option value="new">Nouveau</option>
-                <option value="ongoing">En traitement</option>
-              </select>
-            </div>
-          </Container>
-          <hr />
           <Row gutters className="fr-mb-1v">
             <Col md="6" xs="12">
               <div className="fr-select-group">
@@ -122,8 +105,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                   onChange={(e) => handleTagChange("file", e.target.value)}
                   className="fr-select"
                 >
-                  {VARIATION_TAGS.file.map((tag) => (
-                    <option value={tag}>{tag}</option>
+                  {Object.entries(VARIATION_TAGS.file).map(([key, { name }]) => (
+                    <option value={key}>{name}</option>
                   ))}
                 </select>
               </div>
@@ -139,8 +122,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                   onChange={(e) => handleTagChange("code", e.target.value)}
                   className="fr-select"
                 >
-                  {VARIATION_TAGS.code.map((tag) => (
-                    <option value={tag}>{tag}</option>
+                  {Object.entries(VARIATION_TAGS.code).map(([key, { name }]) => (
+                    <option value={key}>{name}</option>
                   ))}
                 </select>
               </div>
@@ -157,15 +140,15 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                   onChange={(e) => handleTagChange("index", e.target.value)}
                   className="fr-select"
                 >
-                  {VARIATION_TAGS.index.map((tag) => (
-                    <option value={tag}>{tag}</option>
+                  {Object.entries(VARIATION_TAGS.index).map(([key, { name }]) => (
+                    <option value={key}>{name}</option>
                   ))}
                 </select>
               </div>
               <br />
               <div className="fr-select-group">
                 <label htmlFor="notificationTagInput" className="fr-label">
-                  Code
+                  Messages
                 </label>
                 <select
                   id="notificationTagInput"
@@ -174,8 +157,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                   onChange={(e) => handleTagChange("notification", e.target.value)}
                   className="fr-select"
                 >
-                  {VARIATION_TAGS.notification.map((tag) => (
-                    <option value={tag}>{tag}</option>
+                  {Object.entries(VARIATION_TAGS.notification).map(([key, { name }]) => (
+                    <option value={key}>{name}</option>
                   ))}
                 </select>
               </div>

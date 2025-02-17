@@ -1,11 +1,12 @@
 import { useState } from "react"
-import { Badge, BadgeGroup, Button, Col, Row, Text, Title } from "@dataesr/dsfr-plus"
+import { Badge, BadgeGroup, Button, ButtonGroup, Col, Row, Text, Title } from "@dataesr/dsfr-plus"
 import { BadgeStatus, StatusLabel } from "../../../utils"
 import { FaCopy } from "react-icons/fa"
 import "./styles.scss"
 import { VariationItemProps } from "../types"
 import { CopyButton } from "../../../utils/copy-button"
 import EditModal from "./edit-modal"
+import VARIATION_TAGS from "../config/tags"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => {
   const [showModal, setShowModal] = useState(false)
@@ -29,12 +30,20 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           <Badge size="sm" color={BadgeStatus({ status: variation?.status })}>
             {StatusLabel({ status: variation?.status })}
           </Badge>
-          <Badge size="sm">File: {variation.tags.file}</Badge>
-          <Badge size="sm">Code: {variation.tags.code}</Badge>
-          <Badge size="sm">Index: {variation.tags.index}</Badge>
-          <Badge size="sm">Notif: {variation.tags.notification}</Badge>
+          <Badge size="sm" color={VARIATION_TAGS.file[variation.tags.file].color}>
+            File: {variation.tags.file}
+          </Badge>
+          <Badge size="sm" color={VARIATION_TAGS.code[variation.tags.code].color}>
+            Code: {variation.tags.code}
+          </Badge>
+          <Badge size="sm" color={VARIATION_TAGS.index[variation.tags.index].color}>
+            Index: {variation.tags.index}
+          </Badge>
+          <Badge size="sm" color={VARIATION_TAGS.notification[variation.tags.notification].color}>
+            Notif: {variation.tags.notification}
+          </Badge>
           {variation?.comment && variation?.team?.length > 0 && (
-            <Badge size="sm" color="green-emeraude" className="fr-mr-1w fr-mb-1w">
+            <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
               {`Commenté par ${variation.team[0]}`}
             </Badge>
           )}
@@ -89,10 +98,22 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
       </Row>
       <Row>
         <Col>
-          {variation?.modified_at && (
+          {variation?.modified_at && !variation?.treated_at && (
             <Text size="sm">
-              Édité ({variation.team ? variation.team[0] : ""}){" "}
-              <strong>: {new Date(variation.modified_at).toLocaleDateString()}</strong>
+              Édité ({variation.team ? variation.team[0] : ""})
+              <strong>
+                : {new Date(variation.modified_at).toLocaleDateString()} à{" "}
+                {new Date(variation.modified_at).toLocaleTimeString()}
+              </strong>
+            </Text>
+          )}
+          {variation?.treated_at && (
+            <Text size="sm">
+              Traité ({variation.team ? variation.team[0] : ""})
+              <strong>
+                : {new Date(variation.treated_at).toLocaleDateString()} à{" "}
+                {new Date(variation.treated_at).toLocaleTimeString()}
+              </strong>
             </Text>
           )}
         </Col>
@@ -105,9 +126,10 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
         </Col>
       </Row>
       <EditModal refetch={refetch} isOpen={showModal} onClose={() => setShowModal(false)} variation={variation} />
-      <Row className="fr-mb-5w fr-mt-3w">
+      <ButtonGroup isInlineFrom="xs" className="fr-mb-5w fr-mt-3w">
         <Button onClick={() => setShowModal(true)}>Éditer la demande</Button>
-      </Row>
+        <Button disabled>Lancer des tâches</Button>
+      </ButtonGroup>
     </>
   )
 }
