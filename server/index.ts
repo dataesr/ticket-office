@@ -17,7 +17,7 @@ import variationsRoutes from "./routes/variations"
 dotenv.config()
 
 const app = new Elysia()
-// fetchEmails();
+fetchEmails();
 app
   .use(
     cors({

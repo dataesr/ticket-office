@@ -353,10 +353,10 @@ function determineCollectionName(collectionPrefix: string) {
   return collections[collectionPrefix] || "contacts";
 }
 
-// setInterval(() => {
-//   console.log("Vérification des emails...");
-//   fetchEmails().catch(console.error);
-// }, 200 * 500);
+setInterval(() => {
+  console.log("Vérification des emails...");
+  fetchEmails().catch(console.error);
+}, 200 * 500);
 
 export const getReceivedMailsRoutes = new Elysia();
 

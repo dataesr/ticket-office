@@ -25,7 +25,6 @@ const LocalBSO = () => {
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1
 
   console.log("variations", variations)
-  const selectedVariation = variations?.find((variation) => variation?.id === selectedVariationId) || variations?.[0]
 
   if (isLoading) {
     return (
@@ -41,6 +40,8 @@ const LocalBSO = () => {
         <Text>Erreur lors du chargement des données.</Text>
       </Container>
     )
+
+  const selectedVariation = variations?.find((variation) => variation?.id === selectedVariationId) || variations?.[0]
 
   return (
     <Container className="fr-my-5w">
@@ -65,9 +66,7 @@ const LocalBSO = () => {
           <VariationsSummary variations={variations} onSelectedVariation={handleSelectVariation} />
         </Col>
         <Col md="7" xs="12">
-          <div>
-            <VariationItem key={selectedVariation.id} variation={selectedVariation} refetch={refetch} />
-          </div>
+          {selectedVariation && <VariationItem key={selectedVariation.id} variation={selectedVariation} refetch={refetch} />}
           <div className="fr-mt-10w">
             {/* <StaffActions
               data={fakeVariations.find(
