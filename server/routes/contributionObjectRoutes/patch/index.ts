@@ -1,6 +1,6 @@
 import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
-import { editContributionsSchema } from "../../../schemas/patch/editSchema";
+import { editContributionSchema } from "../../../schemas/patch/editContributionSchema"
 import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 
@@ -9,53 +9,41 @@ const contributionObjectPutRoutes = new Elysia();
 
 contributionObjectPutRoutes.patch(
   "/contribute/:id",
-  async ({
-    params: { id },
-    body,
-    error,
-  }: {
-    params: { id: string };
-    body: any;
-    error: any;
-  }) => {
+  async ({ params: { id }, body, error }: { params: { id: string }; body: any; error: any }) => {
     if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date();
+      body.treated_at = new Date()
     }
 
     if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0];
+      const userWhoModified = body.team[0]
       if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified);
+        body.team.push(userWhoModified)
       }
     }
 
     if (body.threads) {
       body.threads = body.threads.map((thread: { responses: any[] }) => {
-        thread.responses = thread.responses?.map(
-          (response: { read: boolean }) => {
-            if (response.read === false) {
-              response.read = true;
-            }
-            return response;
+        thread.responses = thread.responses?.map((response: { read: boolean }) => {
+          if (response.read === false) {
+            response.read = true
           }
-        );
-        return thread;
-      });
+          return response
+        })
+        return thread
+      })
     }
 
     const { acknowledged } = await db
       .collection("contribute")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
+      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
 
     if (!acknowledged) {
-      return error(500, { message: "Erreur interne du serveur" });
+      return error(500, { message: "Erreur interne du serveur" })
     }
 
-    const updatedObjectContribution = await db
-      .collection("contribute")
-      .findOne<ContributionType>({ id });
+    const updatedObjectContribution = await db.collection("contribute").findOne<ContributionType>({ id })
     if (!updatedObjectContribution) {
-      return error(404, { message: "Contact non trouvé" });
+      return error(404, { message: "Contact non trouvé" })
     }
 
     const responseObjectContribution = {
@@ -66,16 +54,16 @@ contributionObjectPutRoutes.patch(
       team: updatedObjectContribution.team,
       modified_at: updatedObjectContribution.modified_at,
       extra: updatedObjectContribution.extra || {},
-    };
+    }
 
-    return responseObjectContribution;
+    return responseObjectContribution
   },
   // pourquoi on envoit pas la réponse 200 ?
   {
     params: t.Object({
       id: t.String(),
     }),
-    body: editContributionsSchema,
+    body: editContributionSchema,
     response: {
       200: contributionObjectSchema,
       401: errorSchema,
@@ -89,6 +77,6 @@ contributionObjectPutRoutes.patch(
       tags: ["Contribution par objet"],
     },
   }
-);
+)
 
 export default contributionObjectPutRoutes;
