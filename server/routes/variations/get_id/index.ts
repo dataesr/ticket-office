@@ -11,10 +11,11 @@ const getVariationByIdRoutes = new Elysia()
 getVariationByIdRoutes.get(
   "/variations/:id",
   async ({ params: { id } }) => {
+    console.log("id", id, typeof id)
     const variation = await db
-      .collection("local_variation")
+      .collection("local_variations")
       .findOne<variationType>({
-        id: new ObjectId(id),
+        _id: new ObjectId(id),
       })
       .catch((error) => error(500, "Failed to fetch variation"))
     if (!variation) return { message: "Une erreur s'est produite" }

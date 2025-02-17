@@ -19,6 +19,11 @@ postVariationRoutes.post(
       id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
+      states: {
+        file: "none",
+        code: "none",
+        index: "none",
+      },
     }
 
     const result = await db.collection("local_variations").insertOne(newVariation)

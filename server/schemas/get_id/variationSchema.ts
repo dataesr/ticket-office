@@ -23,6 +23,7 @@ export const variationSchema = t.Object(
         notification: t.Optional(t.Enum({ none: "none", ongoing: "ongoing", done: "done" })),
       })
     ),
+    csv: t.String(),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
