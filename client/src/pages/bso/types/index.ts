@@ -33,7 +33,7 @@ export interface VariationsSummaryProps {
 export type VariationTags = {
   file: "none" | "uploaded"
   code: "none" | "staging" | "production"
-  index: "none" | "ongoing" | "failed" | "created"
+  index: "none" | "ongoing" | "failed" | "finalized"
   notification: "none" | "ongoing" | "done"
 }
 
