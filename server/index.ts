@@ -10,8 +10,9 @@ import removeUserRoutes from "./routes/remove-user"
 import updateUserDataRoutes from "./routes/update-user-data"
 import contactsRoutes from "./routes/contacts"
 import sendMail from "./routes/reply/replyRoutes"
-import getReceivedMailsRoutes from "./routes/receive-email"
+import getReceivedMailsRoutes, { fetchEmails } from "./routes/receive-email"
 import getLastMailsSentRoutes from "./routes/last-mails-sent"
+import variationsRoutes from "./routes/variations"
 
 dotenv.config()
 
@@ -48,6 +49,10 @@ app
             name: "Mise à jour de données utilisateurs",
             description: "Gestion des demandes de mise à jour de données utilisateur",
           },
+          {
+            name: "Déclinaisons locales",
+            description: "Gestion des demandes de déclinaisons locales",
+          },
         ],
       },
     })
@@ -64,6 +69,7 @@ app
     app.use(sendMail)
     app.use(getLastMailsSentRoutes)
     app.use(getReceivedMailsRoutes)
+    app.use(variationsRoutes)
     return app
   })
   .use(
