@@ -34,7 +34,7 @@ const Selectors = ({
         <option value="ongoing">Contribution en traitement</option>
         <option value="treated">Contributions traitées</option>
       </select>
-      {location.pathname !== "/scanr-apioperations" && (
+      {setSearchInMessage && (
         <Toggle
           checked={searchInMessage}
           id="searchInMessage"

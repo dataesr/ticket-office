@@ -7,6 +7,7 @@ const routes = [
   "production",
   "remove-user",
   "update-user-data",
+  "variations",
 ];
 
 const fetchAllData = async (baseApiUrl) => {
