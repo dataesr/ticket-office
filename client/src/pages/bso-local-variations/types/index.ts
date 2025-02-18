@@ -7,6 +7,7 @@ export interface Variation {
     name: string
     id?: string
   }
+  csv: string
   tags: VariationTags
   status: string
   created_at: string

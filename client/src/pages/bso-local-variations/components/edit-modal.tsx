@@ -35,9 +35,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
     }
   }, [selectedProfile, variation])
 
-  console.log("variation", variation)
-  console.log("inputs", inputs)
-
   const handleInputChange = (key: string, value: string) => {
     setInputs((prevInputs) => ({
       ...prevInputs,
@@ -66,7 +63,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
         status: getStatusFromTags(inputs.tags),
         team: [selectedProfile],
       })
-      console.log("body", body)
 
       const response = await fetch(url, {
         method: "PATCH",

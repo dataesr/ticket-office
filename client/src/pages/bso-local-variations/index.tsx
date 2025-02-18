@@ -29,7 +29,6 @@ const BSOLocalVariations = () => {
   const [selectedVariationId, setSelectedVariationId] = useState<string | null>(null)
 
   const url = buildURL(location, currentSort, currentStatus, currentQuery.join(" "), currentPage, null, null)
-  console.log("url", url)
   const { data, isLoading, isError, refetch } = ContributionData(url)
 
   const handleSelectVariation = (id: string) => {

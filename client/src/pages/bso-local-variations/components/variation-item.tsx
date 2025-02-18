@@ -7,6 +7,7 @@ import { VariationItemProps } from "../types"
 import { CopyButton } from "../../../utils/copy-button"
 import EditModal from "./edit-modal"
 import VARIATION_TAGS from "../config/tags"
+import DownloadFile from "../actions/download-file"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => {
   const [showModal, setShowModal] = useState(false)
@@ -20,8 +21,6 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
       }, 2000)
     })
   }
-
-  console.log("variation-item", variation)
 
   return (
     <>
@@ -114,9 +113,14 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
         </Col>
       </Row>
       <EditModal refetch={refetch} isOpen={showModal} onClose={() => setShowModal(false)} variation={variation} />
+      <ButtonGroup isInlineFrom="xs"></ButtonGroup>
       <ButtonGroup isInlineFrom="xs" className="fr-mb-5w fr-mt-3w">
-        <Button onClick={() => setShowModal(true)}>Éditer la demande</Button>
-        <Button disabled>Lancer des tâches</Button>
+        <Button icon="edit-line" onClick={() => setShowModal(true)}>
+          Éditer la demande
+        </Button>
+        <Button variant="tertiary" icon="download-line" onClick={() => DownloadFile(variation)}>
+          Télécharger le fichier
+        </Button>
       </ButtonGroup>
     </>
   )

@@ -28,7 +28,6 @@ export default function useUrl() {
   const removeQueryItem = useCallback(
     (query: string) => {
       const removedQuery = currentQuery.filter((item) => item !== query)
-      console.log("removedQuery", removedQuery)
       if (removedQuery.length === 0) searchParams.delete("query")
       else searchParams.set("query", removedQuery.join(","))
       setSearchParams(searchParams)
