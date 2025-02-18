@@ -141,7 +141,7 @@ const Header: React.FC = () => {
             <Link current={pathname.startsWith("/bso")} href="/bso-contact">
               Formulaire de contact
             </Link>
-            <Link current={pathname.startsWith("/bso")} href="/bso-local">
+            <Link current={pathname.startsWith("/bso")} href="/bso-local-variations">
               Demandes de BSO local
             </Link>
           </NavItem>

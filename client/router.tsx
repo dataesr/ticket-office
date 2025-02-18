@@ -5,7 +5,7 @@ import ApiOperationPage from "./src/pages/api-operation-page/index";
 import Layout from "./src/layout";
 import React from "react";
 import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";
-import LocalBSO from "./src/pages/bso/index";
+import BSOLocalVariations from "./src/pages/bso-local-variations/index";
 import LastMailSent from "./src/pages/last-mails-sent";
 import LastMailsReceived from "./src/pages/last-mails-received";
 import GetStats from "./src/pages/stats";
@@ -32,7 +32,7 @@ export default function Router() {
           path="/bso-contact"
           element={<ContactAndContributionPage fromApplication="bso" />}
         />
-        <Route path="/bso-local" element={<LocalBSO />} />
+        <Route path="/bso-local-variations" element={<BSOLocalVariations />} />
         <Route
           path="/curiexplore-contact"
           element={<ContactAndContributionPage fromApplication="curiexplore" />}

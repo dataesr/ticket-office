@@ -9,7 +9,7 @@ import VariationItem from "./components/variation-item"
 import { ClipLoader } from "react-spinners"
 import { Variation } from "./types"
 
-const LocalBSO = () => {
+const BSOLocalVariations = () => {
   const [sort, setSort] = useState<string>("DESC")
   const [status, setStatus] = useState<string>("choose")
   const [page, setPage] = useState<number>(1)
@@ -86,4 +86,4 @@ const LocalBSO = () => {
   )
 }
 
-export default LocalBSO
+export default BSOLocalVariations
