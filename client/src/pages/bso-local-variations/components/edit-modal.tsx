@@ -5,7 +5,7 @@ import { postHeaders } from "../../../config/api"
 import ProfileModal from "../../../components/profil-modal"
 import VARIATION_TAGS from "../config/tags"
 import { EditModalInputs, EditModalProps } from "../types"
-import { getStatusFromTags } from "../_utils/functions"
+import getStatusFromTags from "../_utils/get-status-from-tags"
 
 const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refetch }) => {
   const [showProfileModal, setShowProfileModal] = useState(false)
