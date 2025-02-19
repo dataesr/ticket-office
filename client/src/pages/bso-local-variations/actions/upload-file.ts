@@ -1,7 +1,7 @@
+import useEdit from "../hooks/useEdit"
 import { Variation } from "../types"
 
 export default async function UploadFile(variation: Variation) {
-
   const data = {
     container: "bso-local",
     filename: `${variation.structure?.id || variation.structure.name}.csv`,
@@ -20,10 +20,7 @@ export default async function UploadFile(variation: Variation) {
       if (!response.ok) {
         throw new Error("Network response was not ok " + response.statusText)
       }
-      return response.json()
-    })
-    .then((data) => {
-      console.log("Success:", data)
+      useEdit(variation.id, { tags: { ...variation.tags, file: "uploaded" } })
     })
     .catch((error) => {
       throw new Error(error)
