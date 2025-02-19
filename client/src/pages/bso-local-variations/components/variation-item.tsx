@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Badge, BadgeGroup, Button, ButtonGroup, Col, Row, Text, Title } from "@dataesr/dsfr-plus"
+import { Badge, BadgeGroup, Button, ButtonGroup, Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus"
 import { BadgeStatus, StatusLabel } from "../../../utils"
 import { FaCopy } from "react-icons/fa"
 import "./styles.scss"
@@ -9,10 +9,13 @@ import EditModal from "./edit-modal"
 import VARIATION_TAGS from "../config/tags"
 import DownloadFile from "../actions/download-file"
 import UploadFile from "../actions/upload-file"
+import readCSV from "../_utils/read-csv"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => {
   const [showModal, setShowModal] = useState(false)
   const [copiedText, setCopiedText] = useState<string | null>(null)
+
+  const countCsv = readCSV(variation.csv)
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -69,16 +72,16 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
       <Row>
         <Col>
           <Text size="sm">
-            Email de contact: {variation.contact.email}
+            Email de contact: <strong>{variation.contact.email}</strong>
             <CopyButton text={variation.contact.email} copiedText={copiedText} onCopy={copyToClipboard} />
           </Text>
           <Text size="sm">
-            Nom de la structure: {variation.structure.name}
+            Nom de la structure: <strong>{variation.structure.name}</strong>
             <CopyButton text={variation.structure.name} copiedText={copiedText} onCopy={copyToClipboard} />
           </Text>
           {variation.structure?.id && (
             <Text size="sm">
-              ID de la structure: {variation.structure.id}
+              ID de la structure: <strong>{variation.structure.id}</strong>
               <CopyButton text={variation.structure.id} copiedText={copiedText} onCopy={copyToClipboard} />
             </Text>
           )}
@@ -113,6 +116,20 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           )}
         </Col>
       </Row>
+      <Container fluid className="contributorSideContactMessage">
+        <Text size="sm">Le périmètre contient: </Text>
+        <ul>
+          {!!countCsv.doi && <li className="fr-text--sm fr-mb-0">{`${countCsv.doi} DOI`}</li>}
+          {!!countCsv.hal_coll_code && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_coll_code} hal_coll_code`}</li>}
+          {!!countCsv.hal_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_id} hal_id`}</li>}
+          {!!countCsv.hal_struct_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_struct_id} hal_struct_id`}</li>}
+          {!!countCsv.nnt_etab && <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_etab} nnt_etab`}</li>}
+          {!!countCsv.nnt_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_id} nnt_id`}</li>}
+        </ul>
+        <Button variant="text" size="sm" icon="download-line" onClick={() => DownloadFile(variation)}>
+          Télécharger le fichier
+        </Button>
+      </Container>
       <EditModal refetch={refetch} isOpen={showModal} onClose={() => setShowModal(false)} variation={variation} />
       <ButtonGroup isInlineFrom="md" className="fr-mb-5w fr-mt-3w">
         <Button icon="edit-line" onClick={() => setShowModal(true)}>
@@ -120,9 +137,6 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
         </Button>
         <Button variant="secondary" icon="upload-line" onClick={() => UploadFile(variation)}>
           Envoyer le fichier
-        </Button>
-        <Button variant="tertiary" icon="download-line" onClick={() => DownloadFile(variation)}>
-          Télécharger le fichier
         </Button>
       </ButtonGroup>
     </>
