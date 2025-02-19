@@ -13,11 +13,12 @@ import sendMail from "./routes/reply/replyRoutes"
 import getReceivedMailsRoutes, { fetchEmails } from "./routes/receive-email"
 import getLastMailsSentRoutes from "./routes/last-mails-sent"
 import variationsRoutes from "./routes/variations"
+import storageRoutes from "./routes/storage"
 
 dotenv.config()
 
 const app = new Elysia()
-fetchEmails();
+fetchEmails()
 app
   .use(
     cors({
@@ -70,6 +71,7 @@ app
     app.use(getLastMailsSentRoutes)
     app.use(getReceivedMailsRoutes)
     app.use(variationsRoutes)
+    app.use(storageRoutes)
     return app
   })
   .use(
