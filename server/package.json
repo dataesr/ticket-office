@@ -22,6 +22,7 @@
     "imapflow": "^1.0.164",
     "mailparser": "^3.7.1",
     "mongodb": "^6.9.0",
+    "pkgcloud": "^2.2.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
