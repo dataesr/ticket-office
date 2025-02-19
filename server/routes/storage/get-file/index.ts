@@ -1,30 +1,48 @@
 import Elysia, { NotFoundError, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
-import Storage from "../../../libs/storage-bso-local"
+import Storage from "../../../libs/storage"
 
-const getStorage = new Elysia()
+const getFileRoute = new Elysia()
 
-getStorage.get(
-  "/storage/:fileName",
-  async ({ params: { fileName } }) => {
-    const response = (await Storage.get(fileName).catch((err) => {
+export const responseSchema = t.Object(
+  {
+    name: t.String(),
+    etag: t.String(),
+    size: t.Number(),
+    lastModified: t.Union([t.String(), t.Date(), t.Null()]),
+    container: t.String(),
+  },
+  { additionalProperties: true }
+)
+
+getFileRoute.get(
+  "/storage/:container/:filename",
+  async ({ params: { container, filename } }) => {
+    const response = (await Storage.get(container, filename).catch((err) => {
       if (err.statusCode === 404) throw new NotFoundError()
       return err.message
-    })) as string
-    return response
+    })) as Record<string, any>
+
+    return {
+      name: response.name,
+      etag: response.etag,
+      size: response.size,
+      lastModified: response.lastModified,
+      container: response.container,
+    }
   },
   {
     response: {
-      200: t.String(),
+      200: responseSchema,
       401: errorSchema,
       500: errorSchema,
     },
     detail: {
-      summary: "Obtenir un fichier depuis Object Storage via son nom",
-      description: "Cette route retourne les détails d'un fichier spécifique via le nom fourni.",
+      summary: "Obtenir un fichier depuis Object Storage",
+      description: "Cette route retourne les détails d'un fichier spécifique via le container et le nom fourni.",
       tags: ["Object storage"],
     },
   }
 )
 
-export default getStorage
+export default getFileRoute

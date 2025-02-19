@@ -135,8 +135,8 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
         <Button icon="edit-line" onClick={() => setShowModal(true)}>
           Éditer la demande
         </Button>
-        <Button variant="secondary" icon="upload-line" onClick={() => UploadFile(variation)}>
-          Envoyer le fichier
+        <Button variant="tertiary" icon="upload-line" onClick={() => UploadFile(variation)}>
+          Uploader le fichier
         </Button>
       </ButtonGroup>
     </>

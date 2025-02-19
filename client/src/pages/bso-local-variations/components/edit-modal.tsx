@@ -102,7 +102,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                   className="fr-select"
                 >
                   {Object.entries(VARIATION_TAGS.file).map(([key, { name }]) => (
-                    <option value={key}>{name}</option>
+                    <option key={key} value={key}>
+                      {name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -119,7 +121,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                   className="fr-select"
                 >
                   {Object.entries(VARIATION_TAGS.code).map(([key, { name }]) => (
-                    <option value={key}>{name}</option>
+                    <option key={key} value={key}>
+                      {name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -137,7 +141,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                   className="fr-select"
                 >
                   {Object.entries(VARIATION_TAGS.index).map(([key, { name }]) => (
-                    <option value={key}>{name}</option>
+                    <option key={key} value={key}>
+                      {name}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -154,7 +160,9 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                   className="fr-select"
                 >
                   {Object.entries(VARIATION_TAGS.notification).map(([key, { name }]) => (
-                    <option value={key}>{name}</option>
+                    <option key={key} value={key}>
+                      {name}
+                    </option>
                   ))}
                 </select>
               </div>
