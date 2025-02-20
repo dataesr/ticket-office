@@ -106,17 +106,17 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                 label="Email de contact"
                 defaultValue={variation.contact.email}
                 onChange={(e) => handleContactChange("email", e.target.value)}
-              ></TextInput>
+              />
               <TextInput
                 label="Nom de la structure"
                 defaultValue={variation.structure.name}
                 onChange={(e) => handleStructureChange("name", e.target.value)}
-              ></TextInput>
+              />
               <TextInput
                 label="ID de la structure"
                 defaultValue={variation.structure?.id}
                 onChange={(e) => handleStructureChange("id", e.target.value)}
-              ></TextInput>
+              />
               <Container fluid style={{ display: "flex", width: "100%", alignItems: "center" }}>
                 <div style={{ flexGrow: 1 }}>
                   <Button variant="secondary" onClick={onClose}>
