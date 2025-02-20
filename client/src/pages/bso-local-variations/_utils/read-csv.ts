@@ -10,7 +10,7 @@ export default function readCSV(csv: string) {
     nnt_id: 0,
   }
 
-  Papa.parse(window.atob(csv), {
+  Papa.parse(csv, {
     header: true,
     skipEmptyLines: "greedy",
     transform: (value) => value.trim(),

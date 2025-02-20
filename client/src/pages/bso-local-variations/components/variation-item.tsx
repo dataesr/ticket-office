@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Badge, BadgeGroup, Button, ButtonGroup, Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus"
+import { Badge, BadgeGroup, Button, ButtonGroup, Col, Container, Notice, Row, Text, Title } from "@dataesr/dsfr-plus"
 import { BadgeStatus, StatusLabel } from "../../../utils"
 import { FaCopy } from "react-icons/fa"
 import "./styles.scss"
@@ -69,6 +69,11 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           <i className="date">Reçu le {new Date(variation.created_at)?.toLocaleDateString()}</i>
         </Text>
       </Row>
+      {!variation.structure?.id && (
+        <Notice className="fr-mb-2w" type="warning" closeMode="disallow">
+          La demande ne contient pas d'identifiant de structure.
+        </Notice>
+      )}
       <Row>
         <Col>
           <Text size="sm">
@@ -135,8 +140,16 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
         <Button icon="edit-line" onClick={() => setShowModal(true)}>
           Éditer la demande
         </Button>
-        <Button variant="secondary" icon="upload-line" onClick={() => UploadFile(variation)}>
-          Envoyer le fichier
+        <Button
+          variant="tertiary"
+          icon="upload-line"
+          disabled={!variation.structure.id}
+          onClick={() => {
+            UploadFile(variation)
+            refetch()
+          }}
+        >
+          Uploader le fichier
         </Button>
       </ButtonGroup>
     </>

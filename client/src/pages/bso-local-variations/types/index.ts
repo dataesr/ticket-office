@@ -42,6 +42,8 @@ export type EditModalProps = {
 }
 
 export type EditModalInputs = {
+  contact?: { email?: string }
+  structure?: { id?: string; name?: string }
   status?: string
   tags?: VariationTags
   team: string[]
