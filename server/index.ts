@@ -10,7 +10,7 @@ import removeUserRoutes from "./routes/remove-user"
 import updateUserDataRoutes from "./routes/update-user-data"
 import contactsRoutes from "./routes/contacts"
 import sendMail from "./routes/reply/replyRoutes"
-import getReceivedMailsRoutes, { fetchEmails } from "./routes/receive-email"
+import getReceivedMailsRoutes from "./routes/receive-email"
 import getLastMailsSentRoutes from "./routes/last-mails-sent"
 import variationsRoutes from "./routes/variations"
 import storageRoutes from "./routes/storage"
@@ -18,7 +18,6 @@ import storageRoutes from "./routes/storage"
 dotenv.config()
 
 const app = new Elysia()
-fetchEmails()
 app
   .use(
     cors({
