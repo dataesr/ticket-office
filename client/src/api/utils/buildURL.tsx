@@ -21,6 +21,8 @@ export const buildURL = (
     baseUrl = "update-user-data";
   } else if (location?.pathname?.includes("apioperations")) {
     baseUrl = "production";
+  } else if (location?.pathname?.includes("bso-local-variations")) {
+    baseUrl = "variations";
   }
 
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
@@ -32,10 +34,17 @@ export const buildURL = (
     if (isObjectId) {
       where.id = query;
     } else {
-      where.$or = [
-        { name: { $regex: `.*${query}.*`, $options: "i" } },
-        { id: { $regex: `.*${query}.*`, $options: "i" } },
-      ];
+      where.$or =
+        baseUrl === "variations"
+          ? [
+              { "structure.name": { $regex: `.*${query}.*`, $options: "i" } },
+              { "structure.id": { $regex: `.*${query}.*`, $options: "i" } },
+              { "contact.email": { $regex: `.*${query}.*`, $options: "i" } },
+            ]
+          : [
+              { name: { $regex: `.*${query}.*`, $options: "i" } },
+              { id: { $regex: `.*${query}.*`, $options: "i" } }
+            ]
 
       if (searchInMessages) {
         where.$or.push({

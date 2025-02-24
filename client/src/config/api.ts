@@ -17,16 +17,16 @@ export const contactUrl = isDevelopment
 
 export const productionUrl = isDevelopment
   ? "http://localhost:3000/api/production?max_results=2000"
-  : `${url}/api/productionsmax_results=2000`;
+  : `${url}/api/productions?max_results=2000`;
 
 export const nameChangeUrl = isDevelopment
   ? "http://localhost:3000/api/update-user-data?max_results=2000"
-  : `${url}/api/update-user-datamax_results=2000`;
+  : `${url}/api/update-user-data?max_results=2000`;
 
 export const removeUserUrl = isDevelopment
   ? "http://localhost:3000/api/remove-user?max_results=2000"
-  : `${url}/api/remove-usermax_results=2000"`;
+  : `${url}/api/remove-user?max_results=2000`
 
-export const bsoLocalVariations = isDevelopment
+export const variationsUrl = isDevelopment
   ? "http://localhost:3000/api/variations?max_results=2000"
-  : `${url}/api/variationsmax_results=2000"`;
+  : `${url}/api/variations?max_results=2000`;

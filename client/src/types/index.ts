@@ -160,6 +160,7 @@ export type Contribute_Production = {
   treated_at: Date;
   created_at: Date;
   email: string;
+  extra: {};
   message?: string;
   name: string;
   status: string;
