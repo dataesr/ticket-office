@@ -125,18 +125,18 @@ const Header: React.FC = () => {
               );
             })}
           </NavItem>
-          <Link
+          {/* <Link
             current={pathname.startsWith("/paysage")}
             href="/paysage-contact"
           >
             Paysage
-          </Link>
-          <Link
+          </Link> */}
+          {/* <Link
             current={pathname.startsWith("/curiexplore")}
             href="/curiexplore-contact"
           >
             CurieXplore
-          </Link>
+          </Link> */}
           <NavItem current={pathname.split("/").includes("bso")} title={"BSO"}>
             <Link current={pathname.startsWith("/bso")} href="/bso-contact">
               Formulaire de contact
@@ -151,12 +151,12 @@ const Header: React.FC = () => {
           >
             datasupR
           </Link>
-          <Link
+          {/* <Link
             current={pathname.startsWith("/works-magnet")}
             href="/works-magnet-contact"
           >
             Works magnet
-          </Link>
+          </Link> */}
           <Link
             current={pathname.startsWith("/last-mails-sent")}
             href="/last-mails-sent"
