@@ -17,10 +17,7 @@ export default async function UploadFile(variation: Variation) {
     body: JSON.stringify(data),
   })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok " + response.statusText)
-      }
-      useEdit(variation.id, { tags: { ...variation.tags, file: "uploaded" } })
+      if (response.ok) useEdit(variation.id, { tags: { ...variation.tags, file: "uploaded" } })
     })
     .catch((error) => {
       throw new Error(error)
