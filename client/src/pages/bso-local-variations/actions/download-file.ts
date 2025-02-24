@@ -8,7 +8,7 @@ function stringToArrayBuffer(string: string) {
 }
 
 export default function DownloadFile(variation: Variation) {
-  const blob = new Blob([stringToArrayBuffer(window.atob(variation.csv))], { type: "text/csv;charset=utf-8" })
+  const blob = new Blob([stringToArrayBuffer(variation.csv)], { type: "text/csv;charset=utf-8" })
   const url = window.URL.createObjectURL(blob)
   const link = document.createElement("a")
   link.href = url
