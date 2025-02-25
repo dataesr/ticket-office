@@ -10,12 +10,14 @@ import VARIATION_TAGS from "../config/tags"
 import DownloadFile from "../actions/download-file"
 import UploadFile from "../actions/upload-file"
 import readCSV from "../_utils/read-csv"
+import { getCodeFromBSO } from "../_utils/get-code-from-bso"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => {
   const [showModal, setShowModal] = useState(false)
   const [copiedText, setCopiedText] = useState<string | null>(null)
 
   const countCsv = readCSV(variation.csv)
+  const codeTag = getCodeFromBSO(variation.structure?.id)
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -36,8 +38,8 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           <Badge size="sm" color={VARIATION_TAGS.file[variation.tags.file].color}>
             File: {variation.tags.file}
           </Badge>
-          <Badge size="sm" color={VARIATION_TAGS.code[variation.tags.code].color}>
-            Code: {variation.tags.code}
+          <Badge size="sm" color={VARIATION_TAGS.code[codeTag].color}>
+            Code: {codeTag}
           </Badge>
           <Badge size="sm" color={VARIATION_TAGS.index[variation.tags.index].color}>
             Index: {variation.tags.index}
@@ -45,9 +47,9 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           <Badge size="sm" color={VARIATION_TAGS.notification[variation.tags.notification].color}>
             Notif: {variation.tags.notification}
           </Badge>
-          {variation?.comment && variation?.team?.length > 0 && (
+          {variation?.comment && variation?.team && (
             <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
-              {`Commenté par ${variation.team[0]}`}
+              {`Commenté par ${variation.team}`}
             </Badge>
           )}
         </BadgeGroup>
@@ -96,7 +98,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
         <Col>
           {variation?.modified_at && !variation?.treated_at && (
             <Text size="sm">
-              Édité ({variation.team ? variation.team[0] : ""})
+              Édité ({variation?.team || ""})
               <strong>
                 : {new Date(variation.modified_at).toLocaleDateString()} à{" "}
                 {new Date(variation.modified_at).toLocaleTimeString()}
@@ -105,7 +107,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           )}
           {variation?.treated_at && (
             <Text size="sm">
-              Traité ({variation.team ? variation.team[0] : ""})
+              Traité ({variation?.team || ""})
               <strong>
                 : {new Date(variation.treated_at).toLocaleDateString()} à{" "}
                 {new Date(variation.treated_at).toLocaleTimeString()}

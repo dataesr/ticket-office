@@ -2,7 +2,7 @@ import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { productionSchema } from "../../../schemas/get/productionSchema";
-import { editContributionSchema } from "../../../schemas/patch/editContributionSchema"
+import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
 
 type productionType = Static<typeof productionSchema>;
 const productionsPutRoutes = new Elysia();

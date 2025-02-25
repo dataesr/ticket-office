@@ -1,6 +1,6 @@
 import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
-import { editContributionSchema } from "../../../schemas/patch/editContributionSchema"
+import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
 import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 

@@ -1,48 +1,41 @@
-import Elysia, { Static, t } from "elysia"
+import Elysia from "elysia"
 import db from "../../../libs/mongo"
-import { editVariationSchema } from "../../../schemas/patch/editVariationSchema"
-import { variationSchema } from "../../../schemas/get_id/variationSchema"
+import { editVariationsSchema } from "../../../schemas/patch/editVariationsSchema"
+import { variationListSchema } from "../../../schemas/get/variationsSchema"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
+import { dot } from "dot-object"
 
-type variationType = Static<typeof variationSchema>
-const variationPutRoutes = new Elysia()
+const patchVariationsRoute = new Elysia()
 
-variationPutRoutes.patch(
-  "/variations/:id",
-  async ({ params: { id }, body, error }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date()
-    }
+patchVariationsRoute.patch(
+  "/variations",
+  async ({ body, error }: { body: any; error: any }) => {
+    const { ids, data } = body
 
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0]
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified)
-      }
+    if (data.status === "treated") {
+      data.treated_at = new Date()
     }
 
     const { acknowledged } = await db
       .collection("local_variations")
-      .updateOne({ id }, { $set: { ...body, modified_at: new Date() } })
+      .updateMany({ id: { $in: ids } }, { $set: { ...dot(data), modified_at: new Date() } })
 
     if (!acknowledged) {
       return error(500, { message: "Erreur interne du serveur" })
     }
 
-    const updatedVariation = await db.collection("local_variations").findOne<variationType>({ id })
-    if (!updatedVariation) {
-      return error(404, { message: "Déclinaison locale non trouvé" })
-    }
+    const updatedVariations = await db
+      .collection("local_variations")
+      .find({ id: { $in: ids } })
+      .limit(Math.min(ids.length, 2000))
+      .toArray()
 
-    return updatedVariation
+    return updatedVariations
   },
   {
-    params: t.Object({
-      id: t.String(),
-    }),
-    body: editVariationSchema,
+    body: editVariationsSchema,
     response: {
-      200: variationSchema,
+      200: variationListSchema,
       401: errorSchema,
       404: errorSchema,
       500: errorSchema,
@@ -56,4 +49,4 @@ variationPutRoutes.patch(
   }
 )
 
-export default variationPutRoutes
+export default patchVariationsRoute

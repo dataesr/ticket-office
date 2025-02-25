@@ -7,9 +7,9 @@ import { ObjectId } from "mongodb"
 
 type postVariationSchemaType = Static<typeof postVariationSchema>
 
-const postVariationRoutes = new Elysia()
+const postVariationRoute = new Elysia()
 
-postVariationRoutes.post(
+postVariationRoute.post(
   "/variations",
   async ({ error, body }: { error: any; body: postVariationSchemaType }) => {
     const _id = new ObjectId()
@@ -56,4 +56,4 @@ postVariationRoutes.post(
   }
 )
 
-export default postVariationRoutes
+export default postVariationRoute

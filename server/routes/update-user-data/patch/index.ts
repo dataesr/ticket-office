@@ -2,7 +2,7 @@ import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
-import { editContributionSchema } from "../../../schemas/patch/editContributionSchema"
+import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
 
 type updateUserDataType = Static<typeof updateDatasSchema>;
 const updateUserDataPutRoutes = new Elysia();

@@ -21,24 +21,15 @@ import useEdit from "../hooks/useEdit"
 const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refetch }) => {
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedProfile, setSelectedProfile] = useState(localStorage.getItem("selectedProfile"))
-  const [inputs, setInputs] = useState<EditModalInputs>({
-    team: [selectedProfile],
-  })
+  const [inputs, setInputs] = useState<EditModalInputs>({})
 
   useEffect(() => {
     if (!selectedProfile) {
       setShowProfileModal(true)
+    } else {
+      inputs.team = selectedProfile
     }
-
-    if (variation) {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        status: variation.status,
-        tags: variation.tags,
-        comment: variation?.comment || "",
-      }))
-    }
-  }, [selectedProfile, variation])
+  }, [selectedProfile])
 
   const handleInputChange = (key: string, value: string) => {
     setInputs((prevInputs) => ({
@@ -76,6 +67,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
       },
     }))
   }
+
+  console.log("inputs", inputs)
 
   const handleSubmit = async () => {
     if (!selectedProfile || selectedProfile === "null" || selectedProfile === "") {

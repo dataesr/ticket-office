@@ -6,9 +6,9 @@ import { errorSchema } from "../../../schemas/errors/errorSchema"
 
 type variationType = Static<typeof variationSchema>
 
-const getVariationByIdRoutes = new Elysia()
+const getVariationByIdRoute = new Elysia()
 
-getVariationByIdRoutes.get(
+getVariationByIdRoute.get(
   "/variations/:id",
   async ({ params: { id } }) => {
     console.log("id", id, typeof id)
@@ -35,4 +35,4 @@ getVariationByIdRoutes.get(
   }
 )
 
-export default getVariationByIdRoutes
+export default getVariationByIdRoute
