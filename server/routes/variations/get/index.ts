@@ -4,9 +4,9 @@ import db from "../../../libs/mongo"
 import { responseSchema } from "../../../schemas/get/variationsSchema"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-const getVariationsRoutes = new Elysia()
+const getVariationsRoute = new Elysia()
 
-getVariationsRoutes.get(
+getVariationsRoute.get(
   "/variations",
   async ({ query, error }: { query: any; error: any }) => {
     if (!validateQueryParams(query)) {
@@ -65,4 +65,4 @@ getVariationsRoutes.get(
   }
 )
 
-export default getVariationsRoutes
+export default getVariationsRoute
