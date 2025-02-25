@@ -38,7 +38,6 @@ export type EditModalProps = {
   isOpen: boolean
   onClose: () => void
   variation: Variation
-  refetch: () => void
 }
 
 export type EditModalInputs = {

@@ -6,13 +6,17 @@ import "../styles/styles.scss"
 import { VariationItemProps } from "../types"
 import { CopyButton } from "../../../utils/copy-button"
 import EditModal from "./edit-modal"
-import VARIATION_TAGS from "../config/tags"
+import { tagGetColor, tagGetIcon } from "../config/tags"
 import DownloadFile from "../actions/download-file"
-import UploadFile from "../actions/upload-file"
+import uploadFiles from "../actions/upload-files"
 import readCSV from "../_utils/read-csv"
 import { getCodeFromBSO } from "../_utils/get-code-from-bso"
+import { useVariationsContext } from "../context"
 
-const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => {
+const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
+  const {
+    data: { refetch },
+  } = useVariationsContext()
   const [showModal, setShowModal] = useState(false)
   const [copiedText, setCopiedText] = useState<string | null>(null)
 
@@ -35,17 +39,33 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           <Badge size="sm" color={BadgeStatus({ status: variation?.status })}>
             {StatusLabel({ status: variation?.status })}
           </Badge>
-          <Badge size="sm" color={VARIATION_TAGS.file[variation.tags.file].color}>
-            File: {variation.tags.file}
+          <Badge
+            size="sm"
+            color={tagGetColor("file", variation?.tags?.file)}
+            icon={tagGetIcon("file", variation?.tags?.file)}
+          >
+            File: {variation.tags.file || "none"}
           </Badge>
-          <Badge size="sm" color={VARIATION_TAGS.code[codeTag].color}>
+          <Badge
+            size="sm"
+            color={tagGetColor("code", variation?.tags?.code)}
+            icon={tagGetIcon("code", variation?.tags?.code)}
+          >
             Code: {codeTag}
           </Badge>
-          <Badge size="sm" color={VARIATION_TAGS.index[variation.tags.index].color}>
-            Index: {variation.tags.index}
+          <Badge
+            size="sm"
+            color={tagGetColor("index", variation?.tags?.index)}
+            icon={tagGetIcon("index", variation?.tags?.index)}
+          >
+            Index: {variation.tags.index || "none"}
           </Badge>
-          <Badge size="sm" color={VARIATION_TAGS.notification[variation.tags.notification].color}>
-            Notif: {variation.tags.notification}
+          <Badge
+            size="sm"
+            color={tagGetColor("notification", variation?.tags?.notification)}
+            icon={tagGetIcon("notification", variation?.tags?.notification)}
+          >
+            Notif: {variation.tags.notification || "none"}
           </Badge>
           {variation?.comment && variation?.team && (
             <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
@@ -137,7 +157,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           Télécharger le fichier
         </Button>
       </Container>
-      <EditModal refetch={refetch} isOpen={showModal} onClose={() => setShowModal(false)} variation={variation} />
+      <EditModal variation={variation} isOpen={showModal} onClose={() => setShowModal(false)} />
       <ButtonGroup isInlineFrom="md" className="fr-mb-5w fr-mt-3w">
         <Button icon="edit-line" onClick={() => setShowModal(true)}>
           Éditer la demande
@@ -146,10 +166,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation, refetch }) => 
           variant="tertiary"
           icon="upload-line"
           disabled={!variation.structure.id}
-          onClick={() => {
-            UploadFile(variation)
-            refetch()
-          }}
+          onClick={() => uploadFiles([variation]).then(() => refetch())}
         >
           Uploader le fichier
         </Button>
