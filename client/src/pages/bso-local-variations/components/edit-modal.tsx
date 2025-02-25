@@ -68,8 +68,6 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
     }))
   }
 
-  console.log("inputs", inputs)
-
   const handleSubmit = async () => {
     if (!selectedProfile || selectedProfile === "null" || selectedProfile === "") {
       setShowProfileModal(true)
