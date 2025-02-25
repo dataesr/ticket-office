@@ -32,7 +32,7 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
           className="contribution-message"
           title={
             <>
-              <Row gutters>
+              <Row>
                 <Col>
                   {contribution?.type && (
                     <Badge

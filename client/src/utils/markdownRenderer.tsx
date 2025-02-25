@@ -5,15 +5,28 @@ import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Text } from "@dataesr/dsfr-plus";
 import { cleanResponseMessage } from "./clean-response";
 
-const convertBrTagsToNewlines = (content) => {
-  return content?.replace(/<br\s*\/?>/g, "\n");
+const convertUrlsToMarkdownLinks = (content) => {
+  if (!content) return "";
+
+  const urlRegex = /(?<![\[\(])(https?:\/\/[^\s\)]+)(?![\]\)])/g;
+  return content.replace(urlRegex, (url) => `[${url}](${url})`);
 };
 
-const convertATagsToLinks = (content) => {
-  return content?.replace(
-    /<a\s+href="([^"]+)"\s+target="_blank"\s+rel="noopener noreferrer">([^<]+)<\/a>/g,
+const preprocessContent = (content) => {
+  if (!content) return "";
+
+  let processed = content.replace(/<br\s*\/?>/gi, "\n");
+
+  processed = processed.replace(
+    /<a\s+href="([^"]+)"[^>]*>([^<]+)<\/a>/gi,
     (_, url, text) => `[${text}](${url})`
   );
+
+  processed = cleanResponseMessage(processed);
+
+  processed = convertUrlsToMarkdownLinks(processed);
+
+  return processed;
 };
 
 const renderers = {
@@ -36,22 +49,21 @@ const renderers = {
       </code>
     );
   },
+  link({ node, ...props }) {
+    return (
+      <a target="_blank" rel="noopener noreferrer" {...props}>
+        {props.children}
+      </a>
+    );
+  },
 };
 
 const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
-  const cleanedContent = cleanResponseMessage(content);
-
-  const processedContent = convertBrTagsToNewlines(
-    convertATagsToLinks(cleanedContent)
-  );
+  const processedContent = preprocessContent(content);
 
   return (
     <Text>
-      <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
-        components={renderers}
-        skipHtml
-      >
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={renderers}>
         {processedContent}
       </ReactMarkdown>
     </Text>

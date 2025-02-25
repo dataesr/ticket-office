@@ -6,11 +6,13 @@
 }
 .sent-mail {
   border-radius: 20px;
-  padding: 20px;
+  padding: 10px;
   word-wrap: break-word;
   overflow: hidden;
   background-color: var(--background-alt-blue-ecume);
+  margin-bottom: -1px;
 }
+
 .sent-mail p {
   font-size: 0.9em;
 }

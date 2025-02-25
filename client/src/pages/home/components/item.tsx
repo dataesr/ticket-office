@@ -51,6 +51,26 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
               >
                 <Col lg="12" md="10" sm="12">
                   <div>
+                    {contribution?.objectType && (
+                      <Badge
+                        size="sm"
+                        icon={typeIcon({ icon: contribution.objectType })}
+                        color={BadgeColor({ type: contribution.objectType })}
+                        className="fr-mr-1w fr-mt-1w"
+                      >
+                        {TypeLabel({ type: contribution.objectType })}
+                      </Badge>
+                    )}
+                    {(badgeContent === "Lier des publications" ||
+                      badgeContent === "Contribution par objet") && (
+                      <Badge
+                        size="sm"
+                        className="fr-mr-1w fr-mb-1w"
+                        color="blue-ecume"
+                      >
+                        scanR
+                      </Badge>
+                    )}
                     {badgeContent && (
                       <Badge
                         size="sm"
@@ -58,15 +78,6 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
                         className="fr-mr-1w fr-mb-1w"
                       >
                         {badgeContent}
-                      </Badge>
-                    )}
-                    {badgeContent === "Lier des publications" && (
-                      <Badge
-                        size="sm"
-                        className="fr-mr-1w fr-mb-1w"
-                        color="blue-ecume"
-                      >
-                        scanR
                       </Badge>
                     )}
                     {contribution.fromApplication && (
@@ -85,35 +96,6 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
                     >
                       {StatusLabel({ status: contribution.status })}
                     </Badge>
-                    {contribution?.objectType && (
-                      <>
-                        <Badge
-                          size="sm"
-                          icon={typeIcon({ icon: contribution.objectType })}
-                          color={BadgeColor({ type: contribution.objectType })}
-                          className="fr-mr-1w fr-mb-1w"
-                        >
-                          {TypeLabel({ type: contribution.objectType })}
-                        </Badge>
-                        <Badge
-                          size="sm"
-                          className="fr-mr-1w fr-mb-1w"
-                          color="blue-ecume"
-                        >
-                          scanR
-                        </Badge>
-                      </>
-                    )}
-                    {contribution?.comment ||
-                      (contribution?.team?.length > 0 && (
-                        <Badge
-                          size="sm"
-                          color="green-emeraude"
-                          className="fr-mr-1w fr-mb-1w"
-                        >
-                          {`Traité par ${contribution.team[0]}`}
-                        </Badge>
-                      ))}
                   </div>
                   <div>
                     <Text className="fr-mb-0 ">
