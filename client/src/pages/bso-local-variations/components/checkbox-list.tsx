@@ -1,4 +1,4 @@
-import { Badge, BadgeGroup, Checkbox, Col, Container, Row, Text } from "@dataesr/dsfr-plus"
+import { Badge, BadgeGroup, Button, Checkbox, Col, Container, Row, Text } from "@dataesr/dsfr-plus"
 import { Variation } from "../types"
 import { BadgeStatus, StatusLabel } from "../../../utils"
 import { useVariationsContext } from "../context"
@@ -37,10 +37,21 @@ const CheckboxItem = ({ variation }: { variation: Variation }) => {
 }
 
 export default function CheckboxList({ variations }: { variations: Array<Variation> }) {
+  const { checkedIds, checkAllIds } = useVariationsContext()
+  const total = variations.length
+
   return (
-    <Container fluid className="fr-mt-3w">
+    <Container fluid>
       <Text size="lg" bold>
-        Demandes
+        Demandes{" "}
+        <Button
+          className="fr-ml-4w"
+          size="sm"
+          variant="tertiary"
+          onClick={() => checkAllIds(checkedIds.length === total ? [] : variations.map((variation) => variation.id))}
+        >
+          {checkedIds.length === total ? "Tout déselectionner" : "Tout sélectionner"}
+        </Button>
       </Text>
       <Container className="fr-pl-1w">
         {variations.map((variation, index) => (

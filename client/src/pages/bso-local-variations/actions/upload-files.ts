@@ -10,11 +10,6 @@ async function uploadFile(variation: Variation) {
     buffer: variation.csv,
   }
 
-  const inputs = {
-    tags: { file: "uploaded" },
-    ...(variation.status === "new" && { status: "ongoing" }),
-  }
-
   fetch("/api/storage", {
     method: "POST",
     headers: {
@@ -22,12 +17,8 @@ async function uploadFile(variation: Variation) {
     },
     body: JSON.stringify(data),
   })
-    .then(() => {
-      try {
-        useEdit(variation.id, inputs)
-      } catch (error) {
-        throw error
-      }
+    .then((response) => {
+      if (!response.ok) throw new Error(`Error while uploading file for id ${variation.id}`)
     })
     .catch((error) => {
       throw error
@@ -35,8 +26,14 @@ async function uploadFile(variation: Variation) {
 }
 
 export default async function uploadFiles(variations: Array<Variation>) {
+  const inputs = { tags: { file: "uploaded" }, status: "ongoing" }
+
   Promise.all(variations.map((variation) => uploadFile(variation)))
     .then(() => {
+      useEdit(
+        variations.map((variation) => variation.id),
+        inputs
+      )
       toast.success(
         variations?.length > 1
           ? "Les fichiers ont été chargés sur OVH avec succès !"
