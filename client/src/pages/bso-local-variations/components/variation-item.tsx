@@ -34,7 +34,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
 
   return (
     <>
-      <Row className="fr-mt-3w">
+      <Row>
         <BadgeGroup>
           <Badge size="sm" color={BadgeStatus({ status: variation?.status })}>
             {StatusLabel({ status: variation?.status })}

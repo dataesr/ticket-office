@@ -17,8 +17,13 @@ import ProfileModal from "../../../components/profil-modal"
 import { VARIATION_TAGS } from "../config/tags"
 import { EditModalInputs, EditModalProps } from "../types"
 import useEdit from "../hooks/useEdit"
+import { useVariationsContext } from "../context"
+import getStatusFromTags from "../_utils/get-status-from-tags"
 
 const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => {
+  const {
+    data: { refetch },
+  } = useVariationsContext()
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedProfile, setSelectedProfile] = useState(localStorage.getItem("selectedProfile"))
   const [inputs, setInputs] = useState<EditModalInputs>({})
@@ -76,8 +81,11 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
       return
     }
 
+    if (inputs?.tags) inputs.status = getStatusFromTags({ ...variation?.tags, ...inputs.tags })
+
     await useEdit(variation.id, inputs)
       .then(() => {
+        refetch()
         onClose()
         toast.success("Les modifications ont été enregistrées avec succès !")
       })
@@ -133,7 +141,7 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
                 <select
                   id="statusInput"
                   name="status"
-                  value={inputs?.status || "none"}
+                  value={inputs?.status || variation.status || "none"}
                   onChange={(e) => handleInputChange("status", e.target.value)}
                   className="fr-select"
                 >
