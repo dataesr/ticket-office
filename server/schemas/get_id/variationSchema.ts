@@ -22,7 +22,7 @@ export const variationSchema = t.Object(
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
     status: t.Enum({ ongoing: "ongoing", treated: "treated", new: "new" }),
-    team: t.Optional(t.Array(t.String())),
+    team: t.Optional(t.String()),
     comment: t.Optional(t.String()),
   },
   { additionalProperties: false }

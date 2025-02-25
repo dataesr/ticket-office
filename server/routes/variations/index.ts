@@ -1,15 +1,17 @@
-import getVariationsRoutes from "./get"
-import getVariationByIdRoutes from "./get_id"
-import postVariationRoutes from "./post"
-import patchVariationRoutes from "./patch"
+import getVariationsRoute from "./get"
+import getVariationByIdRoute from "./get_id"
+import patchVariationsRoute from "./patch"
+import patchVariationByIdRoute from "./patch_id"
+import postVariationRoute from "./post"
 
 import { Elysia } from "elysia"
 
 export const variationsRoutes = new Elysia()
 
-variationsRoutes.use(getVariationsRoutes)
-variationsRoutes.use(getVariationByIdRoutes)
-variationsRoutes.use(postVariationRoutes)
-variationsRoutes.use(patchVariationRoutes)
+variationsRoutes.use(getVariationsRoute)
+variationsRoutes.use(getVariationByIdRoute)
+variationsRoutes.use(patchVariationsRoute)
+variationsRoutes.use(patchVariationByIdRoute)
+variationsRoutes.use(postVariationRoute)
 
 export default variationsRoutes
