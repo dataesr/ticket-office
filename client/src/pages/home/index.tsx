@@ -9,7 +9,6 @@ const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 const prodUrl = import.meta.env.VITE_BASE_API_URL;
 
 const url = isDevelopment ? "http://localhost:3000/api" : `${prodUrl}/api`;
-
 const Home = () => {
   const [query, setQuery] = useState<string[]>([]);
   const [highlightedQuery, setHighlightedQuery] = useState<string>("");

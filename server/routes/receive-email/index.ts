@@ -353,10 +353,12 @@ function determineCollectionName(collectionPrefix: string) {
   return collections[collectionPrefix] || "contacts";
 }
 
-setInterval(() => {
-  console.log("Vérification des emails...");
-  fetchEmails().catch(console.error);
-}, 200 * 500);
+process.env.APP_ENV === "production" || process.env.APP_ENV === "staging"
+  ? setInterval(() => {
+      console.log("Vérification des emails...");
+      fetchEmails().catch(console.error);
+    }, 200 * 500)
+  : console.log("Not in production mode, skipping email fetching");
 
 export const getReceivedMailsRoutes = new Elysia();
 

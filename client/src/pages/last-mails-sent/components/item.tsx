@@ -65,7 +65,7 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
                   </div>
                   <Row>
                     <Col md="10" xs="12" lg="10">
-                      <Text className="fr-mb-0">
+                      <Text>
                         Réponse de{" "}
                         <strong>
                           <i>{lastMailSent.selectedProfile}</i>
