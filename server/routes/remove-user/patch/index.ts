@@ -1,7 +1,7 @@
 import Elysia, { Static, t } from "elysia";
 import db from "../../../libs/mongo.js";
 import { deleteSchema } from "../../../schemas/get/deleteSchema.ts.js";
-import { editContributionSchema } from "../../../schemas/patch/editContributionSchema.js"
+import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema.js"
 import { errorSchema } from "../../../schemas/errors/errorSchema.js";
 
 type removeUserType = Static<typeof deleteSchema>;
