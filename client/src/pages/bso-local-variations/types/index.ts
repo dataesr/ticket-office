@@ -28,10 +28,10 @@ export interface VariationsSummaryProps {
 }
 
 export type VariationTags = {
-  file: "none" | "uploaded"
-  code: "none" | "staging" | "production"
-  index: "none" | "ongoing" | "failed" | "finalized"
-  notification: "none" | "ongoing" | "done"
+  file?: "none" | "uploaded"
+  code?: "none" | "staging" | "production"
+  index?: "none" | "ongoing" | "failed" | "finalized"
+  notification?: "none" | "ongoing" | "done"
 }
 
 export type EditModalProps = {
@@ -46,6 +46,6 @@ export type EditModalInputs = {
   structure?: { id?: string; name?: string }
   status?: string
   tags?: VariationTags
-  team: string[]
   comment?: string
+  team?: string
 }
