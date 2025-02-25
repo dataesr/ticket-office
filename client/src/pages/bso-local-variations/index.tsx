@@ -1,9 +1,7 @@
-import { useState } from "react"
 import { Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus"
 import ContributionData from "../../api/contribution-api/getData"
 import TopPaginationButtons from "../../components/pagination/top-buttons"
 import Selectors from "../../components/selectors"
-import VariationsSummary from "./components/variations-summary"
 import VariationItem from "./components/variation-item"
 import { ClipLoader } from "react-spinners"
 import { Variation } from "./types"
@@ -12,8 +10,11 @@ import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import useUrl from "./hooks/useUrl"
 import { useLocation } from "react-router-dom"
 import { buildURL } from "../../api/utils/buildURL"
+import ActionBar from "./components/actions-bar"
+import CheckboxList from "./components/checkbox-list"
+import { useVariationsContext, VariationsContext } from "./context"
 
-const BSOLocalVariations = () => {
+function BSOLocalVariationsPage() {
   const location = useLocation()
   const {
     currentSort,
@@ -26,14 +27,10 @@ const BSOLocalVariations = () => {
     handlePageChange,
     handleStatusChange,
   } = useUrl()
-  const [selectedVariationId, setSelectedVariationId] = useState<string | null>(null)
+  const { selectedId } = useVariationsContext()
 
   const url = buildURL(location, currentSort, currentStatus, currentQuery.join(" "), currentPage, null, null)
   const { data, isLoading, isError, refetch } = ContributionData(url)
-
-  const handleSelectVariation = (id: string) => {
-    setSelectedVariationId(id)
-  }
 
   const variations: Variation[] = data ? data.data : []
   const meta = data?.meta
@@ -56,7 +53,7 @@ const BSOLocalVariations = () => {
       </Container>
     )
 
-  const selectedVariation = variations?.find((variation) => variation?.id === selectedVariationId) || variations?.[0]
+  const selectedVariation = variations?.find((variation) => variation?.id === selectedId) || variations?.[0]
 
   return (
     <Container className="fr-my-5w">
@@ -77,19 +74,13 @@ const BSOLocalVariations = () => {
           />
         </Col>
       </Row>
+      <ActionBar />
       <Row>
         <Col md="4" xs="12">
-          <VariationsSummary variations={variations} onSelectedVariation={handleSelectVariation} />
+          <CheckboxList variations={variations} />
         </Col>
         <Col md="7" xs="12">
           {selectedVariation && <VariationItem key={selectedVariation.id} variation={selectedVariation} refetch={refetch} />}
-          <div className="fr-mt-10w">
-            {/* <StaffActions
-              data={fakeVariations.find(
-                (variation) => variation?.id === variation?.id
-              )}
-            /> */}
-          </div>
         </Col>
       </Row>
       <BottomPaginationButtons page={currentPage} maxPage={maxPage} setPage={handlePageChange} />
@@ -97,4 +88,10 @@ const BSOLocalVariations = () => {
   )
 }
 
-export default BSOLocalVariations
+export default function BSOLocalVariations() {
+  return (
+    <VariationsContext>
+      <BSOLocalVariationsPage />
+    </VariationsContext>
+  )
+}
