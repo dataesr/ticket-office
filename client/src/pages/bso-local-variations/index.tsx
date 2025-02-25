@@ -1,5 +1,4 @@
 import { Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus"
-import ContributionData from "../../api/contribution-api/getData"
 import TopPaginationButtons from "../../components/pagination/top-buttons"
 import Selectors from "../../components/selectors"
 import VariationItem from "./components/variation-item"
@@ -8,14 +7,11 @@ import { Variation } from "./types"
 import SearchSection from "../contact-contributionbyobject-page/components/search-section"
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import useUrl from "./hooks/useUrl"
-import { useLocation } from "react-router-dom"
-import { buildURL } from "../../api/utils/buildURL"
 import ActionBar from "./components/actions-bar"
 import CheckboxList from "./components/checkbox-list"
 import { useVariationsContext, VariationsContext } from "./context"
 
 function BSOLocalVariationsPage() {
-  const location = useLocation()
   const {
     currentSort,
     currentQuery,
@@ -23,14 +19,14 @@ function BSOLocalVariationsPage() {
     currentStatus,
     handleSortChange,
     handleQueryChange,
-    removeQueryItem,
     handlePageChange,
     handleStatusChange,
+    removeQueryItem,
   } = useUrl()
-  const { selectedId } = useVariationsContext()
-
-  const url = buildURL(location, currentSort, currentStatus, currentQuery.join(" "), currentPage, null, null)
-  const { data, isLoading, isError, refetch } = ContributionData(url)
+  const {
+    data: { data, isLoading, isError, refetch },
+    selectedId,
+  } = useVariationsContext()
 
   const variations: Variation[] = data ? data.data : []
   const meta = data?.meta

@@ -14,11 +14,11 @@ import {
 } from "@dataesr/dsfr-plus"
 import { toast } from "react-toastify"
 import ProfileModal from "../../../components/profil-modal"
-import VARIATION_TAGS from "../config/tags"
+import { VARIATION_TAGS } from "../config/tags"
 import { EditModalInputs, EditModalProps } from "../types"
 import useEdit from "../hooks/useEdit"
 
-const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refetch }) => {
+const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => {
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedProfile, setSelectedProfile] = useState(localStorage.getItem("selectedProfile"))
   const [inputs, setInputs] = useState<EditModalInputs>({})
@@ -30,6 +30,8 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
       inputs.team = selectedProfile
     }
   }, [selectedProfile])
+
+  const resetInputs = () => setInputs({})
 
   const handleInputChange = (key: string, value: string) => {
     setInputs((prevInputs) => ({
@@ -73,17 +75,21 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
       setShowProfileModal(true)
       return
     }
-    try {
-      const response = await useEdit(variation.id, inputs)
-      if (response.ok) {
-        refetch()
+
+    await useEdit(variation.id, inputs)
+      .then(() => {
         onClose()
         toast.success("Les modifications ont été enregistrées avec succès !")
-      }
-    } catch (error) {
-      console.error("Erreur lors de la soumission:", error)
-      toast.error("Une erreur est survenue lors de l'enregistrement")
-    }
+      })
+      .catch((error) => {
+        console.error("Une erreur est survenue lors de l'enregistrement: ", error.message)
+        toast.error("Une erreur est survenue lors de l'enregistrement")
+      })
+  }
+
+  const handleClose = () => {
+    resetInputs()
+    onClose()
   }
 
   return (
@@ -110,7 +116,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
               />
               <Container fluid style={{ display: "flex", width: "100%", alignItems: "center" }}>
                 <div style={{ flexGrow: 1 }}>
-                  <Button variant="secondary" onClick={onClose}>
+                  <Button variant="secondary" onClick={handleClose}>
                     Annuler
                   </Button>
                 </div>
@@ -146,7 +152,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                     <select
                       id="fileTagInput"
                       name="fileTag"
-                      value={inputs.tags?.file || "none"}
+                      value={inputs?.tags?.file || variation?.tags?.file || "none"}
                       onChange={(e) => handleTagChange("file", e.target.value)}
                       className="fr-select"
                     >
@@ -165,7 +171,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                     <select
                       id="codeTagInput"
                       name="codeTag"
-                      value={inputs.tags?.code || "none"}
+                      value={inputs?.tags?.code || variation?.tags?.code || "none"}
                       onChange={(e) => handleTagChange("code", e.target.value)}
                       className="fr-select"
                     >
@@ -185,7 +191,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                     <select
                       id="indexTagInput"
                       name="indexTag"
-                      value={inputs.tags?.index || "none"}
+                      value={inputs?.tags?.index || variation?.tags?.index || "none"}
                       onChange={(e) => handleTagChange("index", e.target.value)}
                       className="fr-select"
                     >
@@ -204,7 +210,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
                     <select
                       id="notificationTagInput"
                       name="notificationTag"
-                      value={inputs.tags?.notification || "none"}
+                      value={inputs?.tags?.notification || variation?.tags?.notification || "none"}
                       onChange={(e) => handleTagChange("notification", e.target.value)}
                       className="fr-select"
                     >
@@ -225,7 +231,7 @@ const EditModal: React.FC<EditModalProps> = ({ isOpen, variation, onClose, refet
               />
               <Container style={{ display: "flex", width: "100%", alignItems: "center" }}>
                 <div style={{ flexGrow: 1 }}>
-                  <Button variant="secondary" onClick={onClose}>
+                  <Button variant="secondary" onClick={handleClose}>
                     Annuler
                   </Button>
                 </div>
