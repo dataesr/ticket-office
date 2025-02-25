@@ -57,9 +57,6 @@ app
       },
     })
   )
-  .onError(({ code, error }) => {
-    return new Response(error.toString())
-  })
   .group("/api", (app) => {
     app.use(contactsRoutes)
     app.use(contributionObjectRoutes)
