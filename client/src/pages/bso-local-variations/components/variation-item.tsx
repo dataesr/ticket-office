@@ -10,13 +10,13 @@ import { tagGetColor, tagGetIcon } from "../config/tags"
 import DownloadFile from "../actions/download-file"
 import uploadFiles from "../actions/upload-files"
 import readCSV from "../_utils/read-csv"
-import { getCodeFromBSO } from "../_utils/get-code-from-bso"
 import { useVariationsContext } from "../context"
 import Emails from "./emails"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const {
     data: { refetch },
+    getCodeFromBSO,
   } = useVariationsContext()
   const [showModal, setShowModal] = useState(false)
   const [copiedText, setCopiedText] = useState<string | null>(null)

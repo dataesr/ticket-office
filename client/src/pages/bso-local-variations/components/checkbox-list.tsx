@@ -2,9 +2,11 @@ import { Badge, BadgeGroup, Button, Checkbox, Col, Container, Row, Text } from "
 import { Variation } from "../types"
 import { BadgeStatus, StatusLabel } from "../../../utils"
 import { useVariationsContext } from "../context"
+import { tagGetColor } from "../config/tags"
 
 const CheckboxItem = ({ variation }: { variation: Variation }) => {
-  const { checkedIds, checkId, setSelectedId } = useVariationsContext()
+  const { checkedIds, checkId, setSelectedId, getCodeFromBSO } = useVariationsContext()
+  const codeTag = getCodeFromBSO(variation.structure?.id)
 
   return (
     <Container fluid>
@@ -20,9 +22,19 @@ const CheckboxItem = ({ variation }: { variation: Variation }) => {
         <Col lg={11}>
           <button style={{ display: "block", width: "100%" }} onClick={() => setSelectedId(variation.id)}>
             <BadgeGroup className="fr-mt-1w">
-              <Badge size="sm" color={BadgeStatus({ status: variation?.status })} className="fr-mr-1w fr-mb-1w">
+              <Badge size="sm" color={BadgeStatus({ status: variation?.status })}>
                 {StatusLabel({ status: variation.status })}
               </Badge>
+              {variation.tags.file !== "none" && (
+                <Badge size="sm" noIcon color={tagGetColor("file", variation.tags.file)}>
+                  {variation.tags.file}
+                </Badge>
+              )}
+              {codeTag !== "none" && (
+                <Badge size="sm" noIcon color={tagGetColor("code", codeTag)}>
+                  {codeTag}
+                </Badge>
+              )}
             </BadgeGroup>
             <Text bold size="sm" className="fr-mb-2w" as="p" style={{ textAlign: "left" }}>
               <i>

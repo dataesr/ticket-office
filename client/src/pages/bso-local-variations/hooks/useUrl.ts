@@ -7,11 +7,11 @@ export default function useUrl() {
   const currentSort: string = searchParams.get("sort") || "DESC"
   const currentQuery: string[] = String(searchParams.get("query") || "").split(",")
   const currentPage: number = Number(searchParams.get("page") || "1")
-  const currentStatus: string = searchParams.get("status")
-  const currentFile: string = searchParams.get("file")
-  const currentCode: string = searchParams.get("code")
-  const currentIndex: string = searchParams.get("index")
-  const currentNotification: string = searchParams.get("notification")
+  const currentStatus: string = searchParams.get("status") || "choose"
+  const currentFile: string = searchParams.get("file") || "choose"
+  const currentCode: string = searchParams.get("code") || "choose"
+  const currentIndex: string = searchParams.get("index") || "choose"
+  const currentNotification: string = searchParams.get("notification") || "choose"
 
   const handleSortChange = useCallback(
     (sort: "ASC" | "DESC") => {

@@ -32,20 +32,16 @@ export default function FiltersBar() {
           />
         </Col>
         <Col className="fr-pr-1w">
-          <select
-            value={currentStatus || "choose"}
-            onChange={(e) => handleStatusChange(e.target.value)}
-            className="fr-select"
-          >
-            <option value={"choose"}>Status ?</option>
+          <select value={currentStatus} onChange={(e) => handleStatusChange(e.target.value)} className="fr-select">
+            <option value={"choose"}>Tous les status</option>
             <option value={"new"}>Nouveau</option>
             <option value={"ongoing"}>En cours</option>
             <option value={"treated"}>Traité</option>
           </select>
         </Col>
         <Col className="fr-pr-1w">
-          <select value={currentFile || "choose"} onChange={(e) => handleFileChange(e.target.value)} className="fr-select">
-            <option value={"choose"}>Fichier ?</option>
+          <select value={currentFile} onChange={(e) => handleFileChange(e.target.value)} className="fr-select">
+            <option value={"choose"}>Tous les fichiers</option>
             {Object.entries(VARIATION_TAGS.file).map(([key, { name }]) => (
               <option key={key} value={key}>
                 {name}
@@ -54,8 +50,8 @@ export default function FiltersBar() {
           </select>
         </Col>
         <Col className="fr-pr-1w">
-          <select value={currentCode || "choose"} onChange={(e) => handleCodeChange(e.target.value)} className="fr-select">
-            <option value={"choose"}>Code ?</option>
+          <select value={currentCode} onChange={(e) => handleCodeChange(e.target.value)} className="fr-select">
+            <option value={"choose"}>Toutes les config</option>
             {Object.entries(VARIATION_TAGS.code).map(([key, { name }]) => (
               <option key={key} value={key}>
                 {name}
@@ -64,8 +60,8 @@ export default function FiltersBar() {
           </select>
         </Col>
         <Col className="fr-pr-1w">
-          <select value={currentIndex || "choose"} onChange={(e) => handleIndexChange(e.target.value)} className="fr-select">
-            <option value={"choose"}>Index ?</option>
+          <select value={currentIndex} disabled onChange={(e) => handleIndexChange(e.target.value)} className="fr-select">
+            <option value={"choose"}>Tous les index</option>
             {Object.entries(VARIATION_TAGS.index).map(([key, { name }]) => (
               <option key={key} value={key}>
                 {name}
@@ -75,11 +71,11 @@ export default function FiltersBar() {
         </Col>
         <Col>
           <select
-            value={currentNotification || "choose"}
+            value={currentNotification}
             onChange={(e) => handleNotificationChange(e.target.value)}
             className="fr-select"
           >
-            <option value={"choose"}>Messages ?</option>
+            <option value={"choose"}>Tous les messages</option>
             {Object.entries(VARIATION_TAGS.notification).map(([key, { name }]) => (
               <option key={key} value={key}>
                 {name}
