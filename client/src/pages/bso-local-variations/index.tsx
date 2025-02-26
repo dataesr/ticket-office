@@ -1,28 +1,16 @@
 import { Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus"
-import TopPaginationButtons from "../../components/pagination/top-buttons"
-import Selectors from "../../components/selectors"
 import VariationItem from "./components/variation-item"
 import { ClipLoader } from "react-spinners"
 import { Variation } from "./types"
-import SearchSection from "../contact-contributionbyobject-page/components/search-section"
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import useUrl from "./hooks/useUrl"
 import CheckboxList from "./components/checkbox-list"
 import { useVariationsContext, VariationsContext } from "./context"
 import ActionBar from "./components/actions-bar"
+import FiltersBar from "./components/filters-bar"
 
 function BSOLocalVariationsPage() {
-  const {
-    currentSort,
-    currentQuery,
-    currentPage,
-    currentStatus,
-    handleSortChange,
-    handleQueryChange,
-    handlePageChange,
-    handleStatusChange,
-    removeQueryItem,
-  } = useUrl()
+  const { currentPage, handlePageChange } = useUrl()
   const {
     data: { data, isLoading, isError, refetch },
     checkedIds,
@@ -56,22 +44,7 @@ function BSOLocalVariationsPage() {
   return (
     <Container className="fr-my-5w">
       <Title>Demandes de déclinaisons locales</Title>
-      <Row gutters className="fr-mb-3w">
-        <Col md="8" xs="12">
-          <SearchSection query={currentQuery} handleSearch={handleQueryChange} handleRemoveQueryItem={removeQueryItem} />
-          <TopPaginationButtons meta={meta} page={currentPage} maxPage={maxPage} setPage={handlePageChange} />
-        </Col>
-        <Col offsetLg="1">
-          <Selectors
-            sort={currentSort}
-            status={currentStatus}
-            setSort={handleSortChange}
-            setStatus={handleStatusChange}
-            searchInMessage={null}
-            setSearchInMessage={null}
-          />
-        </Col>
-      </Row>
+      <FiltersBar />
       <Row>
         <Col md="4" xs="12">
           <CheckboxList variations={variations} />

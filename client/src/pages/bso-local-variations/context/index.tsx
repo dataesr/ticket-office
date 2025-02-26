@@ -12,7 +12,16 @@ export function useVariationsContext() {
 
 export function VariationsContext({ children }) {
   const location = useLocation()
-  const { currentSort, currentQuery, currentPage, currentStatus } = useUrl()
+  const {
+    currentSort,
+    currentQuery,
+    currentPage,
+    currentStatus,
+    currentFile,
+    currentCode,
+    currentIndex,
+    currentNotification,
+  } = useUrl()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [checkedIds, setCheckedIds] = useState<Array<string>>([])
 
@@ -22,8 +31,12 @@ export function VariationsContext({ children }) {
       : setCheckedIds([...checkedIds, id])
   }
   const checkAllIds = (ids: Array<string>) => setCheckedIds(ids)
-
-  const url = buildURL(location, currentSort, currentStatus, currentQuery.join(" "), currentPage, null, null)
+  const url = buildURL(location, currentSort, currentStatus, currentQuery.join(" "), currentPage, null, null, "20", {
+    file: currentFile,
+    code: currentCode,
+    index: currentIndex,
+    notification: currentNotification,
+  })
   const data = ContributionData(url)
 
   return (
