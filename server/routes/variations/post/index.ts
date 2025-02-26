@@ -21,7 +21,6 @@ postVariationRoute.post(
       status: "new",
       tags: {
         file: "none",
-        code: "none",
         index: "none",
         notification: "none",
       },
