@@ -154,7 +154,7 @@ const EditModal: React.FC<EditModalProps> = ({ variations, isOpen, onClose }) =>
                 </select>
               </div>
               <hr />
-              <Row gutters className="fr-mb-1v">
+              <Row gutters>
                 <Col md="6" xs="12">
                   <div className="fr-select-group">
                     <label htmlFor="fileTagInput" className="fr-label">
@@ -175,45 +175,8 @@ const EditModal: React.FC<EditModalProps> = ({ variations, isOpen, onClose }) =>
                     </select>
                   </div>
                   <br />
-                  <div className="fr-select-group">
-                    <label htmlFor="codeTagInput" className="fr-label">
-                      Code
-                    </label>
-                    <select
-                      id="codeTagInput"
-                      name="codeTag"
-                      value={inputs?.tags?.code || singleVariation?.tags?.code || "none"}
-                      onChange={(e) => handleTagChange("code", e.target.value)}
-                      className="fr-select"
-                    >
-                      {Object.entries(VARIATION_TAGS.code).map(([key, { name }]) => (
-                        <option key={key} value={key}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
                 </Col>
                 <Col md="6" xs="12">
-                  <div className="fr-select-group">
-                    <label htmlFor="indexTagInput" className="fr-label">
-                      Index
-                    </label>
-                    <select
-                      id="indexTagInput"
-                      name="indexTag"
-                      value={inputs?.tags?.index || singleVariation?.tags?.index || "none"}
-                      onChange={(e) => handleTagChange("index", e.target.value)}
-                      className="fr-select"
-                    >
-                      {Object.entries(VARIATION_TAGS.index).map(([key, { name }]) => (
-                        <option key={key} value={key}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <br />
                   <div className="fr-select-group">
                     <label htmlFor="notificationTagInput" className="fr-label">
                       Messages

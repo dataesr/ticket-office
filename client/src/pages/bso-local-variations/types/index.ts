@@ -29,7 +29,6 @@ export interface VariationsSummaryProps {
 
 export type VariationTags = {
   file?: string
-  code?: string
   index?: string
   notification?: string
 }

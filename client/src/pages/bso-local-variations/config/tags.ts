@@ -5,51 +5,51 @@ type VARIATION_TAGS_TYPE = { [tag: string]: { [key: string]: { name: string; col
 export const VARIATION_TAGS: VARIATION_TAGS_TYPE = {
   file: {
     none: {
-      name: "Aucune action réalisée",
+      name: "Fichier non importé",
       color: "beige-gris-galet",
       icon: "close-line",
     },
     uploaded: {
-      name: "Importé sur OVH",
+      name: "Fichier importé sur OVH",
       color: "success",
       icon: "success-line",
     },
   },
   code: {
     none: {
-      name: "Aucune action réalisée",
+      name: "Config non présente",
       color: "beige-gris-galet",
       icon: "close-line",
     },
     staging: {
-      name: "Disponible en staging",
+      name: "Config en staging",
       color: "yellow-tournesol",
       icon: "refresh-line",
     },
     production: {
-      name: "Disponible en production",
+      name: "Config en production",
       color: "success",
       icon: "success-line",
     },
   },
   index: {
     none: {
-      name: "Aucune action réalisée",
+      name: "Index non créé",
       color: "beige-gris-galet",
       icon: "close-line",
     },
     ongoing: {
-      name: "Création en cours",
+      name: "Index en création",
       color: "yellow-tournesol",
       icon: "refresh-line",
     },
     failed: {
-      name: "Erreur lors de la création",
+      name: "Index en erreur",
       color: "error",
       icon: "error",
     },
     finalized: {
-      name: "Création finalisée",
+      name: "Index finalisé",
       color: "success",
       icon: "success",
     },

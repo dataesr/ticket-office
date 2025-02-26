@@ -8,16 +8,27 @@ import CheckboxList from "./components/checkbox-list"
 import { useVariationsContext, VariationsContext } from "./context"
 import ActionBar from "./components/actions-bar"
 import FiltersBar from "./components/filters-bar"
+import { useCallback } from "react"
 
 function BSOLocalVariationsPage() {
-  const { currentPage, handlePageChange } = useUrl()
+  const { currentPage, currentCode, handlePageChange } = useUrl()
   const {
     data: { data, isLoading, isError, refetch },
     checkedIds,
     selectedId,
+    getCodeFromBSO,
   } = useVariationsContext()
 
-  const variations: Variation[] = data ? data.data : []
+  const filterVariations = useCallback(
+    ({ structure: { id } }: Variation) => {
+      if (currentCode === "choose") return true
+      if (currentCode === getCodeFromBSO(id)) return true
+      return false
+    },
+    [currentCode]
+  )
+
+  const variations: Variation[] = data?.data?.filter(filterVariations) || []
   const meta = data?.meta
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1
 
@@ -38,7 +49,6 @@ function BSOLocalVariationsPage() {
       </Container>
     )
 
-  console.log("checkedIds", checkedIds)
   const selectedVariation = variations?.find((variation) => variation?.id === selectedId) || variations?.[0]
 
   return (
