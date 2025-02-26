@@ -48,6 +48,7 @@ export default function CheckboxList({ variations }: { variations: Array<Variati
           className="fr-ml-4w"
           size="sm"
           variant="tertiary"
+          disabled={total === 0}
           onClick={() => checkAllIds(checkedIds.length === total ? [] : variations.map((variation) => variation.id))}
         >
           {checkedIds.length === total ? "Tout déselectionner" : "Tout sélectionner"}

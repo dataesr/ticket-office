@@ -7,7 +7,11 @@ export default function useUrl() {
   const currentSort: string = searchParams.get("sort") || "DESC"
   const currentQuery: string[] = String(searchParams.get("query") || "").split(",")
   const currentPage: number = Number(searchParams.get("page") || "1")
-  const currentStatus: string = searchParams.get("status") || "choose"
+  const currentStatus: string = searchParams.get("status")
+  const currentFile: string = searchParams.get("file")
+  const currentCode: string = searchParams.get("code")
+  const currentIndex: string = searchParams.get("index")
+  const currentNotification: string = searchParams.get("notification")
 
   const handleSortChange = useCallback(
     (sort: "ASC" | "DESC") => {
@@ -51,6 +55,38 @@ export default function useUrl() {
     [searchParams, setSearchParams]
   )
 
+  const handleFileChange = useCallback(
+    (file: string) => {
+      searchParams.set("file", file)
+      setSearchParams(searchParams)
+    },
+    [searchParams, setSearchParams]
+  )
+
+  const handleCodeChange = useCallback(
+    (code: string) => {
+      searchParams.set("code", code)
+      setSearchParams(searchParams)
+    },
+    [searchParams, setSearchParams]
+  )
+
+  const handleIndexChange = useCallback(
+    (index: string) => {
+      searchParams.set("index", index)
+      setSearchParams(searchParams)
+    },
+    [searchParams, setSearchParams]
+  )
+
+  const handleNotificationChange = useCallback(
+    (notification: string) => {
+      searchParams.set("notification", notification)
+      setSearchParams(searchParams)
+    },
+    [searchParams, setSearchParams]
+  )
+
   const values = useMemo(() => {
     return {
       currentSort,
@@ -62,6 +98,14 @@ export default function useUrl() {
       handlePageChange,
       currentStatus,
       handleStatusChange,
+      currentFile,
+      handleFileChange,
+      currentCode,
+      handleCodeChange,
+      currentIndex,
+      handleIndexChange,
+      currentNotification,
+      handleNotificationChange,
     }
   }, [
     currentSort,
@@ -73,6 +117,14 @@ export default function useUrl() {
     handlePageChange,
     currentStatus,
     handleStatusChange,
+    currentFile,
+    handleFileChange,
+    currentCode,
+    handleCodeChange,
+    currentIndex,
+    handleIndexChange,
+    currentNotification,
+    handleNotificationChange,
   ])
   return values
 }

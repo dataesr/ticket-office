@@ -28,10 +28,10 @@ export interface VariationsSummaryProps {
 }
 
 export type VariationTags = {
-  file?: "none" | "uploaded"
-  code?: "none" | "staging" | "production"
-  index?: "none" | "ongoing" | "failed" | "finalized"
-  notification?: "none" | "ongoing" | "done"
+  file?: string
+  code?: string
+  index?: string
+  notification?: string
 }
 
 export type EditModalProps = {
