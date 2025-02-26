@@ -20,13 +20,14 @@ import useEdit from "../hooks/useEdit"
 import { useVariationsContext } from "../context"
 import getStatusFromTags from "../_utils/get-status-from-tags"
 
-const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => {
+const EditModal: React.FC<EditModalProps> = ({ variations, isOpen, onClose }) => {
   const {
     data: { refetch },
   } = useVariationsContext()
   const [showProfileModal, setShowProfileModal] = useState(false)
   const [selectedProfile, setSelectedProfile] = useState(localStorage.getItem("selectedProfile"))
   const [inputs, setInputs] = useState<EditModalInputs>({})
+  const singleVariation = variations?.length === 1 ? variations[0] : null
 
   useEffect(() => {
     if (!selectedProfile) {
@@ -81,9 +82,9 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
       return
     }
 
-    if (inputs?.tags) inputs.status = getStatusFromTags({ ...variation?.tags, ...inputs.tags })
+    if (singleVariation && inputs?.tags) inputs.status = getStatusFromTags({ ...singleVariation?.tags, ...inputs.tags })
 
-    await useEdit(variation.id, inputs)
+    await useEdit(singleVariation ? singleVariation.id : variations.map((variation) => variation.id), inputs)
       .then(() => {
         refetch()
         onClose()
@@ -106,33 +107,35 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
         <ModalTitle>Éditer la demande</ModalTitle>
         <ModalContent>
           <Tabs>
-            <Tab label="Infos" icon="user-line">
-              <TextInput
-                label="Email de contact"
-                defaultValue={variation.contact.email}
-                onChange={(e) => handleContactChange("email", e.target.value)}
-              />
-              <TextInput
-                label="Nom de la structure"
-                defaultValue={variation.structure.name}
-                onChange={(e) => handleStructureChange("name", e.target.value)}
-              />
-              <TextInput
-                label="ID de la structure"
-                defaultValue={variation.structure?.id}
-                onChange={(e) => handleStructureChange("id", e.target.value)}
-              />
-              <Container fluid style={{ display: "flex", width: "100%", alignItems: "center" }}>
-                <div style={{ flexGrow: 1 }}>
-                  <Button variant="secondary" onClick={handleClose}>
-                    Annuler
+            {singleVariation && (
+              <Tab label="Infos" icon="user-line">
+                <TextInput
+                  label="Email de contact"
+                  defaultValue={singleVariation.contact.email}
+                  onChange={(e) => handleContactChange("email", e.target.value)}
+                />
+                <TextInput
+                  label="Nom de la structure"
+                  defaultValue={singleVariation.structure.name}
+                  onChange={(e) => handleStructureChange("name", e.target.value)}
+                />
+                <TextInput
+                  label="ID de la structure"
+                  defaultValue={singleVariation.structure?.id}
+                  onChange={(e) => handleStructureChange("id", e.target.value)}
+                />
+                <Container fluid style={{ display: "flex", width: "100%", alignItems: "center" }}>
+                  <div style={{ flexGrow: 1 }}>
+                    <Button variant="secondary" onClick={handleClose}>
+                      Annuler
+                    </Button>
+                  </div>
+                  <Button variant="primary" onClick={handleSubmit}>
+                    Enregistrer
                   </Button>
-                </div>
-                <Button variant="primary" onClick={handleSubmit}>
-                  Enregistrer
-                </Button>
-              </Container>
-            </Tab>
+                </Container>
+              </Tab>
+            )}
             <Tab label="Status" icon="checkbox-line">
               <div className="fr-select-group">
                 <label htmlFor="statusInput" className="fr-label">
@@ -141,7 +144,7 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
                 <select
                   id="statusInput"
                   name="status"
-                  value={inputs?.status || variation.status || "none"}
+                  value={inputs?.status || singleVariation?.status || "none"}
                   onChange={(e) => handleInputChange("status", e.target.value)}
                   className="fr-select"
                 >
@@ -160,7 +163,7 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
                     <select
                       id="fileTagInput"
                       name="fileTag"
-                      value={inputs?.tags?.file || variation?.tags?.file || "none"}
+                      value={inputs?.tags?.file || singleVariation?.tags?.file || "none"}
                       onChange={(e) => handleTagChange("file", e.target.value)}
                       className="fr-select"
                     >
@@ -179,7 +182,7 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
                     <select
                       id="codeTagInput"
                       name="codeTag"
-                      value={inputs?.tags?.code || variation?.tags?.code || "none"}
+                      value={inputs?.tags?.code || singleVariation?.tags?.code || "none"}
                       onChange={(e) => handleTagChange("code", e.target.value)}
                       className="fr-select"
                     >
@@ -199,7 +202,7 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
                     <select
                       id="indexTagInput"
                       name="indexTag"
-                      value={inputs?.tags?.index || variation?.tags?.index || "none"}
+                      value={inputs?.tags?.index || singleVariation?.tags?.index || "none"}
                       onChange={(e) => handleTagChange("index", e.target.value)}
                       className="fr-select"
                     >
@@ -218,7 +221,7 @@ const EditModal: React.FC<EditModalProps> = ({ variation, isOpen, onClose }) => 
                     <select
                       id="notificationTagInput"
                       name="notificationTag"
-                      value={inputs?.tags?.notification || variation?.tags?.notification || "none"}
+                      value={inputs?.tags?.notification || singleVariation?.tags?.notification || "none"}
                       onChange={(e) => handleTagChange("notification", e.target.value)}
                       className="fr-select"
                     >

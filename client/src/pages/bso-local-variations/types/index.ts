@@ -37,7 +37,7 @@ export type VariationTags = {
 export type EditModalProps = {
   isOpen: boolean
   onClose: () => void
-  variation: Variation
+  variations: Array<Variation>
 }
 
 export type EditModalInputs = {
