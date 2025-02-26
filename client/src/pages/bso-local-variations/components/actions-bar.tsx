@@ -2,8 +2,11 @@ import { Button, ButtonGroup, Container, Notice, Text } from "@dataesr/dsfr-plus
 import uploadFiles from "../actions/upload-files"
 import { useVariationsContext } from "../context"
 import { Variation } from "../types"
+import { useState } from "react"
+import EditModal from "./edit-modal"
 
 export default function ActionBar({ variations }: { variations: Array<Variation> }) {
+  const [showModal, setShowModal] = useState<boolean>(false)
   const {
     data: { refetch },
   } = useVariationsContext()
@@ -27,17 +30,22 @@ export default function ActionBar({ variations }: { variations: Array<Variation>
           {noStructureIds.map((variation) => `- ${variation.structure.name} (${variation.id}) `)}
         </Notice>
       )}
-      <ButtonGroup isInlineFrom="sm">
+      <EditModal variations={variations} isOpen={showModal} onClose={() => setShowModal(false)} />
+      <ButtonGroup style={{ width: "60%" }}>
+        <Button icon="edit-line" onClick={() => setShowModal(true)}>
+          Editer les demandes
+        </Button>
         <Button
+          variant="secondary"
           icon="server-line"
           onClick={() => {
             uploadFiles(variations)
             refetch()
           }}
         >
-          Envoyer les fichiers sur OVH
+          Charger les fichiers sur OVH
         </Button>
-        <Button icon="article-line" disabled>
+        <Button icon="article-line" variant="secondary" disabled>
           Relancer un index BSO
         </Button>
       </ButtonGroup>

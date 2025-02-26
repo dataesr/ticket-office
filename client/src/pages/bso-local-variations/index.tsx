@@ -42,9 +42,7 @@ function BSOLocalVariationsPage() {
   const selectedVariation = variations?.find((variation) => variation?.id === selectedId) || variations?.[0]
 
   return (
-    <Container className="fr-my-5w">
-      <Title>Demandes de déclinaisons locales</Title>
-      <FiltersBar />
+    <Container fluid>
       <Row>
         <Col md="4" xs="12">
           <CheckboxList variations={variations} />
@@ -66,7 +64,11 @@ function BSOLocalVariationsPage() {
 export default function BSOLocalVariations() {
   return (
     <VariationsContext>
-      <BSOLocalVariationsPage />
+      <Container className="fr-my-5w">
+        <Title>Demandes de déclinaisons locales</Title>
+        <FiltersBar />
+        <BSOLocalVariationsPage />
+      </Container>
     </VariationsContext>
   )
 }

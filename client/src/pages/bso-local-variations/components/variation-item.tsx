@@ -12,6 +12,7 @@ import uploadFiles from "../actions/upload-files"
 import readCSV from "../_utils/read-csv"
 import { getCodeFromBSO } from "../_utils/get-code-from-bso"
 import { useVariationsContext } from "../context"
+import Emails from "./emails"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const {
@@ -46,11 +47,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
           >
             File: {variation.tags.file || "none"}
           </Badge>
-          <Badge
-            size="sm"
-            color={tagGetColor("code", variation?.tags?.code)}
-            icon={tagGetIcon("code", variation?.tags?.code)}
-          >
+          <Badge size="sm" color={tagGetColor("code", codeTag)} icon={tagGetIcon("code", codeTag)}>
             Code: {codeTag}
           </Badge>
           <Badge
@@ -157,20 +154,21 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
           Télécharger le fichier
         </Button>
       </Container>
-      <EditModal variation={variation} isOpen={showModal} onClose={() => setShowModal(false)} />
+      <EditModal variations={[variation]} isOpen={showModal} onClose={() => setShowModal(false)} />
       <ButtonGroup isInlineFrom="md" className="fr-mb-5w fr-mt-3w">
         <Button icon="edit-line" onClick={() => setShowModal(true)}>
           Éditer la demande
         </Button>
         <Button
-          variant="tertiary"
-          icon="upload-line"
+          variant="secondary"
+          icon="server-line"
           disabled={!variation.structure.id}
           onClick={() => uploadFiles([variation]).then(() => refetch())}
         >
-          Uploader le fichier
+          Charger le fichier sur OVH
         </Button>
       </ButtonGroup>
+      <Emails />
     </>
   )
 }
