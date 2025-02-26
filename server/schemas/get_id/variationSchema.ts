@@ -13,8 +13,7 @@ export const variationSchema = t.Object(
     }),
     tags: t.Object({
       file: t.Enum({ none: "none", uploaded: "uploaded" }),
-      code: t.Enum({ none: "none", staging: "staging", production: "production" }),
-      index: t.Enum({ none: "none", ongoing: "ongoing", error: "error", finalized: "finalized" }),
+      index: t.String(),
       notification: t.Enum({ none: "none", ongoing: "ongoing", done: "done" }),
     }),
     csv: t.String(),
