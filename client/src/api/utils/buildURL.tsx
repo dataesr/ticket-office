@@ -1,3 +1,5 @@
+import { VariationTags } from "../../pages/bso-local-variations/types";
+
 export const buildURL = (
   location: any,
   sort: string,
@@ -6,7 +8,8 @@ export const buildURL = (
   page: number,
   searchInMessages: boolean = true,
   fromApplication?: string,
-  max_results: string = "20"
+  max_results: string = "20",
+  tags?: VariationTags
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
@@ -59,6 +62,13 @@ export const buildURL = (
     : "";
   if (["new", "ongoing", "treated"].includes(status)) {
     where.status = status;
+  }
+
+  if(baseUrl === "variations" && tags) {
+    if(["none", "uploaded"].includes(tags?.file)) where["tags.file"] = tags.file
+    if(["none", "staging", "production"].includes(tags?.code)) where["tags.code"] = tags.code
+    if(["none", "ongoing", "failed", "finalized"].includes(tags?.index)) where["tags.index"] = tags.index
+    if(["none", "ongoing", "done"].includes(tags?.notification)) where["tags.notification"] = tags.notification
   }
 
   const whereQuery =
