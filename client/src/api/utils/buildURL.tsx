@@ -65,9 +65,7 @@ export const buildURL = (
   }
 
   if(baseUrl === "variations" && tags) {
-    if(["none", "uploaded"].includes(tags?.file)) where["tags.file"] = tags.file
-    if(["none", "staging", "production"].includes(tags?.code)) where["tags.code"] = tags.code
-    if(["none", "ongoing", "failed", "finalized"].includes(tags?.index)) where["tags.index"] = tags.index
+    if (["none", "uploaded"].includes(tags?.file)) where["tags.file"] = tags.file
     if(["none", "ongoing", "done"].includes(tags?.notification)) where["tags.notification"] = tags.notification
   }
 
