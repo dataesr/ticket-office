@@ -5,12 +5,13 @@ const SearchSection: React.FC<SearchSectionProps> = ({
   query,
   handleSearch,
   handleRemoveQueryItem,
+  isLarge=true
 }) => (
   <>
     <SearchBar
       className="fr-mb-1w"
       onSearch={(value) => handleSearch(value || "")}
-      isLarge
+      isLarge={isLarge}
       buttonLabel="Rechercher"
       placeholder="Rechercher par nom, ID ou mot clé"
     />

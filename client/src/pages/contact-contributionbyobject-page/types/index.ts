@@ -42,6 +42,7 @@ export interface SearchSectionProps {
   query: string[];
   handleSearch: (value: string) => void;
   handleRemoveQueryItem: (item: string) => void;
+  isLarge?: boolean
 }
 
 export interface ContributionDetailsProps {
