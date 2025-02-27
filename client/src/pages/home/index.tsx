@@ -1,60 +1,52 @@
 import { Col, Container, Title } from "@dataesr/dsfr-plus";
 import SearchSection from "../contact-contributionbyobject-page/components/search-section";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
 import AllContributions from "./components/item";
 import { ClipLoader } from "react-spinners";
 
 const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
 const prodUrl = import.meta.env.VITE_BASE_API_URL;
-
 const url = isDevelopment ? "http://localhost:3000/api" : `${prodUrl}/api`;
+
 const Home = () => {
   const [query, setQuery] = useState<string[]>([]);
   const [highlightedQuery, setHighlightedQuery] = useState<string>("");
-  const [filteredData, setFilteredData] = useState<any[]>([]);
+
   const { data, isLoading, isError } = ContributionAllDatas(url);
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      const allItems = data.flatMap((item) => item.data || []);
-      const combinedQuery = highlightedQuery || query.join(" ");
+  const getFilteredData = () => {
+    if (!data || data.length === 0) return [];
 
-      if (combinedQuery.trim() !== "") {
-        const filtered = allItems.filter((item) => {
-          return (
+    const allItems = data.flatMap((item) => item.data || []);
+    const combinedQuery = highlightedQuery || query.join(" ");
+
+    if (combinedQuery.trim() !== "") {
+      return allItems
+        .filter(
+          (item) =>
             item.name?.toLowerCase().includes(combinedQuery.toLowerCase()) ||
             item.email?.toLowerCase().includes(combinedQuery.toLowerCase()) ||
             item.message?.toLowerCase().includes(combinedQuery.toLowerCase())
-          );
-        });
-
-        const sortedFiltered = filtered.sort((a, b) => {
-          return (
+        )
+        .sort(
+          (a, b) =>
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
-        });
-
-        setFilteredData(sortedFiltered);
-      } else {
-        const twentyFourHoursAgo = new Date();
-        twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
-
-        const recentContributions = allItems.filter((item) => {
-          const createdAt = new Date(item.created_at);
-          return createdAt >= twentyFourHoursAgo;
-        });
-
-        const sortedRecentContributions = recentContributions.sort((a, b) => {
-          return (
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
-        });
-
-        setFilteredData(sortedRecentContributions);
-      }
+        );
     }
-  }, [highlightedQuery, query, data]);
+
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
+    return allItems
+      .filter((item) => new Date(item.created_at) >= twentyFourHoursAgo)
+      .sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      );
+  };
+
+  const filteredData = getFilteredData();
 
   const handleSearch = (value: string) => {
     const trimmedValue = value.trim();
@@ -64,7 +56,6 @@ const Home = () => {
     } else {
       setQuery([]);
       setHighlightedQuery("");
-      setFilteredData([]);
     }
   };
 
@@ -72,7 +63,6 @@ const Home = () => {
     setQuery(query.filter((q) => q !== item));
     if (item === highlightedQuery) {
       setHighlightedQuery("");
-      setFilteredData([]);
     }
   };
 
@@ -89,20 +79,18 @@ const Home = () => {
         handleSearch={handleSearch}
         handleRemoveQueryItem={handleRemoveQueryItem}
       />
-      {filteredData.length > 0 ? (
-        <AllContributions data={filteredData} query={highlightedQuery} />
-      ) : (
-        query.length > 0 && (
-          <p>Aucun résultat correspondant à votre recherche.</p>
-        )
-      )}
 
-      {isLoading && (
+      {isLoading ? (
         <div className="loading-container">
           <ClipLoader color="#123abc" size={50} />
         </div>
-      )}
-      {isError && <p>Oops...</p>}
+      ) : isError ? (
+        <p>Oops... Une erreur est survenue.</p>
+      ) : filteredData.length > 0 ? (
+        <AllContributions data={filteredData} query={highlightedQuery} />
+      ) : query.length > 0 ? (
+        <p>Aucun résultat correspondant à votre recherche.</p>
+      ) : null}
     </Container>
   );
 };

@@ -59,6 +59,7 @@ getRemoveUserRoutes.get(
       tags: deletation.tags || [],
       threads: deletation.threads || [],
       extra: deletation.extra || {},
+      contributionType: "remove-user",
     }));
 
     return {

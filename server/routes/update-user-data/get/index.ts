@@ -59,6 +59,7 @@ getUpdateUserDataRoutes.get(
       tags: contrib.tags || [],
       threads: contrib.threads || [],
       extra: contrib.extra || {},
+      contributionType: "update-user-data",
     }));
 
     return {

@@ -8,8 +8,149 @@ import {
   typeIcon,
   TypeLabel,
 } from "../../../utils";
-import { AllContributionsProps } from "../../../types";
+import { AllContributionsProps, Contribution } from "../../../types";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
+
+const FormattedDate = ({ dateString }: { dateString: string }) => {
+  const date = new Date(dateString);
+  const formattedDate = date.toLocaleDateString("fr-FR");
+  const formattedTime = date.toLocaleTimeString("fr-FR", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
+  return (
+    <Text size="sm">
+      <i>
+        Date de la contribution : {formattedDate} à {formattedTime}
+      </i>
+    </Text>
+  );
+};
+
+const ContributionBadges = ({
+  contribution,
+}: {
+  contribution: Contribution;
+}) => {
+  let badgeContent = "Contact";
+
+  if (
+    contribution.contributionType === "contribute_production" ||
+    contribution.productions?.length > 0
+  ) {
+    badgeContent = "Lier des publications";
+  } else if (
+    contribution.contributionType === "contribute" ||
+    (contribution.objectId && !contribution.productions)
+  ) {
+    badgeContent = "Contribution par objet";
+  } else if (contribution.contributionType === "remove-user") {
+    badgeContent = "Suppression de compte";
+  } else if (contribution.contributionType === "update-user-data") {
+    badgeContent = "Mise à jour de données";
+  }
+
+  const isFromScanR =
+    contribution.fromApplication === "scanr" ||
+    [
+      "remove-user",
+      "contact",
+      "update-user-data",
+      "contribute-object",
+      "contribute_production",
+    ].includes(contribution.contributionType || "");
+
+  return (
+    <div>
+      {contribution?.objectType && (
+        <Badge
+          size="sm"
+          icon={typeIcon({ icon: contribution.objectType })}
+          color={BadgeColor({ type: contribution.objectType })}
+          className="fr-mr-1w fr-mt-1w"
+        >
+          {TypeLabel({ type: contribution.objectType })}
+        </Badge>
+      )}
+
+      {isFromScanR && (
+        <Badge size="sm" className="fr-mr-1w fr-mb-1w" color="blue-ecume">
+          scanR
+        </Badge>
+      )}
+
+      <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
+        {badgeContent}
+      </Badge>
+
+      {contribution.fromApplication &&
+        contribution.fromApplication !== "scanr" && (
+          <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
+            {contribution.fromApplication}
+          </Badge>
+        )}
+
+      <Badge
+        size="sm"
+        color={BadgeStatus({ status: contribution?.status })}
+        className="fr-mr-1w fr-mb-1w"
+      >
+        {StatusLabel({ status: contribution.status })}
+      </Badge>
+    </div>
+  );
+};
+
+const ContributionItem = ({
+  contribution,
+  index,
+}: {
+  contribution: Contribution;
+  index: number;
+}) => {
+  const link = generateLinkFromAllDatas(
+    contribution.collection || contribution.collectionName,
+    contribution.fromApplication,
+    contribution.id,
+    contribution.objectId,
+    contribution.productions,
+    contribution.message,
+    contribution.contributionType
+  );
+
+  return (
+    <Row gutters key={index}>
+      <Link
+        href={link}
+        rel="noopener noreferrer"
+        className="contribution-content"
+      >
+        <Col lg="12" md="10" sm="12">
+          <ContributionBadges contribution={contribution} />
+
+          <div>
+            <Text className="fr-mb-0">
+              Contribution de{" "}
+              <i>
+                {contribution?.name || "Anonyme"} -{" "}
+                {contribution?.email || "Pas d'email"}
+              </i>
+            </Text>
+
+            <FormattedDate dateString={contribution.created_at} />
+
+            {contribution?.message && (
+              <Text size="sm">
+                <MarkdownRenderer content={contribution.message} />
+              </Text>
+            )}
+          </div>
+        </Col>
+      </Link>
+    </Row>
+  );
+};
 
 const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
   data,
@@ -19,106 +160,13 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
       {data.length === 0 ? (
         <p>Pas de résultat</p>
       ) : (
-        data.map((contribution, index) => {
-          const link = generateLinkFromAllDatas(
-            contribution.collectionName,
-            contribution.fromApplication,
-            contribution.id,
-            contribution.objectId,
-            contribution.productions,
-            contribution.message
-          );
-          const creationDate = new Date(contribution.created_at);
-          const formattedDate = creationDate.toLocaleDateString("fr-FR");
-          const formattedTime = creationDate.toLocaleTimeString("fr-FR", {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-
-          let badgeContent = "";
-          if (contribution.productions?.length > 0) {
-            badgeContent = "Lier des publications";
-          } else if (contribution.objectId && !contribution.productions) {
-            badgeContent = "Contribution par objet";
-          } else badgeContent = "Contact";
-
-          return (
-            <Row gutters key={index}>
-              <Link
-                href={link}
-                rel="noopener noreferrer"
-                className="contribution-content"
-              >
-                <Col lg="12" md="10" sm="12">
-                  <div>
-                    {contribution?.objectType && (
-                      <Badge
-                        size="sm"
-                        icon={typeIcon({ icon: contribution.objectType })}
-                        color={BadgeColor({ type: contribution.objectType })}
-                        className="fr-mr-1w fr-mt-1w"
-                      >
-                        {TypeLabel({ type: contribution.objectType })}
-                      </Badge>
-                    )}
-                    {(badgeContent === "Lier des publications" ||
-                      badgeContent === "Contribution par objet") && (
-                      <Badge
-                        size="sm"
-                        className="fr-mr-1w fr-mb-1w"
-                        color="blue-ecume"
-                      >
-                        scanR
-                      </Badge>
-                    )}
-                    {badgeContent && (
-                      <Badge
-                        size="sm"
-                        color="blue-ecume"
-                        className="fr-mr-1w fr-mb-1w"
-                      >
-                        {badgeContent}
-                      </Badge>
-                    )}
-                    {contribution.fromApplication && (
-                      <Badge
-                        size="sm"
-                        color="blue-ecume"
-                        className="fr-mr-1w fr-mb-1w"
-                      >
-                        {contribution.fromApplication}
-                      </Badge>
-                    )}
-                    <Badge
-                      size="sm"
-                      color={BadgeStatus({ status: contribution?.status })}
-                      className="fr-mr-1w fr-mb-1w"
-                    >
-                      {StatusLabel({ status: contribution.status })}
-                    </Badge>
-                  </div>
-                  <div>
-                    <Text className="fr-mb-0 ">
-                      Contribution de{" "}
-                      <i>
-                        {contribution?.name} - {contribution?.email}
-                      </i>
-                    </Text>
-                    <Text size="sm">
-                      <i>
-                        Date de la contribution : {formattedDate} à{" "}
-                        {formattedTime}
-                      </i>
-                    </Text>
-                    <Text size="sm">
-                      <MarkdownRenderer content={contribution?.message} />
-                    </Text>
-                  </div>
-                </Col>
-              </Link>
-            </Row>
-          );
-        })
+        data.map((contribution, index) => (
+          <ContributionItem
+            key={contribution.id || index}
+            contribution={contribution}
+            index={index}
+          />
+        ))
       )}
     </Container>
   );
