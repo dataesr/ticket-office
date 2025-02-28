@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import {
   Col,
   Container,
@@ -116,13 +116,9 @@ const ContributionPage: React.FC = () => {
     return nameMatches || idMatches;
   });
 
-  const allProductionIds = useMemo(() => {
-    return filteredContributions
-      .flatMap((contribution) =>
-        contribution.productions.map((prod) => prod.id)
-      )
-      .filter(Boolean);
-  }, [filteredContributions]);
+  const allProductionIds = filteredContributions
+    .flatMap((contribution) => contribution.productions.map((prod) => prod.id))
+    .filter(Boolean);
 
   const {
     authorsData,

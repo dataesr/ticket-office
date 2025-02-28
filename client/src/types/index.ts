@@ -111,6 +111,9 @@ export interface ProfileModalProps {
 }
 
 export interface EmailItem {
+  selectedProfile: any;
+  map(arg0: (email: any) => any): Iterable<unknown>;
+  filter(arg0: (email: any) => boolean): unknown;
   _id: string;
   from: { name: string; address: string }[];
   subject: string;
