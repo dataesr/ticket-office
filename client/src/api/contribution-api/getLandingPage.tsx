@@ -1,38 +1,66 @@
 import { useQuery } from "@tanstack/react-query";
 import { postHeaders } from "../../config/api";
-import { Publication } from "../../types";
 
-const LandingPage = (id: string) => {
-  const fetchContributions = async (): Promise<Publication> => {
-    const response = await fetch(
-      "https://scanr.enseignementsup-recherche.gouv.fr/api/scanr-publications/_search",
-      {
-        method: "POST",
-        headers: postHeaders,
-        body: JSON.stringify({
-          _source: ["landingPage"],
-          query: {
-            match: { id: id },
-          },
-        }),
+/**
+ * Hook pour récupérer plusieurs landing pages par IDs
+ */
+export const useLandingPages = (publicationIds: string[] | string[][]) => {
+  // Aplatir et filtrer les IDs
+  const ids = Array.isArray(publicationIds)
+    ? (Array.isArray(publicationIds[0])
+        ? publicationIds.flat()
+        : publicationIds
+      ).filter(Boolean)
+    : [];
+
+  const { data, isLoading, isError } = useQuery(
+    ["landingPages", ids.join(",")],
+    async () => {
+      if (ids.length === 0) {
+        return { hits: { hits: [] } };
       }
-    );
 
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+      const response = await fetch(
+        "https://scanr.enseignementsup-recherche.gouv.fr/api/scanr-publications/_search",
+        {
+          method: "POST",
+          headers: postHeaders,
+          body: JSON.stringify({
+            size: Math.min(10000, ids.length),
+            _source: ["landingPage", "id"],
+            query: {
+              terms: { "id.keyword": ids },
+            },
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erreur réseau");
+      }
+
+      return response.json();
+    },
+    {
+      enabled: ids.length > 0,
     }
-
-    return response.json();
-  };
-
-  const { data, error, isLoading } = useQuery<Publication>(
-    ["contributions", id],
-    fetchContributions
   );
 
-  const landingPage = (data as any)?.hits?.hits?.[0]?._source.landingPage;
+  const landingPages = {};
 
-  return { landingPage, isLoading, error };
+  if (data?.hits?.hits) {
+    data.hits.hits.forEach((hit) => {
+      if (hit._source?.id && hit._source?.landingPage) {
+        landingPages[hit._source.id] = hit._source.landingPage;
+      }
+    });
+  }
+
+  return {
+    landingPages,
+    isLoading: isLoading && ids.length > 0,
+    isError,
+  };
 };
 
-export default LandingPage;
+export default useLandingPages;

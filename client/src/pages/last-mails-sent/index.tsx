@@ -7,7 +7,7 @@ import useSentEmails from "../../api/contribution-api/getSentMails";
 import Selectors from "./components/selectors";
 import LastMailsSentItem from "./components/item";
 import { ClipLoader } from "react-spinners";
-import { Contribution } from "../../types";
+import { EmailItem } from "../../types";
 
 const LastMailsSent: React.FC = () => {
   const location = useLocation();
@@ -18,7 +18,7 @@ const LastMailsSent: React.FC = () => {
   const [searchInMessage, setSearchInMessage] = useState(true);
 
   const { data, isLoading, isError } = useSentEmails();
-  const sentEmails: Contribution[] = data ? data.emails : [];
+  const sentEmails: EmailItem[] = data ? data.emails : [];
   const maxPage = Math.ceil((data?.emails.length || 0) / 10);
 
   const uniqueProfiles = Array.from(
@@ -86,8 +86,7 @@ const LastMailsSent: React.FC = () => {
       <Col md="6" xs="12" lg="12">
         <LastMailsSentItem
           data={{
-            emails: filteredEmails,
-            length: filteredEmails.length,
+            emails: filteredEmails as any,
           }}
         />
       </Col>

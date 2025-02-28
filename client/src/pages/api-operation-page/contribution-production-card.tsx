@@ -8,17 +8,19 @@ import {
   Text,
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import ContributorProductionInfo from "./contributor-production-info";
 import StaffProductionActions from "./staff-production-action";
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
 import { BadgeStatus, StatusLabel } from "../../utils/index";
-import { ContributionProductionItemProps } from "./types";
+import MessagePreview from "./message-preview";
+import { ContributionProductionItemProps } from "../../types";
 
 const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
   data,
   refetch,
   allTags,
+  authorsData,
+  landingPages,
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -89,12 +91,23 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
   return (
     <AccordionGroup>
       <Accordion title={renderAccordion}>
-        <ContributorProductionInfo
-          data={data}
-          refetch={refetch}
+        <MessagePreview
+          authorsData={authorsData}
           allTags={allTags}
+          data={{
+            ...data,
+            objectId: data.id,
+            email: data.email || "",
+            message: data.message || "",
+            status: data.status || "",
+          }}
+          refetch={refetch}
+          landingPages={landingPages}
         />
-        <StaffProductionActions data={data} refetch={refetch} />
+        <StaffProductionActions
+          data={{ threads: data.threads || [] }}
+          refetch={refetch}
+        />
       </Accordion>
     </AccordionGroup>
   );

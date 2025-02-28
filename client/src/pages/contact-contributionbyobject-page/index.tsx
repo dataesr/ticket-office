@@ -12,7 +12,7 @@ import TopPaginationButtons from "../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import { getUrlToSend } from "../../config/urlHelper";
 import { ClipLoader } from "react-spinners";
-import { Contribution, ContributionPageProps } from "./types";
+import { Contribution, ContributionPageProps } from "../../types";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
@@ -68,7 +68,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     query.join(" "),
     page,
     searchInMessage,
-    fromApplication
+    fromApplication?.toString()
   );
 
   const urlToSend = getUrlToSend(window.location.pathname);

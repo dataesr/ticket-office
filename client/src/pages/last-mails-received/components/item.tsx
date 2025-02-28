@@ -9,8 +9,14 @@ import {
   Notice,
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { LastMailsReceivedProps } from "../../../types";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
+import type { EmailItem } from "../../../types";
+
+interface LastMailsReceivedProps {
+  data: {
+    emails: EmailItem[] | { [key: string]: EmailItem[] };
+  };
+}
 
 const EmailContent: React.FC<{ content: string }> = ({ content }) => (
   <Text size="sm">
@@ -18,7 +24,6 @@ const EmailContent: React.FC<{ content: string }> = ({ content }) => (
   </Text>
 );
 
-// Composant pour afficher la date formatée
 const FormattedDate: React.FC<{ date: string }> = ({ date }) => {
   const sentDate = new Date(date);
   const formattedDate = sentDate.toLocaleDateString("fr-FR");
@@ -35,14 +40,6 @@ const FormattedDate: React.FC<{ date: string }> = ({ date }) => {
     </Text>
   );
 };
-
-interface EmailItem {
-  _id: string;
-  from: { name: string; address: string }[];
-  subject: string;
-  date: string;
-  extractedText: string;
-}
 
 const EmailHeader: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   email,

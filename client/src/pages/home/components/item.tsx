@@ -8,10 +8,16 @@ import {
   typeIcon,
   TypeLabel,
 } from "../../../utils";
-import { AllContributionsProps, UnifiedContribution } from "../../../types";
+import {
+  AllContributionsProps,
+  ContributionBadgesProps,
+  ContributionItemProps,
+  FormattedDateProps,
+} from "../../../types";
+
 import MarkdownRenderer from "../../../utils/markdownRenderer";
 
-const FormattedDate = ({ dateString }: { dateString: string }) => {
+const FormattedDate = ({ dateString }: FormattedDateProps) => {
   const date = new Date(dateString);
   const formattedDate = date.toLocaleDateString("fr-FR");
   const formattedTime = date.toLocaleTimeString("fr-FR", {
@@ -27,14 +33,10 @@ const FormattedDate = ({ dateString }: { dateString: string }) => {
     </Text>
   );
 };
-const ContributionBadges = ({
-  contribution,
-}: {
-  contribution: UnifiedContribution;
-}) => {
+
+const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
   let badgeContent = "Contact";
 
-  // Vérification sécurisée des propriétés
   const contributionType = contribution.contributionType || "";
   const hasProductions =
     Array.isArray(contribution.productions) &&
@@ -104,18 +106,15 @@ const ContributionBadges = ({
     </div>
   );
 };
-const ContributionItem = ({
-  contribution,
-  index,
-}: {
-  contribution: UnifiedContribution;
-  index: number;
-}) => {
+
+const ContributionItem = ({ contribution, index }: ContributionItemProps) => {
   const link = generateLinkFromAllDatas(
-    contribution.fromApplication,
+    contribution.fromApplication || "",
     contribution.id,
     contribution.objectId,
-    contribution.productions,
+    contribution.productions
+      ? JSON.stringify(contribution.productions)
+      : undefined,
     contribution.message,
     contribution.contributionType
   );
@@ -152,9 +151,8 @@ const ContributionItem = ({
     </Row>
   );
 };
-const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
-  data,
-}) => {
+
+const AllContributions = ({ data }: AllContributionsProps) => {
   return (
     <Container>
       {data.length === 0 ? (
@@ -165,6 +163,13 @@ const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
             key={contribution.id || index}
             contribution={contribution}
             index={index}
+            data={undefined}
+            highlightedQuery={""}
+            refetch={function (): void {
+              throw new Error("Function not implemented.");
+            }}
+            allTags={[]}
+            url={""}
           />
         ))
       )}

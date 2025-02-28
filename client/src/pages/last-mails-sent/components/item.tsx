@@ -1,8 +1,24 @@
 import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import collectionNameMapping, { generateLink } from "./generate-links";
-import { LastMailsSentProps } from "../../../types";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
+
+interface Email {
+  collectionName: string;
+  fromApplication?: string;
+  contributionId: string;
+  sentAt: string;
+  selectedProfile: string;
+  name: string;
+  to: string;
+  userResponse: string;
+}
+
+interface LastMailsSentProps {
+  data: {
+    emails: Email[];
+  };
+}
 
 const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
   return (

@@ -29,7 +29,6 @@ const LastMailsReceived: React.FC = () => {
         <LastMailsReceivedItem
           data={{
             emails: data,
-            length: data.length,
           }}
         />
       </Col>

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import { useDataList } from "./data-list-context";
 import "./styles.scss";
 import { postHeaders } from "../../config/api";
-import { ContributionData, ExcelExportButtonProps } from "./types";
+import { ContributionData, ExcelExportButtonProps } from "../../types";
 
 const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
   const { dataList, setDataList } = useDataList();

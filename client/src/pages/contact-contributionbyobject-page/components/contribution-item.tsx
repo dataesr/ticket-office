@@ -10,8 +10,8 @@ import {
 } from "../../../utils";
 import { FaCopy } from "react-icons/fa";
 import "./styles.scss";
-import { ContributionItemProps } from "../types";
 import MessagePreview from "./message-preview";
+import { ContributionItemProps } from "../../../types";
 
 const ContributionItem: React.FC<ContributionItemProps> = ({
   data,

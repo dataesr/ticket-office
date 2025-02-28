@@ -2,8 +2,8 @@ import { Col, Text } from "@dataesr/dsfr-plus";
 import EmailSender from "../../../api/send-mail";
 import { useLocation } from "react-router-dom";
 import "./styles.scss";
-import { StaffActionsProps, Thread, ThreadResponse } from "../types";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
+import { StaffActionsProps, Thread } from "../../../types";
 
 const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
   const location = useLocation();
@@ -17,7 +17,7 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
       {data?.threads?.length > 0 && (
         <Col className={contributorClassName}>
           {data.threads.map((thread: Thread, threadIndex) =>
-            thread.responses.map((response: ThreadResponse, index) => {
+            thread.responses.map((response, index) => {
               const responseDate = new Date(
                 response.timestamp
               ).toLocaleDateString();

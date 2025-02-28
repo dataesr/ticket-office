@@ -1,53 +1,61 @@
 import { useQuery } from "@tanstack/react-query";
 import { postHeaders } from "../../config/api";
+import { AuthorData } from "../../types";
 
-const NameFromScanr = (id) => {
-  const url =
-    "https://scanr.enseignementsup-recherche.gouv.fr/api/scanr-publications/_search";
+export const useAllAuthorsData = (productionIds: string[]) => {
+  const uniqueIds = [...new Set(productionIds.filter(Boolean))];
 
-  const fetchContributions = async () => {
-    const body = {
-      _source: ["authors"],
-      query: {
-        bool: {
-          filter: [
-            {
-              term: {
-                "id.keyword": id,
-              },
+  const { data, isLoading, isError } = useQuery(
+    ["all-authors", uniqueIds.join(",")],
+    async () => {
+      if (uniqueIds.length === 0) return {};
+
+      const response = await fetch(
+        "https://scanr.enseignementsup-recherche.gouv.fr/api/scanr-publications/_search",
+        {
+          method: "POST",
+          headers: postHeaders,
+          body: JSON.stringify({
+            size: uniqueIds.length,
+            _source: ["authors", "id"],
+            query: {
+              terms: { "id.keyword": uniqueIds },
             },
-          ],
-        },
-      },
-    };
+          }),
+        }
+      );
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: postHeaders,
-      body: JSON.stringify(body),
-    });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+      if (!response.ok) {
+        throw new Error("Erreur réseau");
+      }
+
+      const result = await response.json();
+      const authorsMap: Record<string, AuthorData> = {};
+
+      result.hits?.hits?.forEach((hit) => {
+        const id = hit._source?.id || hit._id;
+        if (id && hit._source?.authors) {
+          authorsMap[id] = {
+            fullName:
+              hit._source.authors.map((author) => author?.fullName) || [],
+            firstName:
+              hit._source.authors.map((author) => author?.firstName) || [],
+            lastName:
+              hit._source.authors.map((author) => author?.lastName) || [],
+          };
+        }
+      });
+
+      return authorsMap;
+    },
+    {
+      enabled: uniqueIds.length > 0,
     }
-    return response.json();
-  };
-
-  const { data, isLoading, isError, refetch } = useQuery(
-    [url, id],
-    fetchContributions
   );
-  const fullName =
-    data?.hits?.hits[0]?._source?.authors?.map((author) => author?.fullName) ||
-    [];
-  const firstName =
-    data?.hits?.hits[0]?._source?.authors?.map((author) => author?.firstName) ||
-    [];
 
-  const lastName =
-    data?.hits?.hits[0]?._source?.authors?.map((author) => author?.lastName) ||
-    [];
-
-  return { fullName, firstName, lastName, isLoading, isError, refetch };
+  return {
+    authorsData: data || {},
+    isLoading,
+    isError,
+  };
 };
-
-export default NameFromScanr;
