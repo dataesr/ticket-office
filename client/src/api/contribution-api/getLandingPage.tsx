@@ -1,11 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { postHeaders } from "../../config/api";
 
-/**
- * Hook pour récupérer plusieurs landing pages par IDs
- */
 export const useLandingPages = (publicationIds: string[] | string[][]) => {
-  // Aplatir et filtrer les IDs
   const ids = Array.isArray(publicationIds)
     ? (Array.isArray(publicationIds[0])
         ? publicationIds.flat()
