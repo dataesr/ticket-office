@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Modal,
   ModalTitle,
@@ -25,28 +25,43 @@ const EditModal: React.FC<EditModalProps> = ({
 }) => {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [selectedProfile, setSelectedProfile] = useState(
-    localStorage.getItem("selectedProfile")
+    localStorage.getItem("selectedProfile") || ""
   );
+
   const [showTagModal, setShowTagModal] = useState(false);
+  const [tagInput, setTagInput] = useState("");
+
+  const filteredTags = Array.isArray(allTags)
+    ? [
+        ...new Set(
+          allTags
+            .flat()
+            .filter((tag) => typeof tag === "string" && tag.trim() !== "")
+            .map((tag) => tag.toUpperCase())
+        ),
+      ].sort()
+    : [];
 
   const [inputs, setInputs] = useState<Inputs>({
-    team: [selectedProfile],
+    team: [selectedProfile || ""],
     status: "treated",
-    tags: [],
-    comment: "",
-    extra: "",
+    tags: data?.tags || [],
+    comment: data?.comment || "",
+    extra: data?.extra
+      ? Object.entries(data.extra)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join("\n")
+      : "",
+    contributionType: data?.contributionType || "",
   });
-  const [filteredTags, setFilteredTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
+
   let basePath = "contacts";
 
   if (window.location.pathname.includes("contributionPage")) {
     basePath = "contribute";
-  }
-  if (window.location.pathname.includes("scanr-removeuser")) {
+  } else if (window.location.pathname.includes("scanr-removeuser")) {
     basePath = "remove-user";
-  }
-  if (window.location.pathname.includes("scanr-namechange")) {
+  } else if (window.location.pathname.includes("scanr-namechange")) {
     basePath = "update-user-data";
   } else if (window.location.pathname.includes("apioperations")) {
     basePath = "production";
@@ -58,37 +73,9 @@ const EditModal: React.FC<EditModalProps> = ({
     ? `http://localhost:3000/api/${basePath}/${data?.id}`
     : `${baseURL}/api/${basePath}/${data?.id}`;
 
-  useEffect(() => {
-    if (!selectedProfile) {
-      setShowProfileModal(true);
-    }
-
-    const formattedTags = Array.isArray(allTags)
-      ? Array.from(
-          new Set(
-            allTags
-              .flat()
-              .filter((tag) => typeof tag === "string" && tag.trim() !== "")
-              .map((tag) => tag.toUpperCase())
-          )
-        ).sort()
-      : [];
-    setFilteredTags(formattedTags);
-
-    if (data) {
-      setInputs((prevInputs) => ({
-        ...prevInputs,
-        comment: data.comment || "",
-        extra:
-          "extra" in data && data.extra
-            ? Object.entries(data.extra)
-                .map(([key, value]) => `${key}: ${value}`)
-                .join("\n")
-            : "",
-        tags: "tags" in data ? data.tags : [],
-      }));
-    }
-  }, [allTags, selectedProfile, data]);
+  if (!selectedProfile) {
+    setTimeout(() => setShowProfileModal(true), 0);
+  }
 
   const handleInputChange = (key: keyof Inputs, value: any) => {
     setInputs((prevInputs) => ({
@@ -106,6 +93,7 @@ const EditModal: React.FC<EditModalProps> = ({
       setShowProfileModal(true);
       return;
     }
+
     try {
       const extraEntries = inputs.extra.split("\n").reduce((acc, line) => {
         const [key, value] = line.split(":").map((part) => part.trim());
@@ -145,11 +133,13 @@ const EditModal: React.FC<EditModalProps> = ({
       .split(",")
       .map((tag) => tag.trim().toUpperCase())
       .filter((tag) => tag !== "");
+
     if (tagsArray.length > 0) {
       handleInputChange("tags", [...inputs.tags, ...tagsArray]);
       setTagInput("");
     }
   };
+
   const handleOpenTagModal = () => {
     setShowTagModal(true);
   };
@@ -159,6 +149,17 @@ const EditModal: React.FC<EditModalProps> = ({
       "tags",
       inputs.tags.filter((tag) => tag !== tagToRemove)
     );
+  };
+
+  const handleProfileSelection = (profile: string) => {
+    setSelectedProfile(profile);
+    localStorage.setItem("selectedProfile", profile);
+    setShowProfileModal(false);
+
+    setInputs((prev) => ({
+      ...prev,
+      team: [profile],
+    }));
   };
 
   return (
@@ -251,11 +252,7 @@ const EditModal: React.FC<EditModalProps> = ({
       <ProfileModal
         isOpen={showProfileModal}
         onClose={() => setShowProfileModal(false)}
-        onSelectProfile={(profile) => {
-          setSelectedProfile(profile);
-          localStorage.setItem("selectedProfile", profile);
-          setShowProfileModal(false);
-        }}
+        onSelectProfile={handleProfileSelection}
         selectedProfile={selectedProfile}
       />
       <TagSelectionModal
