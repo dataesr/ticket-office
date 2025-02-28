@@ -19,11 +19,23 @@ export interface BaseContribution {
   extra?: Record<string, any>;
 }
 
+export type Contribution_Production = {
+  id: string;
+  status: string;
+  created_at: string;
+  productions: Production[];
+  message?: string;
+  name: string;
+  objectId: string;
+  email?: string;
+  comment?: string;
+  description?: string;
+  team?: string[];
+  threads?: Thread[];
+};
+
 // Type importé depuis un autre fichier
-import {
-  Thread,
-  Contribution_Production,
-} from "../pages/api-operation-page/types";
+import { Thread } from "../pages/api-operation-page/types";
 
 // Données d'auteur
 export interface AuthorData {
@@ -117,18 +129,12 @@ export type MessagePreviewProps = {
   allTags?: string[];
 };
 
-// Type pour les contributions de production
-export type Contribute_Production = BaseContribution & {
-  objectId: string;
-  fullName: string;
-  firstName: string;
-  lastName: string;
-  responseByMail: string;
-  responseFrom: string;
-  tag: string;
-  phone: string;
-  treated_at: Date;
-  productions: any[];
+export type EmailItem = {
+  _id: string;
+  from: { name: string; address: string }[];
+  subject: string;
+  date: string;
+  extractedText: string;
 };
 
 // Types pour les modales
@@ -138,11 +144,32 @@ export type TagSelectionModalProps = {
   onClose: (selectedTags: string[]) => void;
 };
 
+export type ContributionObject = {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  objectId: string;
+  tags: string[];
+  status: string;
+  comment: string;
+  team: string[];
+  message: string;
+  created_at: string;
+  modified_at: string;
+  fromApplication: string;
+  contributionType: string;
+  organisation: string;
+  fonction: string;
+  threads: Thread[];
+  extra: Record<string, any>;
+};
+
 export type EditModalProps = {
   isOpen: boolean;
-  dataProduction?: Contribute_Production[];
+  dataProduction?: Contribution_Production[];
   onClose: () => void;
-  data: Contribution | Contribute_Production;
+  data: Contribution | Contribution_Production;
   refetch: () => void;
   allTags: string[];
 };
@@ -192,3 +219,37 @@ export type EmailSenderProps = {
   contribution: Contribution | Contribution_Production;
   refetch: () => void;
 };
+// Type unifié pour toutes les contributions possibles
+export interface UnifiedContribution {
+  // Propriétés communes obligatoires
+  id: string;
+  created_at: string;
+  status?: string;
+
+  // Propriétés communes optionnelles
+  name?: string;
+  email?: string;
+  message?: string;
+  comment?: string;
+  tags?: string[];
+  team?: string[];
+  fromApplication?: string;
+  contributionType?: string;
+  modified_at?: string;
+  threads?: Thread[];
+  extra?: Record<string, any>;
+
+  // Propriétés spécifiques à ContributionObject
+  objectId?: string;
+  objectType?: string;
+
+  // Propriétés spécifiques à Contribution
+  type?: string;
+  emails?: any;
+  collection?: string;
+  collectionName?: string;
+
+  // Propriétés spécifiques à Contribution_Production
+  productions?: any;
+  description?: string;
+}

@@ -8,7 +8,7 @@ import {
   typeIcon,
   TypeLabel,
 } from "../../../utils";
-import { AllContributionsProps, Contribution } from "../../../types";
+import { AllContributionsProps, UnifiedContribution } from "../../../types";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 const FormattedDate = ({ dateString }: { dateString: string }) => {
@@ -27,27 +27,30 @@ const FormattedDate = ({ dateString }: { dateString: string }) => {
     </Text>
   );
 };
-
 const ContributionBadges = ({
   contribution,
 }: {
-  contribution: Contribution;
+  contribution: UnifiedContribution;
 }) => {
   let badgeContent = "Contact";
 
-  if (
-    contribution.contributionType === "contribute_production" ||
-    contribution.productions?.length > 0
-  ) {
+  // Vérification sécurisée des propriétés
+  const contributionType = contribution.contributionType || "";
+  const hasProductions =
+    Array.isArray(contribution.productions) &&
+    contribution.productions.length > 0;
+  const hasObjectId = Boolean(contribution.objectId);
+
+  if (contributionType === "contribute_production" || hasProductions) {
     badgeContent = "Lier des publications";
   } else if (
-    contribution.contributionType === "contribute" ||
-    (contribution.objectId && !contribution.productions)
+    contributionType === "contribute" ||
+    (hasObjectId && !hasProductions)
   ) {
     badgeContent = "Contribution par objet";
-  } else if (contribution.contributionType === "remove-user") {
+  } else if (contributionType === "remove-user") {
     badgeContent = "Suppression de compte";
-  } else if (contribution.contributionType === "update-user-data") {
+  } else if (contributionType === "update-user-data") {
     badgeContent = "Mise à jour de données";
   }
 
@@ -59,11 +62,11 @@ const ContributionBadges = ({
       "update-user-data",
       "contribute-object",
       "contribute_production",
-    ].includes(contribution.contributionType || "");
+    ].includes(contributionType);
 
   return (
     <div>
-      {contribution?.objectType && (
+      {contribution.objectType && (
         <Badge
           size="sm"
           icon={typeIcon({ icon: contribution.objectType })}
@@ -101,16 +104,14 @@ const ContributionBadges = ({
     </div>
   );
 };
-
 const ContributionItem = ({
   contribution,
   index,
 }: {
-  contribution: Contribution;
+  contribution: UnifiedContribution;
   index: number;
 }) => {
   const link = generateLinkFromAllDatas(
-    contribution.collection || contribution.collectionName,
     contribution.fromApplication,
     contribution.id,
     contribution.objectId,
@@ -151,7 +152,6 @@ const ContributionItem = ({
     </Row>
   );
 };
-
 const AllContributions: React.FC<AllContributionsProps & { query: string }> = ({
   data,
 }) => {

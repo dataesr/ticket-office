@@ -2,8 +2,8 @@ export function generateLinkFromAllDatas(
   collectionName: string,
   fromApplication?: string,
   id?: string,
-  objectId?: boolean,
-  productions?: Array<any>,
+  objectId?: string,
+  productions?: any,
   message?: string,
   contributionType?: string
 ): string {
