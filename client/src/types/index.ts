@@ -1,110 +1,3 @@
-import {
-  Contribution_Production,
-  Thread,
-} from "../pages/api-operation-page/types";
-
-export interface Contribution {
-  [x: string]: any;
-  id: string;
-  name: string;
-  email: string;
-  phone?: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
-  type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
-  fromApplication: string;
-  emails?: any;
-}
-
-export interface LastMailsSentProps {
-  data: {
-    length: number;
-
-    emails: Contribution[];
-  };
-}
-export interface LastMailsReceivedProps {
-  data: {
-    [x: string]: any;
-    length: number;
-  };
-}
-
-export interface AllContributionsProps {
-  data: Contribution[];
-}
-export interface ContributorSummaryProps {
-  contributions: Contribution[];
-  onSelectContribution: (id: string) => void;
-}
-export interface ContributionItemProps {
-  data: Contribution & { type: string };
-  highlightedQuery: string;
-  refetch: () => void;
-  allTags: string[];
-  url: string;
-}
-export interface ChangeNameProps {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
-  type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
-}
-
-export interface RemoveUserProps {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
-  type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
-}
-export interface ChangeNameContribution {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
-  type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
-}
-
 export interface Response {
   read: boolean;
   responseMessage: string;
@@ -112,115 +5,345 @@ export interface Response {
   team?: string[];
 }
 
-export type ContributionDataType = {
-  responseFrom: string;
-  idref: string | number;
-  tags: string[];
+export interface Thread {
   id: string;
-  type: string;
-  section: string;
-  comment: string;
+  responses: Response[];
+}
+
+export interface Production {
+  id: string;
+  lastName?: string;
+  firstName?: string;
+  productionId?: string;
+  fullName?: string;
+  name?: string;
+  treated?: boolean;
+}
+
+export interface BaseContribution {
+  id: string;
   name: string;
-  organisation: string;
   email: string;
-  fonction: string;
+  status: string;
   message: string;
-  modified_at: string;
   created_at: string;
-  status: string;
-  team: string[];
-  threads?: Thread[];
-};
-
-export type ContributionPageProps = {
+  phone?: string;
+  tags?: string[];
+  comment?: string;
+  team?: string[];
+  modified_at?: string;
   fromApplication?: string;
-};
-
-export type StaffActionsProps = {
-  data: any[];
-};
-
-export type MessagePreviewProps = {
-  renderMessage: (message: string) => JSX.Element;
-};
-
-export type Contribute_Production = {
-  objectId: string;
-  fullName: string;
-  firstName: string;
-  lastName: string;
-  responseByMail: string;
-  responseFrom: string;
-  tag: string;
-  id: string;
-  team: string[];
-  phone: string;
-  modified_at: string | number | Date;
-  comment: string;
-  treated_at: Date;
-  created_at: Date;
-  email: string;
-  extra: {};
-  message?: string;
-  name: string;
-  status: string;
-  productions: any[];
+  contributionType?: string;
+  organisation?: string;
+  fonction?: string;
   threads?: Thread[];
-  fromApplication: string;
-};
+  extra?: Record<string, any>;
+}
 
-export type TagSelectionModalProps = {
+export interface Contribution extends BaseContribution {
+  selectedProfile: any;
+  objectType: any;
+  type: string;
+  emails?: any;
+}
+
+export interface Contribute_Production extends BaseContribution {
+  objectId: string;
+  productions: Production[];
+  description?: string;
+}
+
+export interface ContributionObject extends BaseContribution {
+  objectId: string;
+  objectType: string;
+}
+
+export interface UnifiedContribution {
+  id: string;
+  created_at: string;
+  status?: string;
+  name?: string;
+  email?: string;
+  message?: string;
+  objectId?: string;
+  objectType?: string;
+  productions?: Production[];
+  type?: string;
+  comment?: string;
+  tags?: string[];
+  team?: string[];
+  threads?: Thread[];
+  fromApplication?: string;
+  contributionType?: string;
+}
+
+export interface AuthorData {
+  fullName: string[];
+  firstName: string[];
+  lastName: string[];
+}
+
+export interface Publication {
+  hits: number;
+  landingPage?: string;
+}
+
+export interface TagSelectionModalProps {
   isOpen: boolean;
   allTags: string[];
   onClose: (selectedTags: string[]) => void;
-};
+}
 
-export type EditModalProps = {
+export interface EditModalProps {
   isOpen: boolean;
-  dataProduction: Contribute_Production[];
   onClose: () => void;
   data: Contribution | Contribute_Production;
   refetch: () => void;
   allTags: string[];
-};
+  dataProduction?: Contribute_Production[];
+}
 
-export type Production = {
-  lastName: string;
-  firstName: string;
-  productionId: string;
-  fullName: string;
-  name: string;
-  id: string;
-  treated: boolean;
-};
+export interface ProfileModalProps {
+  isOpen: boolean;
+  selectedProfile: string | null;
+  onClose: () => void;
+  onSelectProfile: (profile: string) => void;
+}
 
-export type Inputs = {
+export interface EmailItem {
+  _id: string;
+  from: { name: string; address: string }[];
+  subject: string;
+  date: string;
+  extractedText: string;
+}
+
+export interface EmailSenderProps {
+  contribution: Contribution | Contribute_Production;
+  refetch: () => void;
+}
+
+export interface ContributionItemProps {
+  data: Contribution;
+  highlightedQuery: string;
+  refetch: () => void;
+  allTags: string[];
+  url: string;
+}
+
+export interface Inputs {
   team: string[];
   status: string;
   tags: string[];
   comment: string;
   extra: string;
-};
-
-export interface PersonInfo {
-  name: string;
-  email: string;
-  phone: string;
+  contributionType?: string;
 }
 
-export type Publication = {
-  hits: number;
-  landingPage?: string;
-};
+export interface DataListItem {
+  publi_id: string;
+  person_id?: string;
+  export: boolean;
+  fullName?: string;
+}
 
-export type ProfileModalProps = {
-  isOpen: boolean;
-  selectedProfile: string | null;
-  onClose: () => void;
-  onSelectProfile: (profile: string) => void;
-};
+export interface DataListContextType {
+  dataList: DataListItem[];
+  setDataList: React.Dispatch<React.SetStateAction<DataListItem[]>>;
+}
 
-export type EmailSenderProps = {
-  contribution: Contribution | Contribution_Production;
+export interface ExternalLinksProps {
+  productionId: string;
+  name: string;
+  landingPages?: Record<string, string>;
+}
+
+export interface ContributorRequestsProps {
+  data: Contribute_Production;
+  coloredName: string;
+  authorsData?: Record<string, any>;
+  landingPages?: Record<string, string>;
+  idrefNames?: Record<string, string>;
+}
+
+export interface SelectWithNamesProps {
+  productionId: string;
+  idRef: string;
+  coloredName: string;
+  contributionId: string;
+  authorData?: {
+    fullName?: string[];
+    firstName?: string[];
+    lastName?: string[];
+  };
+}
+
+export interface MessagePreviewProps {
+  data: any;
+  highlightedQuery?: string;
   refetch: () => void;
-};
+  allTags: string[];
+}
+export interface MessagePreviewProductionProps {
+  data: any;
+  highlightedQuery?: string;
+  refetch: () => void;
+  allTags: string[];
+  authorsData: AuthorData;
+  landingPages: Record<string, string>;
+}
+
+export interface ContributionProductionDataResponse {
+  data: Contribute_Production[];
+  meta: {
+    total: number;
+    page?: number;
+    max_results?: number;
+  };
+  tags?: string[];
+}
+
+export interface ContributionProductionDataHookResponse {
+  data: ContributionProductionDataResponse | null;
+  isLoading: boolean;
+  isError: boolean;
+  refetch: () => void;
+}
+export interface SelectOption {
+  value: string;
+  label: string;
+  firstName?: string;
+  lastName?: string;
+  isColored?: boolean;
+}
+
+export interface ContributionData {
+  fullName: string;
+  person_id: string;
+  publi_id: string;
+  contribution_id: string;
+  first_name?: string;
+  last_name?: string;
+  export: boolean;
+}
+
+export interface ExtendedSelectWithNamesProps extends SelectWithNamesProps {
+  authorData?: {
+    fullName: string[];
+    firstName: string[];
+    lastName: string[];
+  };
+  landingPage?: string;
+}
+
+export interface FormattedDateProps {
+  dateString: string;
+}
+
+export interface ContributionBadgesProps {
+  contribution: UnifiedContribution;
+}
+
+export interface ContributionItemProps {
+  contribution: UnifiedContribution;
+  index: number;
+}
+
+export interface AllContributionsProps {
+  data: UnifiedContribution[];
+  query?: string;
+}
+export interface ContributionItemProps {
+  contribution: UnifiedContribution;
+  index: number;
+}
+
+export interface ContributionProductionItemProps {
+  data: {
+    threads: any[];
+    email: string;
+    message: string;
+    status?: string;
+    tag?: string;
+    productions: any[];
+    created_at: string;
+    name: string;
+    id: string;
+  };
+  refetch: () => void;
+  allTags: any[];
+  authorsData: any;
+  landingPages: any;
+}
+export interface ExcelExportButtonProps {
+  refetch: () => void;
+}
+
+export interface StaffProductionActionsProps {
+  data?: {
+    threads?: Array<{
+      responses: Array<{
+        team: string[];
+        timestamp: string | number | Date;
+        responseMessage: string;
+      }>;
+    }>;
+  };
+  refetch: () => void;
+}
+
+export interface ContributionDetailsProps {
+  filteredContributions: any[];
+  selectedContribution: string | number;
+  refetch: () => void;
+  highlightedQuery?: string;
+  allTags: any[];
+  url?: string;
+}
+
+export interface ContributorSummaryProps {
+  contributions: {
+    id: string;
+    type?: string;
+    status?: string;
+    tags?: string[];
+    name: string;
+    created_at: string;
+    message: string;
+  }[];
+  onSelectContribution: (id: string) => void;
+}
+
+export interface PageTitleProps {
+  pathname: string;
+}
+export interface PaginationProps {
+  page: number;
+  maxPage: number;
+  setPage: (page: number) => void;
+}
+
+export interface TopPaginationProps extends PaginationProps {
+  meta: any;
+}
+export interface SearchSectionProps {
+  query: string[];
+  handleSearch: (value: string) => void;
+  handleRemoveQueryItem: (item: string) => void;
+  isLarge?: boolean;
+}
+
+export interface ThreadResponse {
+  timestamp: string | Date;
+  team: string;
+  responseMessage: string;
+}
+
+export interface StaffActionsProps {
+  url: string;
+  refetch: () => void;
+  data: Contribution;
+}
+export interface ContributionPageProps {
+  fromApplication?: boolean;
+}

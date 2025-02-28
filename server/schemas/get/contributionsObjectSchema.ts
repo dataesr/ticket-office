@@ -17,6 +17,7 @@ export const contributionObjectSchema = t.Object(
     team: t.Optional(t.Array(t.String())),
     tags: t.Optional(t.Array(t.String())),
     extra: t.Optional(t.Record(t.String(), t.String())),
+    contributionType: t.String(),
     threads: t.Optional(
       t.Array(
         t.Object({

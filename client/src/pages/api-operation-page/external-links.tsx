@@ -1,28 +1,28 @@
 import { Link } from "@dataesr/dsfr-plus";
 import { useState } from "react";
-import LandingPage from "../../api/contribution-api/getLandingPage";
-import { ExternalLinksProps } from "./types";
+import {
+  findLandingPage,
+  getScanRPath,
+} from "../../utils/normalized-id-productions";
+import { ExternalLinksProps } from "../../types";
 
 export const ExternalLinks: React.FC<ExternalLinksProps> = ({
   productionId,
   name,
+  landingPages = {},
 }) => {
   const formattedProductionId = productionId.replace(/\//g, "%2f");
   const [googleClicked, setGoogleClicked] = useState(false);
   const [scanRClicked, setScanRClicked] = useState(false);
   const [landingPageClicked, setLandingPageClicked] = useState(false);
 
-  const { landingPage } = LandingPage(productionId);
-
-  const scanRPath =
-    formattedProductionId.length >= 7 && formattedProductionId.length <= 9
-      ? "patents"
-      : "publications";
+  const landingPage = findLandingPage(productionId, landingPages);
+  const scanRPath = getScanRPath(productionId);
 
   return (
     <>
       <Link
-        className={` fr-ml-2w fr-footer__content-link ${
+        className={`fr-ml-2w fr-footer__content-link ${
           scanRClicked ? "clicked-link" : ""
         }`}
         target="_blank"
@@ -35,7 +35,7 @@ export const ExternalLinks: React.FC<ExternalLinksProps> = ({
 
       {landingPage && (
         <Link
-          className={` fr-ml-2w fr-mr-2w fr-footer__content-link ${
+          className={`fr-ml-2w fr-mr-2w fr-footer__content-link ${
             landingPageClicked ? "clicked-link" : ""
           }`}
           target="_blank"
@@ -43,7 +43,7 @@ export const ExternalLinks: React.FC<ExternalLinksProps> = ({
           href={landingPage}
           onClick={() => setLandingPageClicked(true)}
         >
-          Editeur
+          Éditeur
         </Link>
       )}
 

@@ -58,6 +58,7 @@ getProductionsRoutes.get(
       tags: production.tags || [],
       productions: production.productions || [],
       threads: production.threads || [],
+      contributionType: "production",
     }));
 
     return {

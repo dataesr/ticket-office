@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Col,
   Container,
@@ -14,12 +14,17 @@ import ExcelExportButton from "./export-to-xlsx";
 import { ClipLoader } from "react-spinners";
 import { useDataList } from "./data-list-context";
 import { buildURL } from "../../api/utils/buildURL";
-import { Contribution_Production, ContributionDataHookResponse } from "./types";
 import ContributionData from "../../api/contribution-api/getData";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import ContributionProductionItem from "./contribution-production-card";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
+import { useAllAuthorsData } from "../../api/contribution-api/getNames";
+import useLandingPages from "../../api/contribution-api/getLandingPage";
+import {
+  Contribute_Production,
+  ContributionProductionDataHookResponse,
+} from "../../types";
 
 const ContributionPage: React.FC = () => {
   const [reload] = useState(0);
@@ -57,9 +62,9 @@ const ContributionPage: React.FC = () => {
     isLoading,
     isError,
     refetch,
-  }: ContributionDataHookResponse = ContributionData(url);
+  }: ContributionProductionDataHookResponse = ContributionData(url);
 
-  const contrib: Contribution_Production[] = fetchedData?.data || [];
+  const contrib: Contribute_Production[] = fetchedData?.data || [];
 
   const meta: { total?: number } = fetchedData?.meta || {};
   const maxPage = meta.total ? Math.ceil(meta.total / 10) : 1;
@@ -89,19 +94,60 @@ const ContributionPage: React.FC = () => {
     return nameMatches || idMatches;
   });
 
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <ClipLoader color="#123abc" size={50} />
-      </div>
-    );
-  }
-  if (isError)
+  const allProductionIds = useMemo(() => {
+    return filteredContributions
+      .flatMap((contribution) =>
+        contribution.productions.map((prod) => prod.id)
+      )
+      .filter(Boolean);
+  }, [filteredContributions]);
+
+  const {
+    authorsData,
+    isLoading: isLoadingAuthors,
+    isError: isErrorAuthors,
+  } = useAllAuthorsData(allProductionIds);
+
+  const {
+    landingPages,
+    isLoading: isLoadingLandingPages,
+    isError: isErrorLandingPages,
+  } = useLandingPages(allProductionIds);
+
+  const isPageLoading = isLoading || isLoadingAuthors || isLoadingLandingPages;
+
+  if (isPageLoading) {
     return (
       <Container className="fr-my-5w">
-        <Text>Erreur lors du chargement des données.</Text>
+        <Row gutters>
+          <Col md="12" xs="12">
+            <Title as="h1">Lier des publications</Title>
+            <div className="fr-my-5w text-center">
+              <ClipLoader color="#000091" size={50} />
+            </div>
+          </Col>
+        </Row>
       </Container>
     );
+  }
+
+  // Mettre à jour pour inclure aussi isErrorLandingPages
+  if (isError || isErrorAuthors || isErrorLandingPages) {
+    return (
+      <Container className="fr-my-5w">
+        <Row gutters>
+          <Col md="12" xs="12">
+            <Title as="h1">Lier des publications</Title>
+            <div className="fr-my-3w">
+              <Text className="fr-error-text">
+                Erreur lors du chargement des données.
+              </Text>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 
   return (
     <Container className="fr-my-5w">
@@ -149,17 +195,22 @@ const ContributionPage: React.FC = () => {
           />
         </Col>
       </Row>
+
       {filteredContributions.map((contribution) => (
         <ContributionProductionItem
           key={contribution.id}
-          data={contribution}
+          data={{ ...contribution, threads: contribution.threads || [] }}
           refetch={refetch}
           allTags={fetchedData?.tags || []}
+          authorsData={authorsData}
+          landingPages={landingPages}
         />
       ))}
+
       {dataList.some((item) => item.export === true) && (
         <ExcelExportButton refetch={refetch} />
       )}
+
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}

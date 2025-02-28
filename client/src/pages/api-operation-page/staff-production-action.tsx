@@ -1,7 +1,7 @@
 import { Col, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import EmailSender from "../../api/send-mail";
-import { StaffProductionActionsProps } from "./types";
+import { StaffProductionActionsProps } from "../../types";
 
 const StaffProductionActions = ({
   data,
@@ -24,7 +24,7 @@ const StaffProductionActions = ({
           )}
         </Col>
       )}
-      <EmailSender contribution={data} refetch={refetch} />
+      <EmailSender contribution={data as any} refetch={refetch} />
     </>
   );
 };

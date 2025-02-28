@@ -5,11 +5,14 @@ import { ExternalLinks } from "./external-links";
 import { useDataList } from "./data-list-context";
 import { Col } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { ContributorRequestsProps } from "./types";
+import { findAuthorData } from "../../utils/normalized-id-productions";
+import { ContributorRequestsProps } from "../../types";
 
 const ContributorRequests: React.FC<ContributorRequestsProps> = ({
   data,
   coloredName,
+  authorsData = {},
+  landingPages,
 }) => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const { dataList } = useDataList();
@@ -30,6 +33,8 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
         const hasExport = dataList.find(
           (item) => item?.publi_id === production?.id
         )?.export;
+
+        const currentAuthorData = findAuthorData(production?.id, authorsData);
 
         return (
           <Col
@@ -69,10 +74,15 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
                 idRef={data.objectId}
                 coloredName={coloredName}
                 contributionId={data.id}
+                authorData={currentAuthorData}
               />
             </div>
             <div style={{ flex: 1 }}>
-              <ExternalLinks productionId={production.id} name={data.name} />
+              <ExternalLinks
+                landingPages={landingPages}
+                productionId={production.id}
+                name={data.name}
+              />
             </div>
           </Col>
         );

@@ -1,21 +1,31 @@
 import { useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import NameFromScanr from "../../api/contribution-api/getNames";
 import { Col, Row } from "@dataesr/dsfr-plus";
 import ReactSelect from "react-select";
 import { levenshteinDistance } from "../../utils/compare";
-
 import { useDataList } from "./data-list-context";
-import { ContributionData, SelectOption, SelectWithNamesProps } from "./types";
+import {
+  ContributionData,
+  ExtendedSelectWithNamesProps,
+  SelectOption,
+} from "../../types";
 
 export default function SelectWithNames({
   contributionId,
   productionId,
   idRef,
   coloredName,
-}: SelectWithNamesProps) {
-  const { fullName, firstName, lastName } = NameFromScanr(productionId);
+  authorData: propAuthorData,
+  landingPage,
+}: ExtendedSelectWithNamesProps) {
+  const defaultAuthorData = {
+    fullName: [],
+    firstName: [],
+    lastName: [],
+  };
+
+  const { fullName, firstName, lastName } = propAuthorData || defaultAuthorData;
   const { setDataList } = useDataList();
 
   const customStyles = {
@@ -84,8 +94,11 @@ export default function SelectWithNames({
     setDataList,
   ]);
 
-  const handleChange = (option: SelectOption) => {
+  const handleChange = (option: SelectOption | null) => {
+    if (!option) return;
+
     const selectedIndex = fullName.indexOf(option.value);
+    if (selectedIndex === -1) return;
 
     setDataList((prevState) => {
       const existingItem = prevState.find(
@@ -137,7 +150,17 @@ export default function SelectWithNames({
   return (
     <Row>
       <Col>
-        <ReactSelect
+        {landingPage && (
+          <a
+            href={landingPage}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fr-mb-1w d-block"
+          >
+            Voir la publication
+          </a>
+        )}
+        <ReactSelect<SelectOption>
           options={fullName.map((name, index) => ({
             value: name,
             label: name,
@@ -149,7 +172,7 @@ export default function SelectWithNames({
           styles={customStyles}
           placeholder={coloredName}
           menuPortalTarget={document.body}
-          menuPosition="fixed"
+          menuPosition={"fixed" as any}
         />
       </Col>
     </Row>

@@ -1,5 +1,5 @@
 import { Title } from "@dataesr/dsfr-plus";
-import { PageTitleProps } from "../types";
+import { PageTitleProps } from "../../../types";
 
 const PageTitle: React.FC<PageTitleProps> = ({ pathname }) => {
   const getTitle = () => {

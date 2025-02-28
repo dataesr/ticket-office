@@ -67,6 +67,7 @@ getContactRoutes.get(
       tags: contact.tags || [],
       threads: contact.threads || [],
       extra: contact.extra || {},
+      contributionType: "contact",
     }));
 
     return {

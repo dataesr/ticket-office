@@ -5,7 +5,7 @@ import EditModal from "../../../components/edit-modal";
 import { useState, useCallback } from "react";
 import { capitalizeFirstLetter } from "../../../utils/capitalize";
 import { CopyButton } from "../../../utils/copy-button";
-import { MessagePreviewProps } from "../types";
+import { MessagePreviewProps } from "../../../types";
 
 const MessagePreview: React.FC<MessagePreviewProps> = ({
   data,
@@ -84,7 +84,9 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
                         : capitalizeFirstLetter(key);
 
                     const capitalizedValue =
-                      value.charAt(0).toUpperCase() + value.slice(1);
+                      typeof value === "string"
+                        ? value.charAt(0).toUpperCase() + value.slice(1)
+                        : String(value);
 
                     return (
                       <div key={key}>

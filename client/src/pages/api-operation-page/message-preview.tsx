@@ -16,17 +16,23 @@ import ContributorRequests from "./contributor-requests";
 import NameFromIdref from "../../api/contribution-api/getNamesFromIdref";
 import { useDataList } from "./data-list-context";
 import "./styles.scss";
-import { MessagePreviewProps } from "./types";
-import { Contribute_Production } from "../../types";
+import {
+  Contribute_Production,
+  MessagePreviewProductionProps,
+} from "../../types";
 
-const MessagePreview = ({ data, refetch, allTags }: MessagePreviewProps) => {
+const MessagePreview = ({
+  data,
+  refetch,
+  allTags,
+  authorsData,
+  landingPages,
+}: MessagePreviewProductionProps) => {
   const [showModal, setShowModal] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [idRefClicked, setIdRefClicked] = useState(false);
   const [scanRClicked, setScanRClicked] = useState(false);
-
   const { dataList, setDataList } = useDataList();
-
   const { fullNameFromIdref: fetchedData } = NameFromIdref(data.id);
 
   const copyToClipboard = useCallback((text: string) => {
@@ -203,7 +209,12 @@ const MessagePreview = ({ data, refetch, allTags }: MessagePreviewProps) => {
       </ButtonGroup>
       <Row className="fr-mb-2w">
         <Col className="contributorProductionSide">
-          <ContributorRequests data={data} coloredName={data.name} />
+          <ContributorRequests
+            authorsData={authorsData}
+            data={data}
+            coloredName={data.name}
+            landingPages={landingPages}
+          />
         </Col>
       </Row>
     </Container>

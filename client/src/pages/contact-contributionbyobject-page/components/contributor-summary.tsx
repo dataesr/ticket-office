@@ -13,7 +13,7 @@ import {
   TypeLabel,
   typeIcon,
 } from "../../../utils";
-import { ContributorSummaryProps } from "../types";
+import { ContributorSummaryProps } from "../../../types";
 
 const ContributorSummary: React.FC<ContributorSummaryProps> = ({
   contributions,

@@ -1,6 +1,6 @@
 import { Text } from "@dataesr/dsfr-plus";
 import ContributionItem from "./contribution-item";
-import { ContributionDetailsProps } from "../types";
+import { ContributionDetailsProps } from "../../../types";
 
 const ContributionDetails: React.FC<ContributionDetailsProps> = ({
   filteredContributions,
@@ -20,6 +20,8 @@ const ContributionDetails: React.FC<ContributionDetailsProps> = ({
       refetch={refetch}
       highlightedQuery={highlightedQuery}
       url={url}
+      contribution={undefined}
+      index={0}
     />
   ) : (
     <Text>Aucune contribution trouvée.</Text>

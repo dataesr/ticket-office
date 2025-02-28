@@ -60,6 +60,7 @@ getContributionObjectRoutes.get(
         tags: contributionObject.tags || [],
         threads: contributionObject.threads || [],
         extra: contributionObject.extra || {},
+        contributionType: "contribute-object",
       })
     );
 

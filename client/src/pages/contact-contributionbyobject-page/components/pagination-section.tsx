@@ -1,6 +1,6 @@
 import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../../components/pagination/top-buttons";
-import { PaginationProps, TopPaginationProps } from "../types";
+import { PaginationProps, TopPaginationProps } from "../../../types";
 
 const TopPaginationSection: React.FC<TopPaginationProps> = ({
   meta,
