@@ -104,10 +104,7 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
           refetch={refetch}
           landingPages={landingPages}
         />
-        <StaffProductionActions
-          data={{ threads: data.threads || [] }}
-          refetch={refetch}
-        />
+        <StaffProductionActions data={data} refetch={refetch} />
       </Accordion>
     </AccordionGroup>
   );
