@@ -1,6 +1,5 @@
 export function generateLinkFromAllDatas(
-  collectionName: string,
-  fromApplication?: string,
+  fromApplication: string,
   id?: string,
   objectId?: string,
   productions?: any,
@@ -12,7 +11,6 @@ export function generateLinkFromAllDatas(
     "update-user-data": "/scanr-namechange",
     contribute: "/scanr-contributionPage",
     contribute_production: "/scanr-apioperations",
-
     contact: {
       scanr: "/scanr-contact",
       paysage: "/paysage-contact",
@@ -38,8 +36,6 @@ export function generateLinkFromAllDatas(
     }
   } else if (fromApplication) {
     basePath = pathMap.contact[fromApplication] || pathMap.contact.default;
-  } else if (collectionName) {
-    basePath = pathMap[collectionName] || pathMap.contact.default;
   }
 
   return id
