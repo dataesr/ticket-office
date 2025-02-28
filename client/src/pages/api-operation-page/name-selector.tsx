@@ -1,15 +1,9 @@
-import { useEffect } from "react";
-import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { Col, Row } from "@dataesr/dsfr-plus";
 import ReactSelect from "react-select";
 import { levenshteinDistance } from "../../utils/compare";
 import { useDataList } from "./data-list-context";
-import {
-  ContributionData,
-  ExtendedSelectWithNamesProps,
-  SelectOption,
-} from "../../types";
+import { ExtendedSelectWithNamesProps, SelectOption } from "../../types";
 
 export default function SelectWithNames({
   contributionId,
@@ -26,18 +20,10 @@ export default function SelectWithNames({
   };
 
   const { fullName, firstName, lastName } = propAuthorData || defaultAuthorData;
-  const { setDataList } = useDataList();
+  const { dataList, setDataList } = useDataList();
 
-  const customStyles = {
-    option: (provided: any, state: { data: SelectOption }) => ({
-      ...provided,
-      color: state.data.isColored ? "#1f8d49" : "black",
-    }),
-  };
-
-  const threshold = 7;
-
-  useEffect(() => {
+  const findClosestNameIndex = () => {
+    const threshold = 7;
     let closestIndex = -1;
     let minDistance = Infinity;
 
@@ -49,50 +35,41 @@ export default function SelectWithNames({
       }
     });
 
-    if (closestIndex !== -1) {
-      const closestName = fullName[closestIndex];
-      const selectedOption = {
-        value: closestName,
-        firstName: firstName[closestIndex],
-        lastName: lastName[closestIndex],
-      };
+    return closestIndex;
+  };
 
-      const newElement: ContributionData = {
+  const hasExistingElement = (export_status = false) => {
+    return dataList.some(
+      (e) =>
+        e.person_id === idRef &&
+        e.publi_id === productionId &&
+        e.contribution_id === contributionId &&
+        e.export === export_status
+    );
+  };
+
+  const closestIndex = findClosestNameIndex();
+  if (
+    closestIndex !== -1 &&
+    !hasExistingElement(false) &&
+    !dataList.some(
+      (e) => e.publi_id === productionId && e.contribution_id === contributionId
+    )
+  ) {
+    const closestName = fullName[closestIndex];
+    setDataList((prevState) => [
+      ...prevState,
+      {
         fullName: closestName,
         person_id: idRef,
         publi_id: productionId,
         contribution_id: contributionId,
-        first_name: selectedOption.firstName,
-        last_name: selectedOption.lastName,
+        first_name: firstName[closestIndex],
+        last_name: lastName[closestIndex],
         export: false,
-      };
-
-      setDataList((prevState) => {
-        if (
-          !prevState.some(
-            (e) =>
-              e.person_id === newElement.person_id &&
-              e.publi_id === newElement.publi_id &&
-              e.contribution_id === newElement.contribution_id &&
-              e.export === false
-          )
-        ) {
-          return [...prevState, newElement];
-        } else {
-          return prevState;
-        }
-      });
-    }
-  }, [
-    coloredName,
-    fullName,
-    firstName,
-    lastName,
-    idRef,
-    productionId,
-    contributionId,
-    setDataList,
-  ]);
+      },
+    ]);
+  }
 
   const handleChange = (option: SelectOption | null) => {
     if (!option) return;
@@ -100,16 +77,8 @@ export default function SelectWithNames({
     const selectedIndex = fullName.indexOf(option.value);
     if (selectedIndex === -1) return;
 
-    setDataList((prevState) => {
-      const existingItem = prevState.find(
-        (e) =>
-          e.person_id === idRef &&
-          e.publi_id === productionId &&
-          e.contribution_id === contributionId &&
-          e.export === true
-      );
-
-      if (!existingItem) {
+    if (!hasExistingElement(true)) {
+      setDataList((prevState) => {
         const newList = [
           ...prevState,
           {
@@ -131,21 +100,28 @@ export default function SelectWithNames({
         });
 
         return newList;
-      } else {
-        toast.warn(
-          `La publication de ${option.value} est déjà dans le panier !`,
-          {
-            style: {
-              backgroundColor: "#f57c00",
-              color: "#fff",
-            },
-          }
-        );
-
-        return prevState;
-      }
-    });
+      });
+    } else {
+      toast.warn(
+        `La publication de ${option.value} est déjà dans le panier !`,
+        {
+          style: {
+            backgroundColor: "#f57c00",
+            color: "#fff",
+          },
+        }
+      );
+    }
   };
+
+  const customStyles = {
+    option: (provided: any, state: { data: SelectOption }) => ({
+      ...provided,
+      color: state.data.isColored ? "#1f8d49" : "black",
+    }),
+  };
+
+  const threshold = 7;
 
   return (
     <Row>
