@@ -1,10 +1,5 @@
-import {
-  Contribution_Production,
-  Thread,
-} from "../pages/api-operation-page/types";
-
-export interface Contribution {
-  [x: string]: any;
+// Types de base communs à plusieurs interfaces
+export interface BaseContribution {
   id: string;
   name: string;
   email: string;
@@ -13,38 +8,61 @@ export interface Contribution {
   status: string;
   comment?: string;
   team?: string[];
-  type: string;
-  created_at: string;
   message: string;
+  created_at: string;
+  modified_at?: string;
+  fromApplication?: string;
+  contributionType?: string;
   organisation?: string;
   fonction?: string;
-  modified_at?: string;
   threads?: Thread[];
-  fromApplication: string;
+  extra?: Record<string, any>;
+}
+
+// Type importé depuis un autre fichier
+import {
+  Thread,
+  Contribution_Production,
+} from "../pages/api-operation-page/types";
+
+// Données d'auteur
+export interface AuthorData {
+  fullName: string[];
+  firstName: string[];
+  lastName: string[];
+}
+
+// Contribution standard
+export interface Contribution extends BaseContribution {
+  type: string;
   emails?: any;
 }
 
+// Interfaces pour les props de composants liés aux emails
 export interface LastMailsSentProps {
   data: {
     length: number;
-
     emails: Contribution[];
   };
 }
+
 export interface LastMailsReceivedProps {
   data: {
-    [x: string]: any;
+    [key: string]: any;
     length: number;
   };
 }
 
+// Interfaces pour les props de composants de contribution
 export interface AllContributionsProps {
   data: Contribution[];
 }
+
 export interface ContributorSummaryProps {
   contributions: Contribution[];
   onSelectContribution: (id: string) => void;
 }
+
 export interface ContributionItemProps {
   data: Contribution & { type: string };
   highlightedQuery: string;
@@ -52,59 +70,19 @@ export interface ContributionItemProps {
   allTags: string[];
   url: string;
 }
-export interface ChangeNameProps {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
+
+// Types spécifiques pour certaines pages
+export interface ChangeNameProps extends BaseContribution {
   type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
 }
 
-export interface RemoveUserProps {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
+export interface RemoveUserProps extends BaseContribution {
   type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
-}
-export interface ChangeNameContribution {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  tags: string[];
-  status: string;
-  comment?: string;
-  team?: string[];
-  type: string;
-  created_at: string;
-  message: string;
-  organisation?: string;
-  fonction?: string;
-  modified_at?: string;
-  threads?: Thread[];
 }
 
+export type ChangeNameContribution = ChangeNameProps;
+
+// Type pour les réponses dans les threads
 export interface Response {
   read: boolean;
   responseMessage: string;
@@ -112,39 +90,35 @@ export interface Response {
   team?: string[];
 }
 
+// Types pour les données de contribution
 export type ContributionDataType = {
   responseFrom: string;
   idref: string | number;
-  tags: string[];
-  id: string;
-  type: string;
   section: string;
-  comment: string;
-  name: string;
-  organisation: string;
-  email: string;
-  fonction: string;
-  message: string;
-  modified_at: string;
-  created_at: string;
-  status: string;
-  team: string[];
-  threads?: Thread[];
-};
+  type: string;
+} & BaseContribution;
 
+// Interfaces pour les props de composants de page
 export type ContributionPageProps = {
   fromApplication?: string;
 };
 
 export type StaffActionsProps = {
   data: any[];
+  url?: string;
+  refetch?: () => void;
 };
 
 export type MessagePreviewProps = {
   renderMessage: (message: string) => JSX.Element;
+  data?: BaseContribution;
+  highlightedQuery?: string;
+  refetch?: () => void;
+  allTags?: string[];
 };
 
-export type Contribute_Production = {
+// Type pour les contributions de production
+export type Contribute_Production = BaseContribution & {
   objectId: string;
   fullName: string;
   firstName: string;
@@ -152,23 +126,12 @@ export type Contribute_Production = {
   responseByMail: string;
   responseFrom: string;
   tag: string;
-  id: string;
-  team: string[];
   phone: string;
-  modified_at: string | number | Date;
-  comment: string;
   treated_at: Date;
-  created_at: Date;
-  email: string;
-  extra: {};
-  message?: string;
-  name: string;
-  status: string;
   productions: any[];
-  threads?: Thread[];
-  fromApplication: string;
 };
 
+// Types pour les modales
 export type TagSelectionModalProps = {
   isOpen: boolean;
   allTags: string[];
@@ -177,13 +140,21 @@ export type TagSelectionModalProps = {
 
 export type EditModalProps = {
   isOpen: boolean;
-  dataProduction: Contribute_Production[];
+  dataProduction?: Contribute_Production[];
   onClose: () => void;
   data: Contribution | Contribute_Production;
   refetch: () => void;
   allTags: string[];
 };
 
+export type ProfileModalProps = {
+  isOpen: boolean;
+  selectedProfile: string | null;
+  onClose: () => void;
+  onSelectProfile: (profile: string) => void;
+};
+
+// Type pour la production
 export type Production = {
   lastName: string;
   firstName: string;
@@ -194,12 +165,14 @@ export type Production = {
   treated: boolean;
 };
 
+// Types pour les formulaires
 export type Inputs = {
   team: string[];
   status: string;
   tags: string[];
   comment: string;
   extra: string;
+  contributionType?: string;
 };
 
 export interface PersonInfo {
@@ -208,18 +181,13 @@ export interface PersonInfo {
   phone: string;
 }
 
+// Type pour les publications
 export type Publication = {
   hits: number;
   landingPage?: string;
 };
 
-export type ProfileModalProps = {
-  isOpen: boolean;
-  selectedProfile: string | null;
-  onClose: () => void;
-  onSelectProfile: (profile: string) => void;
-};
-
+// Type pour l'envoi d'email
 export type EmailSenderProps = {
   contribution: Contribution | Contribution_Production;
   refetch: () => void;
