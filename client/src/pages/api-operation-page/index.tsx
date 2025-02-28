@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState } from "react";
 import {
   Col,
   Container,
@@ -27,33 +27,66 @@ import {
 } from "../../types";
 
 const ContributionPage: React.FC = () => {
-  const [reload] = useState(0);
-  const [sort, setSort] = useState("DESC");
-  const [status, setStatus] = useState("choose");
-  const [query, setQuery] = useState<string[]>([]);
-  const [page, setPage] = useState(1);
   const location = useLocation();
+
+  const urlParams = new URLSearchParams(location.search);
+  const initialPage = parseInt(urlParams.get("page") || "1");
+  const initialQuery = urlParams.get("query") || "";
+  const initialStatus = urlParams.get("status") || "new";
+
+  const [sort, setSort] = useState("DESC");
+  const [status, setStatus] = useState(initialStatus);
+  const [query, setQuery] = useState<string[]>(
+    initialQuery ? initialQuery.split(",") : []
+  );
+  const [page, setPage] = useState(initialPage);
   const { dataList } = useDataList();
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setPage(parseInt(params.get("page") || "1"));
-    const queryParam = params.get("query") || "";
-    setQuery(queryParam ? queryParam.split(",") : []);
-  }, [location.search]);
+  const updateUrlAndState = (params: {
+    newStatus?: string;
+    newQuery?: string[];
+    newPage?: number;
+    newSort?: string;
+  }) => {
+    if (params.newStatus !== undefined) setStatus(params.newStatus);
+    if (params.newQuery !== undefined) setQuery(params.newQuery);
+    if (params.newPage !== undefined) setPage(params.newPage);
+    if (params.newSort !== undefined) setSort(params.newSort);
 
-  useEffect(() => {
     const newSearchParams = new URLSearchParams();
-    newSearchParams.set("page", page.toString());
-    newSearchParams.set("query", query.join(","));
+    newSearchParams.set("page", params.newPage?.toString() || page.toString());
+    newSearchParams.set("query", params.newQuery?.join(",") || query.join(","));
+    newSearchParams.set("status", params.newStatus || status);
+    if (params.newSort) newSearchParams.set("sort", params.newSort);
 
     const newURL = `${window.location.pathname}?${newSearchParams.toString()}`;
     window.history.pushState({}, "", newURL);
-  }, [page, query]);
+  };
 
-  useEffect(() => {
-    setPage(1);
-  }, [reload, location.pathname]);
+  const handleSetStatus = (newStatus: string) => {
+    updateUrlAndState({ newStatus, newPage: 1 });
+  };
+
+  const handleSetPage = (newPage: number) => {
+    updateUrlAndState({ newPage });
+  };
+
+  const handleSetSort = (newSort: string) => {
+    updateUrlAndState({ newSort });
+  };
+
+  const handleSearch = (value: string) => {
+    const trimmedValue = value.trim();
+    if (trimmedValue !== "" && !query.includes(trimmedValue)) {
+      const newQuery = [...query, trimmedValue];
+      updateUrlAndState({ newQuery, newPage: 1 });
+    }
+  };
+
+  const handleRemoveQueryItem = (item: string) => {
+    const newQuery = query.filter((q) => q !== item);
+    updateUrlAndState({ newQuery, newPage: 1 });
+  };
 
   const url = buildURL(location, sort, status, query.join(" "), page);
 
@@ -69,17 +102,6 @@ const ContributionPage: React.FC = () => {
   const meta: { total?: number } = fetchedData?.meta || {};
   const maxPage = meta.total ? Math.ceil(meta.total / 10) : 1;
 
-  const handleSearch = (value: string) => {
-    const trimmedValue = value.trim();
-    if (trimmedValue !== "" && !query.includes(trimmedValue)) {
-      setQuery([...query, trimmedValue]);
-    }
-  };
-
-  const handleRemoveQueryItem = (item: string) => {
-    setQuery(query.filter((q) => q !== item));
-  };
-
   const filteredContributions = contrib.filter((contribution) => {
     if (query.length === 0) {
       return true;
@@ -94,13 +116,9 @@ const ContributionPage: React.FC = () => {
     return nameMatches || idMatches;
   });
 
-  const allProductionIds = useMemo(() => {
-    return filteredContributions
-      .flatMap((contribution) =>
-        contribution.productions.map((prod) => prod.id)
-      )
-      .filter(Boolean);
-  }, [filteredContributions]);
+  const allProductionIds = filteredContributions
+    .flatMap((contribution) => contribution.productions.map((prod) => prod.id))
+    .filter(Boolean);
 
   const {
     authorsData,
@@ -131,7 +149,6 @@ const ContributionPage: React.FC = () => {
     );
   }
 
-  // Mettre à jour pour inclure aussi isErrorLandingPages
   if (isError || isErrorAuthors || isErrorLandingPages) {
     return (
       <Container className="fr-my-5w">
@@ -181,15 +198,15 @@ const ContributionPage: React.FC = () => {
             meta={meta}
             page={page}
             maxPage={maxPage}
-            setPage={setPage}
+            setPage={handleSetPage}
           />
         </Col>
         <Col offsetLg="1">
           <Selectors
             sort={sort}
             status={status}
-            setSort={setSort}
-            setStatus={setStatus}
+            setSort={handleSetSort}
+            setStatus={handleSetStatus}
             searchInMessage={true}
             setSearchInMessage={""}
           />
@@ -214,7 +231,7 @@ const ContributionPage: React.FC = () => {
       <BottomPaginationButtons
         page={page}
         maxPage={maxPage}
-        setPage={setPage}
+        setPage={handleSetPage}
       />
     </Container>
   );
