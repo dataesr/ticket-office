@@ -22,7 +22,6 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [selectedProfile, setSelectedProfile] = useState(
     localStorage.getItem("selectedProfile") || ""
   );
-
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
   const apiBaseUrl = isDevelopment
@@ -94,7 +93,6 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const handlePreview = () => {
     setShowPreviewModal(true);
   };
-
   return (
     <>
       <Container>
