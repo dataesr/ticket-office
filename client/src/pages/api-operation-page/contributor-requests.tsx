@@ -26,13 +26,21 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
     });
   };
 
+  const isExported = (publicationId: string, contributionId: string) => {
+    return dataList.some(
+      (item) =>
+        item.publi_id === publicationId &&
+        item.contribution_id === contributionId &&
+        item.export === true
+    );
+  };
+
   return (
     <>
       {data?.productions.map((production) => {
         const isCopied = copiedId === production?.id;
-        const hasExport = dataList.find(
-          (item) => item?.publi_id === production?.id
-        )?.export;
+
+        const hasExport = isExported(production.id, data.id);
 
         const currentAuthorData = findAuthorData(production?.id, authorsData);
 
@@ -55,7 +63,7 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
                 {isCopied && <span className="copied-text">Copié</span>}
                 <FaCopy size={14} color="#2196f3" className="copy-icon" />
               </button>
-              {hasExport === false && (
+              {!hasExport && (
                 <FaShoppingCart
                   className="fr-ml-2w cart-icon red-cart"
                   color="red"
