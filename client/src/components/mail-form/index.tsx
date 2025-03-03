@@ -115,7 +115,7 @@ function EmailForm({
         break;
       case "PUBLICATION":
         setUserResponse(
-          `Bonjour, merci pour votre contribution. Les publications seront liées dans les prochains jours. Cordialement L'équipe scanR`
+          `Bonjour, Merci pour votre contribution. Les publications seront associées à la fiche-auteur à l'occasion de la prochaine mise à jour. Cordialement L'équipe scanR`
         );
         break;
       case "SUPRESSION":
