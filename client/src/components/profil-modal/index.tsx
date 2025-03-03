@@ -8,6 +8,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
   onClose,
   onSelectProfile,
 }) => {
+
   return (
     <Modal isOpen={isOpen} hide={onClose}>
       <ModalTitle>Hello ! Sélectionne ton profil</ModalTitle>
@@ -18,8 +19,8 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
               key={index}
               className={`profile-button profile${index + 1}`}
               onClick={() => {
-                onSelectProfile(profile);
-                onClose();
+                onSelectProfile(profile)
+                onClose()
               }}
             >
               {profile}
@@ -28,7 +29,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({
         </div>
       </ModalContent>
     </Modal>
-  );
+  )
 };
 
 export default ProfileModal;
