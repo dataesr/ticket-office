@@ -87,7 +87,7 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
       </Row>
     </Container>
   );
-
+  console.log(data, "coucou");
   return (
     <AccordionGroup>
       <Accordion title={renderAccordion}>
@@ -96,7 +96,6 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
           allTags={allTags}
           data={{
             ...data,
-            objectId: data.id,
             email: data.email || "",
             message: data.message || "",
             status: data.status || "",
