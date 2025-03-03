@@ -72,9 +72,7 @@ const Header: React.FC = () => {
               </div>
               <div className="fr-header__service">
                 <a href="/" title="Accueil"></a>
-                <p className="fr-header__service-tagline">
-                  Le Guichet numérique - {import.meta.env.VITE_HEADER_TAG}
-                </p>
+                <p className="fr-header__service-tagline">Le Guichet numérique - {import.meta.env.VITE_HEADER_TAG}</p>
               </div>
             </div>
             <div className="fr-header__tools">
@@ -92,20 +90,12 @@ const Header: React.FC = () => {
           <nav className="fr-nav" role="navigation" aria-label="Menu principal">
             <ul className="fr-nav__list">
               <li className="fr-nav__item">
-                <Link
-                  className="fr-nav__link"
-                  href="/"
-                  aria-current={pathname === "/" ? "page" : undefined}
-                >
+                <Link className="fr-nav__link" href="/" aria-current={pathname === "/" ? "page" : undefined}>
                   Accueil
                 </Link>
               </li>
               <li className="fr-nav__item">
-                <button
-                  className="fr-nav__btn"
-                  aria-expanded="false"
-                  aria-controls="scanr-menu"
-                >
+                <button className="fr-nav__btn" aria-expanded="false" aria-controls="scanr-menu">
                   scanR
                 </button>
                 <div className="fr-collapse fr-menu" id="scanr-menu">
@@ -126,50 +116,20 @@ const Header: React.FC = () => {
                 </div>
               </li>
               <li className="fr-nav__item">
-                <button
-                  className="fr-nav__btn"
-                  aria-expanded="false"
-                  aria-controls="bso-menu"
+                <Link
+                  className="fr-nav__link"
+                  href="/bso-local-variations"
+                  aria-current={pathname === "/bso-local-variations" ? "page" : undefined}
+                  onClick={() => concealElement("bso-menu")}
                 >
                   BSO
-                </button>
-                <div className="fr-collapse fr-menu" id="bso-menu">
-                  <ul className="fr-menu__list">
-                    <li>
-                      <Link
-                        className="fr-nav__link"
-                        href="/bso-contact"
-                        aria-current={
-                          pathname === "/bso-contact" ? "page" : undefined
-                        }
-                      >
-                        Formulaire de contact
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        className="fr-nav__link"
-                        href="/bso-local-variations"
-                        aria-current={
-                          pathname === "/bso-local-variations"
-                            ? "page"
-                            : undefined
-                        }
-                        onClick={() => concealElement("bso-menu")}
-                      >
-                        Demandes de BSO local
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
+                </Link>
               </li>
               <li className="fr-nav__item">
                 <Link
                   className="fr-nav__link"
                   href="/datasupr-contact"
-                  aria-current={
-                    pathname === "/datasupr-contact" ? "page" : undefined
-                  }
+                  aria-current={pathname === "/datasupr-contact" ? "page" : undefined}
                 >
                   DatasupR
                 </Link>
@@ -178,9 +138,7 @@ const Header: React.FC = () => {
                 <Link
                   className="fr-nav__link"
                   href="/last-mails-sent"
-                  aria-current={
-                    pathname === "/last-mails-sent" ? "page" : undefined
-                  }
+                  aria-current={pathname === "/last-mails-sent" ? "page" : undefined}
                 >
                   Derniers mails envoyés
                 </Link>
@@ -189,9 +147,7 @@ const Header: React.FC = () => {
                 <Link
                   className="fr-nav__link"
                   href="/last-mails-received"
-                  aria-current={
-                    pathname === "/last-mails-received" ? "page" : undefined
-                  }
+                  aria-current={pathname === "/last-mails-received" ? "page" : undefined}
                 >
                   Derniers mails reçus
                   <span className="fr-icon-medal-fill" aria-hidden="true" />
@@ -201,9 +157,7 @@ const Header: React.FC = () => {
                 <Link
                   className="fr-nav__link"
                   href="/statistiques"
-                  aria-current={
-                    pathname === "/statistiques" ? "page" : undefined
-                  }
+                  aria-current={pathname === "/statistiques" ? "page" : undefined}
                 >
                   Les stats
                 </Link>
@@ -213,7 +167,7 @@ const Header: React.FC = () => {
         </div>
       </div>
     </header>
-  );
+  )
 };
 
 export default Header;
