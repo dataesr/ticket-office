@@ -8,18 +8,16 @@ import { CopyButton } from "../../../utils/copy-button"
 import EditModal from "./edit-modal"
 import { tagGetColor, tagGetIcon } from "../config/tags"
 import DownloadFile from "../actions/download-file"
-import uploadFiles from "../actions/upload-files"
 import readCSV from "../_utils/read-csv"
 import { useVariationsContext } from "../context"
 import Threads from "./threads"
+import UploadModal from "./upload-modal"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
-  const {
-    data: { refetch },
-    getCodeFromBSO,
-  } = useVariationsContext()
-  const [showModal, setShowModal] = useState(false)
+  const [showEditModal, setShowEditModal] = useState<boolean>(false)
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
   const [copiedText, setCopiedText] = useState<string | null>(null)
+  const { getCodeFromBSO } = useVariationsContext()
 
   const countCsv = readCSV(variation.csv)
   const codeTag = getCodeFromBSO(variation.structure?.id)
@@ -154,16 +152,17 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
           Télécharger le fichier
         </Button>
       </Container>
-      <EditModal variations={[variation]} isOpen={showModal} onClose={() => setShowModal(false)} />
+      <EditModal variations={[variation]} isOpen={showEditModal} onClose={() => setShowEditModal(false)} />
+      <UploadModal variations={[variation]} isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
       <ButtonGroup isInlineFrom="md" className="fr-mb-5w fr-mt-3w">
-        <Button icon="edit-line" onClick={() => setShowModal(true)}>
+        <Button icon="edit-line" onClick={() => setShowEditModal(true)}>
           Éditer la demande
         </Button>
         <Button
           variant="secondary"
           icon="server-line"
           disabled={!variation.structure.id}
-          onClick={() => uploadFiles([variation]).then(() => refetch())}
+          onClick={() => setShowUploadModal(true)}
         >
           Charger le fichier sur OVH
         </Button>
