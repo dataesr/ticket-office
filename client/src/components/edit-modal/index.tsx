@@ -13,7 +13,6 @@ import {
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 import TagSelectionModal from "./modal-select-tags";
-import ProfileModal from "../profil-modal";
 import { EditModalProps, Inputs } from "../../types";
 
 const EditModal: React.FC<EditModalProps> = ({
@@ -23,13 +22,9 @@ const EditModal: React.FC<EditModalProps> = ({
   refetch,
   allTags,
 }) => {
-  const [showProfileModal, setShowProfileModal] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState(
-    localStorage.getItem("selectedProfile") || ""
-  );
-
   const [showTagModal, setShowTagModal] = useState(false);
   const [tagInput, setTagInput] = useState("");
+  const selectedProfile = localStorage.getItem("selectedProfile")
 
   const filteredTags = Array.isArray(allTags)
     ? [
@@ -73,10 +68,6 @@ const EditModal: React.FC<EditModalProps> = ({
     ? `http://localhost:3000/api/${basePath}/${data?.id}`
     : `${baseURL}/api/${basePath}/${data?.id}`;
 
-  if (!selectedProfile) {
-    setTimeout(() => setShowProfileModal(true), 0);
-  }
-
   const handleInputChange = (key: keyof Inputs, value: any) => {
     setInputs((prevInputs) => ({
       ...prevInputs,
@@ -85,15 +76,6 @@ const EditModal: React.FC<EditModalProps> = ({
   };
 
   const handleSubmit = async () => {
-    if (
-      !selectedProfile ||
-      selectedProfile === "null" ||
-      selectedProfile === ""
-    ) {
-      setShowProfileModal(true);
-      return;
-    }
-
     try {
       const extraEntries = inputs.extra.split("\n").reduce((acc, line) => {
         const [key, value] = line.split(":").map((part) => part.trim());
@@ -149,17 +131,6 @@ const EditModal: React.FC<EditModalProps> = ({
       "tags",
       inputs.tags.filter((tag) => tag !== tagToRemove)
     );
-  };
-
-  const handleProfileSelection = (profile: string) => {
-    setSelectedProfile(profile);
-    localStorage.setItem("selectedProfile", profile);
-    setShowProfileModal(false);
-
-    setInputs((prev) => ({
-      ...prev,
-      team: [profile],
-    }));
   };
 
   return (
@@ -249,12 +220,6 @@ const EditModal: React.FC<EditModalProps> = ({
           </Row>
         </ModalContent>
       </Modal>
-      <ProfileModal
-        isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
-        onSelectProfile={handleProfileSelection}
-        selectedProfile={selectedProfile}
-      />
       <TagSelectionModal
         isOpen={showTagModal}
         allTags={filteredTags}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   Container,
   Modal,
@@ -14,25 +14,15 @@ import {
 } from "@dataesr/dsfr-plus"
 import { Variation } from "../types"
 import EmailForm from "../../../components/mail-form"
-import ProfileModal from "../../../components/profil-modal"
 import { notificationGetName, notificationGetTemplate } from "../config/notifications"
 import { useVariationsContext } from "../context"
 
 export default function Threads({ variation }: { variation: Variation }) {
   const { getCommentsNameFromBSO } = useVariationsContext()
   const [userResponse, setUserResponse] = useState("")
-  const [showProfileModal, setShowProfileModal] = useState(false)
   const [showPreviewModal, setShowPreviewModal] = useState(false)
-  const [selectedProfile, setSelectedProfile] = useState(localStorage.getItem("selectedProfile") || "")
-
+  const selectedProfile = localStorage.getItem("selectedProfile")
   const commentsName = getCommentsNameFromBSO(variation.structure?.id)
-
-  useEffect(() => {
-    const profileFromLocalStorage = localStorage.getItem("selectedProfile")
-    if (profileFromLocalStorage) {
-      setSelectedProfile(profileFromLocalStorage)
-    }
-  }, [])
 
   return (
     <Container fluid>
@@ -99,12 +89,6 @@ export default function Threads({ variation }: { variation: Variation }) {
           contribution={variation}
         />
       </Container>
-      <ProfileModal
-        isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
-        onSelectProfile={null}
-        selectedProfile={selectedProfile}
-      />
       <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>
         <ModalTitle>Prévisualisation du mail</ModalTitle>
         <ModalContent>
