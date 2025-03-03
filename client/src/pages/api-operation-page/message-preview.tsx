@@ -34,7 +34,6 @@ const MessagePreview = ({
   const [scanRClicked, setScanRClicked] = useState(false);
   const { dataList, setDataList } = useDataList();
   const { fullNameFromIdref: fetchedData } = NameFromIdref(data.id);
-
   const copyToClipboard = useCallback((text: string) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopiedId(text);
