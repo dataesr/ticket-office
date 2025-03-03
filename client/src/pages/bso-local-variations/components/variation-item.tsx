@@ -11,7 +11,7 @@ import DownloadFile from "../actions/download-file"
 import uploadFiles from "../actions/upload-files"
 import readCSV from "../_utils/read-csv"
 import { useVariationsContext } from "../context"
-import Emails from "./emails"
+import Threads from "./threads"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const {
@@ -168,7 +168,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
           Charger le fichier sur OVH
         </Button>
       </ButtonGroup>
-      <Emails />
+      <Threads variation={variation} />
     </>
   )
 }
