@@ -13,6 +13,7 @@ export const postContactSchema = t.Object(
       datasupr: "datasupr",
       curiexplore: "curiexplore",
     }),
+    contributionType: t.Optional(t.String()),
     extra: t.Optional(
       t.Record(t.String(), t.String(), {
         example: {

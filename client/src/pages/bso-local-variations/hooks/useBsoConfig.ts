@@ -5,8 +5,8 @@ const url_main = "https://raw.githubusercontent.com/dataesr/bso-ui/main/src/conf
 const url_staging = "https://raw.githubusercontent.com/dataesr/bso-ui/refs/heads/staging/src/config/locals.json"
 
 type bsoConfig = {
-  main: Array<string>
-  staging: Array<string>
+  main: Record<string, { [key: string]: string }>
+  staging: Record<string, { [key: string]: string }>
 }
 
 export default function useBsoConfig() {
@@ -22,8 +22,8 @@ export default function useBsoConfig() {
 
   const data: bsoConfig = useMemo(() => {
     return {
-      main: Object.keys(dataMain || {}),
-      staging: Object.keys(dataStaging || {}),
+      main: dataMain || {},
+      staging: dataStaging || {},
     }
   }, [dataMain, dataStaging])
   return data

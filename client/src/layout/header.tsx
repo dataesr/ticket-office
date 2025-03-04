@@ -49,11 +49,21 @@ const Header: React.FC = () => {
   ];
 
   useEffect(() => {
-    const profileFromStorage = localStorage.getItem("selectedProfile");
+    const profileFromStorage = localStorage.getItem("selectedProfile")
     if (profileFromStorage) {
-      setSelectedProfile(profileFromStorage);
-    }
-  }, []);
+      setSelectedProfile(profileFromStorage)
+    } else setShowModal(true)
+  }, [])
+
+  const handleProfileSelection = (profile: string) => {
+    setSelectedProfile(profile)
+    localStorage.setItem("selectedProfile", profile)
+    setShowModal(false)
+  }
+
+  const handleClose = () => {
+    if (selectedProfile) setShowModal(true)
+  }
 
   return (
     <header role="banner" className="fr-header">
@@ -82,8 +92,8 @@ const Header: React.FC = () => {
               <ProfileModal
                 isOpen={showModal}
                 selectedProfile={selectedProfile}
-                onClose={() => setShowModal(false)}
-                onSelectProfile={setSelectedProfile}
+                onClose={handleClose}
+                onSelectProfile={handleProfileSelection}
               />
             </div>
           </div>

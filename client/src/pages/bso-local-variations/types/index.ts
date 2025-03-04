@@ -15,6 +15,7 @@ export interface Variation {
   treated_at: string
   team?: string[]
   comment?: string
+  threads?: any[]
 }
 
 export interface VariationItemProps {

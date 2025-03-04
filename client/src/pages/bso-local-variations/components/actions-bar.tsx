@@ -1,17 +1,18 @@
 import { Button, ButtonGroup, Container, Notice, Text } from "@dataesr/dsfr-plus"
-import uploadFiles from "../actions/upload-files"
 import { useVariationsContext } from "../context"
 import { Variation } from "../types"
 import { useState } from "react"
 import EditModal from "./edit-modal"
+import UploadModal from "./upload-modal"
 
 export default function ActionBar({ variations }: { variations: Array<Variation> }) {
-  const [showModal, setShowModal] = useState<boolean>(false)
-  const {
-    data: { refetch },
-  } = useVariationsContext()
+  const [showEditModal, setShowEditModal] = useState<boolean>(false)
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
+  const { getCodeFromBSO } = useVariationsContext()
 
-  const noStructureIds = variations.filter((variation) => !("id" in variation.structure))
+  const variationsWithoutStructureId = variations.filter((variation) => !variation.structure?.id)
+  const variationsWithStructureId = variations.filter((variation) => !!variation.structure?.id)
+  const variationsWithConfig = variations.filter((variation) => getCodeFromBSO(variation.structure?.id) === "production")
 
   return (
     <Container fluid>
@@ -22,31 +23,29 @@ export default function ActionBar({ variations }: { variations: Array<Variation>
         </strong>{" "}
         de déclinaison locale
       </Text>
-      {!!noStructureIds.length && (
+      {!!variationsWithoutStructureId.length && (
         <Notice className="fr-mb-3w" type="warning" closeMode="disallow">
-          {noStructureIds.length} demande{noStructureIds.length > 1 ? "s" : ""} ne contien
-          {noStructureIds.length > 1 ? "nent" : "t"} pas d'identifiant de structure!
+          {variationsWithoutStructureId.length} demande{variationsWithoutStructureId.length > 1 ? "s" : ""} ne contien
+          {variationsWithoutStructureId.length > 1 ? "nent" : "t"} pas d'identifiant de structure!
           <br />
-          {noStructureIds.map((variation) => `- ${variation.structure.name} (${variation.id}) `)}
+          {variationsWithoutStructureId.map((variation) => `- ${variation.structure.name} (${variation.id}) `)}
         </Notice>
       )}
-      <EditModal variations={variations} isOpen={showModal} onClose={() => setShowModal(false)} />
+      <EditModal variations={variations} isOpen={showEditModal} onClose={() => setShowEditModal(false)} />
+      <UploadModal
+        variations={variationsWithStructureId}
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+      />
       <ButtonGroup style={{ width: "60%" }}>
-        <Button icon="edit-line" onClick={() => setShowModal(true)}>
-          Editer les demandes
+        <Button icon="edit-line" onClick={() => setShowEditModal(true)}>
+          {`Editer les demandes (${variations?.length})`}
         </Button>
-        <Button
-          variant="secondary"
-          icon="server-line"
-          onClick={() => {
-            uploadFiles(variations)
-            refetch()
-          }}
-        >
-          Charger les fichiers sur OVH
+        <Button variant="secondary" icon="server-line" onClick={() => setShowUploadModal(true)}>
+          {`Charger les fichiers sur OVH (${variationsWithStructureId.length})`}
         </Button>
         <Button icon="article-line" variant="secondary" disabled>
-          Relancer un index BSO
+          {`Relancer un index BSO (${variationsWithConfig.length})`}
         </Button>
       </ButtonGroup>
     </Container>

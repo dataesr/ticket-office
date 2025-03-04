@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Container,
   Modal,
@@ -9,7 +9,6 @@ import {
   Col,
 } from "@dataesr/dsfr-plus";
 import { toast } from "react-toastify";
-import ProfileModal from "../../components/profil-modal";
 import EmailForm from "../../components/mail-form";
 import { getCollectionNameFromUrl } from "../utils/collectionName";
 import { EmailSenderProps } from "../../types";
@@ -17,34 +16,15 @@ import { EmailSenderProps } from "../../types";
 function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
-  const [showProfileModal, setShowProfileModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState(
-    localStorage.getItem("selectedProfile") || ""
-  );
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
   const apiBaseUrl = isDevelopment
     ? "http://localhost:3000/api/send-email"
     : `${url}/api/send-email`;
-
-  useEffect(() => {
-    const profileFromLocalStorage = localStorage.getItem("selectedProfile");
-    if (profileFromLocalStorage) {
-      setSelectedProfile(profileFromLocalStorage);
-    }
-  }, []);
+  const selectedProfile = localStorage.getItem("selectedProfile")
 
   const sendEmail = async () => {
-    if (
-      !selectedProfile ||
-      selectedProfile === "null" ||
-      selectedProfile === ""
-    ) {
-      setShowProfileModal(true);
-      return;
-    }
-
     const formattedResponse = userResponse.replace(/\n/g, "<br/>");
 
     const currentUrl = window.location.href;
@@ -84,12 +64,6 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     }
   };
 
-  const handleProfileSelect = (profile) => {
-    setSelectedProfile(profile);
-    localStorage.setItem("selectedProfile", profile);
-    setShowProfileModal(false);
-  };
-
   const handlePreview = () => {
     setShowPreviewModal(true);
   };
@@ -104,12 +78,6 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
           contribution={contribution}
         />
       </Container>
-      <ProfileModal
-        isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
-        onSelectProfile={handleProfileSelect}
-        selectedProfile={selectedProfile}
-      />
       <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>
         <ModalTitle>Prévisualisation du mail</ModalTitle>
         <ModalContent>

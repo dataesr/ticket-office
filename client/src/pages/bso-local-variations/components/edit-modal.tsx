@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import {
   Modal,
   ModalTitle,
@@ -13,29 +13,19 @@ import {
   Container,
 } from "@dataesr/dsfr-plus"
 import { toast } from "react-toastify"
-import ProfileModal from "../../../components/profil-modal"
 import { VARIATION_TAGS } from "../config/tags"
 import { EditModalInputs, EditModalProps } from "../types"
 import useEdit from "../hooks/useEdit"
 import { useVariationsContext } from "../context"
 import getStatusFromTags from "../_utils/get-status-from-tags"
 
-const EditModal: React.FC<EditModalProps> = ({ variations, isOpen, onClose }) => {
+export default function EditModal({ variations, isOpen, onClose }: EditModalProps) {
   const {
     data: { refetch },
   } = useVariationsContext()
-  const [showProfileModal, setShowProfileModal] = useState(false)
-  const [selectedProfile, setSelectedProfile] = useState(localStorage.getItem("selectedProfile"))
-  const [inputs, setInputs] = useState<EditModalInputs>({})
+  const selectedProfile = localStorage.getItem("selectedProfile")
+  const [inputs, setInputs] = useState<EditModalInputs>({ team: selectedProfile || "" })
   const singleVariation = variations?.length === 1 ? variations[0] : null
-
-  useEffect(() => {
-    if (!selectedProfile) {
-      setShowProfileModal(true)
-    } else {
-      inputs.team = selectedProfile
-    }
-  }, [selectedProfile])
 
   const resetInputs = () => setInputs({})
 
@@ -77,11 +67,6 @@ const EditModal: React.FC<EditModalProps> = ({ variations, isOpen, onClose }) =>
   }
 
   const handleSubmit = async () => {
-    if (!selectedProfile || selectedProfile === "null" || selectedProfile === "") {
-      setShowProfileModal(true)
-      return
-    }
-
     if (singleVariation && inputs?.tags) inputs.status = getStatusFromTags({ ...singleVariation?.tags, ...inputs.tags })
 
     await useEdit(singleVariation ? singleVariation.id : variations.map((variation) => variation.id), inputs)
@@ -104,7 +89,7 @@ const EditModal: React.FC<EditModalProps> = ({ variations, isOpen, onClose }) =>
   return (
     <>
       <Modal isOpen={isOpen} hide={onClose}>
-        <ModalTitle>Éditer la demande</ModalTitle>
+        <ModalTitle>{singleVariation ? "Éditer la demande" : `Éditer ${variations.length} demandes`}</ModalTitle>
         <ModalContent>
           <Tabs>
             {singleVariation && (
@@ -217,18 +202,6 @@ const EditModal: React.FC<EditModalProps> = ({ variations, isOpen, onClose }) =>
           </Tabs>
         </ModalContent>
       </Modal>
-      <ProfileModal
-        isOpen={showProfileModal}
-        onClose={() => setShowProfileModal(false)}
-        onSelectProfile={(profile) => {
-          setSelectedProfile(profile)
-          localStorage.setItem("selectedProfile", profile)
-          setShowProfileModal(false)
-        }}
-        selectedProfile={selectedProfile}
-      />
     </>
   )
 }
-
-export default EditModal
