@@ -57,7 +57,6 @@ postContactsRoutes.post(
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),
-      contributionType: "contact",
     };
     const url = process.env.BASE_API_URL;
     const contributionLink = `${url}/${body.fromApplication}-contact?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
@@ -81,6 +80,7 @@ postContactsRoutes.post(
       newContributionEmailConfig[
         body.fromApplication as keyof typeof newContributionEmailConfig
       ];
+
     if (!selectedConfig) {
       return error(400, {
         message: `No email configuration found for ${body.fromApplication}`,
@@ -111,7 +111,6 @@ postContactsRoutes.post(
         message: `${finalContribution.message}`,
       },
     };
-
     if (!selectedConfig.senderEmail) {
       console.error(
         `Email d'expéditeur non défini pour ${body.fromApplication}`
