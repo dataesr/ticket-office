@@ -1,8 +1,10 @@
-import useEdit from "../hooks/useEdit"
 import { toast } from "react-toastify"
 import { Variation } from "../types"
+import { apiUrl } from "../../../api/utils/url"
+import editVariations from "./edit-variations"
 
 async function uploadFile(variation: Variation) {
+  const url = `${apiUrl}/api/storage`
   const data = {
     container: "bso-local",
     filename: `${variation.structure?.id || variation.structure.name}.csv`,
@@ -10,7 +12,7 @@ async function uploadFile(variation: Variation) {
     buffer: variation.csv,
   }
 
-  fetch("/api/storage", {
+  fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +32,7 @@ export default async function uploadFiles(variations: Array<Variation>) {
 
   Promise.all(variations.map((variation) => uploadFile(variation)))
     .then(() => {
-      useEdit(
+      editVariations(
         variations.map((variation) => variation.id),
         inputs
       )

@@ -15,9 +15,9 @@ import {
 import { toast } from "react-toastify"
 import { VARIATION_TAGS } from "../config/tags"
 import { EditModalInputs, EditModalProps } from "../types"
-import useEdit from "../hooks/useEdit"
 import { useVariationsContext } from "../context"
 import getStatusFromTags from "../_utils/get-status-from-tags"
+import editVariations from "../actions/edit-variations"
 
 export default function EditModal({ variations, isOpen, onClose }: EditModalProps) {
   const {
@@ -69,7 +69,10 @@ export default function EditModal({ variations, isOpen, onClose }: EditModalProp
   const handleSubmit = async () => {
     if (singleVariation && inputs?.tags) inputs.status = getStatusFromTags({ ...singleVariation?.tags, ...inputs.tags })
 
-    await useEdit(singleVariation ? singleVariation.id : variations.map((variation) => variation.id), inputs)
+    await editVariations(
+      variations.map((variation) => variation.id),
+      inputs
+    )
       .then(() => {
         refetch()
         onClose()

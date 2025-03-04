@@ -13,14 +13,15 @@ import {
   Button,
 } from "@dataesr/dsfr-plus"
 import { Variation } from "../types"
-import EmailForm from "../../../components/mail-form"
 import { notificationGetName, notificationGetTemplate } from "../config/notifications"
 import { useVariationsContext } from "../context"
+import sendEmails from "../actions/send-email"
 
 export default function Threads({ variation }: { variation: Variation }) {
   const { getCommentsNameFromBSO } = useVariationsContext()
-  const [userResponse, setUserResponse] = useState("")
-  const [showPreviewModal, setShowPreviewModal] = useState(false)
+  const [userResponse, setUserResponse] = useState<string>("")
+  const [notificationTag, setNotificationTag] = useState<string>("ongoing")
+  const [showPreviewModal, setShowPreviewModal] = useState<boolean>(false)
   const selectedProfile = localStorage.getItem("selectedProfile")
   const commentsName = getCommentsNameFromBSO(variation.structure?.id)
 
@@ -46,11 +47,12 @@ export default function Threads({ variation }: { variation: Variation }) {
             <label htmlFor="templateSelect">Choisir un template de réponse</label>
             <select
               id="templateSelect"
-              value={"1"}
-              onChange={(event) =>
-                setUserResponse(notificationGetTemplate(event.target.value, variation.structure?.id, commentsName))
-              }
               className="fr-select"
+              value={"1"}
+              onChange={(event) => {
+                setNotificationTag(event.target.value)
+                setUserResponse(notificationGetTemplate(event.target.value, variation.structure?.id, commentsName))
+              }}
             >
               <option value="">Sélectionnez un template</option>
 
@@ -70,25 +72,16 @@ export default function Threads({ variation }: { variation: Variation }) {
           </Col>
           <Col offsetMd="9" md="3" xs="12">
             <ButtonGroup size="sm">
-              <Button className="fr-mt-1w" variant="secondary" onClick={() => setShowPreviewModal(true)}>
+              <Button variant="secondary" onClick={() => setShowPreviewModal(true)}>
                 Prévisualiser le mail
               </Button>
-              <Button className="fr-mt-1w" variant="primary" onClick={null}>
-                {"Répondre"}
+              <Button variant="primary" onClick={() => sendEmails([variation], notificationTag, userResponse)}>
+                Envoyer
               </Button>
             </ButtonGroup>
           </Col>
         </Row>
       )}
-      <Container>
-        <EmailForm
-          userResponse={userResponse}
-          setUserResponse={setUserResponse}
-          handlePreview={null}
-          sendEmail={null}
-          contribution={variation}
-        />
-      </Container>
       <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>
         <ModalTitle>Prévisualisation du mail</ModalTitle>
         <ModalContent>
@@ -96,7 +89,7 @@ export default function Threads({ variation }: { variation: Variation }) {
             <Col>
               <p>De: {`${selectedProfile} de l'équipe BSO <support@bso.fr>`}</p>
               <p>À: {`<${variation.contact.email}>`}</p>
-              <p>Objet: Réponse à votre demande de déclinaison locale, référence {variation?.id}</p>
+              <p>Objet: Réponse à votre demande de déclinaison locale, référence {variation.id}</p>
               <div>
                 <h4>Message:</h4>
                 {userResponse ? (
