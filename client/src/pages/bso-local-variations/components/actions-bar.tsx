@@ -19,16 +19,15 @@ export default function ActionBar({ variations }: { variations: Array<Variation>
   return (
     <Container fluid>
       <Text>
-        Sélection:{" "}
-        <strong>
-          {variations.length} demande{variations.length > 1 ? "s" : ""}
-        </strong>{" "}
-        de déclinaison locale
+        Sélection: <strong>{variations.length === 1 ? "1 demande" : `${variations.length} demandes`}</strong> de déclinaison
+        locale
       </Text>
       {!!variationsWithoutStructureId.length && (
         <Notice className="fr-mb-3w" type="warning" closeMode="disallow">
-          {variationsWithoutStructureId.length} demande{variationsWithoutStructureId.length > 1 ? "s" : ""} ne contien
-          {variationsWithoutStructureId.length > 1 ? "nent" : "t"} pas d'identifiant de structure!
+          {variationsWithoutStructureId.length === 1
+            ? "1 demande ne contient"
+            : `${variationsWithoutStructureId.length} demandes ne contiennent`}{" "}
+          pas d'identifiant de structure!
           <br />
           {variationsWithoutStructureId.map((variation) => `- ${variation.structure.name} (${variation.id}) `)}
         </Notice>
