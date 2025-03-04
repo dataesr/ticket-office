@@ -8,6 +8,8 @@ import UploadModal from "./upload-modal"
 export default function ActionBar({ variations }: { variations: Array<Variation> }) {
   const [showEditModal, setShowEditModal] = useState<boolean>(false)
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
+  const [_, setShowEmailModal] = useState<boolean>(false)
+
   const { getCodeFromBSO } = useVariationsContext()
 
   const variationsWithoutStructureId = variations.filter((variation) => !variation.structure?.id)
@@ -46,6 +48,9 @@ export default function ActionBar({ variations }: { variations: Array<Variation>
         </Button>
         <Button icon="article-line" variant="secondary" disabled>
           {`Relancer un index BSO (${variationsWithConfig.length})`}
+        </Button>
+        <Button variant="secondary" icon="send-plane-line" onClick={() => setShowEmailModal(true)} disabled>
+          {`Envoyer les notifications (${variationsWithStructureId.length})`}
         </Button>
       </ButtonGroup>
     </Container>

@@ -3,6 +3,8 @@ import { Variation } from "../types"
 import { apiUrl } from "../../../api/utils/url"
 import editVariations from "./edit-variations"
 
+const messageTemplate = (variation: Variation) => `<ul><li>Nom de la structure: ${variation.structure.name}</li></ul>`
+
 async function sendEmail(variation: Variation, response: string) {
   const url = `${apiUrl}/api/send-email`
   const selectedProfile = localStorage.getItem("selectedProfile")
@@ -11,8 +13,10 @@ async function sendEmail(variation: Variation, response: string) {
   const emailPayload = {
     contributionId: variation.id,
     to: variation.contact.email,
-    subject: `Réponse à votre demande de déclinaison locale, référence ${variation.id}`,
+    subject: `Réponse à votre demande de déclinaison locale, référence bso-${variation.id}`,
     userResponse: formattedResponse,
+    message: messageTemplate(variation),
+    collectionName: "local_variations",
     selectedProfile,
   }
 
