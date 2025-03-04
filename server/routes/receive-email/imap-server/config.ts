@@ -42,13 +42,13 @@ export const config = {
   } as Record<
     string,
     {
-      mailSender: string | undefined;
-      senderName: string;
-      templateId: number;
-      recipients: string[];
+      mailSender: string | undefined
+      senderName: string
+      templateId: number
+      recipients: string[]
     }
   >,
-};
+}
 
 export function validateConfig() {
   if (!config.email || !config.password || !config.mongoUri || !config.dbName) {
