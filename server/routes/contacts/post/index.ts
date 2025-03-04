@@ -57,6 +57,7 @@ postContactsRoutes.post(
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),
+      contributionType: "contact",
     };
     const url = process.env.BASE_API_URL;
     const contributionLink = `${url}/${body.fromApplication}-contact?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
