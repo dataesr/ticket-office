@@ -60,6 +60,8 @@ export function determineCollectionName(collectionPrefix: string): string {
     contribute_productions: "contribute_productions",
     productions: "contribute_productions",
     "update-user-data": "update-user-data",
+    bso: "local_variations",
+    local_variations: "local_variations",
   };
 
   const normalizedPrefix = collectionPrefix.toLowerCase().replace(/-/g, "");

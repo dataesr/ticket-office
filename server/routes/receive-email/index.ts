@@ -203,8 +203,6 @@ function generateContributionLink(
         return `${baseUrl}/datasupr-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
       case "works-magnet":
         return `${baseUrl}/works-magnet-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
-      case "bso":
-        return `${baseUrl}/bso-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
     }
   }
   if (collectionName === "contribute") {
@@ -218,6 +216,9 @@ function generateContributionLink(
   }
   if (collectionName === "update-user-data") {
     return `${baseUrl}/scanr-namechange?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+  }
+  if (collectionName === "local_variations") {
+    return `${baseUrl}/bso-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
   }
   return "";
 }
@@ -349,7 +350,10 @@ function determineCollectionName(collectionPrefix: string) {
     contribute: "contribute",
     contribute_productions: "contribute_productions",
     "update-user-data": "update-user-data",
+    bso: "local_variations",
+    local_variations: "local_variations",
   };
+  console.log(collections[collectionPrefix]);
   return collections[collectionPrefix] || "contacts";
 }
 

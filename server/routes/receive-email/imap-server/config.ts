@@ -9,8 +9,7 @@ export const config = {
   // listes de destinataires, on peut en faire un tableau pour mettre plusieurs personnes,
   //  à voir si pour le bso on veut un mail pour prévenir, pas sur
   scanrEmailRecipients: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
-  variationEmailRecipients:
-    process.env.VARIATION_EMAIL_RECIPIENTS?.split(",") || [],
+  variationEmailRecipients: process.env.BSO_EMAIL_RECIPIENTS?.split(",") || [],
   datasuprEmailRecipients:
     process.env.DATASUPR_EMAIL_RECIPIENTS?.split(",") || [],
 
@@ -28,17 +27,16 @@ export const config = {
       templateId: 269,
       recipients: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
     },
-    "support@bso.fr": {
+    "bso@dataesr.fr": {
       mailSender: process.env.VARIATION_MAIL_SENDER,
       senderName: "L'équipe BSO",
-      templateId: 271,
-      // À remplacer par le bon ID
-      recipients: process.env.VARIATION_EMAIL_RECIPIENTS?.split(",") || [],
+      templateId: 269,
+      recipients: process.env.BSO_EMAIL_RECIPIENTS?.split(",") || [],
     },
     "support@datasupr.fr": {
       mailSender: process.env.DATASUPR_MAIL_SENDER,
       senderName: "L'équipe DataSupR",
-      templateId: 272,
+      templateId: 269,
       // À remplacer par le bon ID
       recipients: process.env.DATASUPR_EMAIL_RECIPIENTS?.split(",") || [],
     },
