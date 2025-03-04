@@ -1,20 +1,20 @@
 import { Button, ButtonGroup, Container, Notice, Text } from "@dataesr/dsfr-plus"
-import { useVariationsContext } from "../context"
 import { Variation } from "../types"
 import { useState } from "react"
 import EditModal from "./edit-modal"
 import UploadModal from "./upload-modal"
+import EmailModal from "./email-modal"
+import IndexModal from "./index-modal"
 
 export default function ActionBar({ variations }: { variations: Array<Variation> }) {
   const [showEditModal, setShowEditModal] = useState<boolean>(false)
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
-  const [_, setShowEmailModal] = useState<boolean>(false)
-
-  const { getCodeFromBSO } = useVariationsContext()
+  const [showEmailModal, setShowEmailModal] = useState<boolean>(false)
+  const [showIndexModal, setShowIndexModal] = useState<boolean>(false)
 
   const variationsWithoutStructureId = variations.filter((variation) => !variation.structure?.id)
   const variationsWithStructureId = variations.filter((variation) => !!variation.structure?.id)
-  const variationsWithConfig = variations.filter((variation) => getCodeFromBSO(variation.structure?.id) === "production")
+  const variationsWithUploadedFile = variations.filter((variation) => variation?.tags?.file === "uploaded")
 
   return (
     <Container fluid>
@@ -34,23 +34,35 @@ export default function ActionBar({ variations }: { variations: Array<Variation>
         </Notice>
       )}
       <EditModal variations={variations} isOpen={showEditModal} onClose={() => setShowEditModal(false)} />
+      <EmailModal variations={variations} isOpen={showEmailModal} onClose={() => setShowEmailModal(false)} />
       <UploadModal
         variations={variationsWithStructureId}
         isOpen={showUploadModal}
         onClose={() => setShowUploadModal(false)}
       />
+      <IndexModal variations={variationsWithUploadedFile} isOpen={showIndexModal} onClose={() => setShowIndexModal(false)} />
       <ButtonGroup style={{ width: "60%" }}>
         <Button icon="edit-line" onClick={() => setShowEditModal(true)}>
           {`Editer les demandes (${variations?.length})`}
         </Button>
-        <Button variant="secondary" icon="server-line" onClick={() => setShowUploadModal(true)}>
+        <Button variant="secondary" icon="send-plane-line" onClick={() => setShowEmailModal(true)}>
+          {`Envoyer des notifications (${variations.length})`}
+        </Button>
+        <Button
+          variant="secondary"
+          icon="server-line"
+          onClick={() => setShowUploadModal(true)}
+          disabled={!variationsWithStructureId.length}
+        >
           {`Charger les fichiers sur OVH (${variationsWithStructureId.length})`}
         </Button>
-        <Button icon="article-line" variant="secondary" disabled>
-          {`Relancer un index BSO (${variationsWithConfig.length})`}
-        </Button>
-        <Button variant="secondary" icon="send-plane-line" onClick={() => setShowEmailModal(true)} disabled>
-          {`Envoyer les notifications (${variationsWithStructureId.length})`}
+        <Button
+          icon="git-repository-commits-line"
+          variant="secondary"
+          onClick={() => setShowIndexModal(true)}
+          disabled={!variationsWithUploadedFile.length}
+        >
+          {`Relancer un index BSO (${variationsWithUploadedFile.length})`}
         </Button>
       </ButtonGroup>
     </Container>

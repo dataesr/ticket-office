@@ -2,8 +2,13 @@ import { toast } from "react-toastify"
 import { Variation } from "../types"
 import { apiUrl } from "../../../api/utils/url"
 import editVariations from "./edit-variations"
+import { notificationGetTemplate } from "../config/notifications"
+import { useVariationsContext } from "../context"
 
-const messageTemplate = (variation: Variation) => `<ul><li>Nom de la structure: ${variation.structure.name}</li></ul>`
+const messageTemplate = (variation: Variation) =>
+  `<ul><li>Nom de la structure: ${variation.structure.name}</li><li>Identifiant de la structure: ${
+    variation.structure?.id || "Non renseigné"
+  }</li><li>Date de la demande: ${new Date(variation.created_at).toLocaleTimeString()}</li></ul>`
 
 async function sendEmail(variation: Variation, response: string) {
   const url = `${apiUrl}/api/send-email`
@@ -35,10 +40,25 @@ async function sendEmail(variation: Variation, response: string) {
     })
 }
 
-export default async function sendEmails(variations: Array<Variation>, notification: string, response: string) {
+export default async function sendEmails(
+  variations: Array<Variation>,
+  notification: string,
+  response: string,
+  useTemplate?: boolean
+) {
+  const { getCommentsNameFromBSO } = useVariationsContext()
   const inputs = { tags: { notification: notification }, status: "ongoing" }
 
-  Promise.all(variations.map((variation) => sendEmail(variation, response)))
+  Promise.all(
+    variations.map((variation) =>
+      sendEmail(
+        variation,
+        useTemplate
+          ? notificationGetTemplate(notification, variation.id, getCommentsNameFromBSO(variation.structure?.id))
+          : response
+      )
+    )
+  )
     .then(() => {
       if (["ongoing", "done"].includes(notification)) {
         editVariations(

@@ -34,13 +34,7 @@ export type VariationTags = {
   notification?: string
 }
 
-export type EditModalProps = {
-  isOpen: boolean
-  onClose: () => void
-  variations: Array<Variation>
-}
-
-export type EditModalInputs = {
+export type VariationEditInputs = {
   contact?: { email?: string }
   structure?: { id?: string; name?: string }
   status?: string

@@ -57,7 +57,7 @@ function BSOLocalVariationsPage() {
         <Col md="4" xs="12">
           <CheckboxList variations={variations} />
         </Col>
-        <Col md="7" xs="12">
+        <Col md="8" xs="12">
           {!checkedIds.length && selectedVariation && (
             <VariationItem key={selectedVariation.id} variation={selectedVariation} refetch={refetch} />
           )}
