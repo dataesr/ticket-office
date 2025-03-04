@@ -58,7 +58,6 @@ postContactsRoutes.post(
       ...newContribution,
       id: result.insertedId.toHexString(),
     };
-    console.log(finalContribution);
     const url = process.env.BASE_API_URL;
     const contributionLink = `${url}/${body.fromApplication}-contact?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
 
@@ -88,7 +87,6 @@ postContactsRoutes.post(
         code: "EMAIL_CONFIG_NOT_FOUND",
       });
     }
-    console.log(selectedConfig);
     const fonction = finalContribution.extra?.fonction || "non renseigné";
     const dataForBrevo = {
       sender: {
@@ -113,7 +111,6 @@ postContactsRoutes.post(
         message: `${finalContribution.message}`,
       },
     };
-    console.log(dataForBrevo);
     if (!selectedConfig.senderEmail) {
       console.error(
         `Email d'expéditeur non défini pour ${body.fromApplication}`
