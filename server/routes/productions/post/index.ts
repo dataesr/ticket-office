@@ -5,6 +5,7 @@ import { productionSchema } from "../../../schemas/get/productionSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { ObjectId } from "mongodb";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
+import { newContributionEmailConfig } from "../../../utils/configEmail";
 
 type postProductionSchemaType = Static<typeof postProductionsSchema>;
 
@@ -59,16 +60,18 @@ postProductionRoutes.post(
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
     };
 
+    const selectedConfig = newContributionEmailConfig.scanr;
+
     const dataForBrevo = {
       sender: {
-        email: process.env.MAIL_SENDER,
-        name: "L'équipe scanR",
+        email: selectedConfig.senderEmail,
+        name: selectedConfig.senderName,
       },
-      to: recipients.to.map((email: string) => ({
-        email,
-        name: email.split("@")[0],
-      })),
-      replyTo: { email: "support@scanr.fr", name: "L'équipe scanR" },
+      to: recipients.to.map((email) => ({ email, name: email.split("@")[0] })),
+      replyTo: {
+        email: selectedConfig.replyToEmail,
+        name: selectedConfig.replyToName,
+      },
       subject: "Nouvelle contribution d'affiliation de publication",
       templateId: 268,
       params: {
@@ -76,8 +79,7 @@ postProductionRoutes.post(
         title:
           "Nouvelle contribution créée pour une affiliation de publication(s)",
         link: contributionLink,
-        message: `La contribution avec l'ID ${finalContribution.id} a été ajoutée.
-        `,
+        message: `La contribution avec l'ID ${finalContribution.id} a été ajoutée.`,
       },
     };
 

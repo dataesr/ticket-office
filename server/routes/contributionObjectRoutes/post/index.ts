@@ -5,6 +5,7 @@ import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
 import { ObjectId } from "mongodb";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
+import { newContributionEmailConfig } from "../../../utils/configEmail";
 
 type postContributionObjectSchemaType = Static<
   typeof postContributionObjectSchema
@@ -68,28 +69,29 @@ postContributionObjectRoutes.post(
     const recipients = emailRecipients["contribute"] || {
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
     };
-    const fonction = finalContribution.extra.fonction || "non renseigné";
+    const selectedConfig = newContributionEmailConfig.scanr;
 
+    const fonction = finalContribution.extra?.fonction || "non renseigné";
     const dataForBrevo = {
       sender: {
-        email: process.env.MAIL_SENDER,
-        name: "L'équipe scanR",
+        email: selectedConfig.senderEmail,
+        name: selectedConfig.senderName,
       },
-      to: recipients.to.map((email: string) => ({
-        email,
-        name: email.split("@")[0],
-      })),
-      replyTo: { email: "support@scanr.fr", name: "L'équipe scanR" },
+      to: recipients.to.map((email) => ({ email, name: email.split("@")[0] })),
+      replyTo: {
+        email: selectedConfig.replyToEmail,
+        name: selectedConfig.replyToName,
+      },
       subject: "Nouvelle contribution par objet créée",
       templateId: 268,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
-        title: "Nouvelle contribution créée concernant un objet",
+        title: `Nouvelle contribution créée via formulaire de contact }`,
+        name: finalContribution.name,
+        email: finalContribution.email,
+        fonction: fonction,
         id: finalContribution.id,
         link: contributionLink,
-        name: finalContribution.name,
-        fonction: fonction,
-        email: finalContribution.email,
         message: `${finalContribution.message}`,
       },
     };

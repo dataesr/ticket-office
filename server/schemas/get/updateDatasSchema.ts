@@ -14,7 +14,7 @@ export const updateDatasSchema = t.Object(
     extra: t.Optional(t.Record(t.String(), t.String())),
     team: t.Optional(t.Array(t.String())),
     tags: t.Optional(t.Array(t.String())),
-    contributionType: t.String(),
+    contributionType: t.Optional(t.String()),
     threads: t.Optional(
       t.Array(
         t.Object({
