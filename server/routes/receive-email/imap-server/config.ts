@@ -37,7 +37,6 @@ export const config = {
       mailSender: process.env.DATASUPR_MAIL_SENDER,
       senderName: "L'équipe DataSupR",
       templateId: 269,
-      // À remplacer par le bon ID
       recipients: process.env.DATASUPR_EMAIL_RECIPIENTS?.split(",") || [],
     },
   } as Record<
