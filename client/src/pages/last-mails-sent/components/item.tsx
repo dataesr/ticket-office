@@ -47,6 +47,11 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
             "Lier des publications",
             "Contribution par objets",
           ].includes(collectionNameMapping[lastMailSent.collectionName]);
+          const showBsoBadge = ["Demande de bso local"].includes(
+            collectionNameMapping[lastMailSent.collectionName]
+          );
+
+          console.log(collectionNameMapping[lastMailSent.collectionName]);
 
           return (
             <Link href={link} rel="noopener noreferrer" key={index}>
@@ -67,6 +72,15 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
                         className="fr-mr-1w fr-mb-1w"
                       >
                         Scanr
+                      </Badge>
+                    )}
+                    {showBsoBadge && (
+                      <Badge
+                        size="sm"
+                        color="blue-ecume"
+                        className="fr-mr-1w fr-mb-1w"
+                      >
+                        BSO
                       </Badge>
                     )}
                     {lastMailSent.fromApplication && (
