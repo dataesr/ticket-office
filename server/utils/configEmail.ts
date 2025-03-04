@@ -14,4 +14,5 @@ export const newContributionEmailConfig = {
     templateId: 999,
   },
   //   Modifier Template de création de contribution pour BSO
+  //   Et adresse mail de l'équipe BSO
 };
