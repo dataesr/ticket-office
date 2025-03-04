@@ -9,10 +9,25 @@ export const newContributionEmailConfig = {
   bso: {
     senderEmail: process.env.VARIATION_MAIL_SENDER,
     senderName: "L'équipe BSO",
-    replyToEmail: "support@bso.fr",
+    replyToEmail: "bso@dataesr.fr",
     replyToName: "L'équipe BSO",
-    templateId: 999,
+    templateId: 272,
   },
-  //   Modifier Template de création de contribution pour BSO
-  //   Et adresse mail de l'équipe BSO
-};
+}
+
+export const replyEmailConfig = {
+  scanr: {
+    senderEmail: process.env.SCANR_MAIL_SENDER,
+    senderName: "L'équipe scanR",
+    replyToEmail: "support@scanr.fr",
+    replyToName: "L'équipe scanR",
+    templateId: 267,
+  },
+  bso: {
+    senderEmail: process.env.VARIATION_MAIL_SENDER,
+    senderName: "L'équipe BSO",
+    replyToEmail: "bso@dataesr.fr",
+    replyToName: "L'équipe BSO",
+    templateId: 272,
+  },
+}
