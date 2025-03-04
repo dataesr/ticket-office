@@ -20,14 +20,12 @@ export async function lookupCorrectCollection(
     "update-user-data",
     "local_variations",
   ];
-
   try {
     const database = client.db(config.dbName);
 
     for (const collectionName of collections) {
       const collection = database.collection(collectionName);
       const document = await collection.findOne({ id: referenceId });
-
       if (document) {
         console.log(
           `ID ${referenceId} trouvé dans la collection ${collectionName}`

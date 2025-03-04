@@ -94,8 +94,8 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
     : Object.values(data.emails).flat();
 
   const isTrackedEmail = (email) =>
-    email.subject.includes(" à votre contribution, référence");
-
+    email.subject.includes(" à votre contribution, référence") ||
+    email.subject.includes("déclinaison locale, référence");
   const trackedEmails = emails
     .filter(isTrackedEmail)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());

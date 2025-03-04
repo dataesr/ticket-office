@@ -4,6 +4,7 @@ const collectionNameMapping: { [key: string]: string } = {
   contribute_productions: "Lier des publications",
   "remove-user": "Retirer de la base de données",
   "update-user-data": "Changement de nom",
+  local_variations: "Demande de bso local",
 };
 
 export default collectionNameMapping;
@@ -25,6 +26,7 @@ export function generateLink(
     "remove-user": "/scanr-removeuser",
     "update-user-data": "/scanr-namechange",
     contribute: "/scanr-contributionPage",
+    local_variations: "/bso-local-variations",
   };
 
   let basePath = "";
