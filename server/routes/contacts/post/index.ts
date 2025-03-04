@@ -5,6 +5,7 @@ import { contactSchema } from "../../../schemas/get/contactSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { ObjectId } from "mongodb";
 import { emailRecipients } from "./emailRecipents";
+import { newContributionEmailConfig } from "../../../utils/configEmail";
 
 type postContactSchemaType = Static<typeof postContactSchema>;
 
@@ -75,19 +76,32 @@ postContactsRoutes.post(
         code: "NO_RECIPIENTS_FOUND",
       });
     }
-    const fonction = finalContribution.extra.fonction || "non renseigné";
+    const selectedConfig =
+      newContributionEmailConfig[
+        body.fromApplication as keyof typeof newContributionEmailConfig
+      ];
+    if (!selectedConfig) {
+      return error(400, {
+        message: `No email configuration found for ${body.fromApplication}`,
+        code: "EMAIL_CONFIG_NOT_FOUND",
+      });
+    }
+    const fonction = finalContribution.extra?.fonction || "non renseigné";
     const dataForBrevo = {
       sender: {
-        email: process.env.MAIL_SENDER,
-        name: "L'équipe scanR",
+        email: selectedConfig.senderEmail,
+        name: selectedConfig.senderName,
       },
       to: recipients.to.map((email) => ({ email, name: email.split("@")[0] })),
-      replyTo: { email: "support@scanr.fr", name: "L'équipe scanR" },
+      replyTo: {
+        email: selectedConfig.replyToEmail,
+        name: selectedConfig.replyToName,
+      },
       subject: "Nouvelle contribution créée",
-      templateId: 268,
+      templateId: selectedConfig.templateId,
       params: {
         date: new Date().toLocaleDateString("fr-FR"),
-        title: "Nouvelle contribution créée via formulaire de contact",
+        title: `Nouvelle contribution créée via formulaire de contact ${body.fromApplication.toUpperCase()}`,
         name: finalContribution.name,
         email: finalContribution.email,
         fonction: fonction,
@@ -96,6 +110,16 @@ postContactsRoutes.post(
         message: `${finalContribution.message}`,
       },
     };
+
+    if (!selectedConfig.senderEmail) {
+      console.error(
+        `Email d'expéditeur non défini pour ${body.fromApplication}`
+      );
+      return error(500, {
+        message: `Configuration d'email incomplète pour ${body.fromApplication}`,
+        code: "EMAIL_CONFIG_INCOMPLETE",
+      });
+    }
 
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",

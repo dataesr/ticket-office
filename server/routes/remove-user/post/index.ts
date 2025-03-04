@@ -5,6 +5,7 @@ import { ObjectId } from "mongodb";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
+import { newContributionEmailConfig } from "../../../utils/configEmail";
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
@@ -58,18 +59,19 @@ postRemoveUserRoutes.post(
     const recipients = emailRecipients["remove-user"] || {
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
     };
-    const fonction = finalContribution.extra.fonction || "non renseigné";
+    const selectedConfig = newContributionEmailConfig.scanr;
 
+    const fonction = finalContribution.extra?.fonction || "non renseigné";
     const dataForBrevo = {
       sender: {
-        email: process.env.MAIL_SENDER,
-        name: "L'équipe scanR",
+        email: selectedConfig.senderEmail,
+        name: selectedConfig.senderName,
       },
-      to: recipients.to.map((email: string) => ({
-        email,
-        name: email.split("@")[0],
-      })),
-      replyTo: { email: "support@scanr.fr", name: "L'équipe scanR" },
+      to: recipients.to.map((email) => ({ email, name: email.split("@")[0] })),
+      replyTo: {
+        email: selectedConfig.replyToEmail,
+        name: selectedConfig.replyToName,
+      },
       subject: "Nouvelle demande de suppression de profil",
       templateId: 268,
       params: {
