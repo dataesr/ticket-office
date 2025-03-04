@@ -13,6 +13,9 @@ export const postContactSchema = t.Object(
       datasupr: "datasupr",
       curiexplore: "curiexplore",
     }),
+    contributionType: t.Enum({
+      contributionType: "contact",
+    }),
     extra: t.Optional(
       t.Record(t.String(), t.String(), {
         example: {
