@@ -12,6 +12,7 @@ import {
   updateContribution,
 } from "./db";
 import { config } from "./config";
+import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 
 export async function processEmailContent(messageSource: string) {
   const parsed = await simpleParser(messageSource);
@@ -46,11 +47,56 @@ export async function processEmailContent(messageSource: string) {
 
   return cleanedText;
 }
+
+export async function sendMattermostNotifications(
+  referenceId: string,
+  contribution: any,
+  collectionName: string,
+  envelope: any,
+  extractedText: string
+): Promise<void> {
+  if (!contribution || !referenceId) {
+    console.error(`Invalid contribution data for ID: ${referenceId}`);
+    return;
+  }
+
+  const contributionLink = generateContributionLink(
+    referenceId,
+    contribution.fromApplication || "",
+    collectionName
+  );
+  console.log(collectionName);
+  const senderName =
+    envelope?.from && envelope.from.length > 0
+      ? envelope.from[0].name || envelope.from[0].address
+      : contribution.name || "Expéditeur inconnu";
+
+  const mattermostMessage = `
+### Bip...Bip - Nouvelle réponse de ${senderName} le ${new Date().toLocaleString(
+    "fr-FR"
+  )}
+
+${extractedText.substring(0, 500)}${extractedText.length > 500 ? "..." : ""}
+
+[Voir la contribution complète](${contributionLink})`;
+
+  try {
+    await sendMattermostNotification(mattermostMessage);
+    console.log(`Notification Mattermost envoyée pour ${referenceId}`);
+  } catch (error) {
+    console.error(
+      "Erreur lors de l'envoi de la notification Mattermost:",
+      error
+    );
+  }
+}
 export async function sendNotificationEmail(
   referenceId: string,
   contribution: any,
   collectionName: string,
-  toAddress: string = ""
+  toAddress: string = "",
+  extractedText: string = "",
+  envelope: any = null
 ) {
   if (!contribution.email || !contribution.id) {
     console.error(`Invalid contribution data for ID: ${referenceId}`);
@@ -61,6 +107,14 @@ export async function sendNotificationEmail(
     referenceId,
     contribution.fromApplication,
     collectionName
+  );
+
+  await sendMattermostNotifications(
+    referenceId,
+    contribution,
+    collectionName,
+    envelope,
+    extractedText
   );
 
   let emailConfig = config.defaultConfig;
