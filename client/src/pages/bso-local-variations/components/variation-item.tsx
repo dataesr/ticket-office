@@ -12,6 +12,7 @@ import readCSV from "../_utils/read-csv"
 import { useVariationsContext } from "../context"
 import Threads from "./threads"
 import UploadModal from "./upload-modal"
+import EmailBox from "./email-box"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const [showEditModal, setShowEditModal] = useState<boolean>(false)
@@ -168,6 +169,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
         </Button>
       </ButtonGroup>
       <Threads variation={variation} />
+      <EmailBox variation={variation} />
     </>
   )
 }

@@ -14,17 +14,22 @@ import {
 } from "@dataesr/dsfr-plus"
 import { toast } from "react-toastify"
 import { VARIATION_TAGS } from "../config/tags"
-import { EditModalInputs, EditModalProps } from "../types"
-import useEdit from "../hooks/useEdit"
+import { VariationEditInputs, Variation } from "../types"
 import { useVariationsContext } from "../context"
 import getStatusFromTags from "../_utils/get-status-from-tags"
+import editVariations from "../actions/edit-variations"
 
+type EditModalProps = {
+  variations: Array<Variation>
+  isOpen: boolean
+  onClose: () => void
+}
 export default function EditModal({ variations, isOpen, onClose }: EditModalProps) {
   const {
     data: { refetch },
   } = useVariationsContext()
   const selectedProfile = localStorage.getItem("selectedProfile")
-  const [inputs, setInputs] = useState<EditModalInputs>({ team: selectedProfile || "" })
+  const [inputs, setInputs] = useState<VariationEditInputs>({ team: selectedProfile || "" })
   const singleVariation = variations?.length === 1 ? variations[0] : null
 
   const resetInputs = () => setInputs({})
@@ -69,7 +74,10 @@ export default function EditModal({ variations, isOpen, onClose }: EditModalProp
   const handleSubmit = async () => {
     if (singleVariation && inputs?.tags) inputs.status = getStatusFromTags({ ...singleVariation?.tags, ...inputs.tags })
 
-    await useEdit(singleVariation ? singleVariation.id : variations.map((variation) => variation.id), inputs)
+    await editVariations(
+      variations.map((variation) => variation.id),
+      inputs
+    )
       .then(() => {
         refetch()
         onClose()

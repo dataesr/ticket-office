@@ -11,7 +11,7 @@ export const VARIATION_NOTIFICATIONS = {
   },
 }
 
-export const notificationGetTemplate = (notification: string, id: string, commentsName: string) =>
+export const notificationGetTemplate = (notification: string, id?: string, commentsName?: string) =>
   VARIATION_NOTIFICATIONS?.[notification]?.template(id, commentsName) || "Template not found..."
 export const notificationGetName = (notification: string) =>
   VARIATION_NOTIFICATIONS?.[notification]?.name || "Name not found..."

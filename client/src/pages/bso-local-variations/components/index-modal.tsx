@@ -1,28 +1,33 @@
-import { Modal, ModalTitle, ModalContent, Container, Button, ModalFooter } from "@dataesr/dsfr-plus"
+import { Modal, ModalTitle, ModalContent, Container, Button, ModalFooter, TextArea } from "@dataesr/dsfr-plus"
 import { useVariationsContext } from "../context"
-import uploadFiles from "../actions/upload-files"
 import { Variation } from "../types"
 
-type UploadModalProps = {
+type IndexModalProps = {
   variations: Array<Variation>
   isOpen: boolean
   onClose: () => void
 }
-export default function UploadModal({ variations, isOpen, onClose }: UploadModalProps) {
+export default function IndexModal({ variations, isOpen, onClose }: IndexModalProps) {
   const {
     data: { refetch },
   } = useVariationsContext()
-  const singleVariation = variations?.length === 1 ? variations[0] : null
 
   return (
     <Modal isOpen={isOpen} hide={onClose}>
-      <ModalTitle>{singleVariation ? "Charger 1 fichier" : `Charger ${variations?.length} fichiers`}</ModalTitle>
+      <ModalTitle>{"Relancer un index BSO"}</ModalTitle>
       <ModalContent>
         <ul>
           {variations.map((variation, index) => (
             <li key={index}>{`${variation.structure.name} - ${variation.structure?.id}`}</li>
           ))}
         </ul>
+        <TextArea
+          style={{ resize: "none" }}
+          value={"Props"}
+          onChange={(event) => console.log(event.target.value)}
+          placeholder="Props..."
+          rows={10}
+        />
       </ModalContent>
       <ModalFooter>
         <Container style={{ display: "flex", width: "100%", alignItems: "center" }}>
@@ -34,11 +39,10 @@ export default function UploadModal({ variations, isOpen, onClose }: UploadModal
           <Button
             variant="primary"
             onClick={() => {
-              uploadFiles(variations)
               refetch()
             }}
           >
-            Charger sur OVH
+            Exécuter
           </Button>
         </Container>
       </ModalFooter>

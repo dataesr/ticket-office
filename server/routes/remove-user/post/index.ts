@@ -6,6 +6,7 @@ import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 import { newContributionEmailConfig } from "../../../utils/configEmail";
+import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 
 type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
 
@@ -100,6 +101,13 @@ postRemoveUserRoutes.post(
         code: "EMAIL_SEND_FAILED",
       });
     }
+
+    const mattermostMessage = `:mega: Bip...Bip - Nouvelle demande de suppression de profil sur scanR !*  
+        **Nom**: ${finalContribution.name}  
+        **Email**: ${finalContribution.email}  
+        [Voir la contribution](${contributionLink})`;
+
+    await sendMattermostNotification(mattermostMessage);
 
     return finalContribution;
   },

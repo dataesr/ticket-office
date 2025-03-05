@@ -6,6 +6,7 @@ import { contributionObjectSchema } from "../../../schemas/get/contributionsObje
 import { ObjectId } from "mongodb";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 import { newContributionEmailConfig } from "../../../utils/configEmail";
+import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 
 type postContributionObjectSchemaType = Static<
   typeof postContributionObjectSchema
@@ -110,6 +111,16 @@ postContributionObjectRoutes.post(
         code: "EMAIL_SEND_FAILED",
       });
     }
+
+    const mattermostMessage = `:mega: Bip...Bip - Nouvelle contribution créée pour ScanR concernant un/une${
+      finalContribution.objectType
+    }! *  
+**Nom**: ${finalContribution.name}  
+**Email**: ${finalContribution.email}  
+**Fonction**: ${finalContribution.extra?.fonction || "non renseigné"}  
+[Voir la contribution](${contributionLink})`;
+
+    await sendMattermostNotification(mattermostMessage);
 
     return finalContribution;
   },

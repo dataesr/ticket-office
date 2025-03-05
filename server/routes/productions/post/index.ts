@@ -6,6 +6,7 @@ import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { ObjectId } from "mongodb";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 import { newContributionEmailConfig } from "../../../utils/configEmail";
+import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 
 type postProductionSchemaType = Static<typeof postProductionsSchema>;
 
@@ -97,6 +98,13 @@ postProductionRoutes.post(
         code: "EMAIL_SEND_FAILED",
       });
     }
+
+    const mattermostMessage = `:mega: Bip...Bip - Nouvelle demande de liaison de publication créée pour scanr*  
+    **Nom**: ${finalContribution.name}  
+    **Email**: ${finalContribution.email}  
+    [Voir la contribution](${contributionLink})`;
+
+    await sendMattermostNotification(mattermostMessage);
 
     return finalContribution;
   },
