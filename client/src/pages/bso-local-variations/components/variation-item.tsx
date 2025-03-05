@@ -20,7 +20,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
   const [copiedText, setCopiedText] = useState<string | null>(null)
   const { getCodeFromBSO } = useVariationsContext()
-  const indexTag = getBsoTaskStatus("996d2526-337c-4285-a289-1e55467f0f1a")
+  const indexTag = getBsoTaskStatus("996d2526-337c-4285-a289-1e55467f0f1b")
 
   const countCsv = readCSV(variation.csv)
   const codeTag: string = getCodeFromBSO(variation.structure?.id)
