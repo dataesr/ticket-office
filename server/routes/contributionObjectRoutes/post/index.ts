@@ -112,13 +112,13 @@ postContributionObjectRoutes.post(
       });
     }
 
-    const mattermostMessage = `:mega: Bip...Bip - Nouvelle contribution créée pour ScanR concernant un/une${
+    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ScanR concernant un/une${
       finalContribution.objectType
     }! *  
 **Nom**: ${finalContribution.name}  
 **Email**: ${finalContribution.email}  
 **Fonction**: ${finalContribution.extra?.fonction || "non renseigné"}  
-[Voir la contribution](${contributionLink})`;
+🔗 [Voir la contribution](${contributionLink})`;
 
     await sendMattermostNotification(mattermostMessage);
 

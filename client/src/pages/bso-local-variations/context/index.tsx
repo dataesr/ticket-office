@@ -33,7 +33,7 @@ export function VariationsContext({ children }) {
   const data = ContributionData(url)
 
   const getCodeFromBSO = useCallback(
-    (id: string) => {
+    (id: string): string => {
       if (bsoConfig?.main && Object.keys(bsoConfig.main).includes(id)) return "production"
       if (bsoConfig?.staging && Object.keys(bsoConfig.staging).includes(id)) return "staging"
       return "none"
@@ -41,7 +41,7 @@ export function VariationsContext({ children }) {
     [bsoConfig]
   )
 
-  const getCommentsNameFromBSO = useCallback((id: string) => bsoConfig?.main?.[id]?.commentsName, [bsoConfig])
+  const getCommentsNameFromBSO = useCallback((id: string): string => bsoConfig?.main?.[id]?.commentsName, [bsoConfig])
 
   return (
     <Context.Provider

@@ -31,7 +31,7 @@ export default function EmailBox({ variation }: { variation: Variation }) {
     <Container fluid>
       {variation.contact.email && (
         <Row gutters className="fr-mt-2w">
-          <Col offsetMd="3" md="9" xs="12">
+          <Col offsetMd="4" md="8" xs="12">
             <label htmlFor="templateSelect">Choisir un template de réponse</label>
             <select
               id="templateSelect"

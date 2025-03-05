@@ -99,10 +99,10 @@ postProductionRoutes.post(
       });
     }
 
-    const mattermostMessage = `:mega: Bip...Bip - Nouvelle demande de liaison de publication créée pour scanr*  
+    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de liaison de publication créée pour scanr*  
     **Nom**: ${finalContribution.name}  
     **Email**: ${finalContribution.email}  
-    [Voir la contribution](${contributionLink})`;
+    🔗 [Voir la contribution](${contributionLink})`;
 
     await sendMattermostNotification(mattermostMessage);
 
