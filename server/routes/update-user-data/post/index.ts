@@ -6,6 +6,7 @@ import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 import { newContributionEmailConfig } from "../../../utils/configEmail";
+import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 
 type postUpdateUserDataSchemaType = Static<typeof postUpdateUserDataSchema>;
 
@@ -106,6 +107,13 @@ postUpdateUserDataRoutes.post(
         code: "EMAIL_SEND_FAILED",
       });
     }
+
+    const mattermostMessage = `:mega: Bip...Bip - Nouvelle demande de mise à jour sur scanR !*  
+        **Nom**: ${finalContribution.name}  
+        **Email**: ${finalContribution.email}  
+        [Voir la contribution](${contributionLink})`;
+
+    await sendMattermostNotification(mattermostMessage);
 
     return finalContribution;
   },
