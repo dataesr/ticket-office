@@ -16,8 +16,13 @@ export default function getBsoTaskStatus(id: string) {
     enabled: !!id,
   })
 
-  console.log("data", data)
-  const status = useMemo(() => data, [data])
+  const status = useMemo(() => {
+    if (!id) return "none"
+    if (["queued", "deferred", "started"].includes(data)) return "ongoing"
+    if (data === "finished") return "finalized"
+    if (data === "failed") return "failed"
+    return "finalized"
+  }, [id, data])
 
   return status
 }
