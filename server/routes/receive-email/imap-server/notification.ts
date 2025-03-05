@@ -39,7 +39,7 @@ export async function sendNotificationEmail(
       url: contributionLink,
     },
   };
-
+  console.log(contribution);
   const response = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -71,21 +71,22 @@ export async function sendNotifications(
     contribution.fromApplication || "",
     collectionName
   );
-  console.log(contribution);
   const extractedText =
     contribution.extractedText || "Aucun contenu disponible";
 
-  const senderName = contribution.from.name || "Expéditeur inconnu";
+  const senderName = contribution.from[0]?.name || "Expéditeur inconnu";
 
   const mattermostMessage = `
-### Bip...Bip - Nouvelle réponse de ${senderName}
+### Bip...Bip - Nouvelle réponse de ${senderName} le ${new Date().toLocaleString(
+    "fr-FR"
+  )}
 
 ${extractedText.substring(0, 500)}${extractedText.length > 500 ? "..." : ""}
 
 [Voir la contribution complète](${contributionLink})`;
 
-  await Promise.all([
-    sendMattermostNotification(mattermostMessage),
-    sendNotificationEmail(referenceId, contribution, collectionName),
-  ]);
+  sendMattermostNotification(mattermostMessage),
+    await Promise.all([
+      sendNotificationEmail(referenceId, contribution, collectionName),
+    ]);
 }
