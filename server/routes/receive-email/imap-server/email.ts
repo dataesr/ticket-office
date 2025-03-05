@@ -71,14 +71,22 @@ export async function sendMattermostNotifications(
       ? envelope.from[0].name || envelope.from[0].address
       : contribution.name || "Expéditeur inconnu";
 
+  const extractSentences = (text: string, maxSentences = 2) => {
+    const sentences = text.match(/[^.!?]+[.!?]/g);
+    if (!sentences) return text;
+    return sentences.slice(0, maxSentences).join(" ").trim(); // Prend 1 ou 2 phrases max
+  };
+
   const mattermostMessage = `
-### Bip...Bip - Nouvelle réponse de ${senderName} le ${new Date().toLocaleString(
+🚀 **Bip...Bip**  
+## 📩 Nouvelle réponse de ${senderName} le ${new Date().toLocaleString(
     "fr-FR"
-  )}
+  )} ##
+## 📝 Extrait du message : ##
+  ${extractSentences(extractedText)}
 
-${extractedText.substring(0, 500)}${extractedText.length > 500 ? "..." : ""}
-
-[Voir la contribution complète](${contributionLink})`;
+🔗 [Voir la contribution complète](${contributionLink})
+`;
 
   try {
     await sendMattermostNotification(mattermostMessage);

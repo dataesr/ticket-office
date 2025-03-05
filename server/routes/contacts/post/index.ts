@@ -138,11 +138,11 @@ postContactsRoutes.post(
       });
     }
 
-    const mattermostMessage = `:mega: Bip...Bip - Nouvelle contribution créée pour scanR*  
+    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour scanR*  
 **Nom**: ${finalContribution.name}  
 **Email**: ${finalContribution.email}  
 **Fonction**: ${finalContribution.extra?.fonction || "non renseigné"}  
-[Voir la contribution](${contributionLink})`;
+🔗 [Voir la contribution](${contributionLink})`;
 
     await sendMattermostNotification(mattermostMessage);
 

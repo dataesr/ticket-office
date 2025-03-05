@@ -102,10 +102,10 @@ postRemoveUserRoutes.post(
       });
     }
 
-    const mattermostMessage = `:mega: Bip...Bip - Nouvelle demande de suppression de profil sur scanR !*  
+    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de suppression de profil sur scanR !*  
         **Nom**: ${finalContribution.name}  
         **Email**: ${finalContribution.email}  
-        [Voir la contribution](${contributionLink})`;
+       🔗 [Voir la contribution](${contributionLink})`;
 
     await sendMattermostNotification(mattermostMessage);
 
