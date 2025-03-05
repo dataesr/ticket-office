@@ -13,15 +13,18 @@ import { useVariationsContext } from "../context"
 import Threads from "./threads"
 import UploadModal from "./upload-modal"
 import EmailBox from "./email-box"
+import getBsoTaskStatus from "../_utils/get-bso-task-status"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const [showEditModal, setShowEditModal] = useState<boolean>(false)
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
   const [copiedText, setCopiedText] = useState<string | null>(null)
   const { getCodeFromBSO } = useVariationsContext()
+  const indexTag = getBsoTaskStatus("996d2526-337c-4285-a289-1e55467f0f1a")
 
   const countCsv = readCSV(variation.csv)
-  const codeTag = getCodeFromBSO(variation.structure?.id)
+  const codeTag: string = getCodeFromBSO(variation.structure?.id)
+  console.log("indexTag", indexTag)
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -47,7 +50,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
             File: {variation.tags.file || "none"}
           </Badge>
           <Badge size="sm" color={tagGetColor("code", codeTag)} icon={tagGetIcon("code", codeTag)}>
-            Code: {codeTag}
+            Config: {codeTag}
           </Badge>
           <Badge
             size="sm"
