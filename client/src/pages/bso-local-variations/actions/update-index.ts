@@ -3,8 +3,8 @@ import { rangeArray } from "../../../utils/array"
 import { Variation } from "../types"
 import editVariations from "./edit-variations"
 
-const url = import.meta.env.URL_UPW
-const password = import.meta.env.PUBLIC_API_PASSWORD
+const url = import.meta.env.VITE_URL_UPW
+const password = import.meta.env.VITE_PUBLIC_API_PASSWORD
 
 export default async function updateIndex(variations: Array<Variation>, data: Record<string, unknown>) {
   const inputs = { tags: { index: data?.index_name } }
