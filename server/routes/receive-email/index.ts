@@ -4,6 +4,7 @@ import * as cheerio from "cheerio";
 import { simpleParser } from "mailparser";
 import lastReceivedMail from "./get";
 import Elysia from "elysia";
+import { sendMattermostNotification } from "../../utils/sendMattermostNotification";
 
 const email = process.env.MAIL_ADRESSE;
 const password = process.env.MAIL_PASSWORD;
@@ -107,6 +108,16 @@ async function sendNotificationEmail(
     contribution.fromApplication,
     collectionName
   );
+
+  const extractedText = contribution.extractedText;
+  const mattermostMessage = `
+### Bip...Bip - Nouvelle réponse à de ${contribution.from[0].name}
+
+${extractedText.substring(0, 500)}${extractedText.length > 500 ? "..." : ""}
+
+[Voir la contribution complète](${contributionLink})`;
+
+  await sendMattermostNotification(mattermostMessage);
 
   const emailData = {
     sender: {
