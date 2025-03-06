@@ -1,28 +1,28 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 
-const url: string = import.meta.env.VITE_URL_UPW
-
-const fetchTask = async (taskId: string) => {
-  const data = fetch(`${url}/tasks/${taskId}`, { mode: "no-cors" })
-    .then((response) => {
-      if (response.ok) return response.json()
-      else console.log("response", response)
-    })
-    .then((data) => data)
-    .catch((error) => console.log("error", error))
-  return data
+const fetchTaskStatus = async (id: string) => {
+  const status = await fetch(`/api/bso-tasks/${id}`).then((response) => {
+    if (response.ok) return response.text()
+    if (response.status === 404) return response.text()
+  })
+  return status
 }
 
-export default function getBsoTaskStatus(taskId: string) {
+export default function getBsoTaskStatus(id: string) {
   const { data } = useQuery({
-    queryKey: ["bso", "task", taskId],
-    queryFn: () => fetchTask(taskId),
-    enabled: !!taskId,
+    queryKey: ["bso", "task", id],
+    queryFn: () => fetchTaskStatus(id),
+    enabled: !!id,
   })
 
-  console.log("data", data)
-  const status = useMemo(() => data?.data?.task_status, [data])
+  const status = useMemo(() => {
+    if (!id) return "none"
+    if (["queued", "deferred", "started"].includes(data)) return "ongoing"
+    if (data === "finished") return "finalized"
+    if (data === "failed") return "failed"
+    return "finalized"
+  }, [id, data])
 
   return status
 }

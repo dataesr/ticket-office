@@ -106,7 +106,7 @@ export function generateContributionLink(
     return `${baseUrl}/bso-local-variations?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
   }
   if (collectionName === "contribute_productions") {
-    return `${baseUrl}/apiOperations?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
+    return `${baseUrl}/scanr-apioperations?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
   }
   if (collectionName === "remove-user") {
     return `${baseUrl}/scanr-removeuser?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;

@@ -37,10 +37,15 @@ export default function IndexModal({ variations, isOpen, onClose }: IndexModalPr
     setTextJSON(text)
     try {
       const json = JSON.parse(text)
-      const pretty = JSON.stringify(json, undefined, 8)
-      setTextJSON(pretty)
-      setIsValid(true)
-      setValidationError(null)
+      if ("index_name" in json) {
+        const pretty = JSON.stringify(json, undefined, 8)
+        setTextJSON(pretty)
+        setIsValid(true)
+        setValidationError(null)
+      } else {
+        setIsValid(false)
+        setValidationError(new Error('"index_name" is missing!'))
+      }
     } catch (error) {
       setIsValid(false)
       setValidationError(error)

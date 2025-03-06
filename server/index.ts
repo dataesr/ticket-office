@@ -14,6 +14,7 @@ import getReceivedMailsRoutes from "./routes/receive-email"
 import getLastMailsSentRoutes from "./routes/last-mails-sent"
 import variationsRoutes from "./routes/variations"
 import storageRoutes from "./routes/storage"
+import bsoTasksRoutes from "./routes/bso-tasks"
 
 dotenv.config()
 
@@ -53,6 +54,14 @@ app
             name: "Déclinaisons locales",
             description: "Gestion des demandes de déclinaisons locales",
           },
+          {
+            name: "Object storage",
+            description: "Gestion de fichiers sur object storage (OVH)",
+          },
+          {
+            name: "Tâches",
+            description: "Gestion des tâches (BSO)",
+          },
         ],
       },
     })
@@ -68,6 +77,7 @@ app
     app.use(getReceivedMailsRoutes)
     app.use(variationsRoutes)
     app.use(storageRoutes)
+    app.use(bsoTasksRoutes)
     return app
   })
   .use(

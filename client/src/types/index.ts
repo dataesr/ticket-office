@@ -284,6 +284,7 @@ export interface ExcelExportButtonProps {
 
 export interface StaffProductionActionsProps {
   data?: {
+    name: any;
     threads?: Array<{
       responses: Array<{
         team: string[];

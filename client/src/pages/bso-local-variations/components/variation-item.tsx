@@ -20,11 +20,10 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
   const [copiedText, setCopiedText] = useState<string | null>(null)
   const { getCodeFromBSO } = useVariationsContext()
-  const indexTag = getBsoTaskStatus("996d2526-337c-4285-a289-1e55467f0f1a")
 
   const countCsv = readCSV(variation.csv)
+  const indexTag: string = getBsoTaskStatus(variation.tags?.index)
   const codeTag: string = getCodeFromBSO(variation.structure?.id)
-  console.log("indexTag", indexTag)
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -52,12 +51,8 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
           <Badge size="sm" color={tagGetColor("code", codeTag)} icon={tagGetIcon("code", codeTag)}>
             Config: {codeTag}
           </Badge>
-          <Badge
-            size="sm"
-            color={tagGetColor("index", variation?.tags?.index)}
-            icon={tagGetIcon("index", variation?.tags?.index)}
-          >
-            Index: {variation.tags.index || "none"}
+          <Badge size="sm" color={tagGetColor("index", indexTag)} icon={tagGetIcon("index", indexTag)}>
+            Index: {indexTag}
           </Badge>
           <Badge
             size="sm"
