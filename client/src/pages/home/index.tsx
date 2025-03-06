@@ -20,7 +20,6 @@ const Home = () => {
     const allItems = data.flatMap((item) => item.data || []);
     const combinedQuery = highlightedQuery || query.join(" ");
 
-    console.log(combinedQuery);
     if (combinedQuery.trim() !== "") {
       return allItems
         .filter(
