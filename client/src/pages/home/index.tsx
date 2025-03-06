@@ -17,17 +17,18 @@ const Home = () => {
 
   const getFilteredData = () => {
     if (!data || data.length === 0) return [];
-
     const allItems = data.flatMap((item) => item.data || []);
     const combinedQuery = highlightedQuery || query.join(" ");
 
+    console.log(combinedQuery);
     if (combinedQuery.trim() !== "") {
       return allItems
         .filter(
           (item) =>
             item.name?.toLowerCase().includes(combinedQuery.toLowerCase()) ||
             item.email?.toLowerCase().includes(combinedQuery.toLowerCase()) ||
-            item.message?.toLowerCase().includes(combinedQuery.toLowerCase())
+            item.message?.toLowerCase().includes(combinedQuery.toLowerCase()) ||
+            item.id?.toLowerCase().includes(combinedQuery.toLowerCase())
         )
         .sort(
           (a, b) =>
