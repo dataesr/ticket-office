@@ -3,6 +3,7 @@ import {
   Col,
   Container,
   DismissibleTag,
+  Notice,
   Row,
   SearchBar,
   Text,
@@ -134,21 +135,6 @@ const ContributionPage: React.FC = () => {
 
   const isPageLoading = isLoading || isLoadingAuthors || isLoadingLandingPages;
 
-  if (isPageLoading) {
-    return (
-      <Container className="fr-my-5w">
-        <Row gutters>
-          <Col md="12" xs="12">
-            <Title as="h1">Lier des publications</Title>
-            <div className="fr-my-5w text-center">
-              <ClipLoader color="#000091" size={50} />
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    );
-  }
-
   if (isError || isErrorAuthors || isErrorLandingPages) {
     return (
       <Container className="fr-my-5w">
@@ -213,17 +199,37 @@ const ContributionPage: React.FC = () => {
         </Col>
       </Row>
 
-      {filteredContributions.map((contribution) => (
-        <ContributionProductionItem
-          key={contribution.id}
-          data={{ ...contribution, threads: contribution.threads || [] }}
-          refetch={refetch}
-          allTags={fetchedData?.tags || []}
-          authorsData={authorsData}
-          landingPages={landingPages}
-        />
-      ))}
-
+      <div className="fr-mb-3w">
+        {!isLoading &&
+        filteredContributions.length === 0 &&
+        status === "new" ? (
+          <Notice type="success" closeMode="disallow" className="fr-mb-3w">
+            <Text bold>Félicitations ! Vous êtes à jour !</Text>
+            <Text>
+              Il n'y a actuellement aucune nouvelle contribution à traiter.
+            </Text>
+          </Notice>
+        ) : !isLoading && filteredContributions.length === 0 ? (
+          <Notice type="info" closeMode="disallow" className="fr-mb-3w">
+            Aucune contribution ne correspond à votre recherche.
+          </Notice>
+        ) : isPageLoading ? (
+          <div className="fr-my-5w text-center">
+            <ClipLoader color="#000091" size={50} />
+          </div>
+        ) : (
+          filteredContributions.map((contribution) => (
+            <ContributionProductionItem
+              key={contribution.id}
+              data={{ ...contribution, threads: contribution.threads || [] }}
+              refetch={refetch}
+              allTags={fetchedData?.tags || []}
+              authorsData={authorsData}
+              landingPages={landingPages}
+            />
+          ))
+        )}
+      </div>
       {dataList.some((item) => item.export === true) && (
         <ExcelExportButton refetch={refetch} />
       )}

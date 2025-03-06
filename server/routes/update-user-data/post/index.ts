@@ -108,7 +108,7 @@ postUpdateUserDataRoutes.post(
       });
     }
 
-    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de mise à jour sur scanR !*  
+    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de mise à jour sur scanR ! 
         **Nom**: ${finalContribution.name}  
         **Email**: ${finalContribution.email}  
        🔗 [Voir la contribution](${contributionLink})`;

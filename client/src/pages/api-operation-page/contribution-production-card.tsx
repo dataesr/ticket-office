@@ -87,7 +87,6 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
       </Row>
     </Container>
   );
-  console.log(data, "coucou");
   return (
     <AccordionGroup>
       <Accordion title={renderAccordion}>
