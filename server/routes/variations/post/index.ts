@@ -63,3 +63,5 @@ postVariationRoute.post(
     },
   }
 )
+
+export default postVariationRoute
