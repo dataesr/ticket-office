@@ -9,5 +9,4 @@ COPY ./server .
 ENV NODE_ENV=production
 CMD ["bun", "run", "index.ts"]
 
-
 EXPOSE 3000
