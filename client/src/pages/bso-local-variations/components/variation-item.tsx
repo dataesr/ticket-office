@@ -1,38 +1,49 @@
-import { useState } from "react"
-import { Badge, BadgeGroup, Button, ButtonGroup, Col, Container, Notice, Row, Text, Title } from "@dataesr/dsfr-plus"
-import { BadgeStatus, StatusLabel } from "../../../utils"
-import { FaCopy } from "react-icons/fa"
-import "../styles/styles.scss"
-import { VariationItemProps } from "../types"
-import { CopyButton } from "../../../utils/copy-button"
-import EditModal from "./edit-modal"
-import { tagGetColor, tagGetIcon } from "../config/tags"
-import DownloadFile from "../actions/download-file"
-import readCSV from "../_utils/read-csv"
-import { useVariationsContext } from "../context"
-import Threads from "./threads"
-import UploadModal from "./upload-modal"
-import EmailBox from "./email-box"
-import getBsoTaskStatus from "../_utils/get-bso-task-status"
+import { useState } from "react";
+import {
+  Badge,
+  BadgeGroup,
+  Button,
+  ButtonGroup,
+  Col,
+  Container,
+  Notice,
+  Row,
+  Text,
+  Title,
+} from "@dataesr/dsfr-plus";
+import { BadgeStatus, StatusLabel } from "../../../utils";
+import { FaCopy } from "react-icons/fa";
+import "../styles/styles.scss";
+import { VariationItemProps } from "../types";
+import { CopyButton } from "../../../utils/copy-button";
+import EditModal from "./edit-modal";
+import { tagGetColor, tagGetIcon } from "../config/tags";
+import DownloadFile from "../actions/download-file";
+import readCSV from "../_utils/read-csv";
+import { useVariationsContext } from "../context";
+import Threads from "./threads";
+import UploadModal from "./upload-modal";
+import EmailBox from "./email-box";
+import getBsoTaskStatus from "../_utils/get-bso-task-status";
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
-  const [showEditModal, setShowEditModal] = useState<boolean>(false)
-  const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
-  const [copiedText, setCopiedText] = useState<string | null>(null)
-  const { getCodeFromBSO } = useVariationsContext()
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  const [copiedText, setCopiedText] = useState<string | null>(null);
+  const { getCodeFromBSO } = useVariationsContext();
 
-  const countCsv = readCSV(variation.csv)
-  const indexTag: string = getBsoTaskStatus(variation.tags?.index)
-  const codeTag: string = getCodeFromBSO(variation.structure?.id)
+  const countCsv = readCSV(variation.csv);
+  const indexTag: string = getBsoTaskStatus(variation.tags?.index);
+  const codeTag: string = getCodeFromBSO(variation.structure?.id);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      setCopiedText(text)
+      setCopiedText(text);
       setTimeout(() => {
-        setCopiedText(null)
-      }, 2000)
-    })
-  }
+        setCopiedText(null);
+      }, 2000);
+    });
+  };
 
   return (
     <>
@@ -48,10 +59,18 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
           >
             File: {variation.tags.file || "none"}
           </Badge>
-          <Badge size="sm" color={tagGetColor("code", codeTag)} icon={tagGetIcon("code", codeTag)}>
+          <Badge
+            size="sm"
+            color={tagGetColor("code", codeTag)}
+            icon={tagGetIcon("code", codeTag)}
+          >
             Config: {codeTag}
           </Badge>
-          <Badge size="sm" color={tagGetColor("index", indexTag)} icon={tagGetIcon("index", indexTag)}>
+          <Badge
+            size="sm"
+            color={tagGetColor("index", indexTag)}
+            icon={tagGetIcon("index", indexTag)}
+          >
             Index: {indexTag}
           </Badge>
           <Badge
@@ -73,16 +92,22 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
           <Title look="h5">
             {variation.structure.name} ({variation.id})
             <button
-              className={`copy-button ${copiedText === variation.id ? "copied" : ""}`}
+              className={`copy-button ${
+                copiedText === variation.id ? "copied" : ""
+              }`}
               onClick={() => copyToClipboard(variation?.id)}
             >
-              {copiedText === variation.id && <span className="copied-text">Copié</span>}
+              {copiedText === variation.id && (
+                <span className="copied-text">Copié</span>
+              )}
               <FaCopy size={14} color="#2196f3" className="copy-icon" />
             </button>
           </Title>
         </Col>
         <Text size="sm">
-          <i className="date">Reçu le {new Date(variation.created_at)?.toLocaleDateString()}</i>
+          <i className="date">
+            Reçu le {new Date(variation.created_at)?.toLocaleDateString()}
+          </i>
         </Text>
       </Row>
       {!variation.structure?.id && (
@@ -94,16 +119,28 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
         <Col>
           <Text size="sm">
             Email de contact: <strong>{variation.contact.email}</strong>
-            <CopyButton text={variation.contact.email} copiedText={copiedText} onCopy={copyToClipboard} />
+            <CopyButton
+              text={variation.contact.email}
+              copiedText={copiedText}
+              onCopy={copyToClipboard}
+            />
           </Text>
           <Text size="sm">
             Nom de la structure: <strong>{variation.structure.name}</strong>
-            <CopyButton text={variation.structure.name} copiedText={copiedText} onCopy={copyToClipboard} />
+            <CopyButton
+              text={variation.structure.name}
+              copiedText={copiedText}
+              onCopy={copyToClipboard}
+            />
           </Text>
           {variation.structure?.id && (
             <Text size="sm">
               ID de la structure: <strong>{variation.structure.id}</strong>
-              <CopyButton text={variation.structure.id} copiedText={copiedText} onCopy={copyToClipboard} />
+              <CopyButton
+                text={variation.structure.id}
+                copiedText={copiedText}
+                onCopy={copyToClipboard}
+              />
             </Text>
           )}
         </Col>
@@ -112,7 +149,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
         <Col>
           {variation?.modified_at && !variation?.treated_at && (
             <Text size="sm">
-              Édité ({variation?.team || ""})
+              {variation?.team && `Édité par ${variation?.team}`}
               <strong>
                 : {new Date(variation.modified_at).toLocaleDateString()} à{" "}
                 {new Date(variation.modified_at).toLocaleTimeString()}
@@ -132,7 +169,8 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
         <Col>
           {variation?.comment && (
             <Text size="sm">
-              Commentaire ({variation.team ? variation.team[0] : ""}) <strong>: {variation.comment}</strong>
+              Commentaire ({variation.team ? variation.team[0] : ""}){" "}
+              <strong>: {variation.comment}</strong>
             </Text>
           )}
         </Col>
@@ -140,19 +178,44 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
       <Container fluid className="contributorSideContactMessage">
         <Text size="sm">Le périmètre contient: </Text>
         <ul>
-          {!!countCsv.doi && <li className="fr-text--sm fr-mb-0">{`${countCsv.doi} DOI`}</li>}
-          {!!countCsv.hal_coll_code && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_coll_code} hal_coll_code`}</li>}
-          {!!countCsv.hal_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_id} hal_id`}</li>}
-          {!!countCsv.hal_struct_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_struct_id} hal_struct_id`}</li>}
-          {!!countCsv.nnt_etab && <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_etab} nnt_etab`}</li>}
-          {!!countCsv.nnt_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_id} nnt_id`}</li>}
+          {!!countCsv.doi && (
+            <li className="fr-text--sm fr-mb-0">{`${countCsv.doi} DOI`}</li>
+          )}
+          {!!countCsv.hal_coll_code && (
+            <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_coll_code} hal_coll_code`}</li>
+          )}
+          {!!countCsv.hal_id && (
+            <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_id} hal_id`}</li>
+          )}
+          {!!countCsv.hal_struct_id && (
+            <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_struct_id} hal_struct_id`}</li>
+          )}
+          {!!countCsv.nnt_etab && (
+            <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_etab} nnt_etab`}</li>
+          )}
+          {!!countCsv.nnt_id && (
+            <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_id} nnt_id`}</li>
+          )}
         </ul>
-        <Button variant="text" size="sm" icon="download-line" onClick={() => DownloadFile(variation)}>
+        <Button
+          variant="text"
+          size="sm"
+          icon="download-line"
+          onClick={() => DownloadFile(variation)}
+        >
           Télécharger le fichier
         </Button>
       </Container>
-      <EditModal variations={[variation]} isOpen={showEditModal} onClose={() => setShowEditModal(false)} />
-      <UploadModal variations={[variation]} isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
+      <EditModal
+        variations={[variation]}
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+      />
+      <UploadModal
+        variations={[variation]}
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
+      />
       <ButtonGroup isInlineFrom="md" className="fr-mb-5w fr-mt-3w">
         <Button icon="edit-line" onClick={() => setShowEditModal(true)}>
           Éditer la demande
@@ -169,7 +232,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
       <Threads variation={variation} />
       <EmailBox variation={variation} />
     </>
-  )
-}
+  );
+};
 
-export default VariationItem
+export default VariationItem;

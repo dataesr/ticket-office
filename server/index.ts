@@ -87,7 +87,6 @@ app
       alwaysStatic: true,
     })
   )
-  .get("*", () => Bun.file("public/index.html"))
-  .compile();
+  .get("*", () => Bun.file("public/index.html"));
 
 export default app;
