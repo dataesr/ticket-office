@@ -86,6 +86,7 @@ app
       alwaysStatic: true,
     })
   )
-  .get("*", () => Bun.file("public/index.html"));
-
+  .get("*", () => {
+    return new Response(Bun.file("./public/index.html"));
+  });
 export default app;
