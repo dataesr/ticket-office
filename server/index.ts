@@ -81,6 +81,7 @@ app
     return app;
   })
   .use(staticPlugin({ prefix: "", alwaysStatic: true }))
-  .get("*", () => Bun.file("./public/index.html"));
+  .get("*", () => Bun.file("./public/index.html"))
+  .compile();
 
 export default app;
