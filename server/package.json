@@ -2,8 +2,9 @@
   "name": "app",
   "version": "1.0.50",
   "scripts": {
-    "dev": "bun run --watch server.ts",
-    "start": "bun run server.ts"
+    "dev": "bun run --watch index.ts",
+    "start": "bun run index.ts",
+    "build": "bun build --compile --minify-whitespace --minify-syntax --target bun --outfile ./server server.ts"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.2.0",
