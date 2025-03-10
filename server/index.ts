@@ -82,7 +82,6 @@ app
   })
   .use(
     staticPlugin({
-      assets: "public",
       prefix: "",
       alwaysStatic: true,
     })
