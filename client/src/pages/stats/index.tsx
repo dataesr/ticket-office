@@ -17,9 +17,7 @@ const GetStats = () => {
 
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const prodUrl = import.meta.env.VITE_BASE_API_URL;
-  const baseUrl = isDevelopment
-    ? "http://localhost:3000/api"
-    : `${prodUrl}/api`;
+  const baseUrl = isDevelopment ? "/api" : `${prodUrl}/api`;
 
   useEffect(() => {
     if (filter !== "global") {

@@ -2,14 +2,14 @@
   "name": "app",
   "version": "1.0.50",
   "scripts": {
-    "dev": "bun run --watch server.ts",
-    "build": "bun build --compile --minify --target bun --outfile ../build/server server.ts",
-    "start": "bun run server.ts"
+    "dev": "bun run --watch index.ts",
+    "build": "bun build --compile --minify --target bun --outfile ../build/server index.ts",
+    "test": "bun test"
   },
   "dependencies": {
-    "@elysiajs/cors": "^1.1.0",
-    "@elysiajs/static": "~1.0.3",
-    "@elysiajs/swagger": "~1.0.5",
+    "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/static": "^1.2.0",
+    "@elysiajs/swagger": "^1.2.2",
     "@types/imapflow": "^1.0.20",
     "@types/mongodb": "^4.0.7",
     "cheerio": "^1.0.0",

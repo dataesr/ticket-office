@@ -44,7 +44,7 @@ function EmailForm({
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const baseURL = import.meta.env.VITE_BASE_API_URL;
   const url = isDevelopment
-    ? `http://localhost:3000/api/${basePath}/${contribution?.id}`
+    ? `/api/${basePath}/${contribution?.id}`
     : `${baseURL}/api/${basePath}/${contribution?.id}`;
 
   const { mutate: updateTags } = useMutation<void, unknown, string[]>(

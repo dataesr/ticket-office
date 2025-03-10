@@ -15,16 +15,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
 
       - name: 🔑 Login Docker
         run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build client (Vite.js)
-        run: |
-          bun i
-          bunx --bun vite build client --mode staging --emptyOutDir --outDir '../server/public'
-          docker build -t ${{ github.repository }} .
+      - name: 🏗️ Build Docker image
+        run: docker build -t ${{ github.repository }} .
 
       - name: Get Tag
         id: version
