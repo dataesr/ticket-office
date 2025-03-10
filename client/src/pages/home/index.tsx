@@ -1,4 +1,4 @@
-import { Col, Container } from "@dataesr/dsfr-plus";
+import { Col, Container, Title } from "@dataesr/dsfr-plus";
 import SearchSection from "../contact-contributionbyobject-page/components/search-section";
 import { useState } from "react";
 import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
@@ -68,6 +68,7 @@ const Home = () => {
 
   return (
     <Container className="fr-mt-10v">
+      <Title>Bienvenue sur le Guichet numérique du DISD</Title>
       <Col className="fr-mb-3w">
         <i>
           Sans filtre, voici plus bas les contributions sur les dernières 24h.
