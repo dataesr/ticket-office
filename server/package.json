@@ -6,9 +6,9 @@
     "start": "bun run server.ts"
   },
   "dependencies": {
-    "@elysiajs/cors": "^1.1.0",
-    "@elysiajs/static": "~1.0.3",
-    "@elysiajs/swagger": "~1.0.5",
+    "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/static": "^1.2.0",
+    "@elysiajs/swagger": "^1.2.2",
     "@types/dot-object": "^2.1.6",
     "@types/imap": "^0.8.40",
     "@types/imap-simple": "^4.2.9",
@@ -18,7 +18,7 @@
     "cheerio": "^1.0.0",
     "dot-object": "^2.1.5",
     "dotenv": "^16.4.5",
-    "elysia": "~1.0.27",
+    "elysia": "^1.2.25",
     "imap": "^0.8.19",
     "imap-simple": "^5.1.0",
     "imapflow": "^1.0.164",
