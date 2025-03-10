@@ -27,6 +27,7 @@ const collectionMapping = [
 
 export const getCollectionNameFromUrl = (url: string) => {
   const mapping = collectionMapping.find(({ regex }) => regex.test(url));
+  console.log(mapping);
   return mapping ? mapping.collectionName : null;
 };
 
