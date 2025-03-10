@@ -17,6 +17,7 @@ import storageRoutes from "./routes/storage";
 import bsoTasksRoutes from "./routes/bso-tasks";
 
 dotenv.config();
+
 const app = new Elysia();
 app
   .use(
@@ -87,7 +88,6 @@ app
       alwaysStatic: true,
     })
   )
-  .get("*", () => Bun.file("public/index.html"))
-  .compile();
+  .get("*", () => Bun.file("public/index.html"));
 
 export default app;
