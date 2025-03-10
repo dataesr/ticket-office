@@ -1,6 +1,7 @@
 import { Elysia } from "elysia";
 import staticPlugin from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
+import dotenv from "dotenv";
 
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
 import productionsRoutes from "./routes/productions";
@@ -13,6 +14,8 @@ import getLastMailsSentRoutes from "./routes/last-mails-sent";
 import variationsRoutes from "./routes/variations";
 import storageRoutes from "./routes/storage";
 import bsoTasksRoutes from "./routes/bso-tasks";
+
+dotenv.config();
 
 const ENV = Bun.env.NODE_ENV || "development";
 
@@ -81,7 +84,6 @@ const createApp = async () => {
         })
         .use(staticPlugin({ prefix: "", alwaysStatic: true }))
         .get("*", () => Bun.file("./public/index.html"))
-        .compile()
         .listen(3000);
     default:
       return new Elysia()
@@ -144,8 +146,7 @@ const createApp = async () => {
           app.use(bsoTasksRoutes);
           return app;
         })
-        .listen(3000)
-        .compile();
+        .listen(3000);
   }
 };
 

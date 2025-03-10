@@ -13,5 +13,8 @@
   "workspaces": [
     "server",
     "client"
-  ]
+  ],
+  "dependencies": {
+    "concurrently": "8.2.2"
+  }
 }
