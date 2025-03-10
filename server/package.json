@@ -3,13 +3,12 @@
   "version": "1.0.50",
   "scripts": {
     "dev": "bun run --watch index.ts",
-    "start": "bun run index.ts",
-    "build": "bun build --compile --minify-whitespace --minify-syntax --target bun --outfile ./server server.ts"
+    "start": "bun run index.ts"
   },
   "dependencies": {
-    "@elysiajs/cors": "^1.2.0",
-    "@elysiajs/static": "^1.2.0",
-    "@elysiajs/swagger": "^1.2.2",
+    "@elysiajs/cors": "^1.1.0",
+    "@elysiajs/static": "~1.0.3",
+    "@elysiajs/swagger": "~1.0.5",
     "@types/dot-object": "^2.1.6",
     "@types/imap": "^0.8.40",
     "@types/imap-simple": "^4.2.9",
@@ -19,7 +18,7 @@
     "cheerio": "^1.0.0",
     "dot-object": "^2.1.5",
     "dotenv": "^16.4.5",
-    "elysia": "^1.2.25",
+    "elysia": "~1.0.27",
     "imap": "^0.8.19",
     "imap-simple": "^5.1.0",
     "imapflow": "^1.0.164",
@@ -31,13 +30,13 @@
   "devDependencies": {
     "@babel/preset-env": "^7.25.3",
     "@types/imap-simple": "^4.2.9",
-    "@types/imapflow": "^1.0.19",
     "@types/node": "^22.4.1",
+    "@types/imapflow": "^1.0.19",
     "@types/quoted-printable": "^1.0.2",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
     "@types/uuid": "^10.0.0",
-    "bun-types": "^1.2.4",
+    "bun-types": "latest",
     "supertest": "^7.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.4"
