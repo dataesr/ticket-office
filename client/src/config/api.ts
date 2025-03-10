@@ -8,25 +8,25 @@ export const postHeaders = {
 const url = import.meta.env.VITE_BASE_API_URL || "";
 
 export const contributionUrl = isDevelopment
-  ? "/api/contribute?max_results=2000"
+  ? "http://localhost:3000/api/contribute?max_results=2000"
   : `${url}/api/contribute?max_results=2000`;
 
 export const contactUrl = isDevelopment
-  ? "/api/contacts?max_results=2000"
+  ? "http://localhost:3000/api/contacts?max_results=2000"
   : `${url}/api/contacts?max_results=2000`;
 
 export const productionUrl = isDevelopment
-  ? "/api/production?max_results=2000"
+  ? "http://localhost:3000/api/production?max_results=2000"
   : `${url}/api/productions?max_results=2000`;
 
 export const nameChangeUrl = isDevelopment
-  ? "/api/update-user-data?max_results=2000"
+  ? "http://localhost:3000/api/update-user-data?max_results=2000"
   : `${url}/api/update-user-data?max_results=2000`;
 
 export const removeUserUrl = isDevelopment
-  ? "/api/remove-user?max_results=2000"
-  : `${url}/api/remove-user?max_results=2000`;
+  ? "http://localhost:3000/api/remove-user?max_results=2000"
+  : `${url}/api/remove-user?max_results=2000`
 
 export const variationsUrl = isDevelopment
-  ? "/api/variations?max_results=2000"
+  ? "http://localhost:3000/api/variations?max_results=2000"
   : `${url}/api/variations?max_results=2000`;

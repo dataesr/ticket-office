@@ -11,6 +11,10 @@ export const buildURL = (
   max_results: string = "20",
   tags?: VariationTags
 ): string => {
+  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
+  const url = import.meta.env.VITE_BASE_API_URL;
+  const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : `${url}/api`;
+
   let baseUrl = "contacts";
   if (location?.pathname?.includes("scanr-contributionPage")) {
     baseUrl = "contribute";
@@ -42,8 +46,8 @@ export const buildURL = (
             ]
           : [
               { name: { $regex: `.*${query}.*`, $options: "i" } },
-              { id: { $regex: `.*${query}.*`, $options: "i" } },
-            ];
+              { id: { $regex: `.*${query}.*`, $options: "i" } }
+            ]
 
       if (searchInMessages) {
         where.$or.push({
@@ -60,17 +64,15 @@ export const buildURL = (
     where.status = status;
   }
 
-  if (baseUrl === "variations" && tags) {
-    if (["none", "uploaded"].includes(tags?.file))
-      where["tags.file"] = tags.file;
-    if (["none", "ongoing", "done"].includes(tags?.notification))
-      where["tags.notification"] = tags.notification;
+  if(baseUrl === "variations" && tags) {
+    if (["none", "uploaded"].includes(tags?.file)) where["tags.file"] = tags.file
+    if(["none", "ongoing", "done"].includes(tags?.notification)) where["tags.notification"] = tags.notification
   }
 
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
-  return `api/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
+  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
 };
 
 export const buildStatsURL = (
@@ -81,7 +83,7 @@ export const buildStatsURL = (
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
-  const baseApiUrl = isDevelopment ? "/api" : `${url}/api`;
+  const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : `${url}/api`;
 
   let baseUrl = "contacts";
 

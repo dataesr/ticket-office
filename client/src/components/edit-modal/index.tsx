@@ -24,7 +24,7 @@ const EditModal: React.FC<EditModalProps> = ({
 }) => {
   const [showTagModal, setShowTagModal] = useState(false);
   const [tagInput, setTagInput] = useState("");
-  const selectedProfile = localStorage.getItem("selectedProfile");
+  const selectedProfile = localStorage.getItem("selectedProfile")
 
   const filteredTags = Array.isArray(allTags)
     ? [
@@ -65,7 +65,7 @@ const EditModal: React.FC<EditModalProps> = ({
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const baseURL = import.meta.env.VITE_BASE_API_URL;
   const url = isDevelopment
-    ? `/api/${basePath}/${data?.id}`
+    ? `http://localhost:3000/api/${basePath}/${data?.id}`
     : `${baseURL}/api/${basePath}/${data?.id}`;
 
   const handleInputChange = (key: keyof Inputs, value: any) => {

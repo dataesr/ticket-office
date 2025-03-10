@@ -20,9 +20,9 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
   const apiBaseUrl = isDevelopment
-    ? "/api/send-email"
+    ? "http://localhost:3000/api/send-email"
     : `${url}/api/send-email`;
-  const selectedProfile = localStorage.getItem("selectedProfile");
+  const selectedProfile = localStorage.getItem("selectedProfile")
 
   const sendEmail = async () => {
     const formattedResponse = userResponse.replace(/\n/g, "<br/>");
