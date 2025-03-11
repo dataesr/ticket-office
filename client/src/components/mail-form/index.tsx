@@ -44,11 +44,11 @@ function EmailForm({
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const baseURL = import.meta.env.VITE_BASE_API_URL;
   const url = isDevelopment
-    ? `http://localhost:3000/api/${basePath}/${contribution?.id}`
+    ? `/api/${basePath}/${contribution?.id}`
     : `${baseURL}/api/${basePath}/${contribution?.id}`;
 
-  const { mutate: updateTags } = useMutation<void, unknown, string[]>(
-    async (updatedTags: string[]) => {
+  const { mutate: updateTags } = useMutation({
+    mutationFn: async (updatedTags: string[]) => {
       const response = await fetch(`${url}`, {
         method: "PATCH",
         headers: postHeaders,
@@ -60,15 +60,13 @@ function EmailForm({
       }
       return response.json();
     },
-    {
-      onSuccess: () => {
-        toast.success("Tag ajouté avec succès !");
-      },
-      onError: () => {
-        toast.error("Erreur lors de l'ajout du tag.");
-      },
-    }
-  );
+    onSuccess: () => {
+      toast.success("Tag ajouté avec succès !");
+    },
+    onError: () => {
+      toast.error("Erreur lors de l'ajout du tag.");
+    },
+  });
 
   const handleTemplateChange = (e) => {
     const value = e.target.value;

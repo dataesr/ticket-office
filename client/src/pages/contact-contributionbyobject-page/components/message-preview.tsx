@@ -32,7 +32,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 
   return (
     <>
-      <Container fluid className="fr-mb-4w">
+      <Container fluid className="fr-mb-4w test">
         <Row>
           <Col>
             {data?.objectId && data?.objectType !== "network" && (

@@ -45,7 +45,6 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
             {data.tags.join(", ")}
           </Badge>
         )}
-
         {data?.status && (
           <Badge
             size="sm"
@@ -55,19 +54,16 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
             {StatusLabel({ status: data.status })}
           </Badge>
         )}
-
         {firstResponse?.team && (
           <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
             {`Réponse envoyée par ${firstResponse.team}`}
           </Badge>
         )}
-
         {data?.comment && data?.team?.length > 0 && (
           <Badge size="sm" color="green-emeraude" className="fr-mr-1w fr-mb-1w">
             {`Commenté par ${data.team[0]}`}
           </Badge>
         )}
-
         {data?.objectType && (
           <Badge
             size="sm"
@@ -95,7 +91,6 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
               <FaCopy size={14} color="#2196f3" className="copy-icon" />
             </button>
           </Title>
-
           {!firstResponse && (
             <Notice type="info" closeMode="disallow" className="fr-mb-2w">
               Aucune réponse apportée à ce message pour l'instant

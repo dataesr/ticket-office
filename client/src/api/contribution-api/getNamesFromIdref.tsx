@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { postHeaders } from "../../config/api";
 
-const NameFromIdref = (id) => {
+const NameFromIdref = (id: string) => {
   const url =
     "https://scanr.enseignementsup-recherche.gouv.fr/api/scanr-persons/_search";
 
@@ -32,7 +32,10 @@ const NameFromIdref = (id) => {
     return response.json();
   };
 
-  const { data, refetch } = useQuery([url, id], fetchContributions);
+  const { data, refetch } = useQuery({
+    queryKey: [url, id],
+    queryFn: fetchContributions,
+  });
   const fullNameFromIdref = data?.hits?.hits[0]?._source?.fullName || "";
   return { fullNameFromIdref, refetch };
 };

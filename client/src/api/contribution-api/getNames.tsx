@@ -5,9 +5,9 @@ import { AuthorData } from "../../types";
 export const useAllAuthorsData = (productionIds: string[]) => {
   const uniqueIds = [...new Set(productionIds.filter(Boolean))];
 
-  const { data, isLoading, isError } = useQuery(
-    ["all-authors", uniqueIds.join(",")],
-    async () => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["all-authors", uniqueIds.join(",")],
+    queryFn: async () => {
       if (uniqueIds.length === 0) return {};
 
       const response = await fetch(
@@ -48,10 +48,8 @@ export const useAllAuthorsData = (productionIds: string[]) => {
 
       return authorsMap;
     },
-    {
-      enabled: uniqueIds.length > 0,
-    }
-  );
+    enabled: uniqueIds.length > 0,
+  });
 
   return {
     authorsData: data || {},
