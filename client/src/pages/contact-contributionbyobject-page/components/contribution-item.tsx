@@ -83,7 +83,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
       <Row>
         <Col>
           <Title look="h5">
-            {data?.name || "Anonyme"} ({data?.id || "ID inconnu"})
+            {data?.name || ""} ({data?.id || ""})
             <button
               className={`copy-button ${copiedId === data?.id ? "copied" : ""}`}
               onClick={copyToClipboard}
