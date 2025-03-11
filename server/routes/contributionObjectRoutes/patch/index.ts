@@ -18,60 +18,69 @@ contributionObjectPutRoutes.patch(
     body: any;
     error: any;
   }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date();
+    const updateData = { ...body };
+
+    if (
+      updateData.status &&
+      ["ongoing", "treated"].includes(updateData.status)
+    ) {
+      updateData.treated_at = new Date();
     }
 
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0];
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified);
+    if (updateData.team && Array.isArray(updateData.team)) {
+      const userWhoModified = updateData.team[0];
+      if (!updateData.team.includes(userWhoModified)) {
+        updateData.team.push(userWhoModified);
       }
     }
 
-    if (body.threads) {
-      body.threads = body.threads.map((thread: { responses: any[] }) => {
-        thread.responses = thread.responses?.map(
-          (response: { read: boolean }) => {
-            if (response.read === false) {
-              response.read = true;
+    if (updateData.threads) {
+      updateData.threads = updateData.threads.map(
+        (thread: { responses: any[] }) => {
+          thread.responses = thread.responses?.map(
+            (response: { read: boolean }) => {
+              if (response.read === false) {
+                response.read = true;
+              }
+              return response;
             }
-            return response;
-          }
-        );
-        return thread;
-      });
+          );
+          return thread;
+        }
+      );
     }
 
-    const { acknowledged } = await db
-      .collection("contribute")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
+    updateData.modified_at = new Date();
 
-    if (!acknowledged) {
+    const updateResult = await db
+      .collection("contribute")
+      .updateOne({ id }, { $set: updateData })
+      .catch(() => null);
+
+    if (!updateResult?.acknowledged) {
       return error(500, { message: "Erreur interne du serveur" });
     }
 
-    const updatedObjectContribution = await db
+    const updatedDoc = await db
       .collection("contribute")
-      .findOne<ContributionType>({ id });
-    if (!updatedObjectContribution) {
-      return error(404, { message: "Contact non trouvé" });
+      .findOne<ContributionType>({ id })
+      .catch(() => null);
+
+    if (!updatedDoc) {
+      return error(404, { message: "Contribution non trouvée" });
     }
 
-    const responseObjectContribution = {
-      id: updatedObjectContribution.id,
-      name: updatedObjectContribution.name,
-      email: updatedObjectContribution.email,
-      status: updatedObjectContribution.status,
-      team: updatedObjectContribution.team,
-      modified_at: updatedObjectContribution.modified_at,
-      extra: updatedObjectContribution.extra || {},
-      contributionType: updatedObjectContribution.contributionType,
+    const completeDoc = {
+      ...updatedDoc,
+      comment: updatedDoc.comment || "",
+      tags: updatedDoc.tags || [],
+      threads: updatedDoc.threads || [],
+      extra: updatedDoc.extra || {},
+      contributionType: updatedDoc.contributionType || "contribute-object",
     };
 
-    return responseObjectContribution;
+    return completeDoc;
   },
-  // pourquoi on envoit pas la réponse 200 ?
   {
     params: t.Object({
       id: t.String(),
