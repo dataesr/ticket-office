@@ -11,10 +11,11 @@ const ContributionData = (url: string) => {
     }
     return response.json();
   };
-  const { data, isLoading, isError, refetch } = useQuery(
-    [url],
-    fetchContributions
-  );
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: [url],
+    queryFn: fetchContributions,
+  });
+
   return { data, isLoading, isError, refetch };
 };
 

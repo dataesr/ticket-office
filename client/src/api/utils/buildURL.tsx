@@ -14,7 +14,7 @@ export const buildURL = (
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
-  const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : `${url}/api`;
+  const baseApiUrl = isDevelopment ? "/api" : `${url}/api`;
 
   let baseUrl = "contacts";
   if (location?.pathname?.includes("scanr-contributionPage")) {
@@ -89,7 +89,7 @@ export const buildStatsURL = (
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
-  const baseApiUrl = isDevelopment ? "http://localhost:3000/api" : `${url}/api`;
+  const baseApiUrl = isDevelopment ? "/api" : `${url}/api`;
 
   let baseUrl = "contacts";
 

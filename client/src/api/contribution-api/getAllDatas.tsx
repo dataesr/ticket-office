@@ -27,10 +27,12 @@ const fetchAllData = async (baseApiUrl) => {
 
 const ContributionAllDatas = (baseApiUrl) => {
   const fetchContributions = () => fetchAllData(baseApiUrl);
-  const { data, isLoading, isError, refetch } = useQuery(
-    ["allContributions"],
-    fetchContributions
-  );
+
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["allContributions"],
+    queryFn: fetchContributions,
+  });
+
   return { data, isLoading, isError, refetch };
 };
 

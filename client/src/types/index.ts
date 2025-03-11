@@ -349,5 +349,5 @@ export interface StaffActionsProps {
   data: Contribution;
 }
 export interface ContributionPageProps {
-  fromApplication?: boolean;
+  fromApplication?: string;
 }

@@ -12,10 +12,10 @@ const useReceivedEmails = () => {
     return response.json();
   };
 
-  const { data, isLoading, isError, refetch } = useQuery(
-    ["receivedEmails"],
-    fetchReceivedEmails
-  );
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["receivedEmails"],
+    queryFn: fetchReceivedEmails,
+  });
   return { data, isLoading, isError, refetch };
 };
 

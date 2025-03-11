@@ -9,9 +9,9 @@ export const useLandingPages = (publicationIds: string[] | string[][]) => {
       ).filter(Boolean)
     : [];
 
-  const { data, isLoading, isError } = useQuery(
-    ["landingPages", ids.join(",")],
-    async () => {
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["landingPages", ids.join(",")],
+    queryFn: async () => {
       if (ids.length === 0) {
         return { hits: { hits: [] } };
       }
@@ -37,10 +37,8 @@ export const useLandingPages = (publicationIds: string[] | string[][]) => {
 
       return response.json();
     },
-    {
-      enabled: ids.length > 0,
-    }
-  );
+    enabled: ids.length > 0,
+  });
 
   const landingPages = {};
 

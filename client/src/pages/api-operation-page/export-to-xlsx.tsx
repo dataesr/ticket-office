@@ -21,7 +21,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
 
     const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
     const urlBase = isDevelopment
-      ? `http://localhost:3000/api/${basePath}`
+      ? `/api/${basePath}`
       : `${window.location.origin}/api/${basePath}`;
 
     const body = { status: "treated" };
