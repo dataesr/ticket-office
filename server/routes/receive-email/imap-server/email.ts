@@ -48,12 +48,11 @@ export async function processEmailContent(messageSource: string) {
   return cleanedText;
 }
 
-export async function sendMattermostNotifications(
+export async function senderToMattermostNotifications(
   referenceId: string,
   contribution: any,
   collectionName: string,
-  envelope: any,
-  extractedText: string
+  envelope: any
 ): Promise<void> {
   if (!contribution || !referenceId) {
     console.error(`Invalid contribution data for ID: ${referenceId}`);
@@ -65,7 +64,6 @@ export async function sendMattermostNotifications(
     contribution.fromApplication || "",
     collectionName
   );
-  console.log(collectionName);
   const senderName =
     envelope?.from && envelope.from.length > 0
       ? envelope.from[0].name || envelope.from[0].address
@@ -111,18 +109,15 @@ export async function sendNotificationEmail(
     collectionName
   );
 
-  await sendMattermostNotifications(
+  await senderToMattermostNotifications(
     referenceId,
     contribution,
     collectionName,
-    envelope,
-    extractedText
+    envelope
   );
 
   let emailConfig = config.defaultConfig;
 
-  // On prend l'adresse email et on la convertit en minuscules
-  // pour que "SUPPORT@SCANR.FR" et "support@scanr.fr" sont pareils
   const addressKey = toAddress.toLowerCase();
 
   // Ensuite on vérifie deux choses:

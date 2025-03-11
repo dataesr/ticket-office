@@ -1,24 +1,24 @@
-import { Elysia } from "elysia"
-import staticPlugin from "@elysiajs/static"
-import { swagger } from "@elysiajs/swagger"
-import dotenv from "dotenv"
-import { cors } from "@elysiajs/cors"
+import { Elysia } from "elysia";
+import staticPlugin from "@elysiajs/static";
+import { swagger } from "@elysiajs/swagger";
+import dotenv from "dotenv";
+import { cors } from "@elysiajs/cors";
 
-import contributionObjectRoutes from "./routes/contributionObjectRoutes"
-import productionsRoutes from "./routes/productions"
-import removeUserRoutes from "./routes/remove-user"
-import updateUserDataRoutes from "./routes/update-user-data"
-import contactsRoutes from "./routes/contacts"
-import sendMail from "./routes/reply/replyRoutes"
-import getReceivedMailsRoutes from "./routes/receive-email"
-import getLastMailsSentRoutes from "./routes/last-mails-sent"
-import variationsRoutes from "./routes/variations"
-import storageRoutes from "./routes/storage"
-import bsoTasksRoutes from "./routes/bso-tasks"
+import contributionObjectRoutes from "./routes/contributionObjectRoutes";
+import productionsRoutes from "./routes/productions";
+import removeUserRoutes from "./routes/remove-user";
+import updateUserDataRoutes from "./routes/update-user-data";
+import contactsRoutes from "./routes/contacts";
+import sendMail from "./routes/reply/replyRoutes";
+import getReceivedMailsRoutes from "./routes/receive-email";
+import getLastMailsSentRoutes from "./routes/last-mails-sent";
+import variationsRoutes from "./routes/variations";
+import storageRoutes from "./routes/storage";
+import bsoTasksRoutes from "./routes/bso-tasks";
 
-dotenv.config()
+dotenv.config();
 
-const app = new Elysia()
+const app = new Elysia();
 app
   .use(
     cors({
@@ -48,7 +48,8 @@ app
           },
           {
             name: "Mise à jour de données utilisateurs",
-            description: "Gestion des demandes de mise à jour de données utilisateur",
+            description:
+              "Gestion des demandes de mise à jour de données utilisateur",
           },
           {
             name: "Déclinaisons locales",
@@ -67,18 +68,18 @@ app
     })
   )
   .group("/api", (app) => {
-    app.use(contactsRoutes)
-    app.use(contributionObjectRoutes)
-    app.use(productionsRoutes)
-    app.use(removeUserRoutes)
-    app.use(updateUserDataRoutes)
-    app.use(sendMail)
-    app.use(getLastMailsSentRoutes)
-    app.use(getReceivedMailsRoutes)
-    app.use(variationsRoutes)
-    app.use(storageRoutes)
-    app.use(bsoTasksRoutes)
-    return app
+    app.use(contactsRoutes);
+    app.use(contributionObjectRoutes);
+    app.use(productionsRoutes);
+    app.use(removeUserRoutes);
+    app.use(updateUserDataRoutes);
+    app.use(sendMail);
+    app.use(getLastMailsSentRoutes);
+    app.use(getReceivedMailsRoutes);
+    app.use(variationsRoutes);
+    app.use(storageRoutes);
+    app.use(bsoTasksRoutes);
+    return app;
   })
   .use(
     staticPlugin({
@@ -87,6 +88,6 @@ app
       alwaysStatic: true,
     })
   )
-  .get("*", () => Bun.file("public/index.html"))
+  .get("*", () => Bun.file("public/index.html"));
 
-export default app
+export default app;

@@ -9,7 +9,8 @@ export const buildURL = (
   searchInMessages: boolean = true,
   fromApplication?: string,
   max_results: string = "20",
-  tags?: VariationTags
+  tags?: VariationTags,
+  objectType?: string
 ): string => {
   const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
   const url = import.meta.env.VITE_BASE_API_URL;
@@ -46,8 +47,8 @@ export const buildURL = (
             ]
           : [
               { name: { $regex: `.*${query}.*`, $options: "i" } },
-              { id: { $regex: `.*${query}.*`, $options: "i" } }
-            ]
+              { id: { $regex: `.*${query}.*`, $options: "i" } },
+            ];
 
       if (searchInMessages) {
         where.$or.push({
@@ -64,9 +65,14 @@ export const buildURL = (
     where.status = status;
   }
 
-  if(baseUrl === "variations" && tags) {
-    if (["none", "uploaded"].includes(tags?.file)) where["tags.file"] = tags.file
-    if(["none", "ongoing", "done"].includes(tags?.notification)) where["tags.notification"] = tags.notification
+  if (baseUrl === "variations" && tags) {
+    if (["none", "uploaded"].includes(tags?.file))
+      where["tags.file"] = tags.file;
+    if (["none", "ongoing", "done"].includes(tags?.notification))
+      where["tags.notification"] = tags.notification;
+  }
+  if (baseUrl === "contribute" && objectType && objectType !== "all") {
+    where.objectType = { $regex: `^${objectType}$`, $options: "i" };
   }
 
   const whereQuery =
