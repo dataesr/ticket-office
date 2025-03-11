@@ -50,6 +50,7 @@ const Selectors = ({
             <option value="structures">Structures</option>
             <option value="publications">Publications</option>
             <option value="projects">Projets</option>
+            <option value="network">Réseaux</option>
           </select>
         </Col>
       )}
