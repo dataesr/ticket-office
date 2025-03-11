@@ -19,6 +19,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
 }) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
+  const isScanrPage = location.pathname.includes("/scanr-contributionPage");
 
   const [sort, setSort] = useState(params.get("sort") || "DESC");
   const [status, setStatus] = useState(params.get("status") || "choose");
@@ -30,6 +31,9 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     params.get("searchInMessage") !== "false"
   );
   const [highlightedQuery, setHighlightedQuery] = useState("");
+  const [objectType, setObjectType] = useState(
+    isScanrPage ? params.get("objectType") || "all" : undefined
+  );
 
   const updateURL = (updates: Record<string, string>) => {
     const newParams = new URLSearchParams(location.search);
@@ -60,6 +64,10 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     setSearchInMessage(value);
     updateURL({ searchInMessage: value.toString() });
   };
+  const handleSetObjectType = (newObjectType: string) => {
+    setObjectType(newObjectType);
+    updateURL({ objectType: newObjectType });
+  };
 
   const url = buildURL(
     location,
@@ -68,7 +76,10 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     query.join(" "),
     page,
     searchInMessage,
-    fromApplication?.toString()
+    fromApplication?.toString(),
+    "20",
+    undefined,
+    objectType
   );
 
   const urlToSend = getUrlToSend(window.location.pathname);
@@ -165,6 +176,8 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
             setStatus={handleSetStatus}
             searchInMessage={searchInMessage}
             setSearchInMessage={handleSetSearchInMessage}
+            objectType={objectType}
+            setObjectType={handleSetObjectType}
           />
         </Col>
       </Row>
