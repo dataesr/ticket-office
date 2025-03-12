@@ -4,16 +4,14 @@ import { useState } from "react";
 import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
 import AllContributions from "./components/item";
 import { ClipLoader } from "react-spinners";
+import { apiUrl } from "../../api/utils/url"
 
-const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-const prodUrl = import.meta.env.VITE_BASE_API_URL;
-const url = isDevelopment ? "/api" : `${prodUrl}/api`;
 
 const Home = () => {
   const [query, setQuery] = useState<string[]>([]);
   const [highlightedQuery, setHighlightedQuery] = useState<string>("");
 
-  const { data, isLoading, isError } = ContributionAllDatas(url);
+  const { data, isLoading, isError } = ContributionAllDatas(apiUrl);
 
   const getFilteredData = () => {
     if (!data || data.length === 0) return [];

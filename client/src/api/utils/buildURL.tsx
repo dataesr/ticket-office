@@ -1,4 +1,5 @@
 import { VariationTags } from "../../pages/bso-local-variations/types";
+import { apiUrl } from "./url";
 
 export const buildURL = (
   location: any,
@@ -12,10 +13,8 @@ export const buildURL = (
   tags?: VariationTags,
   objectType?: string
 ): string => {
-  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const url = import.meta.env.VITE_BASE_API_URL;
-  const baseApiUrl = isDevelopment ? "/api" : `${url}/api`;
 
+  const baseApiUrl = apiUrl;
   let baseUrl = "contacts";
   if (location?.pathname?.includes("scanr-contributionPage")) {
     baseUrl = "contribute";
@@ -87,10 +86,7 @@ export const buildStatsURL = (
   page: number = 1,
   maxResults: string = "3000"
 ): string => {
-  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const url = import.meta.env.VITE_BASE_API_URL;
-  const baseApiUrl = isDevelopment ? "/api" : `${url}/api`;
-
+  const baseApiUrl = apiUrl;
   let baseUrl = "contacts";
 
   switch (filter) {

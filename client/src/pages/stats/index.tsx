@@ -10,14 +10,11 @@ import ContributionsGraphByTime from "../../components/graphs/contributions-by-y
 import { ClipLoader } from "react-spinners";
 import "./styles.scss";
 import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
+import { apiUrl } from "../../api/utils/url";
 
 const GetStats = () => {
   const [filter, setFilter] = useState("contact");
   const [url, setUrl] = useState(() => buildStatsURL(filter));
-
-  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const prodUrl = import.meta.env.VITE_BASE_API_URL;
-  const baseUrl = isDevelopment ? "/api" : `${prodUrl}/api`;
 
   useEffect(() => {
     if (filter !== "global") {
@@ -30,7 +27,7 @@ const GetStats = () => {
     data: allData,
     isLoading: isLoadingAllData,
     isError: isErrorAllData,
-  } = ContributionAllDatas(baseUrl);
+  } = ContributionAllDatas(apiUrl);
 
   const isGlobal = filter === "global";
   const contributions = isGlobal

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { postHeaders } from "../../config/api";
+import { apiUrl } from "../../api/utils/url";
 
 function EmailForm({
   userResponse,
@@ -41,11 +42,7 @@ function EmailForm({
     basePath = "production";
   }
 
-  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const baseURL = import.meta.env.VITE_BASE_API_URL;
-  const url = isDevelopment
-    ? `/api/${basePath}/${contribution?.id}`
-    : `${baseURL}/api/${basePath}/${contribution?.id}`;
+  const url =`${apiUrl}/${basePath}/${contribution?.id}`;
 
   const { mutate: updateTags } = useMutation({
     mutationFn: async (updatedTags: string[]) => {
