@@ -3,7 +3,7 @@ import { postHeaders } from "../../../config/api"
 
 export default async function editVariations(ids: Array<string>, inputs: Record<string, unknown>) {
   const singleId = ids.length === 1 ? ids[0] : null
-  const url = !!singleId ? `${apiUrl}/api/variations/${singleId}` : `${apiUrl}/api/variations`
+  const url = !!singleId ? `${apiUrl}/variations/${singleId}` : `${apiUrl}/variations`
   const data = !!singleId ? inputs : { data: inputs, ids: ids }
 
   await fetch(url, {

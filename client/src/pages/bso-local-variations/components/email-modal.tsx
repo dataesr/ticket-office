@@ -39,6 +39,7 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
             )}`}</li>
           ))}
         </ul>
+        <hr />
         <select
           id="templateSelect"
           className="fr-select"
