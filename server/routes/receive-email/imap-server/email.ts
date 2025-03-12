@@ -28,26 +28,52 @@ export async function processEmailContent(messageSource: string) {
 
   const base64Pattern = /([A-Za-z0-9+/=]{100,})(?=\s|$)/g;
   if (base64Pattern.test(cleanedText)) {
-    cleanedText = "[Contenu binaire ignoré]";
+    cleanedText = cleanedText.replace(base64Pattern, "[Contenu binaire ignoré]");
   }
 
-  cleanedText = cleanedText
-    .split("\n")
-    .filter((line) => {
-      const trimmedLine = line.trim();
-      return (
-        trimmedLine &&
-        !/^(De :|Réponse de|L'équipe scanR vous remercie pour votre contribution)/i.test(
-          trimmedLine
-        )
-      );
-    })
-    .join("\n")
-    .trim();
+  const citationMarkers = [
+    "Le mer.",
+    "Le mar.",
+    "Le lun.",
+    "Le jeu.",
+    "Le ven.",
+    "Le sam.",
+    "Le dim.",
+    "écrit :",
+    "wrote:",
+    "> ",
+    "From:",
+    "De :",
+    "-----Original Message",
+    "--",
+    "L'équipe scanR vous remercie"
+  ];
 
-  return cleanedText;
+  let messageLines = cleanedText.split("\n");
+  let firstMeaningfulLines = [];
+  let foundCitation = false;
+
+  for (const line of messageLines) {
+    if (citationMarkers.some(marker => line.trim().includes(marker))) {
+      foundCitation = true;
+      break;
+    }
+    if (line.trim() !== '') {
+      firstMeaningfulLines.push(line.trim());
+    }
+  }
+
+  if (firstMeaningfulLines.length === 0 && messageLines.length > 0) {
+    for (const line of messageLines) {
+      if (line.trim() !== '') {
+        firstMeaningfulLines.push(line.trim());
+        break;
+      }
+    }
+  }
+
+  return firstMeaningfulLines.join(" ").trim();
 }
-
 
 export async function senderToMattermostNotifications(
   referenceId: string,
@@ -76,9 +102,8 @@ export async function senderToMattermostNotifications(
 
   const textToUse = extractedText || 
     (envelope?.extractedText ? envelope.extractedText : "Pas de contenu");
-console.log(envelope,"envelope")
-console.log(extractedText,"extractedText")
-console.log(envelope.extractedText,"envelope.extractedText")
+
+
   const mattermostMessage = `
 🚀 **Bip...Bip**  
 📩 **Nouvelle réponse de ${senderName}** le ${new Date().toLocaleString("fr-FR")}
@@ -117,14 +142,6 @@ export async function sendNotificationEmail(
     referenceId,
     contribution.fromApplication || "",
     collectionName
-  );
-
-  const mattermostSuccess = await senderToMattermostNotifications(
-    referenceId,
-    contribution,
-    collectionName,
-    envelope,
-    extractedText
   );
 
   let emailConfig = config.defaultConfig;
@@ -227,17 +244,18 @@ export async function fetchEmails() {
 
       const extractedContent = await processEmailContent(messageSource);
       if (!extractedContent) continue;
+      
+      const { referenceId, collectionName } = extractReferenceInfo(subject);
 
       const saved = await saveReceivedEmail(
         message.envelope,
         messageSource,
         extractedContent,
-        date
+        date,
+        referenceId || undefined
       );
 
       if (!saved) continue;
-
-      const { referenceId, collectionName } = extractReferenceInfo(subject);
 
       if (referenceId) {
         const finalCollectionName =
