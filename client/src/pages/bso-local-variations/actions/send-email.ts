@@ -11,7 +11,7 @@ const messageTemplate = (variation: Variation) =>
   }</li><li>Date de la demande: ${new Date(variation.created_at).toLocaleTimeString()}</li></ul>`
 
 async function sendEmail(variation: Variation, response: string) {
-  const url = `${apiUrl}/api/send-email`
+  const url = `${apiUrl}/send-email`
   const selectedProfile = localStorage.getItem("selectedProfile")
   const formattedResponse = response.replace(/\n/g, "<br/>")
 

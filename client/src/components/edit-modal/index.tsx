@@ -14,6 +14,7 @@ import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 import TagSelectionModal from "./modal-select-tags";
 import { EditModalProps, Inputs } from "../../types";
+import { apiUrl } from "../../api/utils/url";
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -62,11 +63,7 @@ const EditModal: React.FC<EditModalProps> = ({
     basePath = "production";
   }
 
-  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const baseURL = import.meta.env.VITE_BASE_API_URL;
-  const url = isDevelopment
-    ? `/api/${basePath}/${data?.id}`
-    : `${baseURL}/api/${basePath}/${data?.id}`;
+  const url = `${apiUrl}/${basePath}/${data?.id}`;
 
   const handleInputChange = (key: keyof Inputs, value: any) => {
     setInputs((prevInputs) => ({

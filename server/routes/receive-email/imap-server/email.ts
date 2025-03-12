@@ -28,7 +28,10 @@ export async function processEmailContent(messageSource: string) {
 
   const base64Pattern = /([A-Za-z0-9+/=]{100,})(?=\s|$)/g;
   if (base64Pattern.test(cleanedText)) {
-    cleanedText = cleanedText.replace(base64Pattern, "[Contenu binaire ignoré]");
+    cleanedText = cleanedText.replace(
+      base64Pattern,
+      "[Contenu binaire ignoré]"
+    );
   }
 
   const citationMarkers = [
@@ -46,7 +49,7 @@ export async function processEmailContent(messageSource: string) {
     "De :",
     "-----Original Message",
     "--",
-    "L'équipe scanR vous remercie"
+    "L'équipe scanR vous remercie",
   ];
 
   let messageLines = cleanedText.split("\n");
@@ -54,18 +57,18 @@ export async function processEmailContent(messageSource: string) {
   let foundCitation = false;
 
   for (const line of messageLines) {
-    if (citationMarkers.some(marker => line.trim().includes(marker))) {
+    if (citationMarkers.some((marker) => line.trim().includes(marker))) {
       foundCitation = true;
       break;
     }
-    if (line.trim() !== '') {
+    if (line.trim() !== "") {
       firstMeaningfulLines.push(line.trim());
     }
   }
 
   if (firstMeaningfulLines.length === 0 && messageLines.length > 0) {
     for (const line of messageLines) {
-      if (line.trim() !== '') {
+      if (line.trim() !== "") {
         firstMeaningfulLines.push(line.trim());
         break;
       }
@@ -83,7 +86,7 @@ export async function senderToMattermostNotifications(
   extractedText: string = ""
 ): Promise<boolean> {
   console.log(`🤖 Préparation notification Mattermost pour ${referenceId}`);
-  
+
   if (!contribution || !referenceId) {
     console.error(`❌ Données invalides pour Mattermost: ${referenceId}`);
     return false;
@@ -94,19 +97,21 @@ export async function senderToMattermostNotifications(
     contribution.fromApplication || "",
     collectionName
   );
-  
+
   const senderName =
     envelope?.from && envelope.from.length > 0
       ? envelope.from[0].name || envelope.from[0].address
       : contribution.name || "Expéditeur inconnu";
 
-  const textToUse = extractedText || 
+  const textToUse =
+    extractedText ||
     (envelope?.extractedText ? envelope.extractedText : "Pas de contenu");
-
 
   const mattermostMessage = `
 🚀 **Bip...Bip**  
-📩 **Nouvelle réponse de ${senderName}** le ${new Date().toLocaleString("fr-FR")}
+📩 **Nouvelle réponse de ${senderName}** le ${new Date().toLocaleString(
+    "fr-FR"
+  )}
 **Extrait du message :**
 ${textToUse.substring(0, 100)}...
 
@@ -118,7 +123,10 @@ ${textToUse.substring(0, 100)}...
     console.log(`✅ Notification Mattermost envoyée pour ${referenceId}`);
     return true;
   } catch (error) {
-    console.error(`❌ Erreur notification Mattermost pour ${referenceId}:`, error);
+    console.error(
+      `❌ Erreur notification Mattermost pour ${referenceId}:`,
+      error
+    );
     return false;
   }
 }
@@ -132,7 +140,7 @@ export async function sendNotificationEmail(
   envelope: any = null
 ): Promise<boolean> {
   console.log(`📧 Début du processus de notification pour ${referenceId}`);
-  
+
   if (!contribution?.email || !contribution?.id) {
     console.error(`❌ Données de contribution invalides: ${referenceId}`);
     return false;
@@ -226,8 +234,10 @@ export async function fetchEmails() {
     const messages = await client.fetch("1:*", {
       source: true,
       envelope: true,
+      uid: true,
     });
     const messageList: {
+      uid: number;
       date: string;
       source: string;
       envelope: any;
@@ -235,8 +245,10 @@ export async function fetchEmails() {
       collectionName: string;
     }[] = [];
 
+    const processedUids: number[] = [];
+
     for await (let message of messages) {
-      if (!message.envelope || !message.source) continue;
+      if (!message.envelope || !message.source || !message.uid) continue;
 
       const messageSource = message.source.toString();
       const date = formatDate(message.envelope.date?.toISOString() || null);
@@ -244,7 +256,7 @@ export async function fetchEmails() {
 
       const extractedContent = await processEmailContent(messageSource);
       if (!extractedContent) continue;
-      
+
       const { referenceId, collectionName } = extractReferenceInfo(subject);
 
       const saved = await saveReceivedEmail(
@@ -264,12 +276,15 @@ export async function fetchEmails() {
             : collectionName;
 
         messageList.push({
+          uid: message.uid,
           date,
           source: messageSource,
           envelope: message.envelope,
           referenceId,
           collectionName: finalCollectionName,
         });
+      } else {
+        processedUids.push(message.uid);
       }
     }
 
@@ -278,41 +293,70 @@ export async function fetchEmails() {
     });
 
     for (let message of sortedMessages) {
-    const { referenceId, collectionName, source, envelope } = message;
-    if (referenceId) {
-      const extractedText = await processEmailContent(source);
-      const contribution = await updateContribution(
-        referenceId,
-        extractedText,
-        message.date,
-        collectionName
-      );
-
-      if (contribution) {
-        let toAddress = "";
-        if (envelope && envelope.to && envelope.to.length > 0) {
-          toAddress = envelope.to[0].address || "";
-        }
-
-        await senderToMattermostNotifications(
+      const { uid, referenceId, collectionName, source, envelope } = message;
+      if (referenceId) {
+        const extractedText = await processEmailContent(source);
+        const contribution = await updateContribution(
           referenceId,
-          contribution, 
-          collectionName,
-          envelope,
-          extractedText
-        );
-        
-        await sendNotificationEmail(
-          referenceId,
-          contribution,
-          collectionName,
-          toAddress,
           extractedText,
-          envelope
+          message.date,
+          collectionName
+        );
+
+        if (contribution) {
+          let toAddress = "";
+          if (envelope && envelope.to && envelope.to.length > 0) {
+            toAddress = envelope.to[0].address || "";
+          }
+
+          await senderToMattermostNotifications(
+            referenceId,
+            contribution,
+            collectionName,
+            envelope,
+            extractedText
+          );
+
+          await sendNotificationEmail(
+            referenceId,
+            contribution,
+            collectionName,
+            toAddress,
+            extractedText,
+            envelope
+          );
+
+          processedUids.push(uid);
+        }
+      }
+    }
+
+    if (processedUids.length > 0) {
+      try {
+        const mailboxes = await client.list();
+        const trashMailbox = mailboxes.find(
+          (box) =>
+            box.specialUse === "\\Trash" ||
+            box.path.toLowerCase().includes("trash") ||
+            box.path.toLowerCase().includes("corbeille")
+        );
+
+        const trashPath = trashMailbox ? trashMailbox.path : "Trash";
+
+        console.log(
+          `🗑️ Déplacement de ${processedUids.length} emails traités vers la corbeille...`
+        );
+        await client.messageMove(processedUids, trashPath);
+        console.log(
+          `✅ ${processedUids.length} emails déplacés vers la corbeille`
+        );
+      } catch (moveError) {
+        console.error(
+          "❌ Erreur lors du déplacement des emails vers la corbeille:",
+          moveError
         );
       }
     }
-  }
   } finally {
     lock.release();
     await client.logout();

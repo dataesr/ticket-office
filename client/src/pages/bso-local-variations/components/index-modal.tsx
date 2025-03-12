@@ -1,14 +1,23 @@
-import { Modal, ModalTitle, ModalContent, Container, Button, ModalFooter, TextArea, Alert, Notice } from "@dataesr/dsfr-plus"
+import { Modal, ModalTitle, ModalContent, Container, Button, ModalFooter, TextArea, TextInput } from "@dataesr/dsfr-plus"
 import { useVariationsContext } from "../context"
 import { Variation } from "../types"
 import { useState } from "react"
 import updateIndex from "../actions/update-index"
 
+function getDefaultIndexName() {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, "0")
+  const day = String(today.getDate()).padStart(2, "0")
+  return `bso-publications-${year}${month}${day}`
+}
+function isValidIndexNameFormat(indexName: string) {
+  // Regular expression to match the "bso-publications-YYYYMMDD" format
+  const datePattern = /^bso-publications-\d{4}(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$/
+  return datePattern.test(indexName)
+}
+const defaultIndexName = getDefaultIndexName()
 const defaultJSON = {
-  index_name: "bso-publications-20250102",
-  reset_file: false,
-  extract: false,
-  transform: true,
   skip_download: false,
   observations: ["20180927", "20191122", "20201009", "20211201", "20221201", "20231214", "20241203"],
   hal_dates: ["20221201", "20231214", "20241201"],
@@ -28,34 +37,39 @@ export default function IndexModal({ variations, isOpen, onClose }: IndexModalPr
   const {
     data: { refetch },
   } = useVariationsContext()
+  const [indexName, setIndexName] = useState<string>(defaultIndexName)
   const [textJSON, setTextJSON] = useState<string>(prettifyJSON(defaultJSON))
-  const [isValid, setIsValid] = useState<boolean>(true)
-  const [validationError, setValidationError] = useState<Error>(null)
+  const [isValidIndexName, setIsValidIndexName] = useState<boolean>(true)
+  const [isValidJSON, setIsValidJSON] = useState<boolean>(true)
+  const [errorJSON, setErrorJSON] = useState<Error>(null)
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const name = event.target.value
+    setIndexName(name)
+    setIsValidIndexName(isValidIndexNameFormat(name))
+  }
+
+  const handleParamsChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = event.target.value
     setTextJSON(text)
     try {
       const json = JSON.parse(text)
-      if ("index_name" in json) {
-        const pretty = JSON.stringify(json, undefined, 8)
-        setTextJSON(pretty)
-        setIsValid(true)
-        setValidationError(null)
-      } else {
-        setIsValid(false)
-        setValidationError(new Error('"index_name" is missing!'))
-      }
+      const pretty = JSON.stringify(json, undefined, 8)
+      setTextJSON(pretty)
+      setIsValidJSON(true)
+      setErrorJSON(null)
     } catch (error) {
-      setIsValid(false)
-      setValidationError(error)
+      setIsValidJSON(false)
+      setErrorJSON(error)
     }
   }
 
   const handleClose = () => {
+    setIndexName(defaultIndexName)
     setTextJSON(prettifyJSON(defaultJSON))
-    setIsValid(true)
-    setValidationError(null)
+    setIsValidIndexName(true)
+    setIsValidJSON(true)
+    setErrorJSON(null)
     onClose()
   }
 
@@ -70,16 +84,25 @@ export default function IndexModal({ variations, isOpen, onClose }: IndexModalPr
             <li key={index}>{`${variation.structure.name} - ${variation.structure?.id}`}</li>
           ))}
         </ul>
-        <Notice type="info" closeMode="disallow">
-          N'oubliez pas de changer le champ 'index_name' !
-        </Notice>
-        <TextArea
-          style={{ resize: "none", borderColor: isValid ? "initial" : "red" }}
-          value={textJSON}
-          onChange={handleChange}
-          rows={10}
+        <hr />
+        <TextInput
+          label="Nom de l'index"
+          placeholder={defaultIndexName}
+          value={indexName}
+          onChange={handleNameChange}
+          messageType={isValidIndexName ? "" : "error"}
+          message={isValidIndexName ? "" : "Le nom de l'index doit être au format 'bso-publications-YYYYMMDD'"}
+          required
         />
-        {validationError && <Alert variant="warning" description={validationError.message} />}
+        <TextArea
+          label="Paramètres de l'index"
+          style={{ resize: "none", borderColor: isValidJSON ? "initial" : "red" }}
+          value={textJSON}
+          onChange={handleParamsChange}
+          rows={10}
+          messageType={errorJSON ? "error" : ""}
+          message={errorJSON ? errorJSON.message : ""}
+        />
       </ModalContent>
       <ModalFooter>
         <Container style={{ display: "flex", width: "100%", alignItems: "center" }}>
@@ -91,10 +114,10 @@ export default function IndexModal({ variations, isOpen, onClose }: IndexModalPr
           <Button
             variant="primary"
             onClick={() => {
-              updateIndex(variations, JSON.parse(textJSON))
+              updateIndex(variations, { index_name: indexName, ...JSON.parse(textJSON) })
               refetch()
             }}
-            disabled={!isValid}
+            disabled={!isValidIndexName || !isValidJSON}
           >
             Relancer
           </Button>
