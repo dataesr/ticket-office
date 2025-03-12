@@ -227,138 +227,153 @@ export async function fetchEmails() {
     logger: false,
   });
 
-  await client.connect();
-
-  let lock = await client.getMailboxLock("INBOX");
   try {
-    const messages = await client.fetch("1:*", {
-      source: true,
-      envelope: true,
-      uid: true,
-    });
-    const messageList: {
-      uid: number;
-      date: string;
-      source: string;
-      envelope: any;
-      referenceId: string | null;
-      collectionName: string;
-    }[] = [];
+    await client.connect();
 
-    const processedUids: number[] = [];
+    let lock = await client.getMailboxLock("INBOX");
+    try {
+      const messages = await client.fetch("1:*", {
+        source: true,
+        envelope: true,
+        uid: true,
+      });
 
-    for await (let message of messages) {
-      if (!message.envelope || !message.source || !message.uid) continue;
+      const messageList: {
+        uid: number;
+        date: string;
+        source: string;
+        envelope: any;
+        referenceId: string | null;
+        collectionName: string;
+      }[] = [];
 
-      const messageSource = message.source.toString();
-      const date = formatDate(message.envelope.date?.toISOString() || null);
-      const subject = message.envelope.subject || "";
+      const processedUids: number[] = [];
 
-      const extractedContent = await processEmailContent(messageSource);
-      if (!extractedContent) continue;
+      for await (let message of messages) {
+        if (!message.envelope || !message.source || !message.uid) continue;
 
-      const { referenceId, collectionName } = extractReferenceInfo(subject);
+        const messageSource = message.source.toString();
+        const date = formatDate(message.envelope.date?.toISOString() || null);
+        const subject = message.envelope.subject || "";
 
-      const saved = await saveReceivedEmail(
-        message.envelope,
-        messageSource,
-        extractedContent,
-        date,
-        referenceId || undefined
-      );
+        const extractedContent = await processEmailContent(messageSource);
+        if (!extractedContent) continue;
 
-      if (!saved) continue;
+        const { referenceId, collectionName } = extractReferenceInfo(subject);
 
-      if (referenceId) {
-        const finalCollectionName =
-          collectionName === "needs_lookup"
-            ? await lookupCorrectCollection(referenceId)
-            : collectionName;
-
-        messageList.push({
-          uid: message.uid,
+        const saved = await saveReceivedEmail(
+          message.envelope,
+          messageSource,
+          extractedContent,
           date,
-          source: messageSource,
-          envelope: message.envelope,
-          referenceId,
-          collectionName: finalCollectionName,
-        });
-      } else {
-        processedUids.push(message.uid);
-      }
-    }
-
-    const sortedMessages = messageList.sort((a, b) => {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    });
-
-    for (let message of sortedMessages) {
-      const { uid, referenceId, collectionName, source, envelope } = message;
-      if (referenceId) {
-        const extractedText = await processEmailContent(source);
-        const contribution = await updateContribution(
-          referenceId,
-          extractedText,
-          message.date,
-          collectionName
+          referenceId || undefined,
+          collectionName || undefined
         );
 
-        if (contribution) {
-          let toAddress = "";
-          if (envelope && envelope.to && envelope.to.length > 0) {
-            toAddress = envelope.to[0].address || "";
-          }
+        if (!saved) {
+          processedUids.push(message.uid);
+          continue;
+        }
 
-          await senderToMattermostNotifications(
+        if (referenceId) {
+          const finalCollectionName =
+            collectionName === "needs_lookup"
+              ? await lookupCorrectCollection(referenceId)
+              : collectionName;
+
+          messageList.push({
+            uid: message.uid,
+            date,
+            source: messageSource,
+            envelope: message.envelope,
             referenceId,
-            contribution,
-            collectionName,
-            envelope,
-            extractedText
-          );
-
-          await sendNotificationEmail(
-            referenceId,
-            contribution,
-            collectionName,
-            toAddress,
-            extractedText,
-            envelope
-          );
-
-          processedUids.push(uid);
+            collectionName: finalCollectionName,
+          });
+        } else {
+          processedUids.push(message.uid);
         }
       }
-    }
 
-    if (processedUids.length > 0) {
-      try {
-        const mailboxes = await client.list();
-        const trashMailbox = mailboxes.find(
-          (box) =>
-            box.specialUse === "\\Trash" ||
-            box.path.toLowerCase().includes("trash") ||
-            box.path.toLowerCase().includes("corbeille")
-        );
+      const sortedMessages = messageList.sort((a, b) => {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      });
 
-        const trashPath = trashMailbox ? trashMailbox.path : "Trash";
+      for (let message of sortedMessages) {
+        const { uid, referenceId, collectionName, source, envelope } = message;
+        if (referenceId) {
+          const extractedText = await processEmailContent(source);
+          const contribution = await updateContribution(
+            referenceId,
+            extractedText,
+            message.date,
+            collectionName
+          );
 
-        console.log(
-          `🗑️ Déplacement de ${processedUids.length} emails traités vers la corbeille...`
-        );
-        await client.messageMove(processedUids, trashPath);
-        console.log(
-          `✅ ${processedUids.length} emails déplacés vers la corbeille`
-        );
-      } catch (moveError) {
-        console.error(
-          "❌ Erreur lors du déplacement des emails vers la corbeille:",
-          moveError
-        );
+          if (contribution) {
+            let toAddress = "";
+            if (envelope && envelope.to && envelope.to.length > 0) {
+              toAddress = envelope.to[0].address || "";
+            }
+
+            await senderToMattermostNotifications(
+              referenceId,
+              contribution,
+              collectionName,
+              envelope,
+              extractedText
+            );
+
+            await sendNotificationEmail(
+              referenceId,
+              contribution,
+              collectionName,
+              toAddress,
+              extractedText,
+              envelope
+            );
+
+            // Marquer comme traité (normalement)
+            processedUids.push(uid);
+          }
+        }
       }
+
+      if (processedUids.length > 0) {
+        try {
+          const mailboxes = await client.list();
+          const trashMailbox = mailboxes.find(
+            (box) =>
+              box.specialUse === "\\Trash" ||
+              box.path.toLowerCase().includes("trash") ||
+              box.path.toLowerCase().includes("corbeille")
+          );
+
+          const trashPath = trashMailbox ? trashMailbox.path : "Trash";
+
+          console.log(
+            `🗑️ Déplacement de ${processedUids.length} emails traités vers la corbeille...`
+          );
+          await client.messageMove(processedUids, trashPath);
+          console.log(
+            `✅ ${processedUids.length} emails déplacés vers la corbeille`
+          );
+        } catch (moveError) {
+          console.error(
+            "❌ Erreur lors du déplacement des emails vers la corbeille:",
+            moveError
+          );
+        }
+      }
+    } finally {
+      if (lock) lock.release();
     }
+  } catch (error) {
+    console.error("❌ Erreur lors de la vérification des emails:", error);
   } finally {
-    lock.release();
-    await client.logout();
+    try {
+      await client.logout();
+    } catch (logoutError) {
+      console.error("❌ Erreur lors de la déconnexion:", logoutError);
+    }
   }
 }
