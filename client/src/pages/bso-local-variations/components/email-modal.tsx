@@ -1,4 +1,4 @@
-import { Modal, ModalTitle, ModalContent, Container, Button, ModalFooter, TextArea } from "@dataesr/dsfr-plus"
+import { Modal, ModalTitle, ModalContent, Container, Button, ModalFooter, TextArea, Notice } from "@dataesr/dsfr-plus"
 import { useVariationsContext } from "../context"
 import { useState } from "react"
 import { notificationGetName, notificationGetTemplate } from "../config/notifications"
@@ -50,7 +50,7 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
               notificationGetTemplate(
                 event.target.value,
                 singleVariation?.structure?.id || "${structureId}",
-                getCommentsNameFromBSO(singleVariation.structure?.id) || "${structureCommentsName}"
+                getCommentsNameFromBSO(singleVariation?.structure?.id) || "${structureCommentsName}"
               )
             )
           }}
@@ -70,6 +70,11 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
           rows={10}
           readOnly={useTemplate}
         />
+        {useTemplate && (
+          <Notice type="warning" closeMode="disallow">
+            Le template n'est pas modifiable si plusieurs demandes sont selectionnées.
+          </Notice>
+        )}
       </ModalContent>
       <ModalFooter>
         <Container style={{ display: "flex", width: "100%", alignItems: "center" }}>
