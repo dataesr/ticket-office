@@ -76,7 +76,9 @@ export async function senderToMattermostNotifications(
 
   const textToUse = extractedText || 
     (envelope?.extractedText ? envelope.extractedText : "Pas de contenu");
-
+console.log(envelope,"envelope")
+console.log(extractedText,"extractedText")
+console.log(envelope.extractedText,"envelope.extractedText")
   const mattermostMessage = `
 🚀 **Bip...Bip**  
 📩 **Nouvelle réponse de ${senderName}** le ${new Date().toLocaleString("fr-FR")}
@@ -258,30 +260,41 @@ export async function fetchEmails() {
     });
 
     for (let message of sortedMessages) {
-      const { referenceId, collectionName, source, envelope } = message;
-      if (referenceId) {
-        const contribution = await updateContribution(
-          referenceId,
-          await processEmailContent(source),
-          message.date,
-          collectionName
-        );
+    const { referenceId, collectionName, source, envelope } = message;
+    if (referenceId) {
+      const extractedText = await processEmailContent(source);
+      const contribution = await updateContribution(
+        referenceId,
+        extractedText,
+        message.date,
+        collectionName
+      );
 
-        if (contribution) {
-          let toAddress = "";
-          if (envelope && envelope.to && envelope.to.length > 0) {
-            toAddress = envelope.to[0].address || "";
-          }
-
-          await sendNotificationEmail(
-            referenceId,
-            contribution,
-            collectionName,
-            toAddress
-          );
+      if (contribution) {
+        let toAddress = "";
+        if (envelope && envelope.to && envelope.to.length > 0) {
+          toAddress = envelope.to[0].address || "";
         }
+
+        await senderToMattermostNotifications(
+          referenceId,
+          contribution, 
+          collectionName,
+          envelope,
+          extractedText
+        );
+        
+        await sendNotificationEmail(
+          referenceId,
+          contribution,
+          collectionName,
+          toAddress,
+          extractedText,
+          envelope
+        );
       }
     }
+  }
   } finally {
     lock.release();
     await client.logout();
