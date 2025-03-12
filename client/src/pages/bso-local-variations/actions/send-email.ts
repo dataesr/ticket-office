@@ -2,7 +2,6 @@ import { toast } from "react-toastify"
 import { Variation } from "../types"
 import editVariations from "./edit-variations"
 import { notificationGetTemplate } from "../config/notifications"
-import { useVariationsContext } from "../context"
 
 const messageTemplate = (variation: Variation) =>
   `<ul><li>Nom de la structure: ${variation.structure.name}</li><li>Identifiant de la structure: ${
@@ -43,18 +42,16 @@ export default async function sendEmails(
   variations: Array<Variation>,
   notification: string,
   response: string,
-  useTemplate?: boolean
+  useTemplate?: boolean,
+  getCommentsName?: (id: string) => string
 ) {
-  const { getCommentsNameFromBSO } = useVariationsContext()
   const inputs = { tags: { notification: notification }, status: "ongoing" }
 
   Promise.all(
     variations.map((variation) =>
       sendEmail(
         variation,
-        useTemplate
-          ? notificationGetTemplate(notification, variation.id, getCommentsNameFromBSO(variation.structure?.id))
-          : response
+        useTemplate ? notificationGetTemplate(notification, variation.id, getCommentsName(variation.id)) : response
       )
     )
   )
