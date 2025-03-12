@@ -28,6 +28,7 @@ export const replyEmailConfig = {
     senderName: "L'équipe BSO",
     replyToEmail: "bso@dataesr.fr",
     replyToName: "L'équipe BSO",
+    bcc: [{ name: "Baromètre français de la Science Ouverte", email: "bso@recherche.gouv.fr" }],
     templateId: 272,
   },
-};
+}

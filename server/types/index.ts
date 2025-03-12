@@ -14,3 +14,12 @@ export type ProductionResponse = {
     details: string;
   }[];
 };
+
+export type ReplyEmailConfig = {
+  senderEmail: string | undefined
+  senderName: string
+  replyToEmail: string
+  replyToName: string
+  bcc?: Array<{ name: string; email: string }>
+  templateId: number
+}
