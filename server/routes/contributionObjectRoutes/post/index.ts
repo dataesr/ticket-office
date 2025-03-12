@@ -7,6 +7,7 @@ import { ObjectId } from "mongodb";
 import { emailRecipients } from "../../contacts/post/emailRecipents";
 import { newContributionEmailConfig } from "../../../utils/configEmail";
 import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
+import {getObjectTypeLabel} from "../post/utils"
 
 type postContributionObjectSchemaType = Static<
   typeof postContributionObjectSchema
@@ -97,6 +98,7 @@ postContributionObjectRoutes.post(
       },
     };
 
+    
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
@@ -112,9 +114,8 @@ postContributionObjectRoutes.post(
       });
     }
 
-    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ScanR concernant un/une ${
-      finalContribution.objectType
-    }! 
+    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ScanR concernant ${getObjectTypeLabel(finalContribution.objectType)}
+
 **Nom**: ${finalContribution.name}  
 **Email**: ${finalContribution.email}  
 **Fonction**: ${finalContribution.extra?.fonction || "non renseigné"}  
