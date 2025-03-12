@@ -341,27 +341,39 @@ export async function fetchEmails() {
       if (processedUids.length > 0) {
         try {
           const mailboxes = await client.list();
-          const trashMailbox = mailboxes.find(
+
+          let trashPath = "Trash";
+
+          const ovhTrash = mailboxes.find(
             (box) =>
-              box.specialUse === "\\Trash" ||
-              box.path.toLowerCase().includes("trash") ||
-              box.path.toLowerCase().includes("corbeille")
+              box.path === "INBOX.INBOX.Trash" || box.path === "INBOX.Trash"
           );
 
-          const trashPath = trashMailbox ? trashMailbox.path : "Trash";
+          if (ovhTrash) {
+            trashPath = ovhTrash.path;
+          } else {
+            const trashMailbox = mailboxes.find(
+              (box) =>
+                box.specialUse === "\\Trash" ||
+                box.path.toLowerCase().includes("trash") ||
+                box.path.toLowerCase().includes("corbeille")
+            );
+
+            if (trashMailbox) {
+              trashPath = trashMailbox.path;
+            }
+          }
 
           console.log(
-            `🗑️ Déplacement de ${processedUids.length} emails traités vers la corbeille...`
+            `🗑️ Déplacement de ${processedUids.length} emails vers ${trashPath}...`
           );
           await client.messageMove(processedUids, trashPath);
           console.log(
             `✅ ${processedUids.length} emails déplacés vers la corbeille`
           );
         } catch (moveError) {
-          console.error(
-            "❌ Erreur lors du déplacement des emails vers la corbeille:",
-            moveError
-          );
+          console.error("❌ Erreur lors du déplacement des emails:", moveError);
+          console.error(moveError);
         }
       }
     } finally {
