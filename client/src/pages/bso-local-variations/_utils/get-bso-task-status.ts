@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
-import { apiUrl } from "../../../api/utils/url"
 
 const fetchTaskStatus = async (id: string) => {
-  const url = `${apiUrl}/bso-tasks/${id}`
+  const url = `/api/bso-tasks/${id}`
   const status = await fetch(url).then((response) => {
     if (response.ok) return response.text()
     if (response.status === 404) return response.text()

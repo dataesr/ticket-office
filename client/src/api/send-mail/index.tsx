@@ -17,11 +17,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
-  const isDevelopment = import.meta.env.VITE_HEADER_TAG === "Development";
-  const url = import.meta.env.VITE_BASE_API_URL;
-  const apiBaseUrl = isDevelopment
-    ? "/api/send-email"
-    : `${url}/api/send-email`;
+  const apiBaseUrl = "/api/send-email"
   const selectedProfile = localStorage.getItem("selectedProfile");
 
   const sendEmail = async () => {

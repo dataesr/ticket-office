@@ -10,7 +10,6 @@ import ContributionsGraphByTime from "../../components/graphs/contributions-by-y
 import { ClipLoader } from "react-spinners";
 import "./styles.scss";
 import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
-import { apiUrl } from "../../api/utils/url";
 
 const GetStats = () => {
   const [filter, setFilter] = useState("contact");
@@ -27,7 +26,7 @@ const GetStats = () => {
     data: allData,
     isLoading: isLoadingAllData,
     isError: isErrorAllData,
-  } = ContributionAllDatas(apiUrl);
+  } = ContributionAllDatas();
 
   const isGlobal = filter === "global";
   const contributions = isGlobal

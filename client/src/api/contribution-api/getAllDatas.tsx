@@ -25,8 +25,8 @@ const fetchAllData = async (baseApiUrl) => {
   return Promise.all(fetchPromises);
 };
 
-const ContributionAllDatas = (baseApiUrl) => {
-  const fetchContributions = () => fetchAllData(baseApiUrl);
+const ContributionAllDatas = () => {
+  const fetchContributions = () => fetchAllData("/api");
 
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["allContributions"],

@@ -7,7 +7,6 @@ import { useDataList } from "./data-list-context";
 import "./styles.scss";
 import { postHeaders } from "../../config/api";
 import { ContributionData, ExcelExportButtonProps } from "../../types";
-import { apiUrl } from "../../api/utils/url";
 
 const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
   const { dataList, setDataList } = useDataList();
@@ -20,7 +19,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
       ? "contribute_productions"
       : "contacts";
 
-    const urlBase = `${apiUrl}/${basePath}`;
+    const urlBase = `/api/${basePath}`;
     const body = { status: "treated" };
 
     try {

@@ -1,6 +1,5 @@
 import { toast } from "react-toastify"
 import { Variation } from "../types"
-import { apiUrl } from "../../../api/utils/url"
 import editVariations from "./edit-variations"
 import { notificationGetTemplate } from "../config/notifications"
 import { useVariationsContext } from "../context"
@@ -11,7 +10,7 @@ const messageTemplate = (variation: Variation) =>
   }</li><li>Date de la demande: ${new Date(variation.created_at).toLocaleTimeString()}</li></ul>`
 
 async function sendEmail(variation: Variation, response: string) {
-  const url = `${apiUrl}/send-email`
+  const url = `/api/send-email`
   const selectedProfile = localStorage.getItem("selectedProfile")
   const formattedResponse = response.replace(/\n/g, "<br/>")
 

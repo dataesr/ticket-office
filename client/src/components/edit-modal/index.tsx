@@ -13,8 +13,7 @@ import {
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 import TagSelectionModal from "./modal-select-tags";
-import { EditModalProps, Inputs } from "../../types";
-import { apiUrl } from "../../api/utils/url";
+import { EditModalProps, Inputs } from "../../types"
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -63,7 +62,7 @@ const EditModal: React.FC<EditModalProps> = ({
     basePath = "production";
   }
 
-  const url = `${apiUrl}/${basePath}/${data?.id}`;
+  const url = `/api/${basePath}/${data?.id}`
 
   const handleInputChange = (key: keyof Inputs, value: any) => {
     setInputs((prevInputs) => ({

@@ -4,14 +4,12 @@ import { useState } from "react";
 import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
 import AllContributions from "./components/item";
 import { ClipLoader } from "react-spinners";
-import { apiUrl } from "../../api/utils/url"
-
 
 const Home = () => {
   const [query, setQuery] = useState<string[]>([]);
   const [highlightedQuery, setHighlightedQuery] = useState<string>("");
 
-  const { data, isLoading, isError } = ContributionAllDatas(apiUrl);
+  const { data, isLoading, isError } = ContributionAllDatas();
 
   const getFilteredData = () => {
     if (!data || data.length === 0) return [];
