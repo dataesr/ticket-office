@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { postHeaders } from "../../config/api";
-import { apiUrl } from "../../api/utils/url";
 
 function EmailForm({
   userResponse,
@@ -42,7 +41,7 @@ function EmailForm({
     basePath = "production";
   }
 
-  const url =`${apiUrl}/${basePath}/${contribution?.id}`;
+  const url =`/api/${basePath}/${contribution?.id}`;
 
   const { mutate: updateTags } = useMutation({
     mutationFn: async (updatedTags: string[]) => {

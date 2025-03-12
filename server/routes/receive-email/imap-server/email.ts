@@ -176,11 +176,12 @@ export async function sendNotificationEmail(
       email: emailConfig.mailSender,
       name: emailConfig.senderName,
     },
-    subject: "Nouvelle réponse à une contribution",
+    subject: `Réponse de ${envelope.from[0].name} à votre message`,
     templateId: emailConfig.templateId,
     params: {
       date: new Date().toLocaleDateString("fr-FR"),
       title: "Nouvelle réponse à une contribution",
+      extractedText: extractedText.substring(0, 100),
       url: contributionLink,
     },
   };

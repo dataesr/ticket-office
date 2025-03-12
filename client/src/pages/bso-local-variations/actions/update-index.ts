@@ -1,11 +1,10 @@
 import { toast } from "react-toastify"
 import { Variation } from "../types"
 import editVariations from "./edit-variations"
-import { apiUrl } from "../../../api/utils/url"
 
 export default async function updateIndex(variations: Array<Variation>, data: Record<string, unknown>) {
   const indexName = data.index_name
-  const url = `${apiUrl}/bso-tasks`
+  const url = `/api/bso-tasks`
 
   fetch(url, {
     method: "POST",

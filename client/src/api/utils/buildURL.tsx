@@ -1,5 +1,4 @@
 import { VariationTags } from "../../pages/bso-local-variations/types";
-import { apiUrl } from "./url";
 
 export const buildURL = (
   location: any,
@@ -13,9 +12,8 @@ export const buildURL = (
   tags?: VariationTags,
   objectType?: string
 ): string => {
-
-  const baseApiUrl = apiUrl;
   let baseUrl = "contacts";
+
   if (location?.pathname?.includes("scanr-contributionPage")) {
     baseUrl = "contribute";
   } else if (location?.pathname?.includes("removeuser")) {
@@ -77,7 +75,7 @@ export const buildURL = (
   const whereQuery =
     Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
 
-  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
+  return `/api/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
 };
 
 export const buildStatsURL = (
@@ -86,7 +84,6 @@ export const buildStatsURL = (
   page: number = 1,
   maxResults: string = "3000"
 ): string => {
-  const baseApiUrl = apiUrl;
   let baseUrl = "contacts";
 
   switch (filter) {
@@ -105,5 +102,5 @@ export const buildStatsURL = (
 
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
 
-  return `${baseApiUrl}/${baseUrl}?${sorted}&page=${page}&max_results=${maxResults}`;
+  return `/api/${baseUrl}?${sorted}&page=${page}&max_results=${maxResults}`;
 };
