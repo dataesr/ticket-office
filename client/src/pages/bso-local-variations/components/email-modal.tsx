@@ -22,6 +22,8 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
   const [userResponse, setUserResponse] = useState<string>(notificationGetTemplate("ongoing"))
   const variationsWithConfig = variations.filter((variation) => getCodeFromBSO(variation.structure?.id) === "production")
   const useTemplate = !!singleVariation ? false : true
+  const displayStructureId = singleVariation?.structure?.id || "${structureId}"
+  const displayCommentsName = getCommentsNameFromBSO(singleVariation?.structure?.id) || "${structureCommentsName}"
 
   return (
     <Modal isOpen={isOpen} hide={onClose}>
@@ -46,13 +48,7 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
           value={notificationTag}
           onChange={(event) => {
             setNotificationTag(event.target.value)
-            setUserResponse(
-              notificationGetTemplate(
-                event.target.value,
-                singleVariation?.structure?.id || "${structureId}",
-                getCommentsNameFromBSO(singleVariation?.structure?.id) || "${structureCommentsName}"
-              )
-            )
+            setUserResponse(notificationGetTemplate(event.target.value, displayStructureId, displayCommentsName))
           }}
         >
           <option key="ongoing" value="ongoing">
@@ -86,7 +82,7 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
           <Button
             variant="primary"
             onClick={() => {
-              sendEmails(variations, notificationTag, userResponse, useTemplate).then(() => {
+              sendEmails(variations, notificationTag, userResponse, useTemplate, getCommentsNameFromBSO).then(() => {
                 refetch()
                 onClose()
               })
