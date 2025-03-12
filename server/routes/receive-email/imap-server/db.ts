@@ -1,6 +1,7 @@
 import { MongoClient } from "mongodb";
 import { config } from "./config";
 import { formatDate } from "./utils";
+import { generateContributionLink } from "./utils";
 
 export async function getMongoClient() {
   const client = new MongoClient(config.mongoUri);
@@ -74,19 +75,20 @@ export async function isEmailDuplicate(
           },
         ],
       },
-      // Même contenu, mais date différente, on considère que c'est un doublon si la date est dans les 2 dernières minutes
-      // Mais c'est vraiment costaud, ça devrait être suffisant
     ],
   });
 
   return !!existingEmail;
 }
+
 export async function saveReceivedEmail(
   envelope: any,
   messageSource: string,
   extractedContent: string,
   date: string,
-  referenceId?: string 
+  referenceId?: string,
+  collectionName?: string,
+  fromApplication?: string
 ): Promise<boolean> {
   const client = await getMongoClient();
   try {
@@ -107,6 +109,15 @@ export async function saveReceivedEmail(
     const database = client.db(config.dbName);
     const collection = database.collection("received_emails");
 
+    let href = null;
+    if (referenceId && collectionName) {
+      href = generateContributionLink(
+        referenceId,
+        fromApplication || "",
+        collectionName
+      );
+    }
+
     const emailData = {
       messageId: envelope.messageId,
       from: envelope.from,
@@ -116,12 +127,16 @@ export async function saveReceivedEmail(
       rawContent: messageSource,
       extractedText: extractedContent,
       createdAt: new Date(),
-      contributionId: referenceId || null, 
+      href: href,
+      referenceId: referenceId || null,
+      collectionName: collectionName || null,
     };
 
     await collection.insertOne(emailData);
     console.log(
-      `Email enregistré dans received_emails : ${envelope.messageId}${referenceId ? ` (contribution: ${referenceId})` : ''}`
+      `Email enregistré dans received_emails : ${envelope.messageId}${
+        referenceId ? ` (contribution: ${referenceId})` : ""
+      }`
     );
     return true;
   } catch (error) {
