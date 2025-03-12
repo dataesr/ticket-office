@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { MongoClient, ObjectId } from "mongodb";
 import { errorSchema } from "../../schemas/errors/errorSchema";
 import { replyEmailConfig } from "../../utils/configEmail"
+import { ReplyEmailConfig } from "../../types";
 
 const MONGO_URI = process.env.MONGO_URI || ""
 const DB_NAME = process.env.MONGO_DATABASE || ""
@@ -53,7 +54,7 @@ sendMail.post(
       }
     }
 
-    const selectedConfig = collectionName === "local_variations" ? replyEmailConfig.bso : replyEmailConfig.scanr
+    const selectedConfig: ReplyEmailConfig = collectionName === "local_variations" ? replyEmailConfig.bso : replyEmailConfig.scanr
     const dataForBrevo = {
       sender: {
         email: selectedConfig.senderEmail,
@@ -63,6 +64,7 @@ sendMail.post(
       },
       to: [{ email: to, name: name }],
       replyTo: { email: selectedConfig.replyToEmail, name: selectedConfig.replyToName },
+      bcc: selectedConfig?.bcc || [],
       subject: subject,
       templateId: selectedConfig.templateId,
       params: {
