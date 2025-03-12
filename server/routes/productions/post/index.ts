@@ -100,7 +100,7 @@ postProductionRoutes.post(
     }
 
     const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de liaison de publication créée pour scanR
-    **Nom**: ${finalContribution.name}  
+    **Nom de l'auteur**: ${finalContribution.name}  
     **Email du demandeur**: ${finalContribution.email}  
     🔗 [Voir la contribution](${contributionLink})`;
 

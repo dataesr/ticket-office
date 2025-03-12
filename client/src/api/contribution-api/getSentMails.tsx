@@ -12,10 +12,10 @@ const useSentEmails = () => {
     return response.json();
   };
 
-  const { data, isLoading, isError, refetch } = useQuery(
-    ["sentEmails"],
-    fetchSentEmails
-  );
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ["sentEmails"],
+    queryFn: fetchSentEmails,
+  });
   return { data, isLoading, isError, refetch };
 };
 

@@ -13,7 +13,7 @@ export const newContributionEmailConfig = {
     replyToName: "L'équipe BSO",
     templateId: 272,
   },
-}
+};
 
 export const replyEmailConfig = {
   scanr: {
@@ -30,4 +30,4 @@ export const replyEmailConfig = {
     replyToName: "L'équipe BSO",
     templateId: 272,
   },
-}
+};
