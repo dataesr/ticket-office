@@ -81,12 +81,12 @@ export async function isEmailDuplicate(
 
   return !!existingEmail;
 }
-
 export async function saveReceivedEmail(
   envelope: any,
   messageSource: string,
   extractedContent: string,
-  date: string
+  date: string,
+  referenceId?: string 
 ): Promise<boolean> {
   const client = await getMongoClient();
   try {
@@ -116,11 +116,12 @@ export async function saveReceivedEmail(
       rawContent: messageSource,
       extractedText: extractedContent,
       createdAt: new Date(),
+      contributionId: referenceId || null, 
     };
 
     await collection.insertOne(emailData);
     console.log(
-      `Email enregistré dans received_emails : ${envelope.messageId}`
+      `Email enregistré dans received_emails : ${envelope.messageId}${referenceId ? ` (contribution: ${referenceId})` : ''}`
     );
     return true;
   } catch (error) {
