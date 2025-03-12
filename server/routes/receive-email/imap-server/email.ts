@@ -48,15 +48,19 @@ export async function processEmailContent(messageSource: string) {
   return cleanedText;
 }
 
+
 export async function senderToMattermostNotifications(
   referenceId: string,
   contribution: any,
   collectionName: string,
-  envelope: any
-): Promise<void> {
+  envelope: any = null,
+  extractedText: string = ""
+): Promise<boolean> {
+  console.log(`🤖 Préparation notification Mattermost pour ${referenceId}`);
+  
   if (!contribution || !referenceId) {
-    console.error(`Invalid contribution data for ID: ${referenceId}`);
-    return;
+    console.error(`❌ Données invalides pour Mattermost: ${referenceId}`);
+    return false;
   }
 
   const contributionLink = generateContributionLink(
@@ -64,32 +68,34 @@ export async function senderToMattermostNotifications(
     contribution.fromApplication || "",
     collectionName
   );
+  
   const senderName =
     envelope?.from && envelope.from.length > 0
       ? envelope.from[0].name || envelope.from[0].address
       : contribution.name || "Expéditeur inconnu";
 
+  const textToUse = extractedText || 
+    (envelope?.extractedText ? envelope.extractedText : "Pas de contenu");
+
   const mattermostMessage = `
 🚀 **Bip...Bip**  
-📩 **Nouvelle réponse de ${senderName}** le ${new Date().toLocaleString(
-    "fr-FR"
-  )}
+📩 **Nouvelle réponse de ${senderName}** le ${new Date().toLocaleString("fr-FR")}
 **Extrait du message :**
-${envelope.extractedText.substring(0, 100)}...
+${textToUse.substring(0, 100)}...
 
 🔗 [Voir la contribution complète](${contributionLink})
 `;
 
   try {
     await sendMattermostNotification(mattermostMessage);
-    console.log(`Notification Mattermost envoyée pour ${referenceId}`);
+    console.log(`✅ Notification Mattermost envoyée pour ${referenceId}`);
+    return true;
   } catch (error) {
-    console.error(
-      "Erreur lors de l'envoi de la notification Mattermost:",
-      error
-    );
+    console.error(`❌ Erreur notification Mattermost pour ${referenceId}:`, error);
+    return false;
   }
 }
+
 export async function sendNotificationEmail(
   referenceId: string,
   contribution: any,
@@ -97,44 +103,39 @@ export async function sendNotificationEmail(
   toAddress: string = "",
   extractedText: string = "",
   envelope: any = null
-) {
-  if (!contribution.email || !contribution.id) {
-    console.error(`Invalid contribution data for ID: ${referenceId}`);
-    return;
+): Promise<boolean> {
+  console.log(`📧 Début du processus de notification pour ${referenceId}`);
+  
+  if (!contribution?.email || !contribution?.id) {
+    console.error(`❌ Données de contribution invalides: ${referenceId}`);
+    return false;
   }
 
   const contributionLink = generateContributionLink(
     referenceId,
-    contribution.fromApplication,
+    contribution.fromApplication || "",
     collectionName
   );
 
-  await senderToMattermostNotifications(
+  const mattermostSuccess = await senderToMattermostNotifications(
     referenceId,
     contribution,
     collectionName,
-    envelope
+    envelope,
+    extractedText
   );
 
   let emailConfig = config.defaultConfig;
-
   const addressKey = toAddress.toLowerCase();
 
-  // Ensuite on vérifie deux choses:
-  // 1. Est-ce qu'on a vraiment une adresse (pas vide)
-  // 2. Est-ce que cette adresse existe dans notre liste de domaines connus
   if (
     addressKey &&
     Object.prototype.hasOwnProperty.call(config.domainConfigs, addressKey)
   ) {
-    // Si l'adresse existe, on récupère la config spéciale pour cette adresse
-    // Le truc bizarre "as keyof typeof" c'est juste pour faire taire TypeScript
-    // qui se plaint qu'on ne peut pas être sûr que l'adresse existe
     emailConfig =
       config.domainConfigs[addressKey as keyof typeof config.domainConfigs];
   }
 
-  // LE MAIL ENVOYé AUX GENS DE CHEZ NOUS POUR PREVENIR DE LA REPONSE A UN DE NOS MAILS
   const emailData = {
     sender: {
       email: emailConfig.mailSender,
@@ -165,18 +166,25 @@ export async function sendNotificationEmail(
     headers["api-key"] = config.brevoApiKey;
   }
 
-  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers,
-    body: JSON.stringify(emailData),
-  });
+  try {
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(emailData),
+    });
 
-  if (!response.ok) {
-    console.error(`Erreur d'envoi de l'email: ${response.statusText}`);
-  } else {
-    console.log(
-      `Email envoyé pour la contribution ID: ${referenceId} avec l'expéditeur ${emailConfig.mailSender}`
-    );
+    if (!response.ok) {
+      console.error(`❌ Erreur d'envoi email: ${response.statusText}`);
+      return false;
+    } else {
+      console.log(
+        `✅ Email envoyé pour ${referenceId} via ${emailConfig.mailSender}`
+      );
+      return true;
+    }
+  } catch (error) {
+    console.error(`❌ Exception lors de l'envoi email:`, error);
+    return false;
   }
 }
 

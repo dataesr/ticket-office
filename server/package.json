@@ -3,33 +3,35 @@
   "version": "1.0.50",
   "scripts": {
     "dev": "bun run --watch index.ts",
-    "start": "bun run index.ts"
+    "start": "bun run index.ts",
+    "check-updates": "npx npm-check-updates --interactive --format group",
+    "update-deps": "npx npm-check-updates -u --target minor && bun install"
   },
   "dependencies": {
     "@elysiajs/cors": "^1.1.0",
     "@elysiajs/static": "~1.0.3",
     "@elysiajs/swagger": "~1.0.5",
     "@types/dot-object": "^2.1.6",
-    "@types/imapflow": "^1.0.19",
+    "@types/imapflow": "^1.0.20",
     "@types/mailparser": "^3.4.5",
     "@types/mongodb": "^4.0.7",
     "cheerio": "^1.0.0",
     "dot-object": "^2.1.5",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "elysia": "~1.0.27",
-    "imapflow": "^1.0.164",
-    "mailparser": "^3.7.1",
-    "mongodb": "^6.9.0",
+    "imapflow": "^1.0.184",
+    "mailparser": "^3.7.2",
+    "mongodb": "^6.14.2",
     "pkgcloud": "^2.2.0",
     "uuid": "^10.0.0"
   },
   "devDependencies": {
-    "@types/imapflow": "^1.0.19",
+    "@types/imapflow": "^1.0.20",
     "@types/node": "^22.4.1",
     "@types/uuid": "^10.0.0",
     "bun-types": "latest",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.8.2"
   },
   "module": "src/index.js",
   "type": "module"
