@@ -4,7 +4,8 @@ export function generateLinkFromAllDatas(
   objectId?: string,
   productions?: any,
   message?: string,
-  contributionType?: string
+  contributionType?: string,
+  hasCsv?: boolean
 ): string {
   const pathMap = {
     "remove-user": "/scanr-removeuser",
@@ -21,6 +22,12 @@ export function generateLinkFromAllDatas(
       default: "/scanr-contact",
     },
   };
+
+  if (hasCsv) {
+    return id
+      ? `/bso-local-variations?page=1&query=${id}&searchInMessage=false&sort=DESC&status=choose`
+      : "/bso-local-variations";
+  }
 
   let basePath = "";
 

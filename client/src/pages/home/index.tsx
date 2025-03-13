@@ -1,4 +1,4 @@
-import { Col, Container, Title } from "@dataesr/dsfr-plus";
+import { Col, Container } from "@dataesr/dsfr-plus";
 import SearchSection from "../contact-contributionbyobject-page/components/search-section";
 import { useState } from "react";
 import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
