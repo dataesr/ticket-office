@@ -54,6 +54,8 @@ const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
     badgeContent = "Suppression de compte";
   } else if (contributionType === "update-user-data") {
     badgeContent = "Mise à jour de données";
+  } else if (contribution.csv) {
+    badgeContent = "Demande de BSO Local";
   }
 
   const isFromScanR =
@@ -95,7 +97,11 @@ const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
             {contribution.fromApplication}
           </Badge>
         )}
-
+      {contribution?.csv && (
+        <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
+          BSO
+        </Badge>
+      )}
       <Badge
         size="sm"
         color={BadgeStatus({ status: contribution?.status })}
@@ -116,7 +122,8 @@ const ContributionItem = ({ contribution, index }: ContributionItemProps) => {
       ? JSON.stringify(contribution.productions)
       : undefined,
     contribution.message,
-    contribution.contributionType
+    contribution.contributionType,
+    !!contribution.csv
   );
 
   return (
@@ -128,7 +135,6 @@ const ContributionItem = ({ contribution, index }: ContributionItemProps) => {
       >
         <Col lg="12" md="10" sm="12">
           <ContributionBadges contribution={contribution} />
-
           <div>
             <Text className="fr-mb-0">
               Contribution de{" "}
@@ -137,9 +143,7 @@ const ContributionItem = ({ contribution, index }: ContributionItemProps) => {
                 {contribution?.email || "Pas d'email"}
               </i>
             </Text>
-
             <FormattedDate dateString={contribution.created_at} />
-
             {contribution?.message && (
               <Text size="sm">
                 <MarkdownRenderer content={contribution.message} />
