@@ -136,13 +136,21 @@ const ContributionItem = ({ contribution, index }: ContributionItemProps) => {
         <Col lg="12" md="10" sm="12">
           <ContributionBadges contribution={contribution} />
           <div>
-            <Text className="fr-mb-0">
-              Contribution de{" "}
+            {contribution?.name && (
+              <>
+                <i>
+                  Contribution de <strong>{contribution.name}</strong>{" "}
+                </i>
+                <br />
+                <i>{contribution?.email || ""}</i>
+              </>
+            )}
+            {contribution?.contact?.email && (
               <i>
-                {contribution?.name || "Anonyme"} -{" "}
-                {contribution?.email || "Pas d'email"}
+                Mail du demandeur{" "}
+                <strong>{contribution?.contact?.email || ""}</strong>{" "}
               </i>
-            </Text>
+            )}
             <FormattedDate dateString={contribution.created_at} />
             {contribution?.message && (
               <Text size="sm">
