@@ -7,7 +7,7 @@ export default function Threads({ variation }: { variation: Variation }) {
   return (
     <Container fluid>
       {variation?.threads?.length > 0 && (
-        <Col offsetMd="4" className="staffSide fr-my-0 fr-py-0">
+        <Col offsetMd="4" className="fr-my-0 fr-py-0">
           {variation.threads.map((thread: Thread, threadIndex) =>
             thread.responses.map((response, index) => {
               const responseDate = new Date(response.timestamp).toLocaleDateString()
