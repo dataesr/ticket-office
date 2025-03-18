@@ -34,8 +34,10 @@ export default function UploadModal({ variations, isOpen, onClose }: UploadModal
           <Button
             variant="primary"
             onClick={() => {
-              uploadFiles(variations)
-              refetch()
+              uploadFiles(variations).then(() => {
+                refetch()
+                onClose()
+              })
             }}
           >
             Charger sur OVH

@@ -6,7 +6,7 @@ import { notificationGetTemplate } from "../config/notifications"
 const messageTemplate = (variation: Variation) =>
   `<ul><li>Nom de la structure: ${variation.structure.name}</li><li>Identifiant de la structure: ${
     variation.structure?.id || "Non renseigné"
-  }</li><li>Date de la demande: ${new Date(variation.created_at).toLocaleTimeString()}</li></ul>`
+  }</li><li>Date de la demande: ${new Date(variation.created_at).toLocaleDateString()}</li></ul>`
 
 async function sendEmail(variation: Variation, response: string) {
   const url = `/api/send-email`
@@ -45,13 +45,14 @@ export default async function sendEmails(
   useTemplate?: boolean,
   getCommentsName?: (id: string) => string
 ) {
-  const inputs = { tags: { notification: notification }, status: "ongoing" }
+  // Set status as treated if final notification sent
+  const inputs = { tags: { notification: notification }, status: notification === "done" ? "treated" : "ongoing" }
 
   Promise.all(
     variations.map((variation) =>
       sendEmail(
         variation,
-        useTemplate ? notificationGetTemplate(notification, variation.id, getCommentsName(variation.id)) : response
+        useTemplate ? notificationGetTemplate(notification, variation.structure.id, getCommentsName(variation.id)) : response
       )
     )
   )
