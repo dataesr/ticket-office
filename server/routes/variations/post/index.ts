@@ -41,7 +41,7 @@ postVariationRoute.post(
 
     const url = process.env.BASE_API_URL;
     const variationLink = `${url}/bso-local-variations?page=1&query=${finalVariation.id}&searchInMessage=false&sort=DESC&status=choose`;
-    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de déclinaison locale créée!*
+    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de déclinaison locale créée!
      \n**Email de contact**: ${
        finalVariation.contact.email
      } \n**Nom de la structure**: ${
