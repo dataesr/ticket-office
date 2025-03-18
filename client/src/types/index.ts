@@ -59,6 +59,7 @@ export interface ContributionObject extends BaseContribution {
 }
 
 export interface UnifiedContribution {
+  contact: any;
   csv: any;
   id: string;
   created_at: string;
