@@ -45,7 +45,8 @@ export default async function sendEmails(
   useTemplate?: boolean,
   getCommentsName?: (id: string) => string
 ) {
-  const inputs = { tags: { notification: notification }, status: "ongoing" }
+  // Set status as treated if final notification sent
+  const inputs = { tags: { notification: notification }, status: notification === "done" ? "treated" : "ongoing" }
 
   Promise.all(
     variations.map((variation) =>
