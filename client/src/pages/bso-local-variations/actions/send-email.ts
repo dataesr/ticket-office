@@ -52,7 +52,9 @@ export default async function sendEmails(
     variations.map((variation) =>
       sendEmail(
         variation,
-        useTemplate ? notificationGetTemplate(notification, variation.structure.id, getCommentsName(variation.id)) : response
+        useTemplate
+          ? notificationGetTemplate(notification, variation.structure?.id, getCommentsName(variation.structure?.id))
+          : response
       )
     )
   )
