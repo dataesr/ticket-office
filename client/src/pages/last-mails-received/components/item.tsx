@@ -7,6 +7,7 @@ import {
   Tabs,
   Tab,
   Notice,
+  Link,
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
@@ -74,19 +75,24 @@ const EmailHeader: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   </Row>
 );
 
+
 const EmailItem: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   email,
   showSubject,
-}) => (
-  <Row gutters key={email._id}>
-    <Col lg="12" md="10" sm="12" className="fr-mb-1w fr-mt-2w">
-      <EmailHeader email={email} showSubject={showSubject} />
-      <Text className="received-mail">
-        <EmailContent content={email.extractedText} />
-      </Text>
-    </Col>
-  </Row>
-);
+}) => {
+  return (
+    <Row gutters key={email._id}>
+      <Col lg="12" md="10" sm="12" className="fr-mb-1w fr-mt-2w">
+        <Link href={email.href} className="fr-footer__top-link">
+          <EmailHeader email={email} showSubject={showSubject} />
+          <Text className="received-mail">
+            <EmailContent content={email.extractedText} />
+          </Text>
+        </Link>
+      </Col>
+    </Row>
+  );
+};
 
 const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
   const emails = Array.isArray(data.emails)

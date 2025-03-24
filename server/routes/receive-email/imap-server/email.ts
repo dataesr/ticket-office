@@ -19,7 +19,6 @@ export async function processEmailContent(messageSource: string) {
   const bodyText = parsed.text || parsed.html || "";
 
   if (!bodyText) {
-    console.log("Aucun texte trouvé dans l'email");
     return "";
   }
 
@@ -85,8 +84,6 @@ export async function senderToMattermostNotifications(
   envelope: any = null,
   extractedText: string = ""
 ): Promise<boolean> {
-  console.log(`🤖 Préparation notification Mattermost pour ${referenceId}`);
-
   if (!contribution || !referenceId) {
     console.error(`❌ Données invalides pour Mattermost: ${referenceId}`);
     return false;
@@ -120,7 +117,6 @@ ${textToUse.substring(0, 100)}...
 
   try {
     await sendMattermostNotification(mattermostMessage);
-    console.log(`✅ Notification Mattermost envoyée pour ${referenceId}`);
     return true;
   } catch (error) {
     console.error(
@@ -139,10 +135,7 @@ export async function sendNotificationEmail(
   extractedText: string = "",
   envelope: any = null
 ): Promise<boolean> {
-  console.log(`📧 Début du processus de notification pour ${referenceId}`);
-
   if (!contribution?.email || !contribution?.id) {
-    console.error(`❌ Données de contribution invalides: ${referenceId}`);
     return false;
   }
 
@@ -205,9 +198,6 @@ export async function sendNotificationEmail(
       console.error(`❌ Erreur d'envoi email: ${response.statusText}`);
       return false;
     } else {
-      console.log(
-        `✅ Email envoyé pour ${referenceId} via ${emailConfig.mailSender}`
-      );
       return true;
     }
   } catch (error) {
@@ -365,13 +355,7 @@ export async function fetchEmails() {
             }
           }
 
-          console.log(
-            `🗑️ Déplacement de ${processedUids.length} emails vers ${trashPath}...`
-          );
           await client.messageMove(processedUids, trashPath);
-          console.log(
-            `✅ ${processedUids.length} emails déplacés vers la corbeille`
-          );
         } catch (moveError) {
           console.error("❌ Erreur lors du déplacement des emails:", moveError);
           console.error(moveError);

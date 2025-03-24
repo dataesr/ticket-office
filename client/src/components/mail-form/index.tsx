@@ -41,7 +41,7 @@ function EmailForm({
     basePath = "production";
   }
 
-  const url =`/api/${basePath}/${contribution?.id}`;
+  const url = `/api/${basePath}/${contribution?.id}`;
 
   const { mutate: updateTags } = useMutation({
     mutationFn: async (updatedTags: string[]) => {

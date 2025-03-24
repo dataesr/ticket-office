@@ -38,81 +38,98 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
     : "";
 
   return (
-    <>
-      <Row className="fr-mt-3w">
-        {data?.tags?.length > 0 && (
-          <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
-            {data.tags.join(", ")}
-          </Badge>
-        )}
-        {data?.status && (
-          <Badge
-            size="sm"
-            color={BadgeStatus({ status: data.status })}
-            className="fr-mr-1w fr-mb-1w"
-          >
-            {StatusLabel({ status: data.status })}
-          </Badge>
-        )}
-        {firstResponse?.team && (
-          <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
-            {`Réponse envoyée par ${firstResponse.team}`}
-          </Badge>
-        )}
-        {data?.comment && data?.team?.length > 0 && (
-          <Badge size="sm" color="green-emeraude" className="fr-mr-1w fr-mb-1w">
-            {`Commenté par ${data.team[0]}`}
-          </Badge>
-        )}
-        {data?.objectType && (
-          <Badge
-            size="sm"
-            color={BadgeColor({ type: data.objectType })}
-            className="fr-mr-1w fr-mb-1w"
-            icon={typeIcon({ icon: data.objectType })}
-          >
-            {TypeLabel({ type: data.objectType })}
-          </Badge>
-        )}
+    <div className="contribution-item-container">
+      {/* Badges regroupés avec flexbox pour mieux s'adapter */}
+      <Row className="fr-mt-3w badge-container">
+        <div className="badge-wrapper">
+          {data?.tags?.length > 0 && (
+            <Badge size="sm" color="green-menthe" className="badge-item">
+              {data.tags.join(", ")}
+            </Badge>
+          )}
+          {data?.status && (
+            <Badge
+              size="sm"
+              color={BadgeStatus({ status: data.status })}
+              className="badge-item"
+            >
+              {StatusLabel({ status: data.status })}
+            </Badge>
+          )}
+          {firstResponse?.team && (
+            <Badge size="sm" color="blue-ecume" className="badge-item">
+              {`Réponse: ${firstResponse.team}`}
+            </Badge>
+          )}
+          {data?.comment && data?.team?.length > 0 && (
+            <Badge size="sm" color="green-emeraude" className="badge-item">
+              {`Commenté par ${data.team[0]}`}
+            </Badge>
+          )}
+          {data?.objectType && (
+            <Badge
+              size="sm"
+              color={BadgeColor({ type: data.objectType })}
+              className="badge-item"
+              icon={typeIcon({ icon: data.objectType })}
+            >
+              {TypeLabel({ type: data.objectType })}
+            </Badge>
+          )}
+        </div>
       </Row>
 
-      <Row>
-        <Col>
-          <Title look="h5">
-            {data?.name || ""} ({data?.id || ""})
-            <button
-              className={`copy-button ${copiedId === data?.id ? "copied" : ""}`}
-              onClick={copyToClipboard}
-              disabled={!data?.id}
-            >
-              {copiedId === data?.id && (
-                <span className="copied-text">Copié</span>
-              )}
-              <FaCopy size={14} color="#2196f3" className="copy-icon" />
-            </button>
-          </Title>
+      {/* En-tête avec titre et date de création */}
+      <Row className="title-container">
+        <Col xs="12" md="8">
+          <div className="title-wrapper">
+            <Title look="h5" className="contribution-title">
+              {data?.name || ""}
+              <span className="id-container">
+                ({data?.id || ""})
+                <button
+                  className={`copy-button ${
+                    copiedId === data?.id ? "copied" : ""
+                  }`}
+                  onClick={copyToClipboard}
+                  aria-label="Copier l'identifiant"
+                  disabled={!data?.id}
+                >
+                  {copiedId === data?.id && (
+                    <span className="copied-text">Copié</span>
+                  )}
+                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
+                </button>
+              </span>
+            </Title>
+          </div>
+
           {!firstResponse && (
             <Notice type="info" closeMode="disallow" className="fr-mb-2w">
               Aucune réponse apportée à ce message pour l'instant
             </Notice>
           )}
         </Col>
-        {createdDate && (
-          <Text size="sm">
-            <i className="date">Reçu le {createdDate}</i>
-          </Text>
-        )}
+        <Col xs="12" md="4" className="date-container">
+          {createdDate && (
+            <Text size="sm" className="date-text">
+              <i className="date">Reçu le {createdDate}</i>
+            </Text>
+          )}
+        </Col>
       </Row>
-      <Col>
-        <MessagePreview
-          data={data}
-          allTags={allTags}
-          refetch={refetch}
-          highlightedQuery={highlightedQuery}
-        />
-        <StaffActions url={url} refetch={refetch} data={data} />
-      </Col>
-    </>
+      <Row>
+        <Col xs="12">
+          <MessagePreview
+            data={data}
+            allTags={allTags}
+            refetch={refetch}
+            highlightedQuery={highlightedQuery}
+          />
+          <StaffActions url={url} refetch={refetch} data={data} />
+        </Col>
+      </Row>
+    </div>
   );
 };
 

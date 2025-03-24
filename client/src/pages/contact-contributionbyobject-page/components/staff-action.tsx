@@ -8,14 +8,14 @@ import { StaffActionsProps, Thread } from "../../../types";
 const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
   const location = useLocation();
 
-  const contributorClassName = location.pathname.includes("contributionpage")
-    ? "staffSide"
-    : "staffSideContact";
+  const containerClassName = location.pathname.includes("contributionpage")
+    ? "staffSide-container"
+    : "staffSideContact-container";
 
   return (
     <>
       {data?.threads?.length > 0 && (
-        <Col className={contributorClassName}>
+        <Col xs="12" className={`message-container ${containerClassName}`}>
           {data.threads.map((thread: Thread, threadIndex) =>
             thread.responses.map((response, index) => {
               const responseDate = new Date(
@@ -26,19 +26,23 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
               ).toLocaleTimeString();
 
               const isStaffResponse = !response.team.includes("user");
-              const className = isStaffResponse ? "staffSide" : "user-side";
+
+              const bubbleClass = isStaffResponse
+                ? "staffSide message-bubble"
+                : "user-side message-bubble";
 
               return (
                 response.responseMessage && (
-                  <div key={`${threadIndex}-${index}`} className={className}>
-                    <Text size="sm">
+                  <div key={`${threadIndex}-${index}`} className={bubbleClass}>
+                    <Text size="sm" className="message-content">
                       <MarkdownRenderer content={response?.responseMessage} />
-                      <br />
-                      <small>
+                      <small className="message-metadata">
                         Répondu le {responseDate} à {responseTime} par{" "}
-                        {response.team.includes("user")
-                          ? data.name || response.team
-                          : response.team}
+                        <span className="message-author">
+                          {response.team.includes("user")
+                            ? data.name || response.team
+                            : response.team}
+                        </span>
                       </small>
                     </Text>
                   </div>

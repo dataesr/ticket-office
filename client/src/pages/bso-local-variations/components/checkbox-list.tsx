@@ -1,12 +1,22 @@
-import { Badge, BadgeGroup, Button, Checkbox, Col, Container, Row, Text } from "@dataesr/dsfr-plus"
-import { Variation } from "../types"
-import { BadgeStatus, StatusLabel } from "../../../utils"
-import { useVariationsContext } from "../context"
-import { tagGetColor } from "../config/tags"
+import {
+  Badge,
+  BadgeGroup,
+  Button,
+  Checkbox,
+  Col,
+  Container,
+  Row,
+  Text,
+} from "@dataesr/dsfr-plus";
+import { Variation } from "../types";
+import { BadgeStatus, StatusLabel } from "../../../utils";
+import { useVariationsContext } from "../context";
+import { tagGetColor } from "../config/tags";
 
 const CheckboxItem = ({ variation }: { variation: Variation }) => {
-  const { checkedIds, checkId, setSelectedId, getCodeFromBSO } = useVariationsContext()
-  const codeTag = getCodeFromBSO(variation.structure?.id)
+  const { checkedIds, checkId, setSelectedId, getCodeFromBSO } =
+    useVariationsContext();
+  const codeTag = getCodeFromBSO(variation.structure?.id);
 
   return (
     <Container fluid>
@@ -20,13 +30,23 @@ const CheckboxItem = ({ variation }: { variation: Variation }) => {
           />
         </Col>
         <Col lg={11}>
-          <button style={{ display: "block", width: "100%" }} onClick={() => setSelectedId(variation.id)}>
+          <button
+            style={{ display: "block", width: "100%" }}
+            onClick={() => setSelectedId(variation.id)}
+          >
             <BadgeGroup className="fr-mt-1w">
-              <Badge size="sm" color={BadgeStatus({ status: variation?.status })}>
+              <Badge
+                size="sm"
+                color={BadgeStatus({ status: variation?.status })}
+              >
                 {StatusLabel({ status: variation.status })}
               </Badge>
               {variation.tags.file !== "none" && (
-                <Badge size="sm" noIcon color={tagGetColor("file", variation.tags.file)}>
+                <Badge
+                  size="sm"
+                  noIcon
+                  color={tagGetColor("file", variation.tags.file)}
+                >
                   {variation.tags.file}
                 </Badge>
               )}
@@ -36,21 +56,32 @@ const CheckboxItem = ({ variation }: { variation: Variation }) => {
                 </Badge>
               )}
             </BadgeGroup>
-            <Text bold size="sm" className="fr-mb-2w" as="p" style={{ textAlign: "left" }}>
+            <Text
+              bold
+              size="sm"
+              className="fr-mb-2w"
+              as="p"
+              style={{ textAlign: "left" }}
+            >
               <i>
-                {variation.structure.name} {new Date(variation.created_at).toLocaleDateString()}
+                {variation.structure.name}{" "}
+                {new Date(variation.created_at).toLocaleDateString()}
               </i>
             </Text>
           </button>
         </Col>
       </Row>
     </Container>
-  )
-}
+  );
+};
 
-export default function CheckboxList({ variations }: { variations: Array<Variation> }) {
-  const { checkedIds, checkAllIds } = useVariationsContext()
-  const total = variations.length
+export default function CheckboxList({
+  variations,
+}: {
+  variations: Array<Variation>;
+}) {
+  const { checkedIds, checkAllIds } = useVariationsContext();
+  const total = variations.length;
 
   return (
     <Container fluid>
@@ -61,9 +92,17 @@ export default function CheckboxList({ variations }: { variations: Array<Variati
           size="sm"
           variant="tertiary"
           disabled={total === 0}
-          onClick={() => checkAllIds(checkedIds.length === total ? [] : variations.map((variation) => variation.id))}
+          onClick={() =>
+            checkAllIds(
+              checkedIds.length === total
+                ? []
+                : variations.map((variation) => variation.id)
+            )
+          }
         >
-          {checkedIds.length === total ? "Tout déselectionner" : "Tout sélectionner"}
+          {checkedIds.length === total
+            ? "Tout désélectionner"
+            : "Tout sélectionner"}
         </Button>
       </Text>
       <Container className="fr-pl-1w">
@@ -72,5 +111,5 @@ export default function CheckboxList({ variations }: { variations: Array<Variati
         ))}
       </Container>
     </Container>
-  )
+  );
 }

@@ -1,20 +1,24 @@
-import { Container, Col, Text } from "@dataesr/dsfr-plus"
-import { Variation } from "../types"
-import { Thread } from "../../../types"
-import MarkdownRenderer from "../../../utils/markdownRenderer"
+import { Container, Col, Text } from "@dataesr/dsfr-plus";
+import { Variation } from "../types";
+import { Thread } from "../../../types";
+import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 export default function Threads({ variation }: { variation: Variation }) {
   return (
     <Container fluid>
       {variation?.threads?.length > 0 && (
-        <Col offsetMd="4" className="fr-my-0 fr-py-0">
+        <Col className="fr-my-0 fr-py-0">
           {variation.threads.map((thread: Thread, threadIndex) =>
             thread.responses.map((response, index) => {
-              const responseDate = new Date(response.timestamp).toLocaleDateString()
-              const responseTime = new Date(response.timestamp).toLocaleTimeString()
+              const responseDate = new Date(
+                response.timestamp
+              ).toLocaleDateString();
+              const responseTime = new Date(
+                response.timestamp
+              ).toLocaleTimeString();
 
-              const isStaffResponse = !response.team.includes("user")
-              const className = isStaffResponse ? "staffSide" : "user-side"
+              const isStaffResponse = !response.team.includes("user");
+              const className = isStaffResponse ? "staffSide" : "user-side";
 
               return (
                 response.responseMessage && (
@@ -24,16 +28,18 @@ export default function Threads({ variation }: { variation: Variation }) {
                       <br />
                       <small>
                         Répondu le {responseDate} à {responseTime} par{" "}
-                        {response.team.includes("user") ? variation.contact.email || response.team : response.team}
+                        {response.team.includes("user")
+                          ? variation.contact.email || response.team
+                          : response.team}
                       </small>
                     </Text>
                   </div>
                 )
-              )
+              );
             })
           )}
         </Col>
       )}
     </Container>
-  )
+  );
 }
