@@ -34,8 +34,6 @@
   text-align: left;
   background-color: var(--background-alt-pink-macaron);
   border-radius: 20px;
-  padding: 20px;
-  margin-right: 50px;
   margin-top: 10px;
   margin-bottom: 10px;
   word-wrap: break-word;
@@ -43,10 +41,13 @@
 }
 .user-side p {
   font-size: 0.9rem;
+  width: 100%;
 }
 
 .staffSide {
   text-align: right;
+  width: 80%;
+  margin-right: 30px;
   border-radius: 20px;
   padding: 20px;
   margin-left: 140px;
@@ -54,6 +55,7 @@
   word-wrap: break-word;
   overflow: hidden;
 }
+
 .staffSide p {
   font-size: 0.9rem;
 }
