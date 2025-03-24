@@ -51,8 +51,6 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => {
             collectionNameMapping[lastMailSent.collectionName]
           );
 
-          console.log(collectionNameMapping[lastMailSent.collectionName]);
-
           return (
             <Link href={link} rel="noopener noreferrer" key={index}>
               <Row gutters className="email-row">

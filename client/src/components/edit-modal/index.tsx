@@ -13,7 +13,7 @@ import {
 import { postHeaders } from "../../config/api";
 import { toast } from "react-toastify";
 import TagSelectionModal from "./modal-select-tags";
-import { EditModalProps, Inputs } from "../../types"
+import { EditModalProps, Inputs } from "../../types";
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -62,7 +62,7 @@ const EditModal: React.FC<EditModalProps> = ({
     basePath = "production";
   }
 
-  const url = `/api/${basePath}/${data?.id}`
+  const url = `/api/${basePath}/${data?.id}`;
 
   const handleInputChange = (key: keyof Inputs, value: any) => {
     setInputs((prevInputs) => ({
@@ -134,7 +134,7 @@ const EditModal: React.FC<EditModalProps> = ({
       <Modal isOpen={isOpen} hide={onClose}>
         <ModalTitle>Édition</ModalTitle>
         <ModalContent>
-          <Col className="fr-mb-1w">
+          <Col xs="12" className="fr-mb-1w">
             <label htmlFor="statusInput">Statut</label>
             <select
               id="statusInput"

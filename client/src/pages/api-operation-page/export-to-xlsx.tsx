@@ -39,7 +39,6 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
           console.error("Erreur de réponse", response);
         } else {
           const responseData = await response.json();
-          console.log("Données de réponse", responseData);
         }
       });
 

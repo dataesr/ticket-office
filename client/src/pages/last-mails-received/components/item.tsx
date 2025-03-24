@@ -7,6 +7,7 @@ import {
   Tabs,
   Tab,
   Notice,
+  Link,
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
@@ -74,19 +75,59 @@ const EmailHeader: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   </Row>
 );
 
+const getContributionInfo = (
+  subject: string
+): { basePath: string | null; id: string | null } => {
+  if (!subject) return { basePath: null, id: null };
+
+  const referenceMatch = subject.match(/référence\s+([a-z_-]+)-([a-f0-9]+)/i);
+
+  if (!referenceMatch || referenceMatch.length < 3) {
+    return { basePath: null, id: null };
+  }
+
+  const collectionType = referenceMatch[1];
+  const contributionId = referenceMatch[2];
+
+  let basePath = null;
+
+  if (collectionType === "contacts") {
+    basePath = "/scanr-contact";
+  } else if (collectionType === "update-user-data") {
+    basePath = "/scanr-namechange";
+  } else if (collectionType.includes("contribute")) {
+    basePath = "/scanr-contributionPage";
+  } else if (collectionType === "local_variations") {
+    basePath = "/bso-local";
+  }
+
+  return { basePath, id: contributionId };
+};
+
 const EmailItem: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   email,
   showSubject,
-}) => (
-  <Row gutters key={email._id}>
-    <Col lg="12" md="10" sm="12" className="fr-mb-1w fr-mt-2w">
-      <EmailHeader email={email} showSubject={showSubject} />
-      <Text className="received-mail">
-        <EmailContent content={email.extractedText} />
-      </Text>
-    </Col>
-  </Row>
-);
+}) => {
+  const { basePath, id } = getContributionInfo(email.subject);
+  const hasContributionLink = !!basePath && !!id;
+
+  const contributionLink = hasContributionLink
+    ? `${basePath}?page=1&query=${id}&searchInMessage=false&sort=DESC&status=choose`
+    : null;
+
+  return (
+    <Row gutters key={email._id}>
+      <Col lg="12" md="10" sm="12" className="fr-mb-1w fr-mt-2w">
+        <Link href={contributionLink} className="fr-footer__top-link">
+          <EmailHeader email={email} showSubject={showSubject} />
+          <Text className="received-mail">
+            <EmailContent content={email.extractedText} />
+          </Text>
+        </Link>
+      </Col>
+    </Row>
+  );
+};
 
 const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
   const emails = Array.isArray(data.emails)
