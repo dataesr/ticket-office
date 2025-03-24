@@ -241,8 +241,6 @@ export async function fetchEmails() {
         collectionName: string;
       }[] = [];
 
-      const processedUids: number[] = [];
-
       for await (let message of messages) {
         if (!message.envelope || !message.source || !message.uid) continue;
 
@@ -264,11 +262,6 @@ export async function fetchEmails() {
           collectionName || undefined
         );
 
-        if (!saved) {
-          processedUids.push(message.uid);
-          continue;
-        }
-
         if (referenceId) {
           const finalCollectionName =
             collectionName === "needs_lookup"
@@ -283,8 +276,6 @@ export async function fetchEmails() {
             referenceId,
             collectionName: finalCollectionName,
           });
-        } else {
-          processedUids.push(message.uid);
         }
       }
 
@@ -325,43 +316,7 @@ export async function fetchEmails() {
               extractedText,
               envelope
             );
-
-            // Marquer comme traité (normalement)
-            processedUids.push(uid);
           }
-        }
-      }
-
-      if (processedUids.length > 0) {
-        try {
-          const mailboxes = await client.list();
-
-          let trashPath = "Trash";
-
-          const ovhTrash = mailboxes.find(
-            (box) =>
-              box.path === "INBOX.INBOX.Trash" || box.path === "INBOX.Trash"
-          );
-
-          if (ovhTrash) {
-            trashPath = ovhTrash.path;
-          } else {
-            const trashMailbox = mailboxes.find(
-              (box) =>
-                box.specialUse === "\\Trash" ||
-                box.path.toLowerCase().includes("trash") ||
-                box.path.toLowerCase().includes("corbeille")
-            );
-
-            if (trashMailbox) {
-              trashPath = trashMailbox.path;
-            }
-          }
-
-          await client.messageMove(processedUids, trashPath);
-        } catch (moveError) {
-          console.error("❌ Erreur lors du déplacement des emails:", moveError);
-          console.error(moveError);
         }
       }
     } finally {
