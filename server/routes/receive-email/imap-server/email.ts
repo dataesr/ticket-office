@@ -222,6 +222,9 @@ export async function fetchEmails() {
     await client.connect();
 
     let lock = await client.getMailboxLock("INBOX");
+    let mailbox = await client.mailboxOpen("INBOX");
+    await client.messageDelete({ seen: true });
+
     try {
       const messages = await client.fetch("1:*", {
         source: true,

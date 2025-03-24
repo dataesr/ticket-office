@@ -113,6 +113,7 @@ export interface ProfileModalProps {
 }
 
 export interface EmailItem {
+  href: string;
   selectedProfile: any;
   map(arg0: (email: any) => any): Iterable<unknown>;
   filter(arg0: (email: any) => boolean): unknown;
