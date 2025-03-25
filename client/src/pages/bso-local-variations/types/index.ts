@@ -6,6 +6,7 @@ export interface Variation {
   structure: {
     name: string
     id?: string
+    acronym?: string
   }
   csv: string
   tags: VariationTags
@@ -36,7 +37,7 @@ export type VariationTags = {
 
 export type VariationEditInputs = {
   contact?: { email?: string }
-  structure?: { id?: string; name?: string }
+  structure?: { id?: string; name?: string; acronym?: string }
   status?: string
   tags?: VariationTags
   comment?: string
