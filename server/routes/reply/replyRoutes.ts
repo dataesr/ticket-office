@@ -79,12 +79,6 @@ sendMail.post(
         email: selectedConfig.replyToEmail,
         name: selectedConfig.replyToName,
       },
-      // Cette ligne ajoute les destinataires en copie cachée (bcc) seulement si:
-      // 1. selectedConfig.bcc existe
-      // 2. C'est bien un tableau
-      // 3. Le tableau contient au moins un élément
-      // Si une condition n'est pas remplie, la propriété bcc n'est pas ajoutée du tout
-      // Ce format utilise le spread operator (...) pour fusionner conditionnellement l'objet
       ...(selectedConfig.bcc &&
         selectedConfig.bcc.length > 0 && { bcc: selectedConfig.bcc }),
       subject: subject,

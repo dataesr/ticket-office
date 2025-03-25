@@ -36,7 +36,7 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
   const renderAccordion = () => (
     <Container fluid className="accordion">
       <Row>
-        <Col>
+        <Col xs="12">
           {data?.status && (
             <Badge
               size="sm"
@@ -70,7 +70,7 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
         </Text>
       </Row>
       <Row>
-        <Col>
+        <Col xs="12">
           <Text size="sm" bold className="name">
             {data?.name} ({data?.id})
             <button

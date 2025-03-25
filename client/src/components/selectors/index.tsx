@@ -29,7 +29,7 @@ const Selectors = ({
   };
 
   return (
-    <Col offsetLg="1">
+    <Col xs="12" offsetLg="1">
       <Col className="fr-mb-1w">
         <select value={sort} onChange={handleSortChange} className="fr-select">
           <option value="DESC">Plus récentes</option>

@@ -32,7 +32,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 
   return (
     <>
-      <Container fluid className="fr-mb-4w test">
+      <Container fluid className="fr-mb-4w ">
         <Row>
           <Col>
             {data?.objectId && data?.objectType !== "network" && (
@@ -73,7 +73,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
           </Col>
           <Col>
             {data?.extra && (
-              <Col>
+              <Text size="sm">
                 <ul>
                   {Object.entries(data.extra).map(([key, value]) => {
                     if (value === "") return null;
@@ -102,7 +102,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
                     );
                   })}
                 </ul>
-              </Col>
+              </Text>
             )}
           </Col>
         </Row>

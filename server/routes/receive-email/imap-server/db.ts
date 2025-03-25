@@ -130,6 +130,7 @@ export async function saveReceivedEmail(
       href: href,
       referenceId: referenceId || null,
       collectionName: collectionName || null,
+      fromApplication: fromApplication || null,
     };
 
     await collection.insertOne(emailData);

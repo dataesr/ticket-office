@@ -158,7 +158,7 @@ const ContributionPage: React.FC = () => {
         <Col md="12" xs="12">
           <Title as="h1">Lier des publications</Title>
         </Col>
-        <Col md="8" xs="12">
+        <Col>
           <SearchBar
             className="fr-mb-1w"
             onSearch={(value) => handleSearch(value || "")}
@@ -187,7 +187,7 @@ const ContributionPage: React.FC = () => {
             setPage={handleSetPage}
           />
         </Col>
-        <Col offsetLg="1">
+        <Col md="3" offsetLg="1">
           <Selectors
             sort={sort}
             status={status}
@@ -195,6 +195,8 @@ const ContributionPage: React.FC = () => {
             setStatus={handleSetStatus}
             searchInMessage={true}
             setSearchInMessage={""}
+            objectType={undefined}
+            setObjectType={undefined}
           />
         </Col>
       </Row>

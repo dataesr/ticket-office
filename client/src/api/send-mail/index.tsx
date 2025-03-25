@@ -17,7 +17,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
-  const apiBaseUrl = "/api/send-email"
+  const apiBaseUrl = "/api/send-email";
   const selectedProfile = localStorage.getItem("selectedProfile");
 
   const sendEmail = async () => {
@@ -78,7 +78,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
         <ModalTitle>Prévisualisation du mail</ModalTitle>
         <ModalContent>
           <Row gutters>
-            <Col>
+            <Col xs="12">
               <p>
                 De: {`${selectedProfile} de l'équipe scanR <support@scanr.fr>`}
               </p>

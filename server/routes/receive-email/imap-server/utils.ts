@@ -54,10 +54,10 @@ export function determineCollectionName(collectionPrefix: string): string {
   if (!collectionPrefix) return "contacts";
 
   const collections: Record<string, string> = {
-    "remove-user": "remove-user",
     contacts: "contacts",
     contribute: "contribute",
     contribute_productions: "contribute_productions",
+    "remove-user": "remove-user",
     productions: "contribute_productions",
     "update-user-data": "update-user-data",
     bso: "local_variations",
@@ -99,6 +99,7 @@ export function generateContributionLink(
         return `${baseUrl}/bso-contact?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
     }
   }
+  console.log(fromApplication)
   if (collectionName === "contribute") {
     return `${baseUrl}/scanr-contributionPage?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`;
   }

@@ -19,7 +19,6 @@ export async function processEmailContent(messageSource: string) {
   const bodyText = parsed.text || parsed.html || "";
 
   if (!bodyText) {
-    console.log("Aucun texte trouvé dans l'email");
     return "";
   }
 
@@ -85,8 +84,6 @@ export async function senderToMattermostNotifications(
   envelope: any = null,
   extractedText: string = ""
 ): Promise<boolean> {
-  console.log(`🤖 Préparation notification Mattermost pour ${referenceId}`);
-
   if (!contribution || !referenceId) {
     console.error(`❌ Données invalides pour Mattermost: ${referenceId}`);
     return false;
@@ -120,7 +117,6 @@ ${textToUse.substring(0, 100)}...
 
   try {
     await sendMattermostNotification(mattermostMessage);
-    console.log(`✅ Notification Mattermost envoyée pour ${referenceId}`);
     return true;
   } catch (error) {
     console.error(
@@ -139,10 +135,7 @@ export async function sendNotificationEmail(
   extractedText: string = "",
   envelope: any = null
 ): Promise<boolean> {
-  console.log(`📧 Début du processus de notification pour ${referenceId}`);
-
   if (!contribution?.email || !contribution?.id) {
-    console.error(`❌ Données de contribution invalides: ${referenceId}`);
     return false;
   }
 
@@ -205,9 +198,6 @@ export async function sendNotificationEmail(
       console.error(`❌ Erreur d'envoi email: ${response.statusText}`);
       return false;
     } else {
-      console.log(
-        `✅ Email envoyé pour ${referenceId} via ${emailConfig.mailSender}`
-      );
       return true;
     }
   } catch (error) {
@@ -232,6 +222,9 @@ export async function fetchEmails() {
     await client.connect();
 
     let lock = await client.getMailboxLock("INBOX");
+    let mailbox = await client.mailboxOpen("INBOX");
+    await client.messageDelete({ seen: true });
+
     try {
       const messages = await client.fetch("1:*", {
         source: true,
@@ -247,8 +240,6 @@ export async function fetchEmails() {
         referenceId: string | null;
         collectionName: string;
       }[] = [];
-
-      const processedUids: number[] = [];
 
       for await (let message of messages) {
         if (!message.envelope || !message.source || !message.uid) continue;
@@ -271,11 +262,6 @@ export async function fetchEmails() {
           collectionName || undefined
         );
 
-        if (!saved) {
-          processedUids.push(message.uid);
-          continue;
-        }
-
         if (referenceId) {
           const finalCollectionName =
             collectionName === "needs_lookup"
@@ -290,8 +276,6 @@ export async function fetchEmails() {
             referenceId,
             collectionName: finalCollectionName,
           });
-        } else {
-          processedUids.push(message.uid);
         }
       }
 
@@ -332,49 +316,7 @@ export async function fetchEmails() {
               extractedText,
               envelope
             );
-
-            // Marquer comme traité (normalement)
-            processedUids.push(uid);
           }
-        }
-      }
-
-      if (processedUids.length > 0) {
-        try {
-          const mailboxes = await client.list();
-
-          let trashPath = "Trash";
-
-          const ovhTrash = mailboxes.find(
-            (box) =>
-              box.path === "INBOX.INBOX.Trash" || box.path === "INBOX.Trash"
-          );
-
-          if (ovhTrash) {
-            trashPath = ovhTrash.path;
-          } else {
-            const trashMailbox = mailboxes.find(
-              (box) =>
-                box.specialUse === "\\Trash" ||
-                box.path.toLowerCase().includes("trash") ||
-                box.path.toLowerCase().includes("corbeille")
-            );
-
-            if (trashMailbox) {
-              trashPath = trashMailbox.path;
-            }
-          }
-
-          console.log(
-            `🗑️ Déplacement de ${processedUids.length} emails vers ${trashPath}...`
-          );
-          await client.messageMove(processedUids, trashPath);
-          console.log(
-            `✅ ${processedUids.length} emails déplacés vers la corbeille`
-          );
-        } catch (moveError) {
-          console.error("❌ Erreur lors du déplacement des emails:", moveError);
-          console.error(moveError);
         }
       }
     } finally {
