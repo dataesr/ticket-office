@@ -67,8 +67,10 @@ export default function EmailBox({ variation }: { variation: Variation }) {
               <Button
                 variant="primary"
                 onClick={() => {
-                  sendEmails([variation], notificationTag, userResponse).then(() => setUserResponse(""))
-                  refetch()
+                  sendEmails([variation], notificationTag, userResponse).then(() => {
+                    setUserResponse("")
+                    refetch()
+                  })
                 }}
               >
                 Envoyer
