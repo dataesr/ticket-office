@@ -16,6 +16,7 @@ postVariationRoute.post(
     const _id = new ObjectId();
     const newVariation = {
       ...body,
+      csv: atob(body?.csv),
       _id,
       id: _id.toHexString(),
       created_at: new Date(),
