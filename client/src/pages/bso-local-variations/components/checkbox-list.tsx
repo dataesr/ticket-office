@@ -12,11 +12,13 @@ import { Variation } from "../types";
 import { BadgeStatus, StatusLabel } from "../../../utils";
 import { useVariationsContext } from "../context";
 import { tagGetColor } from "../config/tags";
+import "../styles/styles.scss"
 
 const CheckboxItem = ({ variation }: { variation: Variation }) => {
-  const { checkedIds, checkId, setSelectedId, getCodeFromBSO } =
-    useVariationsContext();
-  const codeTag = getCodeFromBSO(variation.structure?.id);
+  const { checkedIds, checkId, selectedId, setSelectedId, getCodeFromBSO } = useVariationsContext()
+  const codeTag = getCodeFromBSO(variation.structure?.id)
+
+  const active = Boolean(selectedId === variation.id && checkedIds.length === 0)
 
   return (
     <Container fluid>
@@ -31,22 +33,16 @@ const CheckboxItem = ({ variation }: { variation: Variation }) => {
         </Col>
         <Col lg={11}>
           <button
+            className={active ? "active" : ""}
             style={{ display: "block", width: "100%" }}
             onClick={() => setSelectedId(variation.id)}
           >
             <BadgeGroup className="fr-mt-1w">
-              <Badge
-                size="sm"
-                color={BadgeStatus({ status: variation?.status })}
-              >
+              <Badge size="sm" color={BadgeStatus({ status: variation?.status })}>
                 {StatusLabel({ status: variation.status })}
               </Badge>
               {variation.tags.file !== "none" && (
-                <Badge
-                  size="sm"
-                  noIcon
-                  color={tagGetColor("file", variation.tags.file)}
-                >
+                <Badge size="sm" noIcon color={tagGetColor("file", variation.tags.file)}>
                   {variation.tags.file}
                 </Badge>
               )}
@@ -56,24 +52,17 @@ const CheckboxItem = ({ variation }: { variation: Variation }) => {
                 </Badge>
               )}
             </BadgeGroup>
-            <Text
-              bold
-              size="sm"
-              className="fr-mb-2w"
-              as="p"
-              style={{ textAlign: "left" }}
-            >
+            <Text bold size="sm" className="fr-mb-2w" as="p" style={{ textAlign: "left" }}>
               <i>
-                {variation.structure.name}{" "}
-                {new Date(variation.created_at).toLocaleDateString()}
+                {variation.structure.name} {new Date(variation.created_at).toLocaleDateString()}
               </i>
             </Text>
           </button>
         </Col>
       </Row>
     </Container>
-  );
-};
+  )
+}
 
 export default function CheckboxList({
   variations,

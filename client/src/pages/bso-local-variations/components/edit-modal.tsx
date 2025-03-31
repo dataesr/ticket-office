@@ -117,6 +117,11 @@ export default function EditModal({ variations, isOpen, onClose }: EditModalProp
                   defaultValue={singleVariation.structure?.id}
                   onChange={(e) => handleStructureChange("id", e.target.value)}
                 />
+                <TextInput
+                  label="Acronyme de la structure"
+                  defaultValue={singleVariation.structure?.acronym}
+                  onChange={(e) => handleStructureChange("acronym", e.target.value)}
+                />
                 <Container fluid style={{ display: "flex", width: "100%", alignItems: "center" }}>
                   <div style={{ flexGrow: 1 }}>
                     <Button variant="secondary" onClick={handleClose}>
@@ -144,6 +149,7 @@ export default function EditModal({ variations, isOpen, onClose }: EditModalProp
                   <option value={"new"}>Nouveau</option>
                   <option value={"ongoing"}>En cours</option>
                   <option value={"treated"}>Traité</option>
+                  <option value={"question"}>Question</option>
                 </select>
               </div>
               <hr />

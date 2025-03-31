@@ -21,7 +21,7 @@ export const editVariationSchema = t.Object(
         notification: t.Optional(t.Enum({ none: "none", ongoing: "ongoing", done: "done" })),
       })
     ),
-    status: t.Optional(t.Enum({ ongoing: "ongoing", treated: "treated", new: "new" })),
+    status: t.Optional(t.Enum({ ongoing: "ongoing", treated: "treated", new: "new", question: "question" })),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),

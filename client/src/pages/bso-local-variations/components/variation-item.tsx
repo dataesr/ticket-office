@@ -1,49 +1,39 @@
-import { useState } from "react";
-import {
-  Badge,
-  BadgeGroup,
-  Button,
-  ButtonGroup,
-  Col,
-  Container,
-  Notice,
-  Row,
-  Text,
-  Title,
-} from "@dataesr/dsfr-plus";
-import { BadgeStatus, StatusLabel } from "../../../utils";
-import { FaCopy } from "react-icons/fa";
-import "../styles/styles.scss";
-import { VariationItemProps } from "../types";
-import { CopyButton } from "../../../utils/copy-button";
-import EditModal from "./edit-modal";
-import { tagGetColor, tagGetIcon } from "../config/tags";
-import DownloadFile from "../actions/download-file";
-import readCSV from "../_utils/read-csv";
-import { useVariationsContext } from "../context";
-import Threads from "./threads";
-import UploadModal from "./upload-modal";
-import EmailBox from "./email-box";
-import getBsoTaskStatus from "../_utils/get-bso-task-status";
+import { useState } from "react"
+import { Badge, BadgeGroup, Button, ButtonGroup, Col, Container, Notice, Row, Text, Title } from "@dataesr/dsfr-plus"
+import { BadgeStatus, StatusLabel } from "../../../utils"
+import { FaCopy } from "react-icons/fa"
+import "../styles/styles.scss"
+import { VariationItemProps } from "../types"
+import { CopyButton } from "../../../utils/copy-button"
+import EditModal from "./edit-modal"
+import { tagGetColor, tagGetIcon } from "../config/tags"
+import DownloadFile from "../actions/download-file"
+import readCSV from "../_utils/read-csv"
+import { useVariationsContext } from "../context"
+import Threads from "./threads"
+import UploadModal from "./upload-modal"
+import EmailBox from "./email-box"
+import getBsoTaskStatus from "../_utils/get-bso-task-status"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
-  const [showEditModal, setShowEditModal] = useState<boolean>(false);
-  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
-  const [copiedText, setCopiedText] = useState<string | null>(null);
-  const { getCodeFromBSO } = useVariationsContext();
+  const [showEditModal, setShowEditModal] = useState<boolean>(false)
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false)
+  const [copiedText, setCopiedText] = useState<string | null>(null)
+  const { getCodeFromBSO, getCommentsNameFromBSO } = useVariationsContext()
 
-  const countCsv = readCSV(variation.csv);
-  const indexTag: string = getBsoTaskStatus(variation.tags?.index);
-  const codeTag: string = getCodeFromBSO(variation.structure?.id);
+  const countCsv = readCSV(variation.csv)
+  const indexTag: string = getBsoTaskStatus(variation.tags?.index)
+  const codeTag: string = getCodeFromBSO(variation.structure?.id)
+  const commentsName: string = getCommentsNameFromBSO(variation.structure?.id)
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
-      setCopiedText(text);
+      setCopiedText(text)
       setTimeout(() => {
-        setCopiedText(null);
-      }, 2000);
-    });
-  };
+        setCopiedText(null)
+      }, 2000)
+    })
+  }
 
   return (
     <>
@@ -98,7 +88,12 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
       </Row>
       {!variation.structure?.id && (
         <Notice className="fr-mb-2w" type="warning" closeMode="disallow">
-          La demande ne contient pas d'identifiant de structure.
+          La demande ne contient pas d'identifiant de structure!
+        </Notice>
+      )}
+      {commentsName && variation.structure?.acronym && !commentsName.includes(variation.structure.acronym) && (
+        <Notice className="fr-mb-2w" type="warning" closeMode="disallow">
+          L'acronyme renseigné diffère de la configuration BSO!
         </Notice>
       )}
       <Row>
@@ -111,18 +106,21 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
             Nom de la structure: <strong>{variation.structure.name}</strong>
             <CopyButton text={variation.structure.name} copiedText={copiedText} onCopy={copyToClipboard} />
           </Text>
-          {variation.structure?.id && (
+          <Text size="sm">
+            ID de la structure: <strong>{variation.structure?.id || "Non renseigné"}</strong>
+            <CopyButton text={variation.structure.id} copiedText={copiedText} onCopy={copyToClipboard} />
+          </Text>
+          <Row>
             <Text size="sm">
-              ID de la structure: <strong>{variation.structure.id}</strong>
-              <CopyButton text={variation.structure.id} copiedText={copiedText} onCopy={copyToClipboard} />
-            </Text>
-          )}
-          {variation.structure?.acronym && (
-            <Text size="sm">
-              Acronyme de la structure: <strong>{variation.structure.acronym}</strong>
+              Acronyme de la structure: <strong>{variation.structure?.acronym || "Non renseigné"}</strong>
               <CopyButton text={variation.structure.acronym} copiedText={copiedText} onCopy={copyToClipboard} />
             </Text>
-          )}
+            <Text className="fr-ml-2w" size="sm">
+              {"(Config: "}
+              <strong>{commentsName || "Non renseigné"}</strong>
+              {") "}
+            </Text>
+          </Row>
         </Col>
       </Row>
       <Row>
@@ -187,6 +185,6 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
       <EmailBox variation={variation} />
     </>
   )
-};
+}
 
-export default VariationItem;
+export default VariationItem
