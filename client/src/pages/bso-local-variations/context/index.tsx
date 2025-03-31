@@ -45,7 +45,16 @@ export function VariationsContext({ children }) {
 
   return (
     <Context.Provider
-      value={{ data, selectedId, setSelectedId, checkedIds, checkId, checkAllIds, getCodeFromBSO, getCommentsNameFromBSO }}
+      value={{
+        data,
+        selectedId,
+        setSelectedId,
+        checkedIds,
+        checkId,
+        checkAllIds,
+        getCodeFromBSO,
+        getCommentsNameFromBSO,
+      }}
     >
       {children}
     </Context.Provider>

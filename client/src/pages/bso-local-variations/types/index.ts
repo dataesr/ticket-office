@@ -6,6 +6,7 @@ export interface Variation {
   structure: {
     name: string
     id?: string
+    acronym?: string
   }
   csv: string
   tags: VariationTags
