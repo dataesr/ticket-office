@@ -58,7 +58,7 @@ export const StatusLabel = ({ status }) => {
       break;
 
     default:
-      statusLabel = "purple-glycine";
+      statusLabel = status
   }
   return statusLabel;
 };
