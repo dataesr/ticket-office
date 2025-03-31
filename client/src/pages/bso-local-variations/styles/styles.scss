@@ -57,3 +57,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+button.active {
+  background-color: var(--active);
+}

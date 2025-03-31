@@ -12,6 +12,7 @@ import { Variation } from "../types";
 import { BadgeStatus, StatusLabel } from "../../../utils";
 import { useVariationsContext } from "../context";
 import { tagGetColor } from "../config/tags";
+import "../styles/styles.scss"
 
 const CheckboxItem = ({ variation }: { variation: Variation }) => {
   const { checkedIds, checkId, selectedId, setSelectedId, getCodeFromBSO } = useVariationsContext()
@@ -32,7 +33,7 @@ const CheckboxItem = ({ variation }: { variation: Variation }) => {
         </Col>
         <Col lg={11}>
           <button
-            className={`fr-btn fr-btn--tertiary${active ? "" : "-no-outline"}`}
+            className={active ? "active" : ""}
             style={{ display: "block", width: "100%" }}
             onClick={() => setSelectedId(variation.id)}
           >
