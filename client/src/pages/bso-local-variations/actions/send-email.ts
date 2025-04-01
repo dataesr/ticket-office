@@ -48,6 +48,10 @@ export default async function sendEmails(
   // Set status as treated if final notification sent
   const inputs = { tags: { notification: notification }, status: notification === "done" ? "treated" : "ongoing" }
 
+  // If single variation and notification is custom, set correct status (should only happen from email-box)
+  if (variations.length === 1 && notification === "custom")
+    inputs.status = variations[0].tags?.notification === "done" ? "treated" : "ongoing"
+
   Promise.all(
     variations.map((variation) =>
       sendEmail(
@@ -59,7 +63,7 @@ export default async function sendEmails(
     )
   )
     .then(() => {
-      if (["ongoing", "done"].includes(notification)) {
+      if (["custom", "ongoing", "done"].includes(notification)) {
         editVariations(
           variations.map((variation) => variation.id),
           inputs
