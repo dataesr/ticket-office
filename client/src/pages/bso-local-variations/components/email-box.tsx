@@ -22,7 +22,7 @@ export default function EmailBox({ variation }: { variation: Variation }) {
     getCommentsNameFromBSO,
   } = useVariationsContext()
   const [userResponse, setUserResponse] = useState<string>("")
-  const [notificationTag, setNotificationTag] = useState<string>("ongoing")
+  const [notificationTag, setNotificationTag] = useState<string>("custom")
   const [showPreviewModal, setShowPreviewModal] = useState<boolean>(false)
   const selectedProfile = localStorage.getItem("selectedProfile")
   const commentsName = getCommentsNameFromBSO(variation.structure?.id)
@@ -36,14 +36,15 @@ export default function EmailBox({ variation }: { variation: Variation }) {
             <select
               id="templateSelect"
               className="fr-select"
-              value={"1"}
+              value={notificationTag}
               onChange={(event) => {
                 setNotificationTag(event.target.value)
                 setUserResponse(notificationGetTemplate(event.target.value, variation.structure?.id, commentsName))
               }}
             >
-              <option value="">Sélectionnez un template</option>
-
+              <option key="custom" value="custom">
+                Sélectionnez un template
+              </option>
               <option key="ongoing" value="ongoing">
                 {notificationGetName("ongoing")}
               </option>

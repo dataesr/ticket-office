@@ -67,7 +67,6 @@ const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
       "contribute-object",
       "production",
     ].includes(contributionType);
-  console.log(contributionType);
   return (
     <div>
       {contribution.objectType && (

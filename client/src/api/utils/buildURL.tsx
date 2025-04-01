@@ -58,8 +58,8 @@ export const buildURL = (
   const fromAppQuery = fromApplication
     ? `&fromApplication=${fromApplication.toLocaleLowerCase()}`
     : "";
-  if (["new", "ongoing", "treated"].includes(status)) {
-    where.status = status;
+  if (["new", "ongoing", "treated", "question"].includes(status)) {
+    where.status = status
   }
 
   if (baseUrl === "variations" && tags) {
