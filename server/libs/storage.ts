@@ -32,9 +32,19 @@ export default {
 
   get: (container: string, remote: string) =>
     new Promise<any>((resolve, reject) => {
-      client.getFile(container, remote, (err: any, file: any) => {
-        if (err) reject(err)
-        resolve(file)
+      const fileData: Array<string> = []
+      const stream = client.download({ container, remote })
+
+      stream.on("data", (chunk) => {
+        fileData.push(chunk.toString())
+      })
+
+      stream.on("end", () => {
+        resolve(fileData.join(""))
+      })
+
+      stream.on("error", (err) => {
+        reject(err)
       })
     }),
 }

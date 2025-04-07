@@ -1,3 +1,3 @@
-export default function SendNotification() {
+export default function sendNotification() {
   console.log("Sending notification to contact... TBD")
 }

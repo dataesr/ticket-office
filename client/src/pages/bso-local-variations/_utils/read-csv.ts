@@ -1,6 +1,8 @@
 import Papa from "papaparse"
 
 export default function readCSV(csv: string) {
+  if (!csv) return undefined
+
   const count = {
     doi: 0,
     hal_coll_code: 0,
