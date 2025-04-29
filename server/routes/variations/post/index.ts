@@ -55,7 +55,7 @@ postVariationRoute.post(
       replyTo: { email: replyEmailConfig.bso.replyToEmail, name: replyEmailConfig.bso.replyToName },
       ...(replyEmailConfig.bso.bcc &&
         replyEmailConfig.bso.bcc.length > 0 && { bcc: replyEmailConfig.bso.bcc }),
-      subject: "Merci pour votre demande",
+      subject: "[BSO] Merci pour votre demande",
       templateId: 273,
     };
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {

@@ -38,6 +38,7 @@ export default function FiltersBar() {
             <option value={"ongoing"}>En cours</option>
             <option value={"treated"}>Traité</option>
             <option value={"question"}>Question</option>
+            <option value={"ko"}>KO</option>
           </select>
         </Col>
         <Col className="fr-pr-1w">
