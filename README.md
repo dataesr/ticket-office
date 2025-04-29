@@ -1,33 +1,36 @@
-# ReadMe# Guichet
+# Guichet numérique // Ticket office
 
-# Eslint
+## Eslint
 
 To ensure a more comfortable coding experience, it is advisable to use the Prettier extension. However, please remember to disable it when working on other projects.
 
-### CLIENT
+## Client
 
-created a .env.local with :
+Create a `.env.local` under the `/client` folder with :
+```sh
 BASE_API_URL="https://ticket-office.staging.dataesr.ovh"
 VITE_TICKET_OFFICE_API_AUTHORIZATION (ask me)
+```
 
-### SERVER
+## Server
 
-created a .env.local (ask me mine)
+Create a .env.local (ask me mine) under the `/server` folder.
 
-# run Ticket-office
+## Run
 
 `bun i`
 `bun start`
 
-## deploy
+## Deploy
 
 `bun run deploy --level=[patch|minor|major]`
 
-# Issues
+## Issues
 
---you might have issues with imap server if you start localy (especialy on work wifi), if needed, disable the function called : "fetchEmails"
+- You might have issues with imap server if you start locally (especialy on wifi). If needed, disable the function called : "fetchEmails".
+- You also might have issues if you install a new dependency. Check if all dependencies are in package.json (especially in server).
+If you have and 503 issue, check error on pod :
 
---you also might have issues if you install a new dependencie, check if all dependencies are in package.json (especially in server)
-if you have and 503 issue, check error on pod
---`kubectl get pods -n ticket-office`
---`kubectl logs ticket-office-xxxxxxx-yyyyyy -n ticket-office`
+`kubectl get pods -n ticket-office`
+
+`kubectl logs ticket-office-xxxxxxx-yyyyyy -n ticket-office`
