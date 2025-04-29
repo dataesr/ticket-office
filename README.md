@@ -21,6 +21,9 @@ Create a .env.local (ask me mine) under the `/server` folder.
 `bun i`
 `bun start`
 
+Server is started at http://localhost:3000.
+Client is started at http://localhost:5173.
+
 ## Deploy
 
 `bun run deploy --level=[patch|minor|major]`

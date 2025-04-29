@@ -1,9 +1,11 @@
 import Elysia, { Static } from "elysia";
+import { ObjectId } from "mongodb";
+
 import db from "../../../libs/mongo";
-import { postVariationSchema } from "../../../schemas/post/variationSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 import { variationSchema } from "../../../schemas/get_id/variationSchema";
-import { ObjectId } from "mongodb";
+import { postVariationSchema } from "../../../schemas/post/variationSchema";
+import { replyEmailConfig } from "../../../utils/configEmail";
 import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 
 type postVariationSchemaType = Static<typeof postVariationSchema>;
@@ -40,18 +42,47 @@ postVariationRoute.post(
       id: result.insertedId.toHexString(),
     };
 
+    const BREVO_API_KEY = process.env.BREVO_API_KEY;
+    if (!BREVO_API_KEY) {
+      return {
+        success: false,
+        error: "BREVO_API_KEY is not defined",
+      };
+    };
+    const dataForBrevo = {
+      sender: { email: finalVariation.contact.email, name: replyEmailConfig.bso.senderName },
+      to: [{ email: finalVariation.contact.email, name: finalVariation.contact.email.split("@")[0] }],
+      replyTo: { email: replyEmailConfig.bso.replyToEmail, name: replyEmailConfig.bso.replyToName },
+      ...(replyEmailConfig.bso.bcc &&
+        replyEmailConfig.bso.bcc.length > 0 && { bcc: replyEmailConfig.bso.bcc }),
+      subject: "Merci pour votre demande",
+      templateId: 273,
+    };
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": BREVO_API_KEY,
+      },
+      body: JSON.stringify(dataForBrevo),
+    });
+    if (!response.ok) {
+      return error(500, {
+        message: `Erreur d'envoi d'email: ${response.statusText}`,
+        code: "EMAIL_SEND_FAILED",
+      });
+    }
+
     const url = process.env.BASE_API_URL;
     const variationLink = `${url}/bso-local-variations?page=1&query=${finalVariation.id}&searchInMessage=false&sort=DESC&status=choose`;
     const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de déclinaison locale créée!
-     \n**Email de contact**: ${
-       finalVariation.contact.email
-     } \n**Nom de la structure**: ${
-      finalVariation.structure.name
-    } \n**ID de la structure**: ${
-      finalVariation.structure?.id || "non renseigné"
-    } \n🔗 [Voir la contribution](${variationLink})`;
+     \n**Email de contact**: ${finalVariation.contact.email
+      } \n**Nom de la structure**: ${finalVariation.structure.name
+      } \n**ID de la structure**: ${finalVariation.structure?.id || "non renseigné"
+      } \n🔗 [Voir la contribution](${variationLink})`;
     await sendMattermostNotification(mattermostMessage);
 
+    console.log(JSON.stringify(finalVariation));
     return finalVariation;
   },
   {
