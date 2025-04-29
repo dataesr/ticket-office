@@ -6,11 +6,7 @@ const getFileRoute = new Elysia()
 
 export const responseSchema = t.Object(
   {
-    name: t.String(),
-    etag: t.String(),
-    size: t.Number(),
-    lastModified: t.Union([t.String(), t.Date(), t.Null()]),
-    container: t.String(),
+    fileContent: t.String(),
   },
   { additionalProperties: true }
 )
@@ -21,14 +17,10 @@ getFileRoute.get(
     const response = (await Storage.get(container, filename).catch((err) => {
       if (err.statusCode === 404) throw new NotFoundError()
       return err.message
-    })) as Record<string, any>
+    })) as string
 
     return {
-      name: response.name,
-      etag: response.etag,
-      size: response.size,
-      lastModified: response.lastModified,
-      container: response.container,
+      fileContent: response || "",
     }
   },
   {

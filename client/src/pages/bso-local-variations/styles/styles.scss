@@ -1,12 +1,20 @@
-.contributorSideMessage {
-  background-color: var(--background-alt-green-emeraude);
-  border: 1px solid var(--background-alt-green-emeraude);
+.fileContentRequest {
+  background-color: var(--background-alt-brown-caramel);
+  border: 1px solid var(--background-alt-brown-caramel);
   border-radius: 10px;
   margin-bottom: 5px;
-  margin-right: 250px;
+  margin-right: 15px;
   padding: 15px;
 }
 
+.fileContentRemote {
+  background-color: var(--background-alt-blue-ecume);
+  border: 1px solid var(--background-alt-blue-ecume);
+  border-radius: 10px;
+  margin-bottom: 5px;
+  margin-right: 15px;
+  padding: 15px;
+}
 .user-side {
   text-align: left;
   background-color: var(--background-alt-pink-macaron);

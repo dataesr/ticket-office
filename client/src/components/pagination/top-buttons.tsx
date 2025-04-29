@@ -14,7 +14,7 @@ const TopPaginationButtons = ({ meta, page, maxPage, setPage }) => {
         variant="secondary"
         size="sm"
       >
-        Retour à la page 1
+        Première page
       </Button>
       <Button
         onClick={() => setPage(maxPage)}

@@ -25,7 +25,7 @@ patchVariationByIdRoute.patch(
 
     const updatedVariation = await db.collection("local_variations").findOne<variationType>({ id })
     if (!updatedVariation) {
-      return error(404, { message: "Déclinaison locale non trouvé" })
+      return error(404, { message: "Déclinaison locale non trouvée" })
     }
 
     return updatedVariation

@@ -7,13 +7,14 @@ import { VariationItemProps } from "../types"
 import { CopyButton } from "../../../utils/copy-button"
 import EditModal from "./edit-modal"
 import { tagGetColor, tagGetIcon } from "../config/tags"
-import DownloadFile from "../actions/download-file"
+import downloadFile from "../actions/download-file"
 import readCSV from "../_utils/read-csv"
 import { useVariationsContext } from "../context"
 import Threads from "./threads"
 import UploadModal from "./upload-modal"
 import EmailBox from "./email-box"
 import getBsoTaskStatus from "../_utils/get-bso-task-status"
+import getFileContent from "../_utils/get-file-content"
 
 const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const [showEditModal, setShowEditModal] = useState<boolean>(false)
@@ -22,6 +23,8 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
   const { getCodeFromBSO, getCommentsNameFromBSO } = useVariationsContext()
 
   const countCsv = readCSV(variation.csv)
+  const { content: remoteContent, refetch } = getFileContent(variation.structure?.id)
+  const countRemoteCsv = readCSV(remoteContent)
   const indexTag: string = getBsoTaskStatus(variation.tags?.index)
   const codeTag: string = getCodeFromBSO(variation.structure?.id)
   const commentsName: string = getCommentsNameFromBSO(variation.structure?.id)
@@ -152,20 +155,58 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
           )}
         </Col>
       </Row>
-      <Container fluid className="contributorSideContactMessage">
-        <Text size="sm">Le périmètre contient: </Text>
-        <ul>
-          {!!countCsv.doi && <li className="fr-text--sm fr-mb-0">{`${countCsv.doi} DOI`}</li>}
-          {!!countCsv.hal_coll_code && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_coll_code} hal_coll_code`}</li>}
-          {!!countCsv.hal_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_id} hal_id`}</li>}
-          {!!countCsv.hal_struct_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_struct_id} hal_struct_id`}</li>}
-          {!!countCsv.nnt_etab && <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_etab} nnt_etab`}</li>}
-          {!!countCsv.nnt_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_id} nnt_id`}</li>}
-        </ul>
-        <Button variant="text" size="sm" icon="download-line" onClick={() => DownloadFile(variation)}>
-          Télécharger le fichier
-        </Button>
-      </Container>
+      <Row>
+        <Col md={7} lg={7}>
+          <Container fluid className="fileContentRequest">
+            <Text size="sm">Le périmètre contient: </Text>
+            <ul>
+              {!!countCsv.doi && <li className="fr-text--sm fr-mb-0">{`${countCsv.doi} DOI`}</li>}
+              {!!countCsv.hal_coll_code && (
+                <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_coll_code} hal_coll_code`}</li>
+              )}
+              {!!countCsv.hal_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_id} hal_id`}</li>}
+              {!!countCsv.hal_struct_id && (
+                <li className="fr-text--sm fr-mb-0">{`${countCsv.hal_struct_id} hal_struct_id`}</li>
+              )}
+              {!!countCsv.nnt_etab && <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_etab} nnt_etab`}</li>}
+              {!!countCsv.nnt_id && <li className="fr-text--sm fr-mb-0">{`${countCsv.nnt_id} nnt_id`}</li>}
+            </ul>
+            <Button
+              variant="text"
+              size="sm"
+              icon="download-line"
+              onClick={() => downloadFile(variation)}
+              disabled={!!variation.csv}
+            >
+              Télécharger le fichier
+            </Button>
+          </Container>
+        </Col>
+        {countRemoteCsv && (
+          <Col md={5} lg={5}>
+            <Container fluid className="fileContentRemote">
+              <Text size="sm">{`Fichier ${variation.structure?.id}.csv trouvé sur OVH: `}</Text>
+              <ul>
+                {!!countRemoteCsv.doi && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.doi} DOI`}</li>}
+                {!!countRemoteCsv.hal_coll_code && (
+                  <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_coll_code} hal_coll_code`}</li>
+                )}
+                {!!countRemoteCsv.hal_id && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_id} hal_id`}</li>}
+                {!!countRemoteCsv.hal_struct_id && (
+                  <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_struct_id} hal_struct_id`}</li>
+                )}
+                {!!countRemoteCsv.nnt_etab && (
+                  <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.nnt_etab} nnt_etab`}</li>
+                )}
+                {!!countRemoteCsv.nnt_id && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.nnt_id} nnt_id`}</li>}
+              </ul>
+              <Button variant="text" size="sm" icon="refresh-line" onClick={() => refetch()}>
+                Actualiser
+              </Button>
+            </Container>
+          </Col>
+        )}
+      </Row>
       <EditModal variations={[variation]} isOpen={showEditModal} onClose={() => setShowEditModal(false)} />
       <UploadModal variations={[variation]} isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
       <ButtonGroup isInlineFrom="md" className="fr-mb-5w fr-mt-3w">
