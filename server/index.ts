@@ -1,19 +1,20 @@
-import { Elysia } from "elysia";
+import { cors } from "@elysiajs/cors";
 import staticPlugin from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
-import { cors } from "@elysiajs/cors";
+import { Elysia } from "elysia";
 
-import contributionObjectRoutes from "./routes/contributionObjectRoutes";
-import productionsRoutes from "./routes/productions";
-import removeUserRoutes from "./routes/remove-user";
-import updateUserDataRoutes from "./routes/update-user-data";
-import contactsRoutes from "./routes/contacts";
-import sendMail from "./routes/reply/replyRoutes";
-import getReceivedMailsRoutes from "./routes/receive-email";
-import getLastMailsSentRoutes from "./routes/last-mails-sent";
-import variationsRoutes from "./routes/variations";
-import storageRoutes from "./routes/storage";
+import bsoLocalVariationsDatasetsRoutes from "./routes/bso-local-variations-datasets";
+import bsoLocalVariationsPublicationsRoutes from "./routes/bso-local-variations-publications";
 import bsoTasksRoutes from "./routes/bso-tasks";
+import contactsRoutes from "./routes/contacts";
+import contributionObjectRoutes from "./routes/contributionObjectRoutes";
+import getLastMailsSentRoutes from "./routes/last-mails-sent";
+import productionsRoutes from "./routes/productions";
+import getReceivedMailsRoutes from "./routes/receive-email";
+import removeUserRoutes from "./routes/remove-user";
+import sendMail from "./routes/reply/replyRoutes";
+import storageRoutes from "./routes/storage";
+import updateUserDataRoutes from "./routes/update-user-data";
 
 const ENV = Bun.env.NODE_ENV || "development";
 const PORT = parseInt(Bun.env.PORT || "3000");
@@ -61,68 +62,36 @@ const swaggerConfig = {
 
 const buildApi = () => {
   return new Elysia().group("/api", (app) => {
+    app.use(bsoLocalVariationsDatasetsRoutes);
+    app.use(bsoLocalVariationsPublicationsRoutes);
+    app.use(bsoTasksRoutes);
     app.use(contactsRoutes);
     app.use(contributionObjectRoutes);
-    app.use(productionsRoutes);
-    app.use(removeUserRoutes);
-    app.use(updateUserDataRoutes);
-    app.use(sendMail);
     app.use(getLastMailsSentRoutes);
     app.use(getReceivedMailsRoutes);
-    app.use(variationsRoutes);
+    app.use(productionsRoutes);
+    app.use(removeUserRoutes);
+    app.use(sendMail);
     app.use(storageRoutes);
-    app.use(bsoTasksRoutes);
+    app.use(updateUserDataRoutes);
     return app;
   });
 };
 
 const createApp = async () => {
-  const api = buildApi();
-
-  switch (ENV) {
-    case "production":
-      return new Elysia()
-        .use(cors({ origin: "*" }))
-        .use(swagger({ path: "/swagger", ...swaggerConfig }))
-        .use(api)
-        .use(
-          staticPlugin({
-            assets: "public",
-            prefix: "",
-            alwaysStatic: true,
-          })
-        )
-        .get("*", () => Bun.file("public/index.html"))
-        .listen(PORT);
-    case "staging":
-      return new Elysia()
-        .use(cors({ origin: "*" }))
-        .use(swagger({ path: "/swagger", ...swaggerConfig }))
-        .use(api)
-        .use(
-          staticPlugin({
-            assets: "public",
-            prefix: "",
-            alwaysStatic: true,
-          })
-        )
-        .get("*", () => Bun.file("public/index.html"))
-        .listen(PORT);
-    default:
-      return new Elysia()
-        .use(cors({ origin: "*" }))
-        .use(swagger({ path: "/swagger", ...swaggerConfig }))
-        .use(api)
-        .use(
-          staticPlugin({
-            assets: "public",
-            prefix: "",
-            alwaysStatic: true,
-          })
-        )
-        .get("*", () => Bun.file("public/index.html"))
-        .listen(PORT);
-  }
+  return new Elysia()
+    .use(cors({ origin: "*" }))
+    .use(swagger({ path: "/swagger", ...swaggerConfig }))
+    .use(buildApi())
+    .use(
+      staticPlugin({
+        assets: "public",
+        prefix: "",
+        alwaysStatic: true,
+      })
+    )
+    .get("*", () => Bun.file("public/index.html"))
+    .listen(PORT);
 };
 
 createApp()
@@ -131,12 +100,12 @@ createApp()
     const serverUrl = app.server?.url;
 
     console.info(`
-  ELYSIA [🦊] ready in ${startupTime}ms
-  Running in ${String(ENV).toUpperCase()} environment
+      ELYSIA [🦊] ready in ${startupTime}ms
+      Running in ${String(ENV).toUpperCase()} environment
 
-  ➜ Local:          ${serverUrl}
-  ➜ Documentation:  ${serverUrl}swagger
-`);
+      ➜ Local:          ${serverUrl}
+      ➜ Documentation:  ${serverUrl}swagger
+    `);
   })
   .catch((error) => {
     console.error("Error while starting the server", error);

@@ -1,4 +1,4 @@
-import { VariationTags } from "../../pages/bso-local-variations/types";
+import { VariationTags } from "../../pages/bso-local-variations-publications/types";
 
 export const buildURL = (
   location: any,
@@ -24,6 +24,8 @@ export const buildURL = (
     baseUrl = "production";
   } else if (location?.pathname?.includes("bso-local-variations-publications")) {
     baseUrl = "bso-local-variations-publications";
+  } else if (location?.pathname?.includes("bso-local-variations-datasets")) {
+    baseUrl = "bso-local-variations-datasets";
   }
 
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
