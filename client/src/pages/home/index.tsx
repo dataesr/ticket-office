@@ -1,7 +1,7 @@
 import { Col, Container } from "@dataesr/dsfr-plus";
 import SearchSection from "../contact-contributionbyobject-page/components/search-section";
 import { useState } from "react";
-import ContributionAllDatas from "../../api/contribution-api/getAllDatas";
+import ContributionAllData from "../../api/contribution-api/getAllData";
 import AllContributions from "./components/item";
 import { ClipLoader } from "react-spinners";
 
@@ -9,7 +9,7 @@ const Home = () => {
   const [query, setQuery] = useState<string[]>([]);
   const [highlightedQuery, setHighlightedQuery] = useState<string>("");
 
-  const { data, isLoading, isError } = ContributionAllDatas();
+  const { data, isLoading, isError } = ContributionAllData();
 
   const getFilteredData = () => {
     if (!data || data.length === 0) return [];

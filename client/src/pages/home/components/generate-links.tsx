@@ -25,8 +25,8 @@ export function generateLinkFromAllDatas(
 
   if (hasCsv) {
     return id
-      ? `/bso-local-variations?page=1&query=${id}&searchInMessage=false&sort=DESC&status=choose`
-      : "/bso-local-variations";
+      ? `/bso-local-variations-publications?page=1&query=${id}&searchInMessage=false&sort=DESC&status=choose`
+      : "/bso-local-variations-publications";
   }
 
   let basePath = "";

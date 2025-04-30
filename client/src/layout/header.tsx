@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
-
-import { useLocation } from "react-router-dom";
 import { Button, Link } from "@dataesr/dsfr-plus";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
 import ProfileModal from "../components/profil-modal";
 import {
   contactUrl,
   contributionUrl,
-  productionUrl,
   nameChangeUrl,
+  productionUrl,
   removeUserUrl,
+  variationsDatasetsUrl,
+  variationsPublicationsUrl,
 } from "../config/api";
 
 const concealElement = (id) => {
@@ -24,27 +26,44 @@ const Header: React.FC = () => {
   const [selectedProfile, setSelectedProfile] = useState<string | null>(null);
   const { pathname } = useLocation();
 
-  const urls = [
+  const urlsScanr = [
     {
-      url: contributionUrl,
-      name: "Contribution par objet",
       href: "/scanr-contributionPage",
+      name: "Contribution par objet",
+      url: contributionUrl,
     },
-    { url: contactUrl, name: "Formulaire de contact", href: "/scanr-contact" },
     {
-      url: productionUrl,
-      name: "Lier des publications",
+      href: "/scanr-contact",
+      name: "Formulaire de contact",
+      url: contactUrl,
+    },
+    {
       href: "/scanr-apioperations",
+      name: "Lier des publications",
+      url: productionUrl,
     },
     {
-      url: removeUserUrl,
-      name: "Supprimer des personnes de la base de données",
       href: "/scanr-removeuser",
+      name: "Supprimer des personnes de la base de données",
+      url: removeUserUrl,
     },
     {
-      url: nameChangeUrl,
-      name: "Changer le nom d'une personne",
       href: "/scanr-namechange",
+      name: "Changer le nom d'une personne",
+      url: nameChangeUrl,
+    },
+  ];
+
+  const urlsBso = [
+    {
+      href: "/bso-local-variations-publications",
+      name: "Demandes de déclinaisons locales - Publications",
+      url: variationsPublicationsUrl,
+    },
+    {
+      href: "/bso-local-variations-datasets",
+      name: "Demandes de déclinaisons locales - Jeux de données",
+      url: variationsDatasetsUrl,
     },
   ];
 
@@ -118,12 +137,12 @@ const Header: React.FC = () => {
                 </button>
                 <div className="fr-collapse fr-menu" id="scanr-menu">
                   <ul className="fr-menu__list">
-                    {urls.map(({ href, name }) => (
+                    {urlsScanr.map(({ href, name }) => (
                       <li className="fr-nav__item" key={href}>
                         <Link
+                          aria-current={pathname === href ? "page" : undefined}
                           className="fr-nav__link"
                           href={href}
-                          aria-current={pathname === href ? "page" : undefined}
                           onClick={() => concealElement("scanr-menu")}
                         >
                           {name}
@@ -134,16 +153,29 @@ const Header: React.FC = () => {
                 </div>
               </li>
               <li className="fr-nav__item">
-                <Link
-                  className="fr-nav__link"
-                  href="/bso-local-variations"
-                  aria-current={
-                    pathname === "/bso-local-variations" ? "page" : undefined
-                  }
-                  onClick={() => concealElement("bso-menu")}
+                <button
+                  className="fr-nav__btn"
+                  aria-expanded="false"
+                  aria-controls="bso-menu"
                 >
                   BSO
-                </Link>
+                </button>
+                <div className="fr-collapse fr-menu" id="bso-menu">
+                  <ul className="fr-menu__list">
+                    {urlsBso.map(({ href, name }) => (
+                      <li className="fr-nav__item" key={href}>
+                        <Link
+                          aria-current={pathname === href ? "page" : undefined}
+                          className="fr-nav__link"
+                          href={href}
+                          onClick={() => concealElement("bso-menu")}
+                        >
+                          {name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </li>
               <li className="fr-nav__item">
                 <Link

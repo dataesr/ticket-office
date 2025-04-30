@@ -45,7 +45,7 @@ sendMail.post(
       "contribute_productions",
       "remove-user",
       "update-user-data",
-      "local_variations",
+      "bso_local_variations_publications",
     ];
 
     if (!allowedCollections.includes(collectionName)) {
@@ -63,7 +63,7 @@ sendMail.post(
       };
     }
     const selectedConfig: ReplyEmailConfig =
-      collectionName === "local_variations"
+      collectionName === "bso_local_variations_publications"
         ? replyEmailConfig.bso
         : replyEmailConfig.scanr;
     const dataForBrevo = {

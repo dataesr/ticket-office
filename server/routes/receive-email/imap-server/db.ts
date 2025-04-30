@@ -19,7 +19,7 @@ export async function lookupCorrectCollection(
     "contribute_productions",
     "remove-user",
     "update-user-data",
-    "local_variations",
+    "bso_local_variations_publications",
   ];
   try {
     const database = client.db(config.dbName);
