@@ -13,7 +13,7 @@ type postVariationSchemaType = Static<typeof postVariationSchema>;
 const postVariationRoute = new Elysia();
 
 postVariationRoute.post(
-  "/variations",
+  "/bso-local-variations-publications",
   async ({ error, body }: { error: any; body: postVariationSchemaType }) => {
     const _id = new ObjectId();
     const newVariation = {
@@ -30,7 +30,7 @@ postVariationRoute.post(
     };
 
     const result = await db
-      .collection("local_variations")
+      .collection("bso_local_variations_publications")
       .insertOne(newVariation);
 
     if (!result.insertedId) {
@@ -74,7 +74,7 @@ postVariationRoute.post(
     }
 
     const url = process.env.BASE_API_URL;
-    const variationLink = `${url}/bso-local-variations?page=1&query=${finalVariation.id}&searchInMessage=false&sort=DESC&status=choose`;
+    const variationLink = `${url}/bso-local-variations-publications?page=1&query=${finalVariation.id}&searchInMessage=false&sort=DESC&status=choose`;
     const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de déclinaison locale créée!
      \n**Email de contact**: ${finalVariation.contact.email
       } \n**Nom de la structure**: ${finalVariation.structure.name
@@ -82,7 +82,6 @@ postVariationRoute.post(
       } \n🔗 [Voir la contribution](${variationLink})`;
     await sendMattermostNotification(mattermostMessage);
 
-    console.log(JSON.stringify(finalVariation));
     return finalVariation;
   },
   {

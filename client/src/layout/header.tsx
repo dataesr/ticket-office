@@ -136,9 +136,9 @@ const Header: React.FC = () => {
               <li className="fr-nav__item">
                 <Link
                   className="fr-nav__link"
-                  href="/bso-local-variations"
+                  href="/bso-local-variations-publications"
                   aria-current={
-                    pathname === "/bso-local-variations" ? "page" : undefined
+                    pathname === "/bso-local-variations-publications" ? "page" : undefined
                   }
                   onClick={() => concealElement("bso-menu")}
                 >

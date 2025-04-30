@@ -9,10 +9,10 @@ type variationType = Static<typeof variationSchema>;
 const getVariationByIdRoute = new Elysia();
 
 getVariationByIdRoute.get(
-  "/variations/:id",
+  "/bso-local-variations-publications/:id",
   async ({ params: { id } }) => {
     const variation = await db
-      .collection("local_variations")
+      .collection("bso_local_variations_publications")
       .findOne<variationType>({
         _id: new ObjectId(id),
       })

@@ -19,7 +19,7 @@ async function sendEmail(variation: Variation, response: string) {
     subject: `Réponse à votre demande de déclinaison locale, référence bso-${variation.id}`,
     userResponse: formattedResponse,
     message: messageTemplate(variation),
-    collectionName: "local_variations",
+    collectionName: "bso_local_variations_publications",
     selectedProfile,
   }
 

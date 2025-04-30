@@ -9,21 +9,21 @@ type variationType = Static<typeof variationSchema>
 const patchVariationByIdRoute = new Elysia()
 
 patchVariationByIdRoute.patch(
-  "/variations/:id",
+  "/bso-local-variations-publications/:id",
   async ({ params: { id }, body, error }) => {
     if (body?.status === "treated") {
       body.treated_at = new Date()
     }
 
     const { acknowledged } = await db
-      .collection("local_variations")
+      .collection("bso_local_variations_publications")
       .updateOne({ id }, { $set: { ...dot(body), modified_at: new Date() } })
 
     if (!acknowledged) {
       return error(500, { message: "Erreur interne du serveur" })
     }
 
-    const updatedVariation = await db.collection("local_variations").findOne<variationType>({ id })
+    const updatedVariation = await db.collection("bso_local_variations_publications").findOne<variationType>({ id })
     if (!updatedVariation) {
       return error(404, { message: "Déclinaison locale non trouvée" })
     }

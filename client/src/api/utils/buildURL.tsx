@@ -22,7 +22,7 @@ export const buildURL = (
     baseUrl = "update-user-data";
   } else if (location?.pathname?.includes("apioperations")) {
     baseUrl = "production";
-  } else if (location?.pathname?.includes("bso-local-variations")) {
+  } else if (location?.pathname?.includes("bso-local-variations-publications")) {
     baseUrl = "variations";
   }
 

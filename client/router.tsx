@@ -32,7 +32,7 @@ export default function Router() {
           path="/bso-contact"
           element={<ContactAndContributionPage fromApplication="bso" />}
         />
-        <Route path="/bso-local-variations" element={<BSOLocalVariations />} />
+        <Route path="/bso-local-variations-publications" element={<BSOLocalVariations />} />
         <Route
           path="/curiexplore-contact"
           element={<ContactAndContributionPage fromApplication="curiexplore" />}

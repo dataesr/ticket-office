@@ -21,7 +21,7 @@ const collectionMapping = [
   },
   {
     regex: /bso/i,
-    collectionName: "local_variations",
+    collectionName: "bso_local_variations_publications",
   },
 ];
 

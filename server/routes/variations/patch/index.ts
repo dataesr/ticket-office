@@ -8,7 +8,7 @@ import { dot } from "dot-object"
 const patchVariationsRoute = new Elysia()
 
 patchVariationsRoute.patch(
-  "/variations",
+  "/bso-local-variations-publications",
   async ({ body, error }: { body: any; error: any }) => {
     const { ids, data } = body
 
@@ -17,7 +17,7 @@ patchVariationsRoute.patch(
     }
 
     const { acknowledged } = await db
-      .collection("local_variations")
+      .collection("bso_local_variations_publications")
       .updateMany({ id: { $in: ids } }, { $set: { ...dot(data), modified_at: new Date() } })
 
     if (!acknowledged) {
@@ -25,7 +25,7 @@ patchVariationsRoute.patch(
     }
 
     const updatedVariations = await db
-      .collection("local_variations")
+      .collection("bso_local_variations_publications")
       .find({ id: { $in: ids } })
       .limit(Math.min(ids.length, 2000))
       .toArray()

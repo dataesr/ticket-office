@@ -7,7 +7,7 @@ import { errorSchema } from "../../../schemas/errors/errorSchema"
 const getVariationsRoute = new Elysia()
 
 getVariationsRoute.get(
-  "/variations",
+  "/bso-local-variations-publications",
   async ({ query, error }: { query: any; error: any }) => {
     if (!validateQueryParams(query)) {
       return error(422, "Invalid query parameters")
@@ -23,14 +23,14 @@ getVariationsRoute.get(
     const sortOrder = sort.startsWith("-") ? -1 : 1
 
     const totalVariations = await db
-      .collection("local_variations")
+      .collection("bso_local_variations_publications")
       .countDocuments(filters)
       .catch((err) => {
         return error(500, "Error fetching variations count")
       })
 
     const variations = await db
-      .collection("local_variations")
+      .collection("bso_local_variations_publications")
       .find(filters)
       .sort({ [sortField]: sortOrder })
       .skip(skip)
