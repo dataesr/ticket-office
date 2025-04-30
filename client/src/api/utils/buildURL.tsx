@@ -23,7 +23,7 @@ export const buildURL = (
   } else if (location?.pathname?.includes("apioperations")) {
     baseUrl = "production";
   } else if (location?.pathname?.includes("bso-local-variations-publications")) {
-    baseUrl = "variations";
+    baseUrl = "bso-local-variations-publications";
   }
 
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";

@@ -1,14 +1,15 @@
 import { Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus";
-import VariationItem from "./components/variation-item";
-import { ClipLoader } from "react-spinners";
-import { Variation } from "./types";
-import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import useUrl from "./hooks/useUrl";
-import CheckboxList from "./components/checkbox-list";
-import { useVariationsContext, VariationsContext } from "./context";
-import ActionBar from "./components/actions-bar";
-import FiltersBar from "./components/filters-bar";
 import { useCallback } from "react";
+import { ClipLoader } from "react-spinners";
+
+import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
+import ActionBar from "./components/actions-bar";
+import CheckboxList from "./components/checkbox-list";
+import FiltersBar from "./components/filters-bar";
+import VariationItem from "./components/variation-item";
+import { useVariationsContext, VariationsContext } from "./context";
+import useUrl from "./hooks/useUrl";
+import { Variation } from "./types";
 
 function BSOLocalVariationsPage() {
   const { currentPage, currentCode, handlePageChange } = useUrl();
@@ -21,8 +22,7 @@ function BSOLocalVariationsPage() {
 
   const filterVariations = useCallback(
     ({ structure: { id } }: Variation) => {
-      if (currentCode === "choose") return true;
-      if (currentCode === getCodeFromBSO(id)) return true;
+      if ((currentCode === "choose") || (currentCode === getCodeFromBSO(id))) return true;
       return false;
     },
     [currentCode]

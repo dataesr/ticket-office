@@ -7,7 +7,7 @@ const routes = [
   "production",
   "remove-user",
   "update-user-data",
-  "variations",
+  "bso-local-variations-publications",
 ];
 
 const fetchAllData = async (baseApiUrl) => {
@@ -25,7 +25,7 @@ const fetchAllData = async (baseApiUrl) => {
   return Promise.all(fetchPromises);
 };
 
-const ContributionAllDatas = () => {
+const ContributionAllData = () => {
   const fetchContributions = () => fetchAllData("/api");
 
   const { data, isLoading, isError, refetch } = useQuery({
@@ -36,4 +36,4 @@ const ContributionAllDatas = () => {
   return { data, isLoading, isError, refetch };
 };
 
-export default ContributionAllDatas;
+export default ContributionAllData;
