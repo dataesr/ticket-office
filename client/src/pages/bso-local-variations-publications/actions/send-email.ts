@@ -16,6 +16,7 @@ async function sendEmail(variation: Variation, response: string) {
   const emailPayload = {
     contributionId: variation.id,
     to: variation.contact.email,
+    name: variation.contact.email.split("@")[0],
     subject: `Réponse à votre demande de déclinaison locale, référence bso-${variation.id}`,
     userResponse: formattedResponse,
     message: messageTemplate(variation),
