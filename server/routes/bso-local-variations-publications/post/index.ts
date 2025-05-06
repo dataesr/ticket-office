@@ -49,15 +49,27 @@ postBsoLocalVariationsPublicationsRoute.post(
         error: "BREVO_API_KEY is not defined",
       };
     };
+    const message = `<ul><li>Nom de la structure: ${newVariation.structure.name}</li><li>Identifiant de la structure: ${
+      newVariation.structure?.id || "Non renseigné"
+    }</li><li>Date de la demande: ${new Date(newVariation.created_at).toLocaleDateString()}</li></ul>`
     const dataForBrevo = {
-      sender: { email: finalVariation.contact.email, name: replyEmailConfig.bso.senderName },
+      sender: {
+        email: replyEmailConfig.bso.senderEmail,
+        name: replyEmailConfig.bso.senderName,
+      },
       to: [{ email: finalVariation.contact.email, name: finalVariation.contact.email.split("@")[0] }],
-      replyTo: { email: replyEmailConfig.bso.replyToEmail, name: replyEmailConfig.bso.replyToName },
-      ...(replyEmailConfig.bso.bcc &&
-        replyEmailConfig.bso.bcc.length > 0 && { bcc: replyEmailConfig.bso.bcc }),
-      subject: "[BSO] Merci pour votre demande",
-      templateId: 273,
-    };
+      replyTo: {
+        email: replyEmailConfig.bso.replyToEmail,
+        name: replyEmailConfig.bso.replyToName,
+      },
+      ...(replyEmailConfig.bso.bcc && replyEmailConfig.bso.bcc.length > 0 && { bcc: replyEmailConfig.bso.bcc }),
+      subject: `Réponse à votre demande de déclinaison locale, référence bso-${newVariation.id}`,
+      templateId: 274,
+      params: {
+        date: new Date().toLocaleDateString("fr-FR"),
+        message,
+      },
+    }
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
