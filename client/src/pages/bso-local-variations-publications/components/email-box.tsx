@@ -43,10 +43,7 @@ export default function EmailBox({ variation }: { variation: Variation }) {
               }}
             >
               <option key="custom" value="custom">
-                Sélectionnez un template
-              </option>
-              <option key="ongoing" value="ongoing">
-                {notificationGetName("ongoing")}
+                Réponse personnalisée
               </option>
               <option key="done" value="done" disabled={!variation.structure?.id || !commentsName}>
                 {notificationGetName("done")}

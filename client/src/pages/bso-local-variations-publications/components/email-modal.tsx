@@ -1,7 +1,6 @@
-import { Modal, ModalTitle, ModalContent, Container, Button, ModalFooter, TextArea, Notice } from "@dataesr/dsfr-plus"
+import { Modal, ModalTitle, ModalContent, Container, Button, ModalFooter, TextArea, Notice, Text } from "@dataesr/dsfr-plus"
 import { useVariationsContext } from "../context"
-import { useState } from "react"
-import { notificationGetName, notificationGetTemplate } from "../config/notifications"
+import { notificationGetTemplate } from "../config/notifications"
 import sendEmails from "../actions/send-email"
 import { Variation } from "../types"
 import { tagGetName } from "../config/tags"
@@ -18,12 +17,12 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
     getCodeFromBSO,
   } = useVariationsContext()
   const singleVariation = variations?.length === 1 ? variations[0] : null
-  const [notificationTag, setNotificationTag] = useState<string>("ongoing")
-  const [userResponse, setUserResponse] = useState<string>(notificationGetTemplate("ongoing"))
-  const variationsWithConfig = variations.filter((variation) => getCodeFromBSO(variation.structure?.id) === "production")
   const useTemplate = !!singleVariation ? false : true
   const displayStructureId = singleVariation?.structure?.id || "${structureId}"
   const displayCommentsName = getCommentsNameFromBSO(singleVariation?.structure?.id) || "${structureCommentsName}"
+  const displayUserResponse = notificationGetTemplate("done", displayStructureId, displayCommentsName)
+
+  const variationsWithConfig = variations.filter((variation) => getCodeFromBSO(variation.structure?.id) === "production")
 
   return (
     <Modal isOpen={isOpen} hide={onClose}>
@@ -42,30 +41,8 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
           ))}
         </ul>
         <hr />
-        <select
-          id="templateSelect"
-          className="fr-select"
-          value={notificationTag}
-          onChange={(event) => {
-            setNotificationTag(event.target.value)
-            setUserResponse(notificationGetTemplate(event.target.value, displayStructureId, displayCommentsName))
-          }}
-        >
-          <option key="ongoing" value="ongoing">
-            {notificationGetName("ongoing")}
-          </option>
-          <option key="done" value="done" disabled={variationsWithConfig.length !== variations.length}>
-            {notificationGetName("done")}
-          </option>
-        </select>
-        <TextArea
-          style={{ resize: "none" }}
-          value={userResponse}
-          onChange={(event) => setUserResponse(event.target.value)}
-          placeholder="Votre réponse..."
-          rows={10}
-          readOnly={useTemplate}
-        />
+        <Text>Déclinaison locale integrée</Text>
+        <TextArea style={{ resize: "none" }} value={displayUserResponse} rows={10} readOnly={useTemplate} />
         {useTemplate && (
           <Notice type="warning" closeMode="disallow">
             Le template n'est pas modifiable si plusieurs demandes sont selectionnées.
@@ -82,11 +59,12 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
           <Button
             variant="primary"
             onClick={() => {
-              sendEmails(variations, notificationTag, userResponse, useTemplate, getCommentsNameFromBSO).then(() => {
+              sendEmails(variations, "done", null, useTemplate, getCommentsNameFromBSO).then(() => {
                 refetch()
                 onClose()
               })
             }}
+            disabled={variationsWithConfig.length !== variations.length}
           >
             Envoyer
           </Button>
