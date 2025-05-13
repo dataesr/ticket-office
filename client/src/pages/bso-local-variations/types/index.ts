@@ -43,3 +43,5 @@ export type VariationEditInputs = {
   comment?: string
   team?: string
 }
+
+export type VariationsTypes = "publications" | "datasets"
