@@ -37,6 +37,23 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
                     <Text size="sm" className="message-content">
                       <MarkdownRenderer content={response?.responseMessage} />
                       <small className="message-metadata">
+                        {response.attachments &&
+                          Object.entries(response.attachments).length > 0 &&
+                          Object.entries(response.attachments).map(
+                            ([key, imageValue]) => (
+                              <div key={key} style={{ maxWidth: "100%" }}>
+                                <img
+                                  style={{
+                                    maxWidth: "400px",
+                                    height: "auto",
+                                    borderRadius: "4px",
+                                  }}
+                                  src={`data:${imageValue.contentType};base64,${imageValue.base64}`}
+                                  alt={`Image ${key}`}
+                                />
+                              </div>
+                            )
+                          )}
                         Répondu le {responseDate} à {responseTime} par{" "}
                         <span className="message-author">
                           {response.team.includes("user")

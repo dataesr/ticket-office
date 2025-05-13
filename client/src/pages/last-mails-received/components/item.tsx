@@ -75,7 +75,6 @@ const EmailHeader: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   </Row>
 );
 
-
 const EmailItem: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   email,
   showSubject,
@@ -88,6 +87,18 @@ const EmailItem: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
           <Text className="received-mail">
             <EmailContent content={email.extractedText} />
           </Text>
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {email.images &&
+              Object.values(email.images)?.map((imageValue) => (
+                <>
+                  <img
+                    width={"400px"}
+                    src={`data:${imageValue.contentType};base64, ${imageValue.base64}`}
+                    alt="test"
+                  />
+                </>
+              ))}
+          </div>
         </Link>
       </Col>
     </Row>

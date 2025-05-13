@@ -60,7 +60,6 @@ const renderers = {
 
 const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
   const processedContent = preprocessContent(content);
-
   return (
     <Text>
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={renderers}>
