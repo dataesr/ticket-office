@@ -1,6 +1,5 @@
 import Elysia, { Static, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
-import { responseSchema } from "../get-file"
 import Storage from "../../../libs/storage"
 
 const uploadFileRoute = new Elysia()
@@ -14,17 +13,23 @@ const bodySchema = t.Object(
   },
   { additionalProperties: false }
 )
-type bodyType = Static<typeof bodySchema>
+const responseSchema = t.Object({
+  name: t.String(),
+  etag: t.String(),
+  size: t.Number(),
+  lastModified: t.Union([t.Date(), t.String()]),
+  container: t.String(),
+})
 
 uploadFileRoute.post(
   "/storage",
-  async ({ error, body }: { error: any; body: bodyType }) => {
+  async ({ error, body }) => {
     const { buffer, container, filename, mimetype } = body
     const response = await Storage.put(buffer, container, filename, {
       contentType: mimetype,
     })
 
-    if (!response?.name && !response?.size) return error(500, "Failed to upload the file")
+    if (!response?.name && !response?.size) return error(500, { message: "Failed to upload the file" })
 
     return {
       name: response.name,
