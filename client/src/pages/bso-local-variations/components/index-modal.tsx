@@ -35,6 +35,7 @@ type IndexModalProps = {
 }
 export default function IndexModal({ variations, isOpen, onClose }: IndexModalProps) {
   const {
+    api,
     data: { refetch },
   } = useVariationsContext()
   const [indexName, setIndexName] = useState<string>(defaultIndexName)
@@ -114,7 +115,7 @@ export default function IndexModal({ variations, isOpen, onClose }: IndexModalPr
           <Button
             variant="primary"
             onClick={() => {
-              updateIndex(variations, { index_name: indexName, ...JSON.parse(textJSON) })
+              updateIndex(api, variations, { index_name: indexName, ...JSON.parse(textJSON) })
               refetch()
             }}
             disabled={!isValidIndexName || !isValidJSON}

@@ -40,6 +40,7 @@ async function sendEmail(variation: Variation, response: string) {
 }
 
 export default async function sendEmails(
+  api: string,
   variations: Array<Variation>,
   notification: string,
   response: string,
@@ -66,6 +67,7 @@ export default async function sendEmails(
     .then(() => {
       if (["custom", "ongoing", "done"].includes(notification)) {
         editVariations(
+          api,
           variations.map((variation) => variation.id),
           inputs
         )

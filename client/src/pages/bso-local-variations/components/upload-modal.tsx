@@ -10,6 +10,7 @@ type UploadModalProps = {
 }
 export default function UploadModal({ variations, isOpen, onClose }: UploadModalProps) {
   const {
+    api,
     data: { refetch },
   } = useVariationsContext()
   const singleVariation = variations?.length === 1 ? variations[0] : null
@@ -34,7 +35,7 @@ export default function UploadModal({ variations, isOpen, onClose }: UploadModal
           <Button
             variant="primary"
             onClick={() => {
-              uploadFiles(variations).then(() => {
+              uploadFiles(api, variations).then(() => {
                 refetch()
                 onClose()
               })

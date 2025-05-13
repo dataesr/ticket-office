@@ -1,8 +1,8 @@
 import { postHeaders } from "../../../config/api"
 
-export default async function editVariations(ids: Array<string>, inputs: Record<string, unknown>) {
+export default async function editVariations(api: string, ids: Array<string>, inputs: Record<string, unknown>) {
   const singleId = ids.length === 1 ? ids[0] : null
-  const url = !!singleId ? `/api/bso-local-variations-publications/${singleId}` : `/api/bso-local-variations-publications`
+  const url = !!singleId ? `/api/bso-local-variations/${api}/${singleId}` : `/api/bso-local-variations/${api}`
   const data = !!singleId ? inputs : { data: inputs, ids: ids }
 
   await fetch(url, {

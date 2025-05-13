@@ -2,7 +2,7 @@ import { toast } from "react-toastify"
 import { Variation } from "../types"
 import editVariations from "./edit-variations"
 
-export default async function updateIndex(variations: Array<Variation>, data: Record<string, unknown>) {
+export default async function updateIndex(api: string, variations: Array<Variation>, data: Record<string, unknown>) {
   const indexName = data.index_name
   const url = `/api/bso-tasks`
 
@@ -18,6 +18,7 @@ export default async function updateIndex(variations: Array<Variation>, data: Re
     })
     .then((data) => {
       editVariations(
+        api,
         variations.map((variation) => variation.id),
         { tags: { index: data.id } }
       )

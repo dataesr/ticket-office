@@ -14,6 +14,7 @@ export function useVariationsContext() {
 
 export function VariationsContext({ children }) {
   const location = useLocation()
+  const api = location.pathname.split("-").pop()
   const { currentSort, currentQuery, currentPage, currentStatus, currentFile, currentIndex, currentNotification } = useUrl()
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [checkedIds, setCheckedIds] = useState<Array<string>>([])
@@ -47,6 +48,7 @@ export function VariationsContext({ children }) {
   return (
     <Context.Provider
       value={{
+        api,
         data,
         selectedId,
         setSelectedId,

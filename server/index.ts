@@ -3,8 +3,7 @@ import staticPlugin from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 
-import bsoLocalVariationsDatasetsRoutes from "./routes/bso-local-variations-datasets";
-import bsoLocalVariationsPublicationsRoutes from "./routes/bso-local-variations-publications";
+import bsoLocalVariationsRoutes from "./routes/bso-local-variations"
 import bsoTasksRoutes from "./routes/bso-tasks";
 import contactsRoutes from "./routes/contacts";
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
@@ -62,8 +61,7 @@ const swaggerConfig = {
 
 const buildApi = () => {
   return new Elysia().group("/api", (app) => {
-    app.use(bsoLocalVariationsDatasetsRoutes);
-    app.use(bsoLocalVariationsPublicationsRoutes);
+    app.use(bsoLocalVariationsRoutes)
     app.use(bsoTasksRoutes);
     app.use(contactsRoutes);
     app.use(contributionObjectRoutes);

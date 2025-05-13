@@ -1,48 +1,51 @@
-import Elysia, { t } from "elysia"
+import Elysia, { t, Static } from "elysia"
 
 import db from "../../../libs/mongo"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import { responseSchema } from "../../../schemas/get/variationsSchema"
 import { validateQueryParams } from "../../../utils/queryValidator"
+import { variationParams } from "../../../schemas/get_id/variationSchema"
 
-const getBsoLocalVariationsDatasetsRoute = new Elysia()
+const getBsoLocalVariationsRoute = new Elysia()
 
-getBsoLocalVariationsDatasetsRoute.get(
-  "/bso-local-variations-datasets",
-  async ({ query, error }: { query: any; error: any }) => {
+getBsoLocalVariationsRoute.get(
+  "/bso-local-variations/:api",
+  async ({ query, params: { api }, error }) => {
     if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters")
+      return error(500, { message: "Invalid query parameters" })
     }
 
     const { where = "{}", sort = "created_at", page = 1, max_results = "" } = query
     const filters = JSON.parse(where as string)
 
-    const limit = parseInt(max_results as string, 10) || 2000
-    const skip = (parseInt(page as string, 10) - 1) * limit
+    const limit = max_results || 2000
+    const skip = (page - 1) * limit
 
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort
     const sortOrder = sort.startsWith("-") ? -1 : 1
 
-    const totalVariations = await db
-      .collection("bso_local_variations_datasets")
-      .countDocuments(filters)
-      .catch((_) => error(500, "Error fetching variations count"))
+    const collection = `bso_local_variations_${api}`
 
-    const variations = await db
-      .collection("bso_local_variations_datasets")
+    const totalVariations = await db
+      .collection(collection)
+      .countDocuments(filters)
+      .catch((_) => error(500, { message: "Error fetching variations count" }))
+
+    const variations: unknown = await db
+      .collection(collection)
       .find(filters)
       .sort({ [sortField]: sortOrder })
       .skip(skip)
       .limit(limit)
       .toArray()
-      .catch((_) => error(500, "Error fetching variations"))
+      .catch((_) => error(500, { message: "Error fetching variations" }))
 
     return {
       data: variations,
       meta: {
         total: totalVariations,
       },
-    }
+    } as Static<typeof responseSchema>
   },
   {
     query: t.Object({
@@ -51,6 +54,7 @@ getBsoLocalVariationsDatasetsRoute.get(
       max_results: t.Optional(t.Numeric()),
       where: t.Optional(t.String()),
     }),
+    params: variationParams,
     response: {
       200: responseSchema,
       401: errorSchema,
@@ -64,4 +68,4 @@ getBsoLocalVariationsDatasetsRoute.get(
   }
 )
 
-export default getBsoLocalVariationsDatasetsRoute;
+export default getBsoLocalVariationsRoute

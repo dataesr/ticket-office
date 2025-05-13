@@ -1,40 +1,43 @@
 import { dot } from "dot-object"
-import Elysia from "elysia"
+import Elysia, { Static } from "elysia"
 
 import db from "../../../libs/mongo"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import { variationListSchema } from "../../../schemas/get/variationsSchema"
 import { editVariationsSchema } from "../../../schemas/patch/editVariationsSchema"
+import { variationParams } from "../../../schemas/get_id/variationSchema"
 
-const patchBsoLocalVariationsPublicationsRoute = new Elysia()
+const patchBsoLocalVariationsRoute = new Elysia()
 
-patchBsoLocalVariationsPublicationsRoute.patch(
-  "/bso-local-variations-publications",
-  async ({ body, error }: { body: any; error: any }) => {
+patchBsoLocalVariationsRoute.patch(
+  "/bso-local-variations/:api",
+  async ({ body, params: { api }, error }) => {
     const { ids, data } = body
 
     if (data.status === "treated") {
       data.treated_at = new Date()
     }
 
+    const collection = `bso_local_variations_${api}`
     const { acknowledged } = await db
-      .collection("bso_local_variations_publications")
+      .collection(collection)
       .updateMany({ id: { $in: ids } }, { $set: { ...dot(data), modified_at: new Date() } })
 
     if (!acknowledged) {
       return error(500, { message: "Erreur interne du serveur" })
     }
 
-    const updatedVariations = await db
-      .collection("bso_local_variations_publications")
+    const updatedVariations: unknown = await db
+      .collection(collection)
       .find({ id: { $in: ids } })
       .limit(Math.min(ids.length, 2000))
       .toArray()
 
-    return updatedVariations
+    return updatedVariations as Static<typeof variationListSchema>
   },
   {
     body: editVariationsSchema,
+    params: variationParams,
     response: {
       200: variationListSchema,
       401: errorSchema,
@@ -50,4 +53,4 @@ patchBsoLocalVariationsPublicationsRoute.patch(
   }
 )
 
-export default patchBsoLocalVariationsPublicationsRoute
+export default patchBsoLocalVariationsRoute

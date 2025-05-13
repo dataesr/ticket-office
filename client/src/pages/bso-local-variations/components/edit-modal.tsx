@@ -26,6 +26,7 @@ type EditModalProps = {
 }
 export default function EditModal({ variations, isOpen, onClose }: EditModalProps) {
   const {
+    api,
     data: { refetch },
   } = useVariationsContext()
   const selectedProfile = localStorage.getItem("selectedProfile")
@@ -75,6 +76,7 @@ export default function EditModal({ variations, isOpen, onClose }: EditModalProp
     if (singleVariation && inputs?.tags) inputs.status = getStatusFromTags({ ...singleVariation?.tags, ...inputs.tags })
 
     await editVariations(
+      api,
       variations.map((variation) => variation.id),
       inputs
     )

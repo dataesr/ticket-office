@@ -2,14 +2,25 @@ import { toast } from "react-toastify"
 import { Variation } from "../types"
 import editVariations from "./edit-variations"
 
-async function uploadFile(variation: Variation) {
+const containerMapping = {
+  publications: "bso-local",
+  datasets: "bso3-local",
+}
+
+async function uploadFile(api: string, variation: Variation) {
+  const container = containerMapping[api]
+  if (!container) {
+    throw `uploadFile: Container not found for variations api ${api}`
+  }
+
   const url = `/api/storage`
   const data = {
-    container: "bso-local",
+    container: container,
     filename: `${variation.structure?.id || variation.structure.name}.csv`,
     mimetype: "text/csv",
     buffer: variation.csv,
   }
+  console.log("data", data)
 
   fetch(url, {
     method: "POST",
@@ -26,12 +37,13 @@ async function uploadFile(variation: Variation) {
     })
 }
 
-export default async function uploadFiles(variations: Array<Variation>) {
+export default async function uploadFiles(api: string, variations: Array<Variation>) {
   const inputs = { tags: { file: "uploaded" }, status: "ongoing" }
 
-  Promise.all(variations.map((variation) => uploadFile(variation)))
+  Promise.all(variations.map((variation) => uploadFile(api, variation)))
     .then(() => {
       editVariations(
+        api,
         variations.map((variation) => variation.id),
         inputs
       )

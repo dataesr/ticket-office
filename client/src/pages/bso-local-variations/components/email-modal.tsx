@@ -12,6 +12,7 @@ type EmailModalProps = {
 }
 export default function EmailModal({ variations, isOpen, onClose }: EmailModalProps) {
   const {
+    api,
     data: { refetch },
     getCommentsNameFromBSO,
     getCodeFromBSO,
@@ -59,7 +60,7 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
           <Button
             variant="primary"
             onClick={() => {
-              sendEmails(variations, "done", null, useTemplate, getCommentsNameFromBSO).then(() => {
+              sendEmails(api, variations, "done", null, useTemplate, getCommentsNameFromBSO).then(() => {
                 refetch()
                 onClose()
               })

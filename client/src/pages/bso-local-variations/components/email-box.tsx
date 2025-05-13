@@ -18,6 +18,7 @@ import { useVariationsContext } from "../context"
 
 export default function EmailBox({ variation }: { variation: Variation }) {
   const {
+    api,
     data: { refetch },
     getCommentsNameFromBSO,
   } = useVariationsContext()
@@ -65,7 +66,7 @@ export default function EmailBox({ variation }: { variation: Variation }) {
               <Button
                 variant="primary"
                 onClick={() => {
-                  sendEmails([variation], notificationTag, userResponse).then(() => {
+                  sendEmails(api, [variation], notificationTag, userResponse).then(() => {
                     setUserResponse("")
                     refetch()
                   })
