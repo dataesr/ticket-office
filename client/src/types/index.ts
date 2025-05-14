@@ -1,4 +1,5 @@
 export interface Response {
+  attachments: boolean;
   read: boolean;
   responseMessage: string;
   timestamp: string;
