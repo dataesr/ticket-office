@@ -44,3 +44,11 @@ export const variationSchema = t.Object(
   },
   { additionalProperties: false }
 )
+
+export const variationParams = t.Object(
+  {
+    api: t.Enum({ publications: "publications", datasets: "datasets" }),
+    id: t.Optional(t.String()),
+  },
+  { additionalProperties: false }
+)

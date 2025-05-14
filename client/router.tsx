@@ -4,8 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Error404 from "./src/components/errors";
 import Layout from "./src/layout";
 import ApiOperationPage from "./src/pages/api-operation-page/index";
-import BsoLocalVariationsDatasets from "./src/pages/bso-local-variations-datasets/index";
-import BsoLocalVariationsPublications from "./src/pages/bso-local-variations-publications/index";
+import BsoLocalVariations from "./src/pages/bso-local-variations/index";
 import ContactAndContributionPage from "./src/pages/contact-contributionbyobject-page";
 import Home from "./src/pages/home";
 import LastMailsReceived from "./src/pages/last-mails-received";
@@ -37,11 +36,11 @@ export default function Router() {
           path="/bso-contact"
         />
         <Route
-          element={<BsoLocalVariationsDatasets />}
+          element={<BsoLocalVariations type="datasets" />}
           path="/bso-local-variations-datasets"
         />
         <Route
-          element={<BsoLocalVariationsPublications />}
+          element={<BsoLocalVariations type="publications" />}
           path="/bso-local-variations-publications"
         />
         <Route

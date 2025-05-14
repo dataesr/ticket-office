@@ -84,7 +84,10 @@ export async function isEmailDuplicate(
 export async function saveReceivedEmail(
   envelope: any,
   messageSource: string,
-  extractedContent: string,
+  extractedContent: {
+    text: string;
+    images: Record<string, { contentType: string; base64: string }>;
+  },
   date: string,
   referenceId?: string,
   collectionName?: string,
@@ -96,7 +99,7 @@ export async function saveReceivedEmail(
       client,
       envelope.messageId,
       date,
-      extractedContent
+      extractedContent.text
     );
 
     if (isDuplicate) {
@@ -125,7 +128,8 @@ export async function saveReceivedEmail(
       subject: envelope.subject,
       date,
       rawContent: messageSource,
-      extractedText: extractedContent,
+      extractedText: extractedContent.text,
+      images: extractedContent.images,
       createdAt: new Date(),
       href: href,
       referenceId: referenceId || null,
@@ -134,10 +138,12 @@ export async function saveReceivedEmail(
     };
 
     await collection.insertOne(emailData);
+
+    const imageCount = Object.keys(extractedContent.images).length;
     console.log(
-      `Email enregistré dans received_emails : ${envelope.messageId}${
+      `Email enregistré : ${envelope.messageId}${
         referenceId ? ` (contribution: ${referenceId})` : ""
-      }`
+      }${imageCount > 0 ? ` avec ${imageCount} pièces jointes` : ""}`
     );
     return true;
   } catch (error) {
@@ -150,7 +156,10 @@ export async function saveReceivedEmail(
 
 export async function updateContribution(
   referenceId: string,
-  responseMessage: string,
+  responseContent: {
+    text: string;
+    images: Record<string, { contentType: string; base64: string }>;
+  },
   timestamp: string | null,
   collectionName: string
 ) {
@@ -176,7 +185,7 @@ export async function updateContribution(
         thread.timestamp === formatDate(timestamp) &&
         thread.responses.some(
           (response: { responseMessage: string }) =>
-            response.responseMessage === responseMessage
+            response.responseMessage === responseContent.text
         )
     );
 
@@ -184,12 +193,12 @@ export async function updateContribution(
       console.log("Réponse déjà enregistrée, aucune mise à jour effectuée.");
       return;
     }
-
     const response = {
       threadId: contribution._id.toString(),
       responses: [
         {
-          responseMessage,
+          responseMessage: responseContent.text,
+          attachments: responseContent.images,
           read: false,
           timestamp: formatDate(timestamp),
           team: ["user"],
@@ -204,7 +213,12 @@ export async function updateContribution(
     );
 
     if (updateResult.modifiedCount > 0) {
-      console.log(`Mise à jour réussie pour l'ID de référence: ${referenceId}`);
+      const imageCount = Object.keys(responseContent.images).length;
+      console.log(
+        `Mise à jour réussie pour l'ID de référence: ${referenceId}${
+          imageCount > 0 ? ` avec ${imageCount} pièces jointes` : ""
+        }`
+      );
       return contribution;
     }
 

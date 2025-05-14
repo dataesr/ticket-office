@@ -14,67 +14,124 @@ import {
 import { config } from "./config";
 import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 
-export async function processEmailContent(messageSource: string) {
-  const parsed = await simpleParser(messageSource);
-  const bodyText = parsed.text || parsed.html || "";
+export async function processEmailContent(messageSource: string): Promise<{
+  text: string;
+  images: Record<string, { contentType: string; base64: string }>;
+}> {
+  try {
+    const parsed = await simpleParser(messageSource);
+    const bodyText = parsed.text || parsed.html || "";
+    const images: Record<string, { contentType: string; base64: string }> = {};
 
-  if (!bodyText) {
-    return "";
-  }
+    if (parsed.attachments && parsed.attachments.length > 0) {
+      console.log(
+        `🔍 Traitement de ${parsed.attachments.length} pièces jointes`
+      );
 
-  const $ = cheerio.load(bodyText);
-  let cleanedText = $("body").text().trim();
+      for (const attachment of parsed.attachments) {
+        const isImage =
+          attachment.contentType?.startsWith("image/") ||
+          /\.(jpg|jpeg|png|gif|bmp|webp|svg)$/i.test(attachment.filename || "");
 
-  const base64Pattern = /([A-Za-z0-9+/=]{100,})(?=\s|$)/g;
-  if (base64Pattern.test(cleanedText)) {
-    cleanedText = cleanedText.replace(
-      base64Pattern,
-      "[Contenu binaire ignoré]"
-    );
-  }
+        if (isImage && attachment.content) {
+          let imageId;
 
-  const citationMarkers = [
-    "Le mer.",
-    "Le mar.",
-    "Le lun.",
-    "Le jeu.",
-    "Le ven.",
-    "Le sam.",
-    "Le dim.",
-    "écrit :",
-    "wrote:",
-    "> ",
-    "From:",
-    "De :",
-    "-----Original Message",
-    "--",
-    "L'équipe scanR vous remercie",
-  ];
+          if (attachment.contentId) {
+            imageId = attachment.contentId.replace(/[<>]/g, "");
+          } else if (attachment.filename) {
+            imageId = attachment.filename.replace(/[^a-zA-Z0-9_-]/g, "_");
+          } else {
+            imageId = `img_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+          }
 
-  let messageLines = cleanedText.split("\n");
-  let firstMeaningfulLines = [];
-  let foundCitation = false;
+          const base64Data = Buffer.isBuffer(attachment.content)
+            ? attachment.content.toString("base64")
+            : typeof attachment.content === "string"
+            ? Buffer.from(attachment.content).toString("base64")
+            : Buffer.from(String(attachment.content || "")).toString("base64");
 
-  for (const line of messageLines) {
-    if (citationMarkers.some((marker) => line.trim().includes(marker))) {
-      foundCitation = true;
-      break;
+          images[imageId] = {
+            contentType: attachment.contentType || "application/octet-stream",
+            base64: base64Data,
+          };
+        }
+      }
+    } else {
+      console.log("⚠️ Aucune pièce jointe trouvée dans l'email");
     }
-    if (line.trim() !== "") {
-      firstMeaningfulLines.push(line.trim());
-    }
-  }
 
-  if (firstMeaningfulLines.length === 0 && messageLines.length > 0) {
+    if (!bodyText) {
+      return { text: "", images };
+    }
+
+    const $ = cheerio.load(bodyText);
+    let cleanedText = $("body").text().trim();
+
+    const base64Pattern = /([A-Za-z0-9+/=]{100,})(?=\s|$)/g;
+    if (base64Pattern.test(cleanedText)) {
+      cleanedText = cleanedText.replace(
+        base64Pattern,
+        "[Contenu binaire ignoré]"
+      );
+    }
+
+    const citationMarkers = [
+      "Le mer.",
+      "Le mar.",
+      "Le lun.",
+      "Le jeu.",
+      "Le ven.",
+      "Le sam.",
+      "Le dim.",
+      "écrit :",
+      "wrote:",
+      "> ",
+      "From:",
+      "De :",
+      "-----Original Message",
+      "--",
+      "L'équipe scanR vous remercie",
+    ];
+
+    let messageLines = cleanedText.split("\n");
+    let firstMeaningfulLines = [];
+    let foundCitation = false;
+
     for (const line of messageLines) {
-      if (line.trim() !== "") {
-        firstMeaningfulLines.push(line.trim());
+      if (citationMarkers.some((marker) => line.trim().includes(marker))) {
+        foundCitation = true;
         break;
       }
+      if (line.trim() !== "") {
+        firstMeaningfulLines.push(line.trim());
+      }
     }
-  }
 
-  return firstMeaningfulLines.join(" ").trim();
+    if (firstMeaningfulLines.length === 0 && messageLines.length > 0) {
+      for (const line of messageLines) {
+        if (line.trim() !== "") {
+          firstMeaningfulLines.push(line.trim());
+          break;
+        }
+      }
+    }
+
+    if (Object.keys(images).length > 0) {
+      for (const [key, img] of Object.entries(images)) {
+        console.log(
+          `📷 Image ${key}: ${img.contentType}, taille base64=${img.base64.length}`
+        );
+      }
+    }
+
+    return {
+      text: firstMeaningfulLines.join(" ").trim(),
+      images,
+    };
+  } catch (error) {
+    console.error("❌ Erreur dans processEmailContent:", error);
+    return { text: "Erreur lors du traitement de l'email", images: {} };
+  }
 }
 
 export async function senderToMattermostNotifications(
@@ -220,7 +277,6 @@ export async function fetchEmails() {
 
   try {
     await client.connect();
-
     let lock = await client.getMailboxLock("INBOX");
     let mailbox = await client.mailboxOpen("INBOX");
     await client.messageDelete({ seen: true });
@@ -247,16 +303,16 @@ export async function fetchEmails() {
         const messageSource = message.source.toString();
         const date = formatDate(message.envelope.date?.toISOString() || null);
         const subject = message.envelope.subject || "";
-
-        const extractedContent = await processEmailContent(messageSource);
-        if (!extractedContent) continue;
+        const processedContent = await processEmailContent(messageSource);
+        console.log(processedContent);
+        if (!processedContent.text) continue;
 
         const { referenceId, collectionName } = extractReferenceInfo(subject);
 
         const saved = await saveReceivedEmail(
           message.envelope,
           messageSource,
-          extractedContent,
+          processedContent,
           date,
           referenceId || undefined,
           collectionName || undefined
@@ -286,14 +342,13 @@ export async function fetchEmails() {
       for (let message of sortedMessages) {
         const { uid, referenceId, collectionName, source, envelope } = message;
         if (referenceId) {
-          const extractedText = await processEmailContent(source);
+          const processedContent = await processEmailContent(source);
           const contribution = await updateContribution(
             referenceId,
-            extractedText,
+            processedContent,
             message.date,
             collectionName
           );
-
           if (contribution) {
             let toAddress = "";
             if (envelope && envelope.to && envelope.to.length > 0) {
@@ -305,7 +360,7 @@ export async function fetchEmails() {
               contribution,
               collectionName,
               envelope,
-              extractedText
+              processedContent.text
             );
 
             await sendNotificationEmail(
@@ -313,7 +368,7 @@ export async function fetchEmails() {
               contribution,
               collectionName,
               toAddress,
-              extractedText,
+              processedContent.text,
               envelope
             );
           }

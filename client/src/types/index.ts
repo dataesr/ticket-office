@@ -1,4 +1,5 @@
 export interface Response {
+  attachments: boolean;
   read: boolean;
   responseMessage: string;
   timestamp: string;
@@ -113,6 +114,7 @@ export interface ProfileModalProps {
 }
 
 export interface EmailItem {
+  images: Record<string, { contentType: string; base64: string }>;
   href: string;
   selectedProfile: any;
   map(arg0: (email: any) => any): Iterable<unknown>;
