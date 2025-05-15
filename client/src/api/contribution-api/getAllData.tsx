@@ -7,8 +7,9 @@ const routes = [
   "production",
   "remove-user",
   "update-user-data",
-  "bso-local-variations-publications",
-];
+  "bso-local-variations/publications",
+  "bso-local-variations/datasets",
+]
 
 const fetchAllData = async (baseApiUrl) => {
   const fetchPromises = routes.map(async (route) => {
