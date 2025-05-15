@@ -19,6 +19,8 @@ getFileRoute.get(
       return err.message
     })) as string
 
+    if (response === "<html><h1>Not Found</h1><p>The resource could not be found.</p></html>") throw new NotFoundError()
+    
     return {
       fileContent: response || "",
     }
