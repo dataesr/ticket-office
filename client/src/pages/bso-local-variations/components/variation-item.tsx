@@ -176,7 +176,7 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
               size="sm"
               icon="download-line"
               onClick={() => downloadFile(variation)}
-              disabled={!!variation.csv}
+              disabled={!variation.csv}
             >
               Télécharger le fichier
             </Button>
