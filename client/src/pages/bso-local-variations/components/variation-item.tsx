@@ -182,30 +182,36 @@ const VariationItem: React.FC<VariationItemProps> = ({ variation }) => {
             </Button>
           </Container>
         </Col>
-        {countRemoteCsv && (
-          <Col md={5} lg={5}>
-            <Container fluid className="fileContentRemote">
-              <Text size="sm">{`Fichier ${variation.structure?.id}.csv trouvé sur OVH: `}</Text>
-              <ul>
-                {!!countRemoteCsv.doi && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.doi} DOI`}</li>}
-                {!!countRemoteCsv.hal_coll_code && (
-                  <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_coll_code} hal_coll_code`}</li>
+        <Col md={5} lg={5}>
+          <Container fluid className="fileContentRemote">
+            {remoteContent ? (
+              <>
+                <Text size="sm">{`Fichier ${variation.structure?.id}.csv trouvé sur OVH: `}</Text>
+                {countRemoteCsv && (
+                  <ul>
+                    {!!countRemoteCsv.doi && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.doi} DOI`}</li>}
+                    {!!countRemoteCsv.hal_coll_code && (
+                      <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_coll_code} hal_coll_code`}</li>
+                    )}
+                    {!!countRemoteCsv.hal_id && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_id} hal_id`}</li>}
+                    {!!countRemoteCsv.hal_struct_id && (
+                      <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_struct_id} hal_struct_id`}</li>
+                    )}
+                    {!!countRemoteCsv.nnt_etab && (
+                      <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.nnt_etab} nnt_etab`}</li>
+                    )}
+                    {!!countRemoteCsv.nnt_id && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.nnt_id} nnt_id`}</li>}
+                  </ul>
                 )}
-                {!!countRemoteCsv.hal_id && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_id} hal_id`}</li>}
-                {!!countRemoteCsv.hal_struct_id && (
-                  <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.hal_struct_id} hal_struct_id`}</li>
-                )}
-                {!!countRemoteCsv.nnt_etab && (
-                  <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.nnt_etab} nnt_etab`}</li>
-                )}
-                {!!countRemoteCsv.nnt_id && <li className="fr-text--sm fr-mb-0">{`${countRemoteCsv.nnt_id} nnt_id`}</li>}
-              </ul>
-              <Button variant="text" size="sm" icon="refresh-line" onClick={() => refetch()}>
-                Actualiser
-              </Button>
-            </Container>
-          </Col>
-        )}
+              </>
+            ) : (
+              <Text size="sm">{`Fichier ${variation.structure?.id}.csv non trouvé sur OVH. `}</Text>
+            )}
+            <Button variant="text" size="sm" icon="refresh-line" onClick={() => refetch()}>
+              Actualiser
+            </Button>
+          </Container>
+        </Col>
       </Row>
       <EditModal variations={[variation]} isOpen={showEditModal} onClose={() => setShowEditModal(false)} />
       <UploadModal variations={[variation]} isOpen={showUploadModal} onClose={() => setShowUploadModal(false)} />
