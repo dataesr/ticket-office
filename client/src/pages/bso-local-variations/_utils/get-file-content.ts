@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
+import { useVariationsContext } from "../context"
+import { getContainer } from "../config/containers"
 
-const fetchFileContent = async (id: string) => {
-  const url = `/api/storage/bso-local/${id}.csv`
+const fetchFileContent = async (container: string, id: string) => {
+  const url = `/api/storage/${container}/${id}.csv`
   const content = await fetch(url)
     .then((response) => {
       if (response.ok) return response.json()
@@ -15,9 +17,11 @@ const fetchFileContent = async (id: string) => {
 }
 
 export default function getFileContent(id: string) {
+  const { api } = useVariationsContext()
+  const container = getContainer(api)
   const { data, refetch } = useQuery({
     queryKey: ["ovh", "file", id],
-    queryFn: () => fetchFileContent(id),
+    queryFn: () => fetchFileContent(container, id),
     enabled: !!id,
   })
 

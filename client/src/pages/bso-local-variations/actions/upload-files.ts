@@ -1,14 +1,10 @@
 import { toast } from "react-toastify"
 import { Variation } from "../types"
 import editVariations from "./edit-variations"
-
-const containerMapping = {
-  publications: "bso-local",
-  datasets: "bso3-local",
-}
+import { getContainer } from "../config/containers"
 
 async function uploadFile(api: string, variation: Variation) {
-  const container = containerMapping[api]
+  const container = getContainer(api)
   if (!container) {
     throw `uploadFile: Container not found for variations api ${api}`
   }
