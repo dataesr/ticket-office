@@ -18,7 +18,7 @@ function isValidIndexNameFormat(indexName: string) {
 }
 const defaultIndexName = getDefaultIndexName()
 const defaultJSON = {
-  skip_download: false,
+  skip_download: true,
   observations: ["20180927", "20191122", "20201009", "20211201", "20221201", "20231214", "20241203"],
   hal_dates: ["20221201", "20231214", "20241201"],
   theses_date: "20241201",
