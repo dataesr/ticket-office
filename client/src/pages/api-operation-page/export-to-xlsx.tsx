@@ -72,23 +72,22 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
 
     await markAsTreated(uniqueContributionIds)
 
-    // Create workbook and worksheet with ExcelJS
+    // Créer un nouveau workbook avec ExcelJS
     const workbook = new ExcelJS.Workbook()
     const worksheet = workbook.addWorksheet("Sheet1")
 
-    // Add headers
+    // Ajouter les en-têtes
     if (dataToExport.length > 0) {
       const headers = Object.keys(dataToExport[0])
       worksheet.addRow(headers)
 
-      // Add data rows
-      dataToExport.forEach((item) => {
-        const row = headers.map((header) => item[header])
-        worksheet.addRow(row)
+      // Ajouter les données
+      dataToExport.forEach((row) => {
+        worksheet.addRow(Object.values(row))
       })
     }
 
-    // Generate buffer and download
+    // Générer et télécharger le fichier
     const buffer = await workbook.xlsx.writeBuffer()
     const blob = new Blob([buffer], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -97,7 +96,9 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
     const link = document.createElement("a")
     link.href = url
     link.download = "export.xlsx"
+    document.body.appendChild(link)
     link.click()
+    document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
 
     setDataList((prevState) =>
