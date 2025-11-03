@@ -1,15 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Link } from "react-router-dom";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
+import React from "react"
+import ReactDOM from "react-dom/client"
+import { BrowserRouter, Link } from "react-router-dom"
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
-import Router from "./router";
-import { DSFRConfig } from "@dataesr/dsfr-plus";
-import { DataListProvider } from "./src/pages/api-operation-page/data-list-context";
-import { RouterLinkProps } from "./types";
+import Router from "./router"
+import { DSFRConfig } from "@dataesr/dsfr-plus"
+import { DataListProvider } from "./src/pages/api-operation-page/data-list-context"
+import { RouterLinkProps } from "./types"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -19,12 +19,12 @@ const queryClient = new QueryClient({
       staleTime: Infinity,
     },
   },
-});
+})
 
 const RouterLink = ({ href, replace, target, ...props }: RouterLinkProps) => {
-  if (target === "_blank") return <a href={href} target={target} {...props} />;
-  return <Link to={href} replace={replace} {...props} />;
-};
+  if (target === "_blank") return <a href={href} target={target} {...props} />
+  return <Link to={href} replace={replace} {...props} />
+}
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -47,4 +47,4 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       </BrowserRouter>
     </DataListProvider>
   </React.StrictMode>
-);
+)

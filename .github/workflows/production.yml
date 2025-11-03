@@ -16,20 +16,46 @@ jobs:
     name: 📦 Publish Docker image
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - uses: actions/checkout@v5.0.0
+      - uses: oven-sh/setup-bun@v2.0.2
+        with:
+          bun-version: latest
 
-      - name: 🔑 Login Docker
-        run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+      - name: � Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.bun/install/cache
+            node_modules
+            client/node_modules
+            server/node_modules
+          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb', '**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-
 
       - name: 🏷️ Get tag
         id: tag
         run: echo "tag=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      - name: Build 🐳 🐳 🐳
+      - name: 📥 Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: 🏗️ Build client (Production)
         run: |
-          bun i
-          bunx --bun vite build client --emptyOutDir --outDir '../server/public'
+          cd client
+          bun run build
+        env:
+          NODE_ENV: production
+
+      - name: 🔑 Login Docker
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🐳 Build Docker images
+        run: |
           IMAGE_ID=ghcr.io/${{ github.repository }}
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker build -t $IMAGE_ID:${{ steps.tag.outputs.tag }} -t $IMAGE_ID:latest .

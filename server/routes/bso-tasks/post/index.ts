@@ -1,4 +1,4 @@
-import Elysia, { Static, t } from "elysia"
+import { Elysia, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 
 const url = process.env.URL_UPW || ""
@@ -6,16 +6,19 @@ const password = process.env.PUBLIC_API_PASSWORD || ""
 
 const updateIndex = new Elysia()
 
-const bodySchema = t.Record(t.String(), t.Union([t.Boolean(), t.String(), t.Number(), t.Array(t.String())]))
+const bodySchema = t.Record(
+  t.String(),
+  t.Union([t.Boolean(), t.String(), t.Number(), t.Array(t.String())])
+)
 const responseSchema = t.Object({
   id: t.String(),
   params: bodySchema,
 })
-type bodyType = Static<typeof bodySchema>
+type bodyType = typeof bodySchema.static
 
 updateIndex.post(
   "/bso-tasks",
-  async ({ error, body }: { error: any; body: bodyType }) => {
+  async ({ set, body }: { set: any; body: bodyType }) => {
     const data = { ...body, PUBLIC_API_PASSWORD: password }
     const responseId = await fetch(`${url}/et_bso_all`, {
       method: "POST",
@@ -25,12 +28,14 @@ updateIndex.post(
       body: JSON.stringify(data),
     })
       .then((response) => {
-        if (!response.ok) throw new Error(`Error while updating index ${body?.index_name}`)
+        if (!response.ok)
+          throw new Error(`Error while updating index ${body?.index_name}`)
         return response.json()
       })
-      .then((data) => {
+      .then((data: any) => {
         if (data.status === "success") {
-          if (!data?.data?.task_id) throw new Error("BSO-tasks didnt return an Id!")
+          if (!data?.data?.task_id)
+            throw new Error("BSO-tasks didnt return an Id!")
           return data.data.task_id
         } else throw new Error(`BSO-tasks returned status=${data.status}`)
       })
@@ -52,7 +57,8 @@ updateIndex.post(
     },
     detail: {
       summary: "Lancer une tâche extract_transform de BSO-publications",
-      description: "Cette route permet de lancer un extract_transform de BSO-publications.",
+      description:
+        "Cette route permet de lancer un extract_transform de BSO-publications.",
       tags: ["Tâches"],
     },
   }

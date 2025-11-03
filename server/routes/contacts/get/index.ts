@@ -1,4 +1,4 @@
-import Elysia, { t } from "elysia";
+import  {Elysia, t } from "elysia";
 import { validateQueryParams } from "../../../utils/queryValidator";
 import db from "../../../libs/mongo";
 import { responseSchema } from "../../../schemas/get/contactSchema";
@@ -7,9 +7,9 @@ import { errorSchema } from "../../../schemas/errors/errorSchema";
 const getContactRoutes = new Elysia();
 getContactRoutes.get(
   "/contacts",
-  async ({ query, error }: { query: any; error: any }) => {
+  async ({ query, set }: { query: any; set: any }) => {
     if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
+      return set.status = 422, { message: "Invalid query parameters" };
     }
 
     const {
@@ -34,23 +34,29 @@ getContactRoutes.get(
     const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
     const sortOrder = sort.startsWith("-") ? -1 : 1;
 
-    const totalContacts = await db
-      .collection("contacts")
-      .countDocuments(filters)
-      .catch((err) => {
-        return error(500, "Error fetching contacts count");
-      });
+    let totalContacts;
+    try {
+      totalContacts = await db
+        .collection("contacts")
+        .countDocuments(filters);
+    } catch (err) {
+      set.status = 500;
+      return { message: "Error fetching contacts count" };
+    }
 
-    const contacts = await db
-      .collection("contacts")
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-      .catch((err) => {
-        return error(500, "Error fetching contacts");
-      });
+    let contacts;
+    try {
+      contacts = await db
+        .collection("contacts")
+        .find(filters)
+        .sort({ [sortField]: sortOrder })
+        .skip(skip)
+        .limit(limit)
+        .toArray();
+    } catch (err) {
+      set.status = 500;
+      return { message: "Error fetching contacts" };
+    }
 
     const formattedContacts = contacts.map((contact: any) => ({
       id: contact.id || "",

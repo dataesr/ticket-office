@@ -1,29 +1,29 @@
-import Elysia, { Static } from "elysia";
-import db from "../../../libs/mongo";
-import { postProductionsSchema } from "../../../schemas/post/productionsSchema";
-import { productionSchema } from "../../../schemas/get/productionSchema";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
-import { ObjectId } from "mongodb";
-import { emailRecipients } from "../../contacts/post/emailRecipents";
-import { newContributionEmailConfig } from "../../../utils/configEmail";
-import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
+import { Elysia } from "elysia"
+import db from "../../../libs/mongo"
+import { postProductionsSchema } from "../../../schemas/post/productionsSchema"
+import { productionSchema } from "../../../schemas/get/productionSchema"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
+import { ObjectId } from "mongodb"
+import { emailRecipients } from "../../contacts/post/emailRecipents"
+import { newContributionEmailConfig } from "../../../utils/configEmail"
+import { sendMattermostNotification } from "../../../utils/sendMattermostNotification"
 
-type postProductionSchemaType = Static<typeof postProductionsSchema>;
+type postProductionSchemaType = typeof postProductionsSchema.static
 
-const postProductionRoutes = new Elysia();
+const postProductionRoutes = new Elysia()
 
 postProductionRoutes.post(
   "/production",
-  async ({ error, body }: { error: any; body: postProductionSchemaType }) => {
+  async ({ set, body }: { set: any; body: postProductionSchemaType }) => {
     const extraLowercase = Object.keys(body.extra || {}).reduce(
       (acc, key) => ({
         ...acc,
         [key]: body.extra ? body.extra[key].toLowerCase() : "",
       }),
       {}
-    );
+    )
 
-    const _id = new ObjectId();
+    const _id = new ObjectId()
     const newContribution = {
       ...body,
       _id,
@@ -31,37 +31,42 @@ postProductionRoutes.post(
       id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
-    };
+    }
 
     const result = await db
       .collection("contribute_productions")
-      .insertOne(newContribution);
+      .insertOne(newContribution)
 
     if (!result.insertedId) {
-      return error(500, "Failed to create the contribution");
+      return (
+        (set.status = 500), { message: "Failed to create the contribution" }
+      )
     }
 
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),
-    };
+    }
 
-    const url = process.env.BASE_API_URL;
-    const contributionLink = `${url}/scanr-apioperations?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
+    const url = process.env.BASE_API_URL
+    const contributionLink = `${url}/scanr-apioperations?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`
 
-    const BREVO_API_KEY = process.env.BREVO_API_KEY;
+    const BREVO_API_KEY = process.env.BREVO_API_KEY
     if (!BREVO_API_KEY) {
-      return error(500, {
-        message: "BREVO_API_KEY is not defined",
-        code: "MISSING_API_KEY",
-      });
+      return (
+        (set.status = 500),
+        {
+          message: "BREVO_API_KEY is not defined",
+          code: "MISSING_API_KEY",
+        }
+      )
     }
 
     const recipients = emailRecipients["contribute_productions"] || {
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
-    };
+    }
 
-    const selectedConfig = newContributionEmailConfig.scanr;
+    const selectedConfig = newContributionEmailConfig.scanr
 
     const dataForBrevo = {
       sender: {
@@ -82,7 +87,7 @@ postProductionRoutes.post(
         link: contributionLink,
         message: `La contribution avec l'ID ${finalContribution.id} a été ajoutée.`,
       },
-    };
+    }
 
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
@@ -91,22 +96,25 @@ postProductionRoutes.post(
         "api-key": BREVO_API_KEY,
       },
       body: JSON.stringify(dataForBrevo),
-    });
+    })
     if (!response.ok) {
-      return error(500, {
-        message: `Erreur d'envoi d'email: ${response.statusText}`,
-        code: "EMAIL_SEND_FAILED",
-      });
+      return (
+        (set.status = 500),
+        {
+          message: `Erreur d'envoi d'email: ${response.statusText}`,
+          code: "EMAIL_SEND_FAILED",
+        }
+      )
     }
 
     const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de liaison de publications créée pour scanR
     **Nom de l'auteur**: ${finalContribution.name}  
     **Email du demandeur**: ${finalContribution.email}  
-    🔗 [Voir la contribution](${contributionLink})`;
+    🔗 [Voir la contribution](${contributionLink})`
 
-    await sendMattermostNotification(mattermostMessage);
+    await sendMattermostNotification(mattermostMessage)
 
-    return finalContribution;
+    return finalContribution
   },
   {
     body: postProductionsSchema,
@@ -123,6 +131,6 @@ postProductionRoutes.post(
       tags: ["Production"],
     },
   }
-);
+)
 
-export default postProductionRoutes;
+export default postProductionRoutes

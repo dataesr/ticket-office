@@ -1,11 +1,11 @@
-import Elysia, { Static, t } from "elysia";
-import db from "../../../libs/mongo";
-import { ObjectId } from "mongodb";
-import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
+import { Elysia, t } from "elysia"
+import db from "../../../libs/mongo"
+import { ObjectId } from "mongodb"
+import { deleteSchema } from "../../../schemas/get/deleteSchema.ts"
 
-type removeUserType = Static<typeof deleteSchema>;
+type removeUserType = typeof deleteSchema.static
 
-const getRemoveUserByIdRoutes = new Elysia();
+const getRemoveUserByIdRoutes = new Elysia()
 
 getRemoveUserByIdRoutes.get(
   "/remove-user/:id",
@@ -15,11 +15,11 @@ getRemoveUserByIdRoutes.get(
       .findOne<removeUserType>({
         id: new ObjectId(id),
       })
-      .catch((error) => error(500, "Failed to fetch remove-user"));
+      .catch((error) => error(500, "Failed to fetch remove-user"))
 
-    if (!contribution) return { message: "Une erreur s'est produite" };
+    if (!contribution) return { message: "Une erreur s'est produite" }
 
-    return contribution;
+    return contribution
   },
   {
     response: {
@@ -35,6 +35,6 @@ getRemoveUserByIdRoutes.get(
       tags: ["Suppression de profil"],
     },
   }
-);
+)
 
-export default getRemoveUserByIdRoutes;
+export default getRemoveUserByIdRoutes

@@ -1,10 +1,10 @@
-import Elysia, { Static, t } from "elysia";
+import  { Elysia, t } from "elysia";
 import db from "../../../libs/mongo";
 import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema";
 import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 
-type ContributionType = Static<typeof contributionObjectSchema>;
+type ContributionType = typeof contributionObjectSchema.static;
 const contributionObjectPutRoutes = new Elysia();
 
 contributionObjectPutRoutes.patch(
@@ -12,11 +12,11 @@ contributionObjectPutRoutes.patch(
   async ({
     params: { id },
     body,
-    error,
+    set,
   }: {
     params: { id: string };
     body: any;
-    error: any;
+    set: any;
   }) => {
     const updateData = { ...body };
 
@@ -58,7 +58,7 @@ contributionObjectPutRoutes.patch(
       .catch(() => null);
 
     if (!updateResult?.acknowledged) {
-      return error(500, { message: "Erreur interne du serveur" });
+      return set.status = 500, { message: "Erreur interne du serveur" };
     }
 
     const updatedDoc = await db
@@ -67,7 +67,7 @@ contributionObjectPutRoutes.patch(
       .catch(() => null);
 
     if (!updatedDoc) {
-      return error(404, { message: "Contribution non trouvée" });
+      return set.status = 404, { message: "Contribution non trouvée" };
     }
 
     const completeDoc = {
