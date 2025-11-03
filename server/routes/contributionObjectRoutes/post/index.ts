@@ -1,4 +1,4 @@
-import Elysia, { Static } from "elysia";
+import { Elysia } from "elysia";
 import db from "../../../libs/mongo";
 import { postContributionObjectSchema } from "../../../schemas/post/contributionByObject";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
@@ -9,19 +9,18 @@ import { newContributionEmailConfig } from "../../../utils/configEmail";
 import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 import {getObjectTypeLabel} from "../post/utils"
 
-type postContributionObjectSchemaType = Static<
-  typeof postContributionObjectSchema
->;
+type postContributionObjectSchemaType = 
+  typeof postContributionObjectSchema.static;
 
 const postContributionObjectRoutes = new Elysia();
 
 postContributionObjectRoutes.post(
   "/contribute",
   async ({
-    error,
+    set,
     body,
   }: {
-    error: any;
+    set: any;
     body: postContributionObjectSchemaType;
   }) => {
     const extraLowercase = Object.keys(body.extra || {}).reduce(
@@ -43,13 +42,13 @@ postContributionObjectRoutes.post(
     };
 
     if (!body.objectId && !body.objectType) {
-      return error(400, "objectId is required when objectType is provided");
+      return set.status = 400, { message: "objectId is required when objectType is provided" };
     }
 
     const result = await db.collection("contribute").insertOne(newContribution);
 
     if (!result.insertedId) {
-      return error(500, "Failed to create the contribution");
+      return set.status = 500, { message: "Failed to create the contribution" };
     }
 
     const finalContribution = {
@@ -62,10 +61,10 @@ postContributionObjectRoutes.post(
 
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
     if (!BREVO_API_KEY) {
-      return error(500, {
+      return set.status = 500, {
         message: "BREVO_API_KEY is not defined",
         code: "MISSING_API_KEY",
-      });
+      };
     }
 
     const recipients = emailRecipients["contribute"] || {
@@ -108,10 +107,10 @@ postContributionObjectRoutes.post(
       body: JSON.stringify(dataForBrevo),
     });
     if (!response.ok) {
-      return error(500, {
+      return set.status = 500, {
         message: `Erreur d'envoi d'email: ${response.statusText}`,
         code: "EMAIL_SEND_FAILED",
-      });
+      };
     }
 
     const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ScanR concernant ${getObjectTypeLabel(finalContribution.objectType)}

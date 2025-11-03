@@ -1,11 +1,11 @@
-import Elysia, { Static } from "elysia";
-import db from "../../../libs/mongo";
-import { ObjectId } from "mongodb";
-import { productionSchema } from "../../../schemas/get/productionSchema";
+import { Elysia } from "elysia"
+import db from "../../../libs/mongo"
+import { ObjectId } from "mongodb"
+import { productionSchema } from "../../../schemas/get/productionSchema"
 
-type productionType = Static<typeof productionSchema>;
+type productionType = typeof productionSchema.static
 
-const getProductionByIdRoutes = new Elysia();
+const getProductionByIdRoutes = new Elysia()
 
 getProductionByIdRoutes.get(
   "/production/:id",
@@ -15,11 +15,11 @@ getProductionByIdRoutes.get(
       .findOne<productionType>({
         id: new ObjectId(id),
       })
-      .catch((error) => error(500, "Failed to fetch production"));
+      .catch((error) => error(500, "Failed to fetch production"))
 
-    if (!production) return { message: "Une erreur s'est produite" };
+    if (!production) return { message: "Une erreur s'est produite" }
 
-    return production;
+    return production
   },
   {
     detail: {
@@ -29,6 +29,6 @@ getProductionByIdRoutes.get(
       tags: ["Production"],
     },
   }
-);
+)
 
-export default getProductionByIdRoutes;
+export default getProductionByIdRoutes

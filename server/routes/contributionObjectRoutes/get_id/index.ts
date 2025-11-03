@@ -1,13 +1,11 @@
-import Elysia, { Static, t } from "elysia";
-import db from "../../../libs/mongo";
-import { ObjectId } from "mongodb";
-import { contactSchema } from "../../../schemas/get_id/contactSchema";
+import { Elysia, t } from "elysia"
+import db from "../../../libs/mongo"
+import { ObjectId } from "mongodb"
+import { contactSchema } from "../../../schemas/get_id/contactSchema"
 
-type contributionObjectType = Static<typeof contactSchema>;
+type contributionObjectType = typeof contactSchema.static
 
-const getContributionObjectByIdRoutes = new Elysia();
-
-getContributionObjectByIdRoutes.get(
+const getContributionObjectByIdRoutes = new Elysia().get(
   "/contribute/:id",
   async ({ params: { id } }) => {
     const contribution = await db
@@ -15,11 +13,11 @@ getContributionObjectByIdRoutes.get(
       .findOne<contributionObjectType>({
         id: new ObjectId(id),
       })
-      .catch((error) => error(500, "Failed to fetch contribution"));
+      .catch((error) => error(500, "Failed to fetch contribution"))
 
-    if (!contribution) return { message: "Une erreur s'est produite" };
+    if (!contribution) return { message: "Une erreur s'est produite" }
 
-    return contribution;
+    return contribution
   },
   {
     response: {
@@ -35,6 +33,6 @@ getContributionObjectByIdRoutes.get(
       tags: ["Contribution par objet"],
     },
   }
-);
+)
 
-export default getContributionObjectByIdRoutes;
+export default getContributionObjectByIdRoutes

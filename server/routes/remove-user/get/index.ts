@@ -1,16 +1,16 @@
-import Elysia from "elysia";
-import { validateQueryParams } from "../../../utils/queryValidator";
-import db from "../../../libs/mongo";
-import { responseSchema } from "../../../schemas/get/deleteSchema.ts";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { Elysia } from "elysia"
+import { validateQueryParams } from "../../../utils/queryValidator"
+import db from "../../../libs/mongo"
+import { responseSchema } from "../../../schemas/get/deleteSchema.ts"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-const getRemoveUserRoutes = new Elysia();
+const getRemoveUserRoutes = new Elysia()
 
 getRemoveUserRoutes.get(
   "/remove-user",
-  async ({ query, error }: { query: any; error: any }) => {
+  async ({ query, set }: { query: any; set: any }) => {
     if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
+      return set.status(422).send("Invalid query parameters")
     }
 
     const {
@@ -18,21 +18,21 @@ getRemoveUserRoutes.get(
       sort = "created_at",
       page = 1,
       max_results = "",
-    } = query;
-    const filters = JSON.parse(where as string);
+    } = query
+    const filters = JSON.parse(where as string)
 
-    const limit = parseInt(max_results as string, 10) || 2000;
-    const skip = (parseInt(page as string, 10) - 1) * limit;
+    const limit = parseInt(max_results as string, 10) || 2000
+    const skip = (parseInt(page as string, 10) - 1) * limit
 
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
-    const sortOrder = sort.startsWith("-") ? -1 : 1;
+    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
+    const sortOrder = sort.startsWith("-") ? -1 : 1
 
     const totalContacts = await db
       .collection("remove-user")
       .countDocuments(filters)
       .catch((err) => {
-        return error(500, "Error fetching contacts count");
-      });
+        return set.status(500).send("Error fetching contacts count")
+      })
 
     const deletation = await db
       .collection("remove-user")
@@ -42,8 +42,8 @@ getRemoveUserRoutes.get(
       .limit(limit)
       .toArray()
       .catch((err) =>
-        error(500, "Error fetching contribution from remove-user")
-      );
+        set.status(500).send("Error fetching contribution from remove-user")
+      )
 
     const formattedDeletation = deletation.map((deletation: any) => ({
       id: deletation.id.toString(),
@@ -60,14 +60,14 @@ getRemoveUserRoutes.get(
       threads: deletation.threads || [],
       extra: deletation.extra || {},
       contributionType: "remove-user",
-    }));
+    }))
 
     return {
       data: formattedDeletation,
       meta: {
         total: totalContacts,
       },
-    };
+    }
   },
   {
     response: {
@@ -83,6 +83,6 @@ getRemoveUserRoutes.get(
       tags: ["Suppression de profil"],
     },
   }
-);
+)
 
-export default getRemoveUserRoutes;
+export default getRemoveUserRoutes

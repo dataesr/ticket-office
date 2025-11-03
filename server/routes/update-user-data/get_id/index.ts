@@ -1,11 +1,11 @@
-import Elysia, { Static } from "elysia";
-import db from "../../../libs/mongo";
-import { ObjectId } from "mongodb";
-import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
+import { Elysia } from "elysia"
+import db from "../../../libs/mongo"
+import { ObjectId } from "mongodb"
+import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema"
 
-type updateUserDataType = Static<typeof updateDatasSchema>;
+type updateUserDataType = typeof updateDatasSchema.static
 
-const getUpdateUserDataByIdRoutes = new Elysia();
+const getUpdateUserDataByIdRoutes = new Elysia()
 
 getUpdateUserDataByIdRoutes.get(
   "/update-user-data/:id",
@@ -17,11 +17,11 @@ getUpdateUserDataByIdRoutes.get(
       })
       .catch((error) =>
         error(500, "Failed to fetch contribution from update-user-data")
-      );
+      )
 
-    if (!contribution) return { message: "Une erreur s'est produite" };
+    if (!contribution) return { message: "Une erreur s'est produite" }
 
-    return contribution;
+    return contribution
   },
   {
     detail: {
@@ -32,6 +32,6 @@ getUpdateUserDataByIdRoutes.get(
       tags: ["Mise à jour de données utilisateur"],
     },
   }
-);
+)
 
-export default getUpdateUserDataByIdRoutes;
+export default getUpdateUserDataByIdRoutes

@@ -1,16 +1,14 @@
-import Elysia, { t } from "elysia";
-import { validateQueryParams } from "../../../utils/queryValidator";
-import db from "../../../libs/mongo";
-import { responseSchema } from "../../../schemas/get/contributionsObjectSchema";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { Elysia, t } from "elysia"
+import { validateQueryParams } from "../../../utils/queryValidator"
+import db from "../../../libs/mongo"
+import { responseSchema } from "../../../schemas/get/contributionsObjectSchema"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-const getContributionObjectRoutes = new Elysia();
-
-getContributionObjectRoutes.get(
+const getContributionObjectRoutes = new Elysia().get(
   "/contribute",
-  async ({ query, error }: { query: any; error: any }) => {
+  async ({ query, set }: { query: any; set: any }) => {
     if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
+      return (set.status = 422), { message: "Invalid query parameters" }
     }
 
     const {
@@ -18,21 +16,22 @@ getContributionObjectRoutes.get(
       sort = "created_at",
       page = 1,
       max_results = "",
-    } = query;
-    const filters = JSON.parse(where as string);
+    } = query
+    const filters = JSON.parse(where as string)
 
-    const limit = parseInt(max_results as string, 10) || 2000;
-    const skip = (parseInt(page as string, 10) - 1) * limit;
+    const limit = parseInt(max_results as string, 10) || 2000
+    const skip = (parseInt(page as string, 10) - 1) * limit
 
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
-    const sortOrder = sort.startsWith("-") ? -1 : 1;
+    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
+    const sortOrder = sort.startsWith("-") ? -1 : 1
 
-    const totalContacts = await db
-      .collection("contribute")
-      .countDocuments(filters)
-      .catch((err) => {
-        return error(500, "Error fetching contacts count");
-      });
+    let totalContacts
+    try {
+      totalContacts = await db.collection("contribute").countDocuments(filters)
+    } catch (err) {
+      set.status = 500
+      return { message: "Error fetching contacts count" }
+    }
 
     const contributionObject = await db
       .collection("contribute")
@@ -41,7 +40,14 @@ getContributionObjectRoutes.get(
       .skip(skip)
       .limit(limit)
       .toArray()
-      .catch((err) => error(500, "Error fetching contributions"));
+      .catch((err) => {
+        set.status = 500
+        return { message: "Error fetching contributions" }
+      })
+
+    if (!Array.isArray(contributionObject)) {
+      return contributionObject
+    }
 
     const formattedContribution = contributionObject.map(
       (contributionObject: any) => ({
@@ -62,14 +68,14 @@ getContributionObjectRoutes.get(
         extra: contributionObject.extra || {},
         contributionType: "contribute-object",
       })
-    );
+    )
 
     return {
       data: formattedContribution,
       meta: {
         total: totalContacts,
       },
-    };
+    }
   },
   {
     query: t.Object({
@@ -91,6 +97,6 @@ getContributionObjectRoutes.get(
       tags: ["Contribution par objet"],
     },
   }
-);
+)
 
-export default getContributionObjectRoutes;
+export default getContributionObjectRoutes

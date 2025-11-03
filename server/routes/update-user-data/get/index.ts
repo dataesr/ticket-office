@@ -1,16 +1,14 @@
-import Elysia from "elysia";
-import { validateQueryParams } from "../../../utils/queryValidator";
-import db from "../../../libs/mongo";
-import { responseSchema } from "../../../schemas/get/updateDatasSchema";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { Elysia } from "elysia"
+import { validateQueryParams } from "../../../utils/queryValidator"
+import db from "../../../libs/mongo"
+import { responseSchema } from "../../../schemas/get/updateDatasSchema"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-const getUpdateUserDataRoutes = new Elysia();
-
-getUpdateUserDataRoutes.get(
+const getUpdateUserDataRoutes = new Elysia().get(
   "/update-user-data",
-  async ({ query, error }: { query: any; error: any }) => {
+  async ({ query, set }: { query: any; set: any }) => {
     if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
+      return set.status(422), { message: "Invalid query parameters" }
     }
 
     const {
@@ -18,32 +16,42 @@ getUpdateUserDataRoutes.get(
       sort = "created_at",
       page = 1,
       max_results = "",
-    } = query;
-    const filters = JSON.parse(where as string);
+    } = query
+    const filters = JSON.parse(where as string)
 
-    const limit = parseInt(max_results as string, 10) || 2000;
-    const skip = (parseInt(page as string, 10) - 1) * limit;
+    const limit = parseInt(max_results as string, 10) || 2000
+    const skip = (parseInt(page as string, 10) - 1) * limit
 
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
-    const sortOrder = sort.startsWith("-") ? -1 : 1;
+    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
+    const sortOrder = sort.startsWith("-") ? -1 : 1
 
-    const totalContacts = await db
-      .collection("update-user-data")
-      .countDocuments(filters)
-      .catch((err) => {
-        return error(500, "Error fetching contacts count");
-      });
+    let totalContacts
+    try {
+      totalContacts = await db
+        .collection("update-user-data")
+        .countDocuments(filters)
+    } catch (err) {
+      set.status = 500
+      return { message: "Error fetching total count from update-user-data" }
+    }
 
-    const contribution = await db
-      .collection("update-user-data")
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-      .catch((err) =>
-        error(500, "Error fetching contribution from update-user-data")
-      );
+    let contribution
+    try {
+      contribution = await db
+        .collection("update-user-data")
+        .find(filters)
+        .sort({ [sortField]: sortOrder })
+        .skip(skip)
+        .limit(limit)
+        .toArray()
+    } catch (err) {
+      set.status = 500
+      return { message: "Error fetching contribution from update-user-data" }
+    }
+
+    if (!Array.isArray(contribution)) {
+      return contribution
+    }
 
     const formattedContribution = contribution.map((contrib: any) => ({
       id: contrib.id.toString(),
@@ -60,14 +68,14 @@ getUpdateUserDataRoutes.get(
       threads: contrib.threads || [],
       extra: contrib.extra || {},
       contributionType: "update-user-data",
-    }));
+    }))
 
     return {
       data: formattedContribution,
       meta: {
         total: totalContacts,
       },
-    };
+    }
   },
   {
     response: {
@@ -83,6 +91,6 @@ getUpdateUserDataRoutes.get(
       tags: ["Mise à jour de données utilisateur"],
     },
   }
-);
+)
 
-export default getUpdateUserDataRoutes;
+export default getUpdateUserDataRoutes

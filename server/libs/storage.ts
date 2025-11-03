@@ -16,7 +16,9 @@ const credentials = {
   strictSSL: false,
 }
 
-export const client = pkgcloud.storage.createClient(credentials as ProviderOptions)
+export const client = pkgcloud.storage.createClient(
+  credentials as ProviderOptions
+)
 
 export default {
   put: (buffer: any, container: string, remote: string, options: any) =>
@@ -35,7 +37,7 @@ export default {
       const fileData: Array<string> = []
       const stream = client.download({ container, remote })
 
-      stream.on("data", (chunk) => {
+      stream.on("data", (chunk: any) => {
         fileData.push(chunk.toString())
       })
 
@@ -43,7 +45,7 @@ export default {
         resolve(fileData.join(""))
       })
 
-      stream.on("error", (err) => {
+      stream.on("error", (err: any) => {
         reject(err)
       })
     }),

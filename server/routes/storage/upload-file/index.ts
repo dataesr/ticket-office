@@ -1,4 +1,4 @@
-import Elysia, { Static, t } from "elysia"
+import { Elysia, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import Storage from "../../../libs/storage"
 
@@ -9,7 +9,11 @@ const bodySchema = t.Object(
     buffer: t.Any(),
     filename: t.String(),
     container: t.String(),
-    mimetype: t.Enum({ text: "text/plain", csv: "text/csv", json: "application/json" }),
+    mimetype: t.Enum({
+      text: "text/plain",
+      csv: "text/csv",
+      json: "application/json",
+    }),
   },
   { additionalProperties: false }
 )
@@ -23,13 +27,16 @@ const responseSchema = t.Object({
 
 uploadFileRoute.post(
   "/storage",
-  async ({ error, body }) => {
+  async ({ set, body }) => {
     const { buffer, container, filename, mimetype } = body
     const response = await Storage.put(buffer, container, filename, {
       contentType: mimetype,
     })
 
-    if (!response?.name && !response?.size) return error(500, { message: "Failed to upload the file" })
+    if (!response?.name && !response?.size) {
+      set.status = 500
+      return { message: "Failed to upload the file" }
+    }
 
     return {
       name: response.name,
@@ -48,7 +55,8 @@ uploadFileRoute.post(
     },
     detail: {
       summary: "Charger un fichier dans Object Storage",
-      description: "Cette route retourne permet de charger un fichier dans Object Storage via son container et son nom.",
+      description:
+        "Cette route retourne permet de charger un fichier dans Object Storage via son container et son nom.",
       tags: ["Object storage"],
     },
   }

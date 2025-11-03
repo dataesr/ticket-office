@@ -1,15 +1,15 @@
-import Elysia, { Static, t } from "elysia";
+import  { Elysia, t } from "elysia";
 import db from "../../../libs/mongo";
 import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema";
 import { contactSchema } from "../../../schemas/get/contactSchema";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 
-type contactType = Static<typeof contactSchema>;
+type contactType = typeof contactSchema.static;
 const contactPutRoutes = new Elysia();
 
 contactPutRoutes.patch(
   "/contacts/:id",
-  async ({ params: { id }, body, error }) => {
+  async ({ params: { id }, body, set }) => {
     if (body.status && ["ongoing", "treated"].includes(body.status)) {
       body.treated_at = new Date();
     }
@@ -22,7 +22,7 @@ contactPutRoutes.patch(
     }
 
     if (body.threads) {
-      body.threads = body.threads.map((thread) => {
+      body.threads = body.threads.map((thread: { responses: any[]; }) => {
         thread.responses = thread.responses?.map((response) => {
           if (response.read === false) {
             response.read = true;
@@ -38,14 +38,14 @@ contactPutRoutes.patch(
       .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
 
     if (!acknowledged) {
-      return error(500, { message: "Erreur interne du serveur" });
+      return set.status = 500, { message: "Erreur interne du serveur" };
     }
 
     const updatedContact = await db
       .collection("contacts")
       .findOne<contactType>({ id });
     if (!updatedContact) {
-      return error(404, { message: "Contact non trouvé" });
+      return set.status = 404, { message: "Contact non trouvé" };
     }
 
     const responseContact = {

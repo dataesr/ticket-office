@@ -1,4 +1,4 @@
-import Elysia, { Static } from "elysia";
+import  {Elysia} from "elysia";
 import { postContactSchema } from "../../../schemas/post/contactSchema";
 import db from "../../../libs/mongo";
 import { contactSchema } from "../../../schemas/get/contactSchema";
@@ -8,12 +8,12 @@ import { emailRecipients } from "./emailRecipents";
 import { newContributionEmailConfig } from "../../../utils/configEmail";
 import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
 
-type postContactSchemaType = Static<typeof postContactSchema>;
+type postContactSchemaType = typeof postContactSchema.static;
 
 const postContactsRoutes = new Elysia();
 postContactsRoutes.post(
   "/contacts",
-  async ({ error, body }: { error: any; body: postContactSchemaType }) => {
+  async ({ set, body }: { set: any; body: postContactSchemaType }) => {
     const allowedFromApps = [
       "paysage",
       "scanr",
@@ -24,10 +24,10 @@ postContactsRoutes.post(
     ];
 
     if (!allowedFromApps.includes(body.fromApplication)) {
-      return error(400, {
+      return set.status=400, {
         message: "Invalid fromApplication value, check child attributes",
         code: "INVALID_FROM_APP",
-      });
+      };
     }
 
     const extraLowercase = Object.keys(body.extra || {}).reduce(
@@ -49,10 +49,10 @@ postContactsRoutes.post(
 
     const result = await db.collection("contacts").insertOne(newContribution);
     if (!result.insertedId) {
-      return error(500, {
+      return set.status = 500, {
         message: "Failed to create the contribution",
         code: "INSERTION_FAILED",
-      });
+      };
     }
 
     const finalContribution = {
@@ -64,18 +64,18 @@ postContactsRoutes.post(
 
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
     if (!BREVO_API_KEY) {
-      return error(500, {
+      return set.status = 500, {
         message: "BREVO_API_KEY is not defined",
         code: "MISSING_API_KEY",
-      });
+      };
     }
 
     const recipients = emailRecipients[body.fromApplication];
     if (!recipients) {
-      return error(400, {
+      return set.status = 400, {
         message: "No email recipients found for this application",
         code: "NO_RECIPIENTS_FOUND",
-      });
+      };
     }
     const selectedConfig =
       newContributionEmailConfig[
@@ -83,10 +83,10 @@ postContactsRoutes.post(
       ];
 
     if (!selectedConfig) {
-      return error(400, {
+      return set.status = 400, {
         message: `No email configuration found for ${body.fromApplication}`,
         code: "EMAIL_CONFIG_NOT_FOUND",
-      });
+      };
     }
     const fonction = finalContribution.extra?.fonction || "non renseigné";
     const dataForBrevo = {
@@ -116,10 +116,10 @@ postContactsRoutes.post(
       console.error(
         `Email d'expéditeur non défini pour ${body.fromApplication}`
       );
-      return error(500, {
+      return set.status = 500, {
         message: `Configuration d'email incomplète pour ${body.fromApplication}`,
         code: "EMAIL_CONFIG_INCOMPLETE",
-      });
+      };
     }
 
     const response = await fetch("https://api.brevo.com/v3/smtp/email", {
@@ -132,10 +132,10 @@ postContactsRoutes.post(
     });
 
     if (!response.ok) {
-      return error(500, {
+      return set.status = 500, {
         message: `Erreur d'envoi d'email: ${response.statusText}`,
         code: "EMAIL_SEND_FAILED",
-      });
+      };
     }
 
     const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour scanR

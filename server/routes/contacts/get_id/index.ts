@@ -1,10 +1,10 @@
-import Elysia, { Static } from "elysia";
+import  {Elysia} from "elysia";
 import { contactSchema } from "../../../schemas/get_id/contactSchema";
 import db from "../../../libs/mongo";
 import { ObjectId } from "mongodb";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 
-type contactType = Static<typeof contactSchema>;
+type contactType = typeof contactSchema.static;
 
 const getContactByIdRoutes = new Elysia();
 

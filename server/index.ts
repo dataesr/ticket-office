@@ -1,22 +1,22 @@
-import { cors } from "@elysiajs/cors";
-import staticPlugin from "@elysiajs/static";
-import { swagger } from "@elysiajs/swagger";
-import { Elysia } from "elysia";
+import { cors } from "@elysiajs/cors"
+import staticPlugin from "@elysiajs/static"
+import { swagger } from "@elysiajs/swagger"
+import { Elysia } from "elysia"
 
 import bsoLocalVariationsRoutes from "./routes/bso-local-variations"
-import bsoTasksRoutes from "./routes/bso-tasks";
-import contactsRoutes from "./routes/contacts";
-import contributionObjectRoutes from "./routes/contributionObjectRoutes";
-import getLastMailsSentRoutes from "./routes/last-mails-sent";
-import productionsRoutes from "./routes/productions";
-import getReceivedMailsRoutes from "./routes/receive-email";
-import removeUserRoutes from "./routes/remove-user";
-import sendMail from "./routes/reply/replyRoutes";
-import storageRoutes from "./routes/storage";
-import updateUserDataRoutes from "./routes/update-user-data";
+import bsoTasksRoutes from "./routes/bso-tasks"
+import contactsRoutes from "./routes/contacts"
+import contributionObjectRoutes from "./routes/contributionObjectRoutes"
+import getLastMailsSentRoutes from "./routes/last-mails-sent"
+import productionsRoutes from "./routes/productions"
+import getReceivedMailsRoutes from "./routes/receive-email"
+import removeUserRoutes from "./routes/remove-user"
+import sendMail from "./routes/reply/replyRoutes"
+import storageRoutes from "./routes/storage"
+import updateUserDataRoutes from "./routes/update-user-data"
 
-const ENV = Bun.env.NODE_ENV || "development";
-const PORT = parseInt(Bun.env.PORT || "3000");
+const ENV = Bun.env.NODE_ENV || "development"
+const PORT = parseInt(Bun.env.PORT || "3000")
 
 const swaggerConfig = {
   documentation: {
@@ -57,24 +57,24 @@ const swaggerConfig = {
       },
     ],
   },
-};
+}
 
 const buildApi = () => {
   return new Elysia().group("/api", (app) => {
     app.use(bsoLocalVariationsRoutes)
-    app.use(bsoTasksRoutes);
-    app.use(contactsRoutes);
-    app.use(contributionObjectRoutes);
-    app.use(getLastMailsSentRoutes);
-    app.use(getReceivedMailsRoutes);
-    app.use(productionsRoutes);
-    app.use(removeUserRoutes);
-    app.use(sendMail);
-    app.use(storageRoutes);
-    app.use(updateUserDataRoutes);
-    return app;
-  });
-};
+    app.use(bsoTasksRoutes)
+    app.use(contactsRoutes)
+    app.use(contributionObjectRoutes)
+    app.use(getLastMailsSentRoutes)
+    app.use(getReceivedMailsRoutes)
+    app.use(productionsRoutes)
+    app.use(removeUserRoutes)
+    app.use(sendMail)
+    app.use(storageRoutes)
+    app.use(updateUserDataRoutes)
+    return app
+  })
+}
 
 const createApp = async () => {
   return new Elysia()
@@ -89,13 +89,13 @@ const createApp = async () => {
       })
     )
     .get("*", () => Bun.file("public/index.html"))
-    .listen(PORT);
-};
+    .listen(PORT)
+}
 
 createApp()
   .then((app) => {
-    const startupTime = Math.floor(process.uptime() * 1000);
-    const serverUrl = app.server?.url;
+    const startupTime = Math.floor(process.uptime() * 1000)
+    const serverUrl = app.server?.url
 
     console.info(`
       ELYSIA [🦊] ready in ${startupTime}ms
@@ -103,20 +103,20 @@ createApp()
 
       ➜ Local:          ${serverUrl}
       ➜ Documentation:  ${serverUrl}swagger
-    `);
+    `)
   })
   .catch((error) => {
-    console.error("Error while starting the server", error);
-    process.exit(1);
-  });
+    console.error("Error while starting the server", error)
+    process.exit(1)
+  })
 
 process.on("SIGINT", () => {
-  console.log("Shutting down!");
-  process.exit(0);
-});
+  console.log("Shutting down!")
+  process.exit(0)
+})
 process.on("SIGTERM", () => {
-  console.log("Shutting down!");
-  process.exit(0);
-});
+  console.log("Shutting down!")
+  process.exit(0)
+})
 
-export default { createApp };
+export default { createApp }

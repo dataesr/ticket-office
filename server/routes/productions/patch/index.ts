@@ -1,51 +1,52 @@
-import Elysia, { Static, t } from "elysia";
-import db from "../../../libs/mongo";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
-import { productionSchema } from "../../../schemas/get/productionSchema";
-import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema";
+import { Elysia, t } from "elysia"
+import db from "../../../libs/mongo"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
+import { productionSchema } from "../../../schemas/get/productionSchema"
+import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
 
-type productionType = Static<typeof productionSchema>;
-const productionsPutRoutes = new Elysia();
+type productionType = typeof productionSchema.static
 
-productionsPutRoutes.patch(
+const productionsPutRoutes = new Elysia().patch(
   "/production/:id",
-  async ({ params: { id }, body, error }) => {
+  async ({ params: { id }, body, set }) => {
     if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date();
+      body.treated_at = new Date()
     }
 
     if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0];
+      const userWhoModified = body.team[0]
       if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified);
+        body.team.push(userWhoModified)
       }
     }
 
     if (body.threads) {
-      body.threads = body.threads.map((thread) => {
-        thread.responses = thread.responses?.map((response) => {
-          if (response.read === false) {
-            response.read = true;
-          }
-          return response;
-        });
-        return thread;
-      });
+      body.threads = body.threads.map(
+        (thread: { responses?: any[]; threadId: string }) => {
+          thread.responses = thread.responses?.map((response) => {
+            if (response.read === false) {
+              response.read = true
+            }
+            return response
+          })
+          return thread
+        }
+      )
     }
 
     const { acknowledged } = await db
       .collection("contribute_productions")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
+      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
 
     if (!acknowledged) {
-      return error(500, { message: "Erreur interne du serveur" });
+      return (set.status = 500), { message: "Erreur interne du serveur" }
     }
 
     const updatedObjectContribution = await db
       .collection("contribute_productions")
-      .findOne<productionType>({ id });
+      .findOne<productionType>({ id })
     if (!updatedObjectContribution) {
-      return error(404, { message: "Contact non trouvé" });
+      return (set.status = 404), { message: "Contact non trouvé" }
     }
 
     const responseObjectContribution = {
@@ -59,9 +60,9 @@ productionsPutRoutes.patch(
       extra: updatedObjectContribution.extra || {},
       productions: updatedObjectContribution.productions || [],
       contributionType: updatedObjectContribution.contributionType,
-    };
+    }
 
-    return responseObjectContribution;
+    return responseObjectContribution
   },
   {
     params: t.Object({
@@ -82,6 +83,6 @@ productionsPutRoutes.patch(
       tags: ["Production"],
     },
   }
-);
+)
 
-export default productionsPutRoutes;
+export default productionsPutRoutes
