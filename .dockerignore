@@ -1,10 +1,14 @@
 # IDE
 .vscode
 
-# Dependencies
+# Dependencies (all node_modules in any subdirectory)
+**/node_modules
 node_modules
 .pnp
 .pnp.js
+**/bun.lockb
+*/dist
+*/build
 
 # Misc
 .DS_Store
