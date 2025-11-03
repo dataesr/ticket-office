@@ -14,42 +14,17 @@ jobs:
   publish-ghcr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5.0.0
-      - uses: oven-sh/setup-bun@v2.0.2
-        with:
-          bun-version: latest
-
-      - name: � Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.bun/install/cache
-            node_modules
-            client/node_modules
-            server/node_modules
-          key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb', '**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-bun-
-
-      - name: 📥 Install dependencies
-        run: bun install --frozen-lockfile
-
-      - name: 🏗️ Build client (Vite.js)
-        run: |
-          cd client
-          bun run build
-        env:
-          NODE_ENV: staging
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
 
       - name: 🔑 Login Docker
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+        run: docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐳 Build Docker image
-        run: docker build -t ${{ github.repository }} .
+      - name: Build client (Vite.js)
+        run: |
+          bun i
+          bunx --bun vite build client --mode staging --emptyOutDir --outDir '../server/public'
+          docker build -t ${{ github.repository }} .
 
       - name: Get Tag
         id: version
