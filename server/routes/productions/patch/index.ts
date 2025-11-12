@@ -9,60 +9,68 @@ type productionType = typeof productionSchema.static
 const productionsPutRoutes = new Elysia().patch(
   "/production/:id",
   async ({ params: { id }, body, set }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date()
-    }
-
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0]
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified)
+    try {
+      if (body.status && ["ongoing", "treated"].includes(body.status)) {
+        body.treated_at = new Date()
       }
-    }
 
-    if (body.threads) {
-      body.threads = body.threads.map(
-        (thread: { responses?: any[]; threadId: string }) => {
-          thread.responses = thread.responses?.map((response) => {
-            if (response.read === false) {
-              response.read = true
-            }
-            return response
-          })
-          return thread
+      if (body.team && Array.isArray(body.team)) {
+        const userWhoModified = body.team[0]
+        if (!body.team.includes(userWhoModified)) {
+          body.team.push(userWhoModified)
         }
-      )
+      }
+
+      if (body.threads) {
+        body.threads = body.threads.map(
+          (thread: { responses?: any[]; threadId: string }) => {
+            thread.responses = thread.responses?.map((response) => {
+              if (response.read === false) {
+                response.read = true
+              }
+              return response
+            })
+            return thread
+          }
+        )
+      }
+
+      const { acknowledged } = await db
+        .collection("contribute_productions")
+        .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
+
+      if (!acknowledged) {
+        set.status = 500
+        return { message: "Erreur interne du serveur" }
+      }
+
+      const updatedObjectContribution = await db
+        .collection("contribute_productions")
+        .findOne<productionType>({ id })
+
+      if (!updatedObjectContribution) {
+        set.status = 404
+        return { message: "Contact non trouvé" }
+      }
+
+      const responseObjectContribution = {
+        id: updatedObjectContribution.id,
+        objectId: updatedObjectContribution.objectId,
+        name: updatedObjectContribution.name,
+        email: updatedObjectContribution.email,
+        status: updatedObjectContribution.status,
+        team: updatedObjectContribution.team,
+        modified_at: updatedObjectContribution.modified_at,
+        extra: updatedObjectContribution.extra || {},
+        productions: updatedObjectContribution.productions || [],
+        contributionType: updatedObjectContribution.contributionType,
+      }
+
+      return responseObjectContribution
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
     }
-
-    const { acknowledged } = await db
-      .collection("contribute_productions")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
-
-    if (!acknowledged) {
-      return (set.status = 500), { message: "Erreur interne du serveur" }
-    }
-
-    const updatedObjectContribution = await db
-      .collection("contribute_productions")
-      .findOne<productionType>({ id })
-    if (!updatedObjectContribution) {
-      return (set.status = 404), { message: "Contact non trouvé" }
-    }
-
-    const responseObjectContribution = {
-      id: updatedObjectContribution.id,
-      objectId: updatedObjectContribution.objectId,
-      name: updatedObjectContribution.name,
-      email: updatedObjectContribution.email,
-      status: updatedObjectContribution.status,
-      team: updatedObjectContribution.team,
-      modified_at: updatedObjectContribution.modified_at,
-      extra: updatedObjectContribution.extra || {},
-      productions: updatedObjectContribution.productions || [],
-      contributionType: updatedObjectContribution.contributionType,
-    }
-
-    return responseObjectContribution
   },
   {
     params: t.Object({

@@ -1,12 +1,12 @@
-import  {Elysia} from "elysia";
-import { contactSchema } from "../../../schemas/get_id/contactSchema";
-import db from "../../../libs/mongo";
-import { ObjectId } from "mongodb";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { Elysia } from "elysia"
+import { contactSchema } from "../../../schemas/get_id/contactSchema"
+import db from "../../../libs/mongo"
+import { ObjectId } from "mongodb"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-type contactType = typeof contactSchema.static;
+type contactType = typeof contactSchema.static
 
-const getContactByIdRoutes = new Elysia();
+const getContactByIdRoutes = new Elysia()
 
 getContactByIdRoutes.get(
   "/contacts/:id",
@@ -16,9 +16,9 @@ getContactByIdRoutes.get(
       .findOne<contactType>({
         id: new ObjectId(id),
       })
-      .catch((error) => error(500, "Failed to fetch contact"));
-    if (!contact) return { message: "Une erreur s'est produite" };
-    return contact;
+      .catch((error) => error(500, "Failed to fetch contact"))
+    if (!contact) return { message: "Une erreur s'est produite" }
+    return contact
   },
   {
     response: {
@@ -33,6 +33,6 @@ getContactByIdRoutes.get(
       tags: ["Contacts"],
     },
   }
-);
+)
 
-export default getContactByIdRoutes;
+export default getContactByIdRoutes

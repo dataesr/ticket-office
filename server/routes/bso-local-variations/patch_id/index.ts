@@ -14,27 +14,35 @@ type variationType = typeof variationSchema.static
 const patchBsoLocalVariationsByIdRoute = new Elysia().patch(
   "/bso-local-variations/:api/:id",
   async ({ body, params: { api, id }, set }) => {
-    if (body?.status === "treated") {
-      body.treated_at = new Date()
+    try {
+      if (body?.status === "treated") {
+        body.treated_at = new Date()
+      }
+
+      const collection = `bso_local_variations_${api}`
+      const { acknowledged } = await db
+        .collection(collection)
+        .updateOne({ id }, { $set: { ...dot(body), modified_at: new Date() } })
+
+      if (!acknowledged) {
+        set.status = 500
+        return { message: "Erreur interne du serveur" }
+      }
+
+      const updatedVariation = await db
+        .collection(collection)
+        .findOne<variationType>({ id })
+
+      if (!updatedVariation) {
+        set.status = 404
+        return { message: "Déclinaison locale non trouvée" }
+      }
+
+      return updatedVariation
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
     }
-
-    const collection = `bso_local_variations_${api}`
-    const { acknowledged } = await db
-      .collection(collection)
-      .updateOne({ id }, { $set: { ...dot(body), modified_at: new Date() } })
-
-    if (!acknowledged) {
-      return (set.status = 500), { message: "Erreur interne du serveur" }
-    }
-
-    const updatedVariation = await db
-      .collection(collection)
-      .findOne<variationType>({ id })
-    if (!updatedVariation) {
-      return (set.status = 404), { message: "Déclinaison locale non trouvée" }
-    }
-
-    return updatedVariation
   },
   {
     body: editVariationSchema,

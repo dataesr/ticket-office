@@ -1,152 +1,170 @@
-import  {Elysia} from "elysia";
-import { postContactSchema } from "../../../schemas/post/contactSchema";
-import db from "../../../libs/mongo";
-import { contactSchema } from "../../../schemas/get/contactSchema";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
-import { ObjectId } from "mongodb";
-import { emailRecipients } from "./emailRecipents";
-import { newContributionEmailConfig } from "../../../utils/configEmail";
-import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
+import { Elysia } from "elysia"
+import { postContactSchema } from "../../../schemas/post/contactSchema"
+import db from "../../../libs/mongo"
+import { contactSchema } from "../../../schemas/get/contactSchema"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
+import { ObjectId } from "mongodb"
+import { emailRecipients } from "./emailRecipents"
+import { newContributionEmailConfig } from "../../../utils/configEmail"
+import { sendMattermostNotification } from "../../../utils/sendMattermostNotification"
 
-type postContactSchemaType = typeof postContactSchema.static;
+type postContactSchemaType = typeof postContactSchema.static
 
-const postContactsRoutes = new Elysia();
+const postContactsRoutes = new Elysia()
 postContactsRoutes.post(
   "/contacts",
-  async ({ set, body }: { set: any; body: postContactSchemaType }) => {
-    const allowedFromApps = [
-      "paysage",
-      "scanr",
-      "bso",
-      "works-magnet",
-      "datasupr",
-      "curiexplore",
-    ];
+  async ({ set, body }) => {
+    try {
+      const allowedFromApps = [
+        "paysage",
+        "scanr",
+        "bso",
+        "works-magnet",
+        "datasupr",
+        "curiexplore",
+      ]
 
-    if (!allowedFromApps.includes(body.fromApplication)) {
-      return set.status=400, {
-        message: "Invalid fromApplication value, check child attributes",
-        code: "INVALID_FROM_APP",
-      };
-    }
+      if (!allowedFromApps.includes(body.fromApplication)) {
+        set.status = 400
+        return {
+          message: "Invalid fromApplication value, check child attributes",
+          code: "INVALID_FROM_APP",
+        }
+      }
 
-    const extraLowercase = Object.keys(body.extra || {}).reduce(
-      (acc, key) => ({
-        ...acc,
-        [key]: body.extra ? body.extra[key].toLowerCase() : "",
-      }),
-      {} as { [key: string]: string }
-    );
-    const _id = new ObjectId();
-    const newContribution = {
-      ...body,
-      _id,
-      extra: extraLowercase,
-      id: _id.toHexString(),
-      created_at: new Date(),
-      status: "new",
-    };
+      const extraLowercase = Object.keys(body.extra || {}).reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: body.extra ? (body.extra as any)[key].toLowerCase() : "",
+        }),
+        {} as { [key: string]: string }
+      )
+      const _id = new ObjectId()
+      const newContribution = {
+        ...body,
+        _id,
+        extra: extraLowercase,
+        id: _id.toHexString(),
+        created_at: new Date(),
+        status: "new",
+      }
 
-    const result = await db.collection("contacts").insertOne(newContribution);
-    if (!result.insertedId) {
-      return set.status = 500, {
-        message: "Failed to create the contribution",
-        code: "INSERTION_FAILED",
-      };
-    }
+      const result = await db.collection("contacts").insertOne(newContribution)
+      if (!result.insertedId) {
+        set.status = 500
+        return {
+          message: "Failed to create the contribution",
+          code: "INSERTION_FAILED",
+        }
+      }
 
-    const finalContribution = {
-      ...newContribution,
-      id: result.insertedId.toHexString(),
-    };
-    const url = process.env.BASE_API_URL;
-    const contributionLink = `${url}/${body.fromApplication}-contact?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
+      const finalContribution = {
+        ...newContribution,
+        id: result.insertedId.toHexString(),
+      }
+      const url = process.env.BASE_API_URL
+      const contributionLink = `${url}/${body.fromApplication}-contact?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`
 
-    const BREVO_API_KEY = process.env.BREVO_API_KEY;
-    if (!BREVO_API_KEY) {
-      return set.status = 500, {
-        message: "BREVO_API_KEY is not defined",
-        code: "MISSING_API_KEY",
-      };
-    }
+      const BREVO_API_KEY = process.env.BREVO_API_KEY
+      if (!BREVO_API_KEY) {
+        set.status = 500
+        return {
+          message: "BREVO_API_KEY is not defined",
+          code: "MISSING_API_KEY",
+        }
+      }
 
-    const recipients = emailRecipients[body.fromApplication];
-    if (!recipients) {
-      return set.status = 400, {
-        message: "No email recipients found for this application",
-        code: "NO_RECIPIENTS_FOUND",
-      };
-    }
-    const selectedConfig =
-      newContributionEmailConfig[
-        body.fromApplication as keyof typeof newContributionEmailConfig
-      ];
+      const recipients = emailRecipients[body.fromApplication]
+      if (!recipients) {
+        set.status = 400
+        return {
+          message: "No email recipients found for this application",
+          code: "NO_RECIPIENTS_FOUND",
+        }
+      }
 
-    if (!selectedConfig) {
-      return set.status = 400, {
-        message: `No email configuration found for ${body.fromApplication}`,
-        code: "EMAIL_CONFIG_NOT_FOUND",
-      };
-    }
-    const fonction = finalContribution.extra?.fonction || "non renseigné";
-    const dataForBrevo = {
-      sender: {
-        email: selectedConfig.senderEmail,
-        name: selectedConfig.senderName,
-      },
-      to: recipients.to.map((email) => ({ email, name: email.split("@")[0] })),
-      replyTo: {
-        email: selectedConfig.replyToEmail,
-        name: selectedConfig.replyToName,
-      },
-      subject: "Nouvelle contribution créée",
-      templateId: selectedConfig.templateId,
-      params: {
-        date: new Date().toLocaleDateString("fr-FR"),
-        title: `Nouvelle contribution créée via formulaire de contact ${body.fromApplication.toUpperCase()}`,
-        name: finalContribution.name,
-        email: finalContribution.email,
-        fonction: fonction,
-        id: finalContribution.id,
-        link: contributionLink,
-        message: `${finalContribution.message}`,
-      },
-    };
-    if (!selectedConfig.senderEmail) {
-      console.error(
-        `Email d'expéditeur non défini pour ${body.fromApplication}`
-      );
-      return set.status = 500, {
-        message: `Configuration d'email incomplète pour ${body.fromApplication}`,
-        code: "EMAIL_CONFIG_INCOMPLETE",
-      };
-    }
+      const selectedConfig =
+        newContributionEmailConfig[
+          body.fromApplication as keyof typeof newContributionEmailConfig
+        ]
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": BREVO_API_KEY,
-      },
-      body: JSON.stringify(dataForBrevo),
-    });
+      if (!selectedConfig) {
+        set.status = 400
+        return {
+          message: `No email configuration found for ${body.fromApplication}`,
+          code: "EMAIL_CONFIG_NOT_FOUND",
+        }
+      }
 
-    if (!response.ok) {
-      return set.status = 500, {
-        message: `Erreur d'envoi d'email: ${response.statusText}`,
-        code: "EMAIL_SEND_FAILED",
-      };
-    }
+      const fonction = finalContribution.extra?.fonction || "non renseigné"
+      const dataForBrevo = {
+        sender: {
+          email: selectedConfig.senderEmail,
+          name: selectedConfig.senderName,
+        },
+        to: recipients.to.map((email) => ({
+          email,
+          name: email.split("@")[0],
+        })),
+        replyTo: {
+          email: selectedConfig.replyToEmail,
+          name: selectedConfig.replyToName,
+        },
+        subject: "Nouvelle contribution créée",
+        templateId: selectedConfig.templateId,
+        params: {
+          date: new Date().toLocaleDateString("fr-FR"),
+          title: `Nouvelle contribution créée via formulaire de contact ${body.fromApplication.toUpperCase()}`,
+          name: finalContribution.name,
+          email: finalContribution.email,
+          fonction: fonction,
+          id: finalContribution.id,
+          link: contributionLink,
+          message: `${finalContribution.message}`,
+        },
+      }
 
-    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour scanR
+      if (!selectedConfig.senderEmail) {
+        console.error(
+          `Email d'expéditeur non défini pour ${body.fromApplication}`
+        )
+        set.status = 500
+        return {
+          message: `Configuration d'email incomplète pour ${body.fromApplication}`,
+          code: "EMAIL_CONFIG_INCOMPLETE",
+        }
+      }
+
+      const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": BREVO_API_KEY,
+        },
+        body: JSON.stringify(dataForBrevo),
+      })
+
+      if (!response.ok) {
+        set.status = 500
+        return {
+          message: `Erreur d'envoi d'email: ${response.statusText}`,
+          code: "EMAIL_SEND_FAILED",
+        }
+      }
+
+      const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour scanR
 **Nom**: ${finalContribution.name}  
 **Email**: ${finalContribution.email}  
 **Fonction**: ${finalContribution.extra?.fonction || "non renseigné"}  
-🔗 [Voir la contribution](${contributionLink})`;
+🔗 [Voir la contribution](${contributionLink})`
 
-    await sendMattermostNotification(mattermostMessage);
+      await sendMattermostNotification(mattermostMessage)
 
-    return finalContribution;
+      return finalContribution
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
+    }
   },
   {
     body: postContactSchema,
@@ -162,6 +180,6 @@ postContactsRoutes.post(
       tags: ["Contacts"],
     },
   }
-);
+)
 
-export default postContactsRoutes;
+export default postContactsRoutes

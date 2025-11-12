@@ -5,11 +5,12 @@ const url = process.env.URL_UPW
 
 const getTaskStatus = new Elysia().get(
   "/bso-tasks/:id",
-  async ({ params: { id } }) => {
+  async ({ params: { id }, set }) => {
     try {
       const response = await fetch(`${url}/tasks/${id}`)
       if (!response.ok) {
-        throw new Error("Failed to fetch bso-task")
+        set.status = 500
+        return { message: "Failed to fetch bso-task" }
       }
 
       const data = await response.json()
@@ -25,10 +26,12 @@ const getTaskStatus = new Elysia().get(
       ) {
         return String(data.data.task_status)
       } else {
-        throw new NotFoundError()
+        set.status = 404
+        return { message: "Task not found" }
       }
     } catch (error) {
-      throw error
+      set.status = 500
+      return { message: "Error processing request" }
     }
   },
   {

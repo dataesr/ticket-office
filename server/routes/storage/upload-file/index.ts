@@ -28,22 +28,27 @@ const responseSchema = t.Object({
 uploadFileRoute.post(
   "/storage",
   async ({ set, body }) => {
-    const { buffer, container, filename, mimetype } = body
-    const response = await Storage.put(buffer, container, filename, {
-      contentType: mimetype,
-    })
+    try {
+      const { buffer, container, filename, mimetype } = body
+      const response = await Storage.put(buffer, container, filename, {
+        contentType: mimetype,
+      })
 
-    if (!response?.name && !response?.size) {
+      if (!response?.name && !response?.size) {
+        set.status = 500
+        return { message: "Failed to upload the file" }
+      }
+
+      return {
+        name: response.name,
+        etag: response.etag,
+        size: response.size,
+        lastModified: response.lastModified,
+        container: response.container,
+      }
+    } catch (error) {
       set.status = 500
-      return { message: "Failed to upload the file" }
-    }
-
-    return {
-      name: response.name,
-      etag: response.etag,
-      size: response.size,
-      lastModified: response.lastModified,
-      container: response.container,
+      return { message: "Error processing request" }
     }
   },
   {

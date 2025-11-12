@@ -88,28 +88,41 @@ const postRemoveUserRoutes = new Elysia().post(
       },
     }
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": BREVO_API_KEY,
-      },
-      body: JSON.stringify(dataForBrevo),
-    })
-    if (!response.ok) {
+    try {
+      const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": BREVO_API_KEY,
+        },
+        body: JSON.stringify(dataForBrevo),
+      })
+
+      if (!response.ok) {
+        set.status = 500
+        return {
+          message: `Erreur d'envoi d'email: ${response.statusText}`,
+          code: "EMAIL_SEND_FAILED",
+        }
+      }
+    } catch (error) {
       set.status = 500
       return {
-        message: `Erreur d'envoi d'email: ${response.statusText}`,
+        message: `Erreur d'envoi d'email: ${error}`,
         code: "EMAIL_SEND_FAILED",
       }
     }
 
-    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de suppression de profil sur scanR !*  
+    try {
+      const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de suppression de profil sur scanR !*  
         **Nom**: ${finalContribution.name}  
         **Email**: ${finalContribution.email}  
        🔗 [Voir la contribution](${contributionLink})`
 
-    await sendMattermostNotification(mattermostMessage)
+      await sendMattermostNotification(mattermostMessage)
+    } catch (error) {
+      console.error("Erreur Mattermost:", error)
+    }
 
     return finalContribution
   },

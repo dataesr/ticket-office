@@ -9,28 +9,28 @@ import { variationParams } from "../../../schemas/get_id/variationSchema"
 const getBsoLocalVariationsRoute = new Elysia().get(
   "/bso-local-variations/:api",
   async ({ query, params: { api }, set }) => {
-    if (!validateQueryParams(query)) {
-      set.status = 500
-      return { message: "Invalid query parameters" }
-    }
-
-    const {
-      where = "{}",
-      sort = "created_at",
-      page = 1,
-      max_results = "",
-    } = query
-    const filters = JSON.parse(where as string)
-
-    const limit = max_results || 2000
-    const skip = (page - 1) * limit
-
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
-    const sortOrder = sort.startsWith("-") ? -1 : 1
-
-    const collection = `bso_local_variations_${api}`
-
     try {
+      if (!validateQueryParams(query)) {
+        set.status = 422
+        return { message: "Invalid query parameters" }
+      }
+
+      const {
+        where = "{}",
+        sort = "created_at",
+        page = 1,
+        max_results = "",
+      } = query
+      const filters = JSON.parse(where as string)
+
+      const limit = max_results || 2000
+      const skip = (page - 1) * limit
+
+      const sortField = sort.startsWith("-") ? sort.substring(1) : sort
+      const sortOrder = sort.startsWith("-") ? -1 : 1
+
+      const collection = `bso_local_variations_${api}`
+
       const totalVariations = await db
         .collection(collection)
         .countDocuments(filters)
@@ -51,7 +51,7 @@ const getBsoLocalVariationsRoute = new Elysia().get(
       } as typeof responseSchema.static
     } catch (error) {
       set.status = 500
-      return { message: "Error fetching variations" }
+      return { message: "Error processing request" }
     }
   },
   {

@@ -13,13 +13,18 @@ const lastReceivedMail = new Elysia()
 
 lastReceivedMail.get(
   "/get-received-emails",
-  async () => {
-    const receivedEmailsCollection = db.collection("received_emails")
+  async ({ set }) => {
+    try {
+      const receivedEmailsCollection = db.collection("received_emails")
 
-    const receivedEmails = await receivedEmailsCollection.find().toArray()
+      const receivedEmails = await receivedEmailsCollection.find().toArray()
 
-    return {
-      emails: receivedEmails,
+      return {
+        emails: receivedEmails,
+      }
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
     }
   },
   {

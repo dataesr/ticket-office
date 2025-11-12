@@ -9,67 +9,72 @@ type removeUserType = typeof deleteSchema.static
 const removeUserPutRoutes = new Elysia().patch(
   "/remove-user/:id",
   async ({ params: { id }, body, set }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date()
-    }
-
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0]
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified)
+    try {
+      if (body.status && ["ongoing", "treated"].includes(body.status)) {
+        body.treated_at = new Date()
       }
-    }
 
-    if (body.threads) {
-      body.threads = body.threads.map(
-        (thread: {
-          responses?: any[]
-          threadId: string
-          timestamp?: string | Date | null
-          message?: string | null
-        }) => {
-          thread.responses = thread.responses?.map((response) => {
-            if (response.read === false) {
-              response.read = true
-            }
-            return response
-          })
-          return thread
+      if (body.team && Array.isArray(body.team)) {
+        const userWhoModified = body.team[0]
+        if (!body.team.includes(userWhoModified)) {
+          body.team.push(userWhoModified)
         }
-      )
-    }
+      }
 
-    const { acknowledged } = await db
-      .collection("remove-user")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
+      if (body.threads) {
+        body.threads = body.threads.map(
+          (thread: {
+            responses?: any[]
+            threadId: string
+            timestamp?: string | Date | null
+            message?: string | null
+          }) => {
+            thread.responses = thread.responses?.map((response) => {
+              if (response.read === false) {
+                response.read = true
+              }
+              return response
+            })
+            return thread
+          }
+        )
+      }
 
-    if (!acknowledged) {
+      const { acknowledged } = await db
+        .collection("remove-user")
+        .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
+
+      if (!acknowledged) {
+        set.status = 500
+        return { message: "Erreur interne du serveur" }
+      }
+
+      const updatedContact = await db
+        .collection("remove-user")
+        .findOne<removeUserType>({ id })
+
+      if (!updatedContact) {
+        set.status = 404
+        return { message: "Contact non trouvé" }
+      }
+
+      const responseContact = {
+        id: updatedContact.id,
+        name: updatedContact.name,
+        email: updatedContact.email,
+        message: updatedContact.message,
+        status: updatedContact.status,
+        team: updatedContact.team,
+        modified_at: updatedContact.modified_at,
+        extra: updatedContact.extra || {},
+        contributionType: updatedContact.contributionType,
+      }
+
+      return responseContact
+    } catch (error) {
       set.status = 500
-      return { message: "Erreur interne du serveur" }
+      return { message: "Error processing request" }
     }
-
-    const updatedContact = await db
-      .collection("remove-user")
-      .findOne<removeUserType>({ id })
-    if (!updatedContact) {
-      set.status = 404
-
-      return { message: "Contact non trouvé" }
-    }
-
-    const responseContact = {
-      id: updatedContact.id,
-      name: updatedContact.name,
-      email: updatedContact.email,
-      message: updatedContact.message,
-      status: updatedContact.status,
-      team: updatedContact.team,
-      modified_at: updatedContact.modified_at,
-      extra: updatedContact.extra || {},
-      contributionType: updatedContact.contributionType,
-    }
-
-    return responseContact
   },
   {
     params: t.Object({

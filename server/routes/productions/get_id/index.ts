@@ -9,17 +9,24 @@ const getProductionByIdRoutes = new Elysia()
 
 getProductionByIdRoutes.get(
   "/production/:id",
-  async ({ params: { id } }) => {
-    const production = await db
-      .collection("contribute_productions")
-      .findOne<productionType>({
-        id: new ObjectId(id),
-      })
-      .catch((error) => error(500, "Failed to fetch production"))
+  async ({ params: { id }, set }) => {
+    try {
+      const production = await db
+        .collection("contribute_productions")
+        .findOne<productionType>({
+          id: new ObjectId(id),
+        })
 
-    if (!production) return { message: "Une erreur s'est produite" }
+      if (!production) {
+        set.status = 404
+        return { message: "Une erreur s'est produite" }
+      }
 
-    return production
+      return production
+    } catch (error) {
+      set.status = 500
+      return { message: "Failed to fetch production" }
+    }
   },
   {
     detail: {

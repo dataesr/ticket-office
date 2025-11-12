@@ -1,5 +1,5 @@
 import { cors } from "@elysiajs/cors"
-import staticPlugin from "@elysiajs/static"
+import { staticPlugin } from "@elysiajs/static"
 import { swagger } from "@elysiajs/swagger"
 import { Elysia } from "elysia"
 
@@ -77,19 +77,21 @@ const buildApi = () => {
 }
 
 const createApp = async () => {
-  return new Elysia()
-    .use(cors({ origin: "*" }))
-    .use(swagger({ path: "/swagger", ...swaggerConfig }))
-    .use(buildApi())
-    .use(
-      staticPlugin({
-        assets: "public",
-        prefix: "",
-        alwaysStatic: true,
+  return (
+    new Elysia()
+      .use(cors({ origin: "*" }))
+      .use(swagger({ path: "/swagger", ...swaggerConfig }))
+      .use(buildApi())
+      // TODO: Workaround pour bug Elysia 1.4.15 - retirer quand fixé pour full staticPlugin
+      .get("/assets/*.js", ({ request, set }) => {
+        const pathname = new URL(request.url).pathname
+        set.headers["Content-Type"] = "application/javascript"
+        return Bun.file(`public${pathname}`)
       })
-    )
-    .get("*", () => Bun.file("public/index.html"))
-    .listen(PORT)
+      .use(staticPlugin({ assets: "public", prefix: "", indexHTML: false }))
+      .get("*", () => Bun.file("public/index.html"))
+      .listen(PORT)
+  )
 }
 
 createApp()

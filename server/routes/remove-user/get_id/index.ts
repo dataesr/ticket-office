@@ -9,17 +9,24 @@ const getRemoveUserByIdRoutes = new Elysia()
 
 getRemoveUserByIdRoutes.get(
   "/remove-user/:id",
-  async ({ params: { id } }) => {
-    const contribution = await db
-      .collection("remove-user")
-      .findOne<removeUserType>({
-        id: new ObjectId(id),
-      })
-      .catch((error) => error(500, "Failed to fetch remove-user"))
+  async ({ params: { id }, set }) => {
+    try {
+      const contribution = await db
+        .collection("remove-user")
+        .findOne<removeUserType>({
+          id: new ObjectId(id),
+        })
 
-    if (!contribution) return { message: "Une erreur s'est produite" }
+      if (!contribution) {
+        set.status = 404
+        return { message: "Une erreur s'est produite" }
+      }
 
-    return contribution
+      return contribution
+    } catch (error) {
+      set.status = 500
+      return { message: "Failed to fetch remove-user" }
+    }
   },
   {
     response: {

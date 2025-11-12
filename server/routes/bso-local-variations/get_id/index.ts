@@ -12,16 +12,23 @@ type variationType = typeof variationSchema.static
 
 const getBsoLocalVariationsByIdRoute = new Elysia().get(
   "/bso-local-variations-publications/:api/:id",
-  async ({ params: { api, id } }) => {
-    const collection = `bso_local_variations_${api}`
-    const variation = await db
-      .collection(collection)
-      .findOne<variationType>({
+  async ({ params: { api, id }, set }) => {
+    try {
+      const collection = `bso_local_variations_${api}`
+      const variation = await db.collection(collection).findOne<variationType>({
         _id: new ObjectId(id),
       })
-      .catch((error) => error(500, "Failed to fetch variation"))
-    if (!variation) return { message: "Une erreur s'est produite" }
-    return variation
+
+      if (!variation) {
+        set.status = 404
+        return { message: "Une erreur s'est produite" }
+      }
+
+      return variation
+    } catch (error) {
+      set.status = 500
+      return { message: "Failed to fetch variation" }
+    }
   },
   {
     params: variationParams,

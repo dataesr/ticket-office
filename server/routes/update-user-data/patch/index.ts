@@ -9,66 +9,72 @@ type updateUserDataType = typeof updateDatasSchema.static
 const updateUserDataPutRoutes = new Elysia().patch(
   "/update-user-data/:id",
   async ({ params: { id }, body, set }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date()
-    }
-
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0]
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified)
+    try {
+      if (body.status && ["ongoing", "treated"].includes(body.status)) {
+        body.treated_at = new Date()
       }
-    }
 
-    if (body.threads) {
-      body.threads = body.threads.map(
-        (thread: {
-          responses?: any[]
-          threadId: string
-          timestamp?: string | Date | null
-          message?: string
-        }) => {
-          thread.responses = thread.responses?.map((response) => {
-            if (response.read === false) {
-              response.read = true
-            }
-            return response
-          })
-          return thread
+      if (body.team && Array.isArray(body.team)) {
+        const userWhoModified = body.team[0]
+        if (!body.team.includes(userWhoModified)) {
+          body.team.push(userWhoModified)
         }
-      )
-    }
+      }
 
-    const { acknowledged } = await db
-      .collection("update-user-data")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
+      if (body.threads) {
+        body.threads = body.threads.map(
+          (thread: {
+            responses?: any[]
+            threadId: string
+            timestamp?: string | Date | null
+            message?: string
+          }) => {
+            thread.responses = thread.responses?.map((response) => {
+              if (response.read === false) {
+                response.read = true
+              }
+              return response
+            })
+            return thread
+          }
+        )
+      }
 
-    if (!acknowledged) {
+      const { acknowledged } = await db
+        .collection("update-user-data")
+        .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
+
+      if (!acknowledged) {
+        set.status = 500
+        return { message: "Erreur interne du serveur" }
+      }
+
+      const updatedContact = await db
+        .collection("update-user-data")
+        .findOne<updateUserDataType>({ id })
+
+      if (!updatedContact) {
+        set.status = 404
+        return { message: "Contact non trouvé" }
+      }
+
+      const responseContact = {
+        id: updatedContact.id,
+        name: updatedContact.name,
+        message: updatedContact.message,
+        email: updatedContact.email,
+        status: updatedContact.status,
+        team: updatedContact.team,
+        extra: updatedContact.extra || {},
+        modified_at: updatedContact.modified_at,
+        contributionType: updatedContact.contributionType,
+      }
+
+      return responseContact
+    } catch (error) {
       set.status = 500
-      return { message: "Erreur interne du serveur" }
+      return { message: "Error processing request" }
     }
-
-    const updatedContact = await db
-      .collection("update-user-data")
-      .findOne<updateUserDataType>({ id })
-    if (!updatedContact) {
-      set.status = 404
-      return { message: "Contact non trouvé" }
-    }
-
-    const responseContact = {
-      id: updatedContact.id,
-      name: updatedContact.name,
-      message: updatedContact.message,
-      email: updatedContact.email,
-      status: updatedContact.status,
-      team: updatedContact.team,
-      extra: updatedContact.extra || {},
-      modified_at: updatedContact.modified_at,
-      contributionType: updatedContact.contributionType,
-    }
-
-    return responseContact
   },
   {
     params: t.Object({
