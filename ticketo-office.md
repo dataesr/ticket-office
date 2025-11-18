@@ -146,9 +146,32 @@ Changements API majeurs avec modification dans le code
 Car pour le passage à la version 1.4.15 :
 -Changement d'import. Exemple static ne s'importe plus cf :
 
-Avant : type variationType = Static<typeof variationSchema>;
+Avant : type variationType =
 
-Aprés : type variationType = typeof variationSchema.static
+```bash
+Static<typeof variationSchema>;
+```
+
+Aprés : type variationType =
+
+```bash
+typeof variationSchema.static
+```
+
+# ⚠️ PROBLÈME CONNU - Bug Elysia 1.4.15 avec staticPlugin
+
+## Workaround temporaire dans server/index.ts :
+
+```bash
+.get("/assets/\*.js", ({ request, set }) => {
+// Force MIME type pour JS à cause du bug HEAD request
+})
+```
+
+## ✅ À faire quand Elysia sera fixé :
+
+- Supprimer ce workaround
+- Utiliser uniquement staticPlugin standard
 
 #### BONUS !
 
@@ -156,7 +179,7 @@ Aprés : type variationType = typeof variationSchema.static
 
 # pkgcloud qui est pas sympas
 
-# C'est quoi depcheck ?! C'est un outil universel qui analyse les dépendances indépendamment du gestionnaire utilisé.
+# C'est quoi depcheck ?! C'est un outil universel qui analyse les dépendances indépendamment du gestionnaire utilisé. Détecte les dépendances inutilisées ou manquantes
 
 npm install -g depcheck
 
