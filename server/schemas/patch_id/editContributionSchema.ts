@@ -1,4 +1,4 @@
-import { t } from "elysia";
+import { t } from "elysia"
 
 export const editContributionSchema = t.Object(
   {
@@ -11,7 +11,7 @@ export const editContributionSchema = t.Object(
     comment: t.Optional(t.String()),
     treated_at: t.Optional(t.Date()),
     contributionType: t.Optional(t.String()),
-    threads: t.Optional(
+    threads: t?.Optional(
       t.Array(
         t.Object({
           threadId: t.String(),
@@ -40,4 +40,4 @@ export const editContributionSchema = t.Object(
     ),
   },
   { additionalProperties: false }
-);
+)

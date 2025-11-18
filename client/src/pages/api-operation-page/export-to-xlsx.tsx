@@ -1,52 +1,52 @@
-import { useState, Key } from "react";
-import { Badge, Button, ButtonGroup, Text, Title } from "@dataesr/dsfr-plus";
-import * as XLSX from "xlsx";
-import { AiOutlineDelete } from "react-icons/ai";
-import { toast } from "react-toastify";
-import { useDataList } from "./data-list-context";
-import "./styles.scss";
-import { postHeaders } from "../../config/api";
-import { ContributionData, ExcelExportButtonProps } from "../../types";
+import { useState, Key } from "react"
+import { Badge, Button, ButtonGroup, Text, Title } from "@dataesr/dsfr-plus"
+import ExcelJS from "exceljs"
+import { AiOutlineDelete } from "react-icons/ai"
+import { toast } from "react-toastify"
+import { useDataList } from "./data-list-context"
+import "./styles.scss"
+import { postHeaders } from "../../config/api"
+import { ContributionData, ExcelExportButtonProps } from "../../types"
 
 const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
-  const { dataList, setDataList } = useDataList();
-  const [isMinimized, setIsMinimized] = useState(false);
+  const { dataList, setDataList } = useDataList()
+  const [isMinimized, setIsMinimized] = useState(false)
 
   const markAsTreated = async (contributionIds: string[]) => {
     const basePath = window.location.pathname.includes("contributionpage")
       ? "contribute"
       : window.location.pathname.includes("apioperations")
       ? "contribute_productions"
-      : "contacts";
+      : "contacts"
 
-    const urlBase = `/api/${basePath}`;
-    const body = { status: "treated" };
+    const urlBase = `/api/${basePath}`
+    const body = { status: "treated" }
 
     try {
-      const uniqueContributionIds = [...new Set(contributionIds)];
+      const uniqueContributionIds = [...new Set(contributionIds)]
       const uniqueContributionPromises = uniqueContributionIds.map((id) =>
         fetch(`${urlBase}/${id}`, {
           method: "PATCH",
           headers: postHeaders,
           body: JSON.stringify(body),
         })
-      );
+      )
 
-      const responses = await Promise.all(uniqueContributionPromises);
+      const responses = await Promise.all(uniqueContributionPromises)
 
       responses.forEach(async (response) => {
         if (!response.ok) {
-          console.error("Erreur de réponse", response);
+          console.error("Erreur de réponse", response)
         } else {
-          const responseData = await response.json();
+          const responseData = await response.json()
         }
-      });
+      })
 
-      refetch();
+      refetch()
     } catch (error) {
-      console.error("Erreur lors de la soumission du formulaire", error);
+      console.error("Erreur lors de la soumission du formulaire", error)
     }
-  };
+  }
 
   const handleExportClick = async () => {
     const dataToExport: ContributionData[] = dataList
@@ -59,33 +59,57 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
         first_name: item.first_name || "",
         last_name: item.last_name || "",
         export: false,
-      }));
+      }))
 
     if (dataToExport.length === 0) {
-      toast.error("Aucune publication à exporter !");
-      return;
+      toast.error("Aucune publication à exporter !")
+      return
     }
 
     const uniqueContributionIds = [
       ...new Set(dataToExport.map((item) => item.contribution_id)),
-    ];
+    ]
 
-    await markAsTreated(uniqueContributionIds);
+    await markAsTreated(uniqueContributionIds)
 
-    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
-    XLSX.writeFile(workbook, "export.xlsx");
+    // Créer un nouveau workbook avec ExcelJS
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet("Sheet1")
+
+    // Ajouter les en-têtes
+    if (dataToExport.length > 0) {
+      const headers = Object.keys(dataToExport[0])
+      worksheet.addRow(headers)
+
+      // Ajouter les données
+      dataToExport.forEach((row) => {
+        worksheet.addRow(Object.values(row))
+      })
+    }
+
+    // Générer et télécharger le fichier
+    const buffer = await workbook.xlsx.writeBuffer()
+    const blob = new Blob([buffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    })
+    const url = window.URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.href = url
+    link.download = "export.xlsx"
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(url)
 
     setDataList((prevState) =>
       prevState.map((item) => ({ ...item, export: false }))
-    );
+    )
     toast("Panier vidé après exportation !", {
       style: {
         backgroundColor: "#c3fad5",
       },
-    });
-  };
+    })
+  }
 
   const handleCopyToClipboardClick = async () => {
     const dataToCopy = dataList
@@ -97,42 +121,42 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
         full_name: item.fullName || "",
         first_name: item.first_name || "",
         last_name: item.last_name || "",
-      }));
+      }))
 
     if (dataToCopy.length === 0) {
-      toast.error("Aucune publication à copier !");
-      return;
+      toast.error("Aucune publication à copier !")
+      return
     }
 
     const uniqueContributionIds = [
       ...new Set(dataToCopy.map((item) => item.contribution_id)),
-    ];
+    ]
 
     const formattedData = dataToCopy
       .map(
         (item) =>
           `${item.person_id}\t${item.publi_id}\t${item.full_name}\t${item.first_name}\t${item.last_name}`
       )
-      .join("\n");
+      .join("\n")
 
     try {
-      await navigator.clipboard.writeText(formattedData);
-      toast.success("Données copiées dans le presse-papiers !");
+      await navigator.clipboard.writeText(formattedData)
+      toast.success("Données copiées dans le presse-papiers !")
     } catch (err) {
-      toast.error("Erreur lors de la copie des données !");
+      toast.error("Erreur lors de la copie des données !")
     }
 
-    await markAsTreated(uniqueContributionIds);
+    await markAsTreated(uniqueContributionIds)
 
     setDataList((prevState) =>
       prevState.map((item) => ({ ...item, export: false }))
-    );
+    )
     toast("Panier vidé après la copie !", {
       style: {
         backgroundColor: "#c3fad5",
       },
-    });
-  };
+    })
+  }
 
   const handleRemoveClick = (publiId: any) => {
     setDataList((prevState) => {
@@ -140,32 +164,32 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
         item.export === true && item.publi_id === publiId
           ? { ...item, export: false }
           : item
-      );
+      )
 
-      const removedItem = newList.find((item) => item.publi_id === publiId);
+      const removedItem = newList.find((item) => item.publi_id === publiId)
       if (removedItem) {
         toast(`Element retiré ! : ${removedItem.fullName}`, {
           style: {
             backgroundColor: "#d64d00",
             color: "#fff",
           },
-        });
+        })
       }
 
-      return newList;
-    });
-  };
+      return newList
+    })
+  }
 
   const handleClearClick = () => {
     setDataList((prevState) =>
       prevState.map((item) => ({ ...item, export: false }))
-    );
+    )
     toast("Panier vidé !", {
       style: {
         backgroundColor: "#c3fad5",
       },
-    });
-  };
+    })
+  }
 
   const uniqueExportCount = dataList
     .filter((item) => item.export === true)
@@ -176,10 +200,10 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
             uniqueItem.publi_id === item.publi_id
         )
       ) {
-        unique.push(item);
+        unique.push(item)
       }
-      return unique;
-    }, []).length;
+      return unique
+    }, []).length
 
   return (
     <div className="basket">
@@ -274,7 +298,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ExcelExportButton;
+export default ExcelExportButton

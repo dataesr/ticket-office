@@ -1,29 +1,27 @@
-import Elysia, { Static } from "elysia";
-import db from "../../../libs/mongo";
-import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema";
-import { ObjectId } from "mongodb";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
-import { deleteSchema } from "../../../schemas/get/deleteSchema.ts";
-import { emailRecipients } from "../../contacts/post/emailRecipents";
-import { newContributionEmailConfig } from "../../../utils/configEmail";
-import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
+import { Elysia } from "elysia"
+import db from "../../../libs/mongo"
+import { postRemoveUserSchema } from "../../../schemas/post/removeUserSchema"
+import { ObjectId } from "mongodb"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
+import { deleteSchema } from "../../../schemas/get/deleteSchema.ts"
+import { emailRecipients } from "../../contacts/post/emailRecipents"
+import { newContributionEmailConfig } from "../../../utils/configEmail"
+import { sendMattermostNotification } from "../../../utils/sendMattermostNotification"
 
-type postRemoveUserSchemaType = Static<typeof postRemoveUserSchema>;
+type postRemoveUserSchemaType = typeof postRemoveUserSchema.static
 
-const postRemoveUserRoutes = new Elysia();
-
-postRemoveUserRoutes.post(
+const postRemoveUserRoutes = new Elysia().post(
   "/remove-user",
-  async ({ error, body }: { error: any; body: postRemoveUserSchemaType }) => {
+  async ({ set, body }: { set: any; body: postRemoveUserSchemaType }) => {
     const extraLowercase = Object.keys(body.extra || {}).reduce(
       (acc, key) => ({
         ...acc,
         [key]: body.extra ? body.extra[key].toLowerCase() : "",
       }),
       {} as { [key: string]: string }
-    );
+    )
 
-    const _id = new ObjectId();
+    const _id = new ObjectId()
     const newContribution = {
       ...body,
       _id,
@@ -31,38 +29,41 @@ postRemoveUserRoutes.post(
       id: _id.toHexString(),
       created_at: new Date(),
       status: "new",
-    };
+    }
 
-    const result = await db
-      .collection("remove-user")
-      .insertOne(newContribution);
+    const result = await db.collection("remove-user").insertOne(newContribution)
 
     if (!result.insertedId) {
-      return error(500, "Failed to create the contribution");
+      set.status = 500
+      return {
+        message: "Failed to create the contribution",
+        code: "INSERTION_FAILED",
+      }
     }
 
     const finalContribution = {
       ...newContribution,
       id: result.insertedId.toHexString(),
-    };
+    }
 
-    const url = process.env.BASE_API_URL;
-    const contributionLink = `${url}/scanr-removeuser?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
+    const url = process.env.BASE_API_URL
+    const contributionLink = `${url}/scanr-removeuser?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`
 
-    const BREVO_API_KEY = process.env.BREVO_API_KEY;
+    const BREVO_API_KEY = process.env.BREVO_API_KEY
     if (!BREVO_API_KEY) {
-      return error(500, {
+      set.status = 500
+      return {
         message: "BREVO_API_KEY is not defined",
         code: "MISSING_API_KEY",
-      });
+      }
     }
 
     const recipients = emailRecipients["remove-user"] || {
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
-    };
-    const selectedConfig = newContributionEmailConfig.scanr;
+    }
+    const selectedConfig = newContributionEmailConfig.scanr
 
-    const fonction = finalContribution.extra?.fonction || "non renseigné";
+    const fonction = finalContribution.extra?.fonction || "non renseigné"
     const dataForBrevo = {
       sender: {
         email: selectedConfig.senderEmail,
@@ -85,31 +86,45 @@ postRemoveUserRoutes.post(
         fonction: fonction,
         message: `${finalContribution.message}`,
       },
-    };
-
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": BREVO_API_KEY,
-      },
-      body: JSON.stringify(dataForBrevo),
-    });
-    if (!response.ok) {
-      return error(500, {
-        message: `Erreur d'envoi d'email: ${response.statusText}`,
-        code: "EMAIL_SEND_FAILED",
-      });
     }
 
-    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de suppression de profil sur scanR !*  
+    try {
+      const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": BREVO_API_KEY,
+        },
+        body: JSON.stringify(dataForBrevo),
+      })
+
+      if (!response.ok) {
+        set.status = 500
+        return {
+          message: `Erreur d'envoi d'email: ${response.statusText}`,
+          code: "EMAIL_SEND_FAILED",
+        }
+      }
+    } catch (error) {
+      set.status = 500
+      return {
+        message: `Erreur d'envoi d'email: ${error}`,
+        code: "EMAIL_SEND_FAILED",
+      }
+    }
+
+    try {
+      const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle demande de suppression de profil sur scanR !*  
         **Nom**: ${finalContribution.name}  
         **Email**: ${finalContribution.email}  
-       🔗 [Voir la contribution](${contributionLink})`;
+       🔗 [Voir la contribution](${contributionLink})`
 
-    await sendMattermostNotification(mattermostMessage);
+      await sendMattermostNotification(mattermostMessage)
+    } catch (error) {
+      console.error("Erreur Mattermost:", error)
+    }
 
-    return finalContribution;
+    return finalContribution
   },
   {
     body: postRemoveUserSchema,
@@ -125,6 +140,6 @@ postRemoveUserRoutes.post(
       tags: ["Suppression de profil"],
     },
   }
-);
+)
 
-export default postRemoveUserRoutes;
+export default postRemoveUserRoutes

@@ -1,12 +1,12 @@
-import { Container, Col, Text } from "@dataesr/dsfr-plus";
-import { Variation } from "../types";
-import { Thread } from "../../../types";
-import MarkdownRenderer from "../../../utils/markdownRenderer";
-import { useState } from "react";
+import { Container, Col, Text } from "@dataesr/dsfr-plus"
+import { Variation } from "../types"
+import { Thread } from "../../../types"
+import MarkdownRenderer from "../../../utils/markdownRenderer"
+import { useState } from "react"
 
 export default function Threads({ variation }: { variation: Variation }) {
-  const [modalImage, setModalImage] = useState<string | null>(null);
-
+  const [modalImage, setModalImage] = useState<string | null>(null)
+  console.log(variation)
   return (
     <Container fluid>
       {variation?.threads?.length > 0 && (
@@ -15,13 +15,13 @@ export default function Threads({ variation }: { variation: Variation }) {
             thread.responses.map((response, index) => {
               const responseDate = new Date(
                 response.timestamp
-              ).toLocaleDateString();
+              ).toLocaleDateString()
               const responseTime = new Date(
                 response.timestamp
-              ).toLocaleTimeString();
+              ).toLocaleTimeString()
 
-              const isStaffResponse = !response.team.includes("user");
-              const className = isStaffResponse ? "staffSide" : "user-side";
+              const isStaffResponse = !response.team.includes("user")
+              const className = isStaffResponse ? "staffSide" : "user-side"
 
               return (
                 response.responseMessage && (
@@ -33,7 +33,7 @@ export default function Threads({ variation }: { variation: Variation }) {
                           Object.entries(response.attachments).length > 0 &&
                           Object.entries(response.attachments).map(
                             ([key, imageValue]) => {
-                              const imgSrc = `data:${imageValue.contentType};base64,${imageValue.base64}`;
+                              const imgSrc = `data:${imageValue.contentType};base64,${imageValue.base64}`
                               return (
                                 <div key={key} style={{ maxWidth: "100%" }}>
                                   <img
@@ -48,7 +48,7 @@ export default function Threads({ variation }: { variation: Variation }) {
                                     alt={`Image ${key}`}
                                   />
                                 </div>
-                              );
+                              )
                             }
                           )}
                         Répondu le {responseDate} à {responseTime} par{" "}
@@ -59,7 +59,7 @@ export default function Threads({ variation }: { variation: Variation }) {
                     </Text>
                   </div>
                 )
-              );
+              )
             })
           )}
         </Col>
@@ -78,5 +78,5 @@ export default function Threads({ variation }: { variation: Variation }) {
         </div>
       )}
     </Container>
-  );
+  )
 }

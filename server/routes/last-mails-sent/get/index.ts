@@ -1,26 +1,31 @@
-import { Elysia } from "elysia";
-import { MongoClient } from "mongodb";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { Elysia } from "elysia"
+import { MongoClient } from "mongodb"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-const MONGO_URI = process.env.MONGO_URI || "";
-const DB_NAME = process.env.MONGO_DATABASE || "";
+const MONGO_URI = process.env.MONGO_URI || ""
+const DB_NAME = process.env.MONGO_DATABASE || ""
 
-const client = new MongoClient(MONGO_URI);
-await client.connect();
-const db = client.db(DB_NAME);
+const client = new MongoClient(MONGO_URI)
+await client.connect()
+const db = client.db(DB_NAME)
 
-const lastSentMail = new Elysia();
+const lastSentMail = new Elysia()
 
 lastSentMail.get(
   "/get-sent-emails",
-  async () => {
-    const sentEmailsCollection = db.collection("sent_emails");
+  async ({ set }) => {
+    try {
+      const sentEmailsCollection = db.collection("sent_emails")
 
-    const sentEmails = await sentEmailsCollection.find().toArray();
+      const sentEmails = await sentEmailsCollection.find().toArray()
 
-    return {
-      emails: sentEmails,
-    };
+      return {
+        emails: sentEmails,
+      }
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
+    }
   },
   {
     response: {
@@ -34,6 +39,6 @@ lastSentMail.get(
       tags: ["Emails"],
     },
   }
-);
+)
 
-export default lastSentMail;
+export default lastSentMail

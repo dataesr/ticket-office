@@ -1,25 +1,32 @@
-import Elysia, { Static } from "elysia";
-import db from "../../../libs/mongo";
-import { ObjectId } from "mongodb";
-import { productionSchema } from "../../../schemas/get/productionSchema";
+import { Elysia } from "elysia"
+import db from "../../../libs/mongo"
+import { ObjectId } from "mongodb"
+import { productionSchema } from "../../../schemas/get/productionSchema"
 
-type productionType = Static<typeof productionSchema>;
+type productionType = typeof productionSchema.static
 
-const getProductionByIdRoutes = new Elysia();
+const getProductionByIdRoutes = new Elysia()
 
 getProductionByIdRoutes.get(
   "/production/:id",
-  async ({ params: { id } }) => {
-    const production = await db
-      .collection("contribute_productions")
-      .findOne<productionType>({
-        id: new ObjectId(id),
-      })
-      .catch((error) => error(500, "Failed to fetch production"));
+  async ({ params: { id }, set }) => {
+    try {
+      const production = await db
+        .collection("contribute_productions")
+        .findOne<productionType>({
+          id: new ObjectId(id),
+        })
 
-    if (!production) return { message: "Une erreur s'est produite" };
+      if (!production) {
+        set.status = 404
+        return { message: "Une erreur s'est produite" }
+      }
 
-    return production;
+      return production
+    } catch (error) {
+      set.status = 500
+      return { message: "Failed to fetch production" }
+    }
   },
   {
     detail: {
@@ -29,6 +36,6 @@ getProductionByIdRoutes.get(
       tags: ["Production"],
     },
   }
-);
+)
 
-export default getProductionByIdRoutes;
+export default getProductionByIdRoutes

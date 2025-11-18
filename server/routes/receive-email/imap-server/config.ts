@@ -42,37 +42,37 @@ export const config = {
   } as Record<
     string,
     {
-      mailSender: string | undefined;
-      senderName: string;
-      templateId: number;
-      recipients: string[];
+      mailSender: string | undefined
+      senderName: string
+      templateId: number
+      recipients: string[]
     }
   >,
-};
+}
 
 export function validateConfig() {
   if (!config.email || !config.password || !config.mongoUri || !config.dbName) {
     throw new Error(
       "MAIL_ADRESSE, MAIL_PASSWORD, DBNAME, MONGO_URI environment variables must be defined"
-    );
+    )
   }
 
   if (!config.brevoApiKey) {
-    throw new Error("BREVO_API_KEY is not defined");
+    throw new Error("BREVO_API_KEY is not defined")
   }
 
   if (!config.defaultConfig.mailSender) {
     console.log(
       "SCANR_MAIL_SENDER n'est pas défini, les emails pourraient ne pas être envoyés correctement"
-    );
+    )
   }
 
   for (const [key, domainConfig] of Object.entries(config.domainConfigs)) {
     if (!domainConfig.mailSender) {
-      console.log(`Configuration d'expéditeur manquante pour ${key}`);
+      console.log(`Configuration d'expéditeur manquante pour ${key}`)
     }
     if (domainConfig.recipients.length === 0) {
-      console.log(`Aucun destinataire configuré pour ${key}`);
+      console.log(`Aucun destinataire configuré pour ${key}`)
     }
   }
 }

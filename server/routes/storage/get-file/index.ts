@@ -1,4 +1,4 @@
-import Elysia, { NotFoundError, t } from "elysia"
+import { Elysia, NotFoundError, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import Storage from "../../../libs/storage"
 
@@ -19,8 +19,12 @@ getFileRoute.get(
       return err.message
     })) as string
 
-    if (response === "<html><h1>Not Found</h1><p>The resource could not be found.</p></html>") throw new NotFoundError()
-    
+    if (
+      response ===
+      "<html><h1>Not Found</h1><p>The resource could not be found.</p></html>"
+    )
+      throw new NotFoundError()
+
     return {
       fileContent: response || "",
     }
@@ -33,7 +37,8 @@ getFileRoute.get(
     },
     detail: {
       summary: "Obtenir un fichier depuis Object Storage",
-      description: "Cette route retourne les détails d'un fichier spécifique via le container et le nom fourni.",
+      description:
+        "Cette route retourne les détails d'un fichier spécifique via le container et le nom fourni.",
       tags: ["Object storage"],
     },
   }

@@ -1,13 +1,17 @@
 {
   "name": "ticket-office",
   "dependencies": {
-    "concurrently": "^9.0.1"
+    "concurrently": "9.2.1"
   },
   "private": true,
   "scripts": {
     "start:client": "cd client && npm run dev",
     "start:server": "cd server && bun run --watch index.ts",
-    "start": "concurrently \"npm run start:client\" \"bun run start:server\"",
+    "start": "concurrently --kill-others-on-fail \"npm run start:client\" \"bun run start:server\"",
+    "clean": "rm -rf node_modules client/node_modules server/node_modules",
+    "fresh-install": "bun run clean && bun install",
+    "check-outdated": "bun outdated && cd client && bun outdated && cd ../server && bun outdated",
+    "lint-all": "cd client && bun run lint",
     "deploy": "git switch main && git pull origin main --rebase --tags && git merge origin staging && npm version $npm_config_level && git push origin main --tags && git switch staging"
   },
   "workspaces": [

@@ -1,66 +1,80 @@
-import Elysia, { Static, t } from "elysia";
-import db from "../../../libs/mongo";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
-import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema";
-import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema";
+import { Elysia, t } from "elysia"
+import db from "../../../libs/mongo"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
+import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema"
+import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
 
-type updateUserDataType = Static<typeof updateDatasSchema>;
-const updateUserDataPutRoutes = new Elysia();
+type updateUserDataType = typeof updateDatasSchema.static
 
-updateUserDataPutRoutes.patch(
+const updateUserDataPutRoutes = new Elysia().patch(
   "/update-user-data/:id",
-  async ({ params: { id }, body, error }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date();
-    }
-
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0];
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified);
+  async ({ params: { id }, body, set }) => {
+    try {
+      if (body.status && ["ongoing", "treated"].includes(body.status)) {
+        body.treated_at = new Date()
       }
-    }
 
-    if (body.threads) {
-      body.threads = body.threads.map((thread) => {
-        thread.responses = thread.responses?.map((response) => {
-          if (response.read === false) {
-            response.read = true;
+      if (body.team && Array.isArray(body.team)) {
+        const userWhoModified = body.team[0]
+        if (!body.team.includes(userWhoModified)) {
+          body.team.push(userWhoModified)
+        }
+      }
+
+      if (body.threads) {
+        body.threads = body.threads.map(
+          (thread: {
+            responses?: any[]
+            threadId: string
+            timestamp?: string | Date | null
+            message?: string
+          }) => {
+            thread.responses = thread.responses?.map((response) => {
+              if (response.read === false) {
+                response.read = true
+              }
+              return response
+            })
+            return thread
           }
-          return response;
-        });
-        return thread;
-      });
+        )
+      }
+
+      const { acknowledged } = await db
+        .collection("update-user-data")
+        .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } })
+
+      if (!acknowledged) {
+        set.status = 500
+        return { message: "Erreur interne du serveur" }
+      }
+
+      const updatedContact = await db
+        .collection("update-user-data")
+        .findOne<updateUserDataType>({ id })
+
+      if (!updatedContact) {
+        set.status = 404
+        return { message: "Contact non trouvé" }
+      }
+
+      const responseContact = {
+        id: updatedContact.id,
+        name: updatedContact.name,
+        message: updatedContact.message,
+        email: updatedContact.email,
+        status: updatedContact.status,
+        team: updatedContact.team,
+        extra: updatedContact.extra || {},
+        modified_at: updatedContact.modified_at,
+        contributionType: updatedContact.contributionType,
+      }
+
+      return responseContact
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
     }
-
-    const { acknowledged } = await db
-      .collection("update-user-data")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
-
-    if (!acknowledged) {
-      return error(500, { message: "Erreur interne du serveur" });
-    }
-
-    const updatedContact = await db
-      .collection("update-user-data")
-      .findOne<updateUserDataType>({ id });
-    if (!updatedContact) {
-      return error(404, { message: "Contact non trouvé" });
-    }
-
-    const responseContact = {
-      id: updatedContact.id,
-      name: updatedContact.name,
-      message: updatedContact.message,
-      email: updatedContact.email,
-      status: updatedContact.status,
-      team: updatedContact.team,
-      extra: updatedContact.extra || {},
-      modified_at: updatedContact.modified_at,
-      contributionType: updatedContact.contributionType,
-    };
-
-    return responseContact;
   },
   {
     params: t.Object({
@@ -81,6 +95,6 @@ updateUserDataPutRoutes.patch(
       tags: ["Mise à jour de données utilisateur"],
     },
   }
-);
+)
 
-export default updateUserDataPutRoutes;
+export default updateUserDataPutRoutes

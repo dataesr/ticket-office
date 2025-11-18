@@ -1,75 +1,75 @@
-import Elysia, { t } from "elysia";
-import { validateQueryParams } from "../../../utils/queryValidator";
-import db from "../../../libs/mongo";
-import { responseSchema } from "../../../schemas/get/contributionsObjectSchema";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { Elysia, t } from "elysia"
+import { validateQueryParams } from "../../../utils/queryValidator"
+import db from "../../../libs/mongo"
+import { responseSchema } from "../../../schemas/get/contributionsObjectSchema"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-const getContributionObjectRoutes = new Elysia();
-
-getContributionObjectRoutes.get(
+const getContributionObjectRoutes = new Elysia().get(
   "/contribute",
-  async ({ query, error }: { query: any; error: any }) => {
-    if (!validateQueryParams(query)) {
-      return error(422, "Invalid query parameters");
+  async ({ query, set }) => {
+    try {
+      if (!validateQueryParams(query)) {
+        set.status = 422
+        return { message: "Invalid query parameters" }
+      }
+
+      const {
+        where = "{}",
+        sort = "created_at",
+        page = 1,
+        max_results = "",
+      } = query
+      const filters = JSON.parse(where as string)
+
+      const limit = parseInt(max_results as string, 10) || 2000
+      const skip = (parseInt(String(page), 10) - 1) * limit
+
+      const sortField = sort.startsWith("-") ? sort.substring(1) : sort
+      const sortOrder = sort.startsWith("-") ? -1 : 1
+
+      const totalContacts = await db
+        .collection("contribute")
+        .countDocuments(filters)
+
+      const contributionObject = await db
+        .collection("contribute")
+        .find(filters)
+        .sort({ [sortField]: sortOrder })
+        .skip(skip)
+        .limit(limit)
+        .toArray()
+
+      const formattedContribution = contributionObject.map(
+        (contributionObject: any) => ({
+          id: contributionObject.id.toString(),
+          treated_at: contributionObject.treated_at || new Date(),
+          email: contributionObject.email || "",
+          name: contributionObject.name || "",
+          objectId: contributionObject.objectId || "",
+          objectType: contributionObject.objectType || "",
+          message: contributionObject.message || "",
+          comment: contributionObject.comment || "",
+          modified_at: contributionObject.modified_at || new Date(),
+          created_at: contributionObject.created_at || new Date(),
+          status: contributionObject.status || "",
+          team: contributionObject.team || [],
+          tags: contributionObject.tags || [],
+          threads: contributionObject.threads || [],
+          extra: contributionObject.extra || {},
+          contributionType: "contribute-object",
+        })
+      )
+
+      return {
+        data: formattedContribution,
+        meta: {
+          total: totalContacts,
+        },
+      }
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
     }
-
-    const {
-      where = "{}",
-      sort = "created_at",
-      page = 1,
-      max_results = "",
-    } = query;
-    const filters = JSON.parse(where as string);
-
-    const limit = parseInt(max_results as string, 10) || 2000;
-    const skip = (parseInt(page as string, 10) - 1) * limit;
-
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort;
-    const sortOrder = sort.startsWith("-") ? -1 : 1;
-
-    const totalContacts = await db
-      .collection("contribute")
-      .countDocuments(filters)
-      .catch((err) => {
-        return error(500, "Error fetching contacts count");
-      });
-
-    const contributionObject = await db
-      .collection("contribute")
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-      .catch((err) => error(500, "Error fetching contributions"));
-
-    const formattedContribution = contributionObject.map(
-      (contributionObject: any) => ({
-        id: contributionObject.id.toString(),
-        treated_at: contributionObject.treated_at || new Date(),
-        email: contributionObject.email || "",
-        name: contributionObject.name || "",
-        objectId: contributionObject.objectId || "",
-        objectType: contributionObject.objectType || "",
-        message: contributionObject.message || "",
-        comment: contributionObject.comment || "",
-        modified_at: contributionObject.modified_at || new Date(),
-        created_at: contributionObject.created_at || new Date(),
-        status: contributionObject.status || "",
-        team: contributionObject.team || [],
-        tags: contributionObject.tags || [],
-        threads: contributionObject.threads || [],
-        extra: contributionObject.extra || {},
-        contributionType: "contribute-object",
-      })
-    );
-
-    return {
-      data: formattedContribution,
-      meta: {
-        total: totalContacts,
-      },
-    };
   },
   {
     query: t.Object({
@@ -91,6 +91,6 @@ getContributionObjectRoutes.get(
       tags: ["Contribution par objet"],
     },
   }
-);
+)
 
-export default getContributionObjectRoutes;
+export default getContributionObjectRoutes

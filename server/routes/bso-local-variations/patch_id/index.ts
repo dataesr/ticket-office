@@ -1,36 +1,48 @@
 import { dot } from "dot-object"
-import Elysia, { Static, t } from "elysia"
+import { Elysia } from "elysia"
 
 import db from "../../../libs/mongo"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
-import { variationParams, variationSchema } from "../../../schemas/get_id/variationSchema"
+import {
+  variationParams,
+  variationSchema,
+} from "../../../schemas/get_id/variationSchema"
 import { editVariationSchema } from "../../../schemas/patch_id/editVariationSchema"
 
-type variationType = Static<typeof variationSchema>
-const patchBsoLocalVariationsByIdRoute = new Elysia()
+type variationType = typeof variationSchema.static
 
-patchBsoLocalVariationsByIdRoute.patch(
+const patchBsoLocalVariationsByIdRoute = new Elysia().patch(
   "/bso-local-variations/:api/:id",
-  async ({ body, params: { api, id }, error }) => {
-    if (body?.status === "treated") {
-      body.treated_at = new Date()
+  async ({ body, params: { api, id }, set }) => {
+    try {
+      if (body?.status === "treated") {
+        body.treated_at = new Date()
+      }
+
+      const collection = `bso_local_variations_${api}`
+      const { acknowledged } = await db
+        .collection(collection)
+        .updateOne({ id }, { $set: { ...dot(body), modified_at: new Date() } })
+
+      if (!acknowledged) {
+        set.status = 500
+        return { message: "Erreur interne du serveur" }
+      }
+
+      const updatedVariation = await db
+        .collection(collection)
+        .findOne<variationType>({ id })
+
+      if (!updatedVariation) {
+        set.status = 404
+        return { message: "Déclinaison locale non trouvée" }
+      }
+
+      return updatedVariation
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
     }
-
-    const collection = `bso_local_variations_${api}`
-    const { acknowledged } = await db
-      .collection(collection)
-      .updateOne({ id }, { $set: { ...dot(body), modified_at: new Date() } })
-
-    if (!acknowledged) {
-      return error(500, { message: "Erreur interne du serveur" })
-    }
-
-    const updatedVariation = await db.collection(collection).findOne<variationType>({ id })
-    if (!updatedVariation) {
-      return error(404, { message: "Déclinaison locale non trouvée" })
-    }
-
-    return updatedVariation
   },
   {
     body: editVariationSchema,

@@ -1,4 +1,4 @@
-import Elysia, { Static, t } from "elysia"
+import { Elysia, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 
 const url = process.env.URL_UPW || ""
@@ -6,41 +6,53 @@ const password = process.env.PUBLIC_API_PASSWORD || ""
 
 const updateIndex = new Elysia()
 
-const bodySchema = t.Record(t.String(), t.Union([t.Boolean(), t.String(), t.Number(), t.Array(t.String())]))
+const bodySchema = t.Record(
+  t.String(),
+  t.Union([t.Boolean(), t.String(), t.Number(), t.Array(t.String())])
+)
 const responseSchema = t.Object({
   id: t.String(),
   params: bodySchema,
 })
-type bodyType = Static<typeof bodySchema>
+type bodyType = typeof bodySchema.static
 
 updateIndex.post(
   "/bso-tasks",
-  async ({ error, body }: { error: any; body: bodyType }) => {
-    const data = { ...body, PUBLIC_API_PASSWORD: password }
-    const responseId = await fetch(`${url}/et_bso_all`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error(`Error while updating index ${body?.index_name}`)
-        return response.json()
-      })
-      .then((data) => {
-        if (data.status === "success") {
-          if (!data?.data?.task_id) throw new Error("BSO-tasks didnt return an Id!")
-          return data.data.task_id
-        } else throw new Error(`BSO-tasks returned status=${data.status}`)
-      })
-      .catch((error) => {
-        throw error
+  async ({ set, body }) => {
+    try {
+      const data = { ...body, PUBLIC_API_PASSWORD: password }
+      const response = await fetch(`${url}/et_bso_all`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
       })
 
-    return {
-      id: responseId,
-      params: body,
+      if (!response.ok) {
+        set.status = 500
+        return { message: `Error while updating index ${body?.index_name}` }
+      }
+
+      const responseData: any = await response.json()
+
+      if (responseData.status !== "success") {
+        set.status = 500
+        return { message: `BSO-tasks returned status=${responseData.status}` }
+      }
+
+      if (!responseData?.data?.task_id) {
+        set.status = 500
+        return { message: "BSO-tasks didnt return an Id!" }
+      }
+
+      return {
+        id: responseData.data.task_id,
+        params: body,
+      }
+    } catch (error) {
+      set.status = 500
+      return { message: "Error processing request" }
     }
   },
   {
@@ -52,7 +64,8 @@ updateIndex.post(
     },
     detail: {
       summary: "Lancer une tâche extract_transform de BSO-publications",
-      description: "Cette route permet de lancer un extract_transform de BSO-publications.",
+      description:
+        "Cette route permet de lancer un extract_transform de BSO-publications.",
       tags: ["Tâches"],
     },
   }

@@ -1,66 +1,81 @@
-import Elysia, { Static, t } from "elysia";
-import db from "../../../libs/mongo";
-import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema";
-import { contactSchema } from "../../../schemas/get/contactSchema";
-import { errorSchema } from "../../../schemas/errors/errorSchema";
+import { Elysia, t } from "elysia"
+import db from "../../../libs/mongo"
+import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
+import { contactSchema } from "../../../schemas/get/contactSchema"
+import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-type contactType = Static<typeof contactSchema>;
-const contactPutRoutes = new Elysia();
+type ContactType = typeof contactSchema.static
 
-contactPutRoutes.patch(
+const contactPutRoutes = new Elysia().patch(
   "/contacts/:id",
-  async ({ params: { id }, body, error }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date();
-    }
+  async ({ params, body, set }) => {
+    try {
+      const { id } = params
 
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0];
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified);
+      const updateData = { ...body }
+
+      if (
+        updateData.status &&
+        ["ongoing", "treated"].includes(updateData.status)
+      ) {
+        updateData.treated_at = new Date()
       }
-    }
 
-    if (body.threads) {
-      body.threads = body.threads.map((thread) => {
-        thread.responses = thread.responses?.map((response) => {
-          if (response.read === false) {
-            response.read = true;
+      if (updateData.team && Array.isArray(updateData.team)) {
+        const userWhoModified = updateData.team[0]
+        if (!updateData.team.includes(userWhoModified)) {
+          updateData.team.push(userWhoModified)
+        }
+      }
+
+      if (updateData.threads) {
+        updateData.threads = updateData.threads.map((thread) => {
+          if (thread.responses) {
+            thread.responses = thread.responses.map((response) => {
+              if (response.read === false) {
+                response.read = true
+              }
+              return response
+            })
           }
-          return response;
-        });
-        return thread;
-      });
+          return thread
+        })
+      }
+
+      const { acknowledged } = await db
+        .collection("contacts")
+        .updateOne({ id }, { $set: { ...updateData, updatedAt: new Date() } })
+
+      if (!acknowledged) {
+        set.status = 500
+        return { message: "Erreur interne du serveur" }
+      }
+
+      const updatedContact = await db
+        .collection("contacts")
+        .findOne<ContactType>({ id })
+
+      if (!updatedContact) {
+        set.status = 404
+        return { message: "Contact non trouvé" }
+      }
+
+      return {
+        id: updatedContact.id,
+        fromApplication: updatedContact.fromApplication,
+        name: updatedContact.name,
+        email: updatedContact.email,
+        status: updatedContact.status,
+        team: updatedContact.team,
+        modified_at: updatedContact.modified_at,
+        extra: updatedContact.extra || {},
+        contributionType: updatedContact.contributionType,
+      }
+    } catch (err) {
+      console.error("Error updating contact:", err)
+      set.status = 500
+      return { message: "Erreur interne du serveur" }
     }
-
-    const { acknowledged } = await db
-      .collection("contacts")
-      .updateOne({ id }, { $set: { ...body, updatedAt: new Date() } });
-
-    if (!acknowledged) {
-      return error(500, { message: "Erreur interne du serveur" });
-    }
-
-    const updatedContact = await db
-      .collection("contacts")
-      .findOne<contactType>({ id });
-    if (!updatedContact) {
-      return error(404, { message: "Contact non trouvé" });
-    }
-
-    const responseContact = {
-      id: updatedContact.id,
-      fromApplication: updatedContact.fromApplication,
-      name: updatedContact.name,
-      email: updatedContact.email,
-      status: updatedContact.status,
-      team: updatedContact.team,
-      modified_at: updatedContact.modified_at,
-      extra: updatedContact.extra || {},
-      contributionType: updatedContact.contributionType,
-    };
-
-    return responseContact;
   },
   {
     params: t.Object({
@@ -80,6 +95,6 @@ contactPutRoutes.patch(
       tags: ["Contacts"],
     },
   }
-);
+)
 
-export default contactPutRoutes;
+export default contactPutRoutes
