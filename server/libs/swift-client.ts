@@ -8,15 +8,15 @@ interface OpenStackConfig {
   region: string
   projectId?: string
   projectName?: string
-  userDomainName?: string // Usually "Default"
-  projectDomainName?: string // Usually "Default"
+  userDomainName?: string // "Default"
+  projectDomainName?: string // "Default"
 }
 
 // Interface for the internal token state
 interface TokenState {
   value: string
   expiresAt: Date
-  endpoint: string // The full URL to the Swift container (e.g., https://storage.../v1/AUTH_...)
+  endpoint: string
 }
 
 export class OpenStackSwiftClient {
@@ -75,13 +75,12 @@ export class OpenStackSwiftClient {
       throw new Error(`OpenStack Auth Failed (${response.status}): ${text}`)
     }
 
-    // 1. Extract Token
+    // Extract Token
     const tokenValue = response.headers.get("X-Subject-Token")
     if (!tokenValue)
       throw new Error("OpenStack: No X-Subject-Token header in response")
 
-    // 2. Extract Catalog to find Swift Endpoint
-    // Fix: Cast response.json() to any to avoid 'unknown' error
+    // Extract Catalog to find Swift Endpoint
     const body: any = await response.json()
     const catalog = body.token.catalog
     const swiftService = catalog.find((s: any) => s.type === "object-store")
@@ -129,15 +128,12 @@ export class OpenStackSwiftClient {
   private async request(
     method: string,
     path: string,
-    // Fix: Use specific types instead of BodyInit to avoid global type issues
     body?: string | Buffer | ReadableStream | null,
     headers: Record<string, string> = {}
   ): Promise<Response> {
     let auth = await this.ensureAuth()
     const url = `${auth.endpoint}/${path}`
 
-    // Bun's fetch accepts these types natively.
-    // We cast body to 'any' here only to satisfy the fetch signature if strict types mismatch
     let response = await fetch(url, {
       method,
       body: body as any,
@@ -147,7 +143,7 @@ export class OpenStackSwiftClient {
       },
     })
 
-    // Retry once if 401 Unauthorized (Token might have been revoked or expired narrowly)
+    // Retry once if 401 Unauthorized (Token might have been revoked or expired)
     if (response.status === 401) {
       console.log("OpenStack: Token expired, re-authenticating...")
       auth = await this.authenticate()
@@ -179,9 +175,6 @@ export class OpenStackSwiftClient {
     data: Buffer | string | ReadableStream | Readable,
     contentType?: string
   ) {
-    // If it's a Node stream, Bun's fetch handles it, or we can convert it.
-    // Bun fetch accepts Readable/ReadableStream directly.
-
     const headers: Record<string, string> = {}
     if (contentType) headers["Content-Type"] = contentType
 
@@ -222,22 +215,18 @@ export class OpenStackSwiftClient {
   }
 }
 
-// --- Initialization ---
-
 const config: OpenStackConfig = {
   username: process.env.OVH_USERNAME || "",
   password: process.env.OVH_PASSWORD || "",
   authUrl: process.env.OVH_AUTH_URL || "",
   region: process.env.OVH_REGION || "",
-  projectId: process.env.OVH_TENANT_ID, // Prefer ID for v3
+  projectId: process.env.OVH_TENANT_ID,
   projectName: process.env.OVH_TENANT_NAME,
   userDomainName: "Default",
   projectDomainName: "Default",
 }
 
 export const client = new OpenStackSwiftClient(config)
-
-// --- Export Default Helper (Matches your existing interface) ---
 
 export default {
   /**
@@ -253,7 +242,6 @@ export default {
     remote: string,
     options: any = {}
   ) => {
-    // Map options if needed, e.g., contentType
     const contentType = options.contentType || options.headers?.["content-type"]
     return client.upload(container, remote, buffer, contentType)
   },
