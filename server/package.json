@@ -19,8 +19,7 @@
     "elysia": "1.4.16",
     "imapflow": "^1.1.1",
     "mailparser": "^3.9.0",
-    "mongodb": "^7.0.0",
-    "pkgcloud": "^2.2.0"
+    "mongodb": "^7.0.0"
   },
   "devDependencies": {
     "@types/imapflow": "^1.0.189",

@@ -1,6 +1,6 @@
 import { Elysia, NotFoundError, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
-import Storage from "../../../libs/storage"
+import Storage from "../../../libs/swift-client"
 
 const getFileRoute = new Elysia()
 
@@ -19,11 +19,7 @@ getFileRoute.get(
       return err.message
     })) as string
 
-    if (
-      response ===
-      "<html><h1>Not Found</h1><p>The resource could not be found.</p></html>"
-    )
-      throw new NotFoundError()
+    if (response.includes("OpenStack Error 404")) throw new NotFoundError()
 
     return {
       fileContent: response || "",
