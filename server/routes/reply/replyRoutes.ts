@@ -34,6 +34,7 @@ sendMail.post(
         "remove-user",
         "update-user-data",
         "bso_local_variations_publications",
+        "bso_local_variations_datasets",
       ]
 
       if (!allowedCollections.includes(collectionName)) {
