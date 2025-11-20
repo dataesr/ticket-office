@@ -54,10 +54,12 @@ sendMail.post(
         }
       }
 
-      const selectedConfig: ReplyEmailConfig =
-        collectionName === "bso_local_variations_publications"
-          ? replyEmailConfig.bso
-          : replyEmailConfig.scanr
+      const selectedConfig: ReplyEmailConfig = [
+        "bso_local_variations_publications",
+        "bso_local_variations_datasets",
+      ].includes(collectionName)
+        ? replyEmailConfig.bso
+        : replyEmailConfig.scanr
 
       const dataForBrevo = {
         sender: {
