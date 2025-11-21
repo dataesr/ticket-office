@@ -60,8 +60,8 @@ export function determineCollectionName(collectionPrefix: string): string {
     "remove-user": "remove-user",
     productions: "contribute_productions",
     "update-user-data": "update-user-data",
-    bso_local_variations_publications: "bso_local_variations_publications",
-    bso_local_variations_datasets: "bso_local_variations_datasets",
+    "bso-publications": "bso_local_variations_publications",
+    "bso-datasets": "bso_local_variations_datasets",
   }
 
   const normalizedPrefix = collectionPrefix.toLowerCase().replace(/-/g, "")
