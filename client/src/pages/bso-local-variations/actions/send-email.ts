@@ -1,14 +1,22 @@
 import { toast } from "react-toastify"
-import { Variation } from "../types"
+import { Variation, VariationsTypes } from "../types"
 import editVariations from "./edit-variations"
 import { notificationGetTemplate } from "../config/notifications"
 
 const messageTemplate = (variation: Variation) =>
-  `<ul><li>Nom de la structure: ${variation.structure.name}</li><li>Identifiant de la structure: ${
+  `<ul><li>Nom de la structure: ${
+    variation.structure.name
+  }</li><li>Identifiant de la structure: ${
     variation.structure?.id || "Non renseigné"
-  }</li><li>Date de la demande: ${new Date(variation.created_at).toLocaleDateString()}</li></ul>`
+  }</li><li>Date de la demande: ${new Date(
+    variation.created_at
+  ).toLocaleDateString()}</li></ul>`
 
-async function sendEmail(variation: Variation, response: string) {
+async function sendEmail(
+  api: VariationsTypes,
+  variation: Variation,
+  response: string
+) {
   const url = `/api/send-email`
   const selectedProfile = localStorage.getItem("selectedProfile")
   const formattedResponse = response.replace(/\n/g, "<br/>")
@@ -20,7 +28,7 @@ async function sendEmail(variation: Variation, response: string) {
     subject: `Réponse à votre demande de déclinaison locale, référence bso-${variation.id}`,
     userResponse: formattedResponse,
     message: messageTemplate(variation),
-    collectionName: "bso_local_variations_publications",
+    collectionName: `bso_local_variations_${api}`,
     selectedProfile,
   }
 
@@ -32,7 +40,8 @@ async function sendEmail(variation: Variation, response: string) {
     body: JSON.stringify(emailPayload),
   })
     .then((response) => {
-      if (!response.ok) throw new Error(`Error while sending email: ${response.status}`)
+      if (!response.ok)
+        throw new Error(`Error while sending email: ${response.status}`)
     })
     .catch((error) => {
       throw error
@@ -40,7 +49,7 @@ async function sendEmail(variation: Variation, response: string) {
 }
 
 export default async function sendEmails(
-  api: string,
+  api: VariationsTypes,
   variations: Array<Variation>,
   notification: string,
   response: string,
@@ -48,18 +57,27 @@ export default async function sendEmails(
   getCommentsName?: (id: string) => string
 ) {
   // Set status as treated if final notification sent
-  const inputs = { tags: { notification: notification }, status: notification === "done" ? "treated" : "ongoing" }
+  const inputs = {
+    tags: { notification: notification },
+    status: notification === "done" ? "treated" : "ongoing",
+  }
 
   // If single variation and notification is custom, set correct status (should only happen from email-box)
   if (variations.length === 1 && notification === "custom")
-    inputs.status = variations[0].tags?.notification === "done" ? "treated" : "ongoing"
+    inputs.status =
+      variations[0].tags?.notification === "done" ? "treated" : "ongoing"
 
   Promise.all(
     variations.map((variation) =>
       sendEmail(
+        api,
         variation,
         useTemplate
-          ? notificationGetTemplate(notification, variation.structure?.id, getCommentsName(variation.structure?.id))
+          ? notificationGetTemplate(
+              notification,
+              variation.structure?.id,
+              getCommentsName(variation.structure?.id)
+            )
           : response
       )
     )
@@ -73,7 +91,9 @@ export default async function sendEmails(
         )
       }
       toast.success(
-        variations?.length > 1 ? "Les emails ont été envoyés avec succès !" : "L'email à été envoyé avec succès !"
+        variations?.length > 1
+          ? "Les emails ont été envoyés avec succès !"
+          : "L'email à été envoyé avec succès !"
       )
     })
     .catch((error) => {

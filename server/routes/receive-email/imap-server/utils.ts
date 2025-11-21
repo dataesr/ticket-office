@@ -61,6 +61,7 @@ export function determineCollectionName(collectionPrefix: string): string {
     productions: "contribute_productions",
     "update-user-data": "update-user-data",
     bso_local_variations_publications: "bso_local_variations_publications",
+    bso_local_variations_datasets: "bso_local_variations_datasets",
   }
 
   const normalizedPrefix = collectionPrefix.toLowerCase().replace(/-/g, "")
@@ -103,6 +104,9 @@ export function generateContributionLink(
   }
   if (collectionName === "bso_local_variations_publications") {
     return `${baseUrl}/bso-local-variations-publications?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`
+  }
+  if (collectionName === "bso_local_variations_datasets") {
+    return `${baseUrl}/bso-local-variations-datasets?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`
   }
   if (collectionName === "contribute_productions") {
     return `${baseUrl}/scanr-apioperations?page=1&query=${referenceId}&searchInMessage=false&sort=DESC&status=choose`

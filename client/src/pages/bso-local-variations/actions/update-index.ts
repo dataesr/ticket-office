@@ -1,8 +1,12 @@
 import { toast } from "react-toastify"
-import { Variation } from "../types"
+import { Variation, VariationsTypes } from "../types"
 import editVariations from "./edit-variations"
 
-export default async function updateIndex(api: string, variations: Array<Variation>, data: Record<string, unknown>) {
+export default async function updateIndex(
+  api: VariationsTypes,
+  variations: Array<Variation>,
+  data: Record<string, unknown>
+) {
   const indexName = data.index_name
   const url = `/api/bso-tasks`
 
@@ -22,7 +26,9 @@ export default async function updateIndex(api: string, variations: Array<Variati
         variations.map((variation) => variation.id),
         { tags: { index: data.id } }
       )
-      toast.success(`L'index ${indexName} a été lancé avec succès ! (id: ${data.id})`)
+      toast.success(
+        `L'index ${indexName} a été lancé avec succès ! (id: ${data.id})`
+      )
     })
     .catch((error) => {
       console.error("updateIndex error:", error.message)

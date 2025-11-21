@@ -1,9 +1,9 @@
 import { toast } from "react-toastify"
-import { Variation } from "../types"
+import { Variation, VariationsTypes } from "../types"
 import editVariations from "./edit-variations"
 import { getContainer } from "../config/containers"
 
-async function uploadFile(api: string, variation: Variation) {
+async function uploadFile(api: VariationsTypes, variation: Variation) {
   const container = getContainer(api)
   if (!container) {
     throw `uploadFile: Container not found for variations api ${api}`
@@ -26,14 +26,18 @@ async function uploadFile(api: string, variation: Variation) {
     body: JSON.stringify(data),
   })
     .then((response) => {
-      if (!response.ok) throw new Error(`Error while uploading file for id ${variation.id}`)
+      if (!response.ok)
+        throw new Error(`Error while uploading file for id ${variation.id}`)
     })
     .catch((error) => {
       throw error
     })
 }
 
-export default async function uploadFiles(api: string, variations: Array<Variation>) {
+export default async function uploadFiles(
+  api: VariationsTypes,
+  variations: Array<Variation>
+) {
   const inputs = { tags: { file: "uploaded" }, status: "ongoing" }
 
   Promise.all(variations.map((variation) => uploadFile(api, variation)))
@@ -51,6 +55,8 @@ export default async function uploadFiles(api: string, variations: Array<Variati
     })
     .catch((error) => {
       console.error("uploadFiles error:", error.message)
-      toast.error("Une erreur est survenue lors du chargement des fichiers sur OVH.")
+      toast.error(
+        "Une erreur est survenue lors du chargement des fichiers sur OVH."
+      )
     })
 }

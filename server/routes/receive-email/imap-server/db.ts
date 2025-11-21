@@ -20,6 +20,7 @@ export async function lookupCorrectCollection(
     "remove-user",
     "update-user-data",
     "bso_local_variations_publications",
+    "bso_local_variations_datasets",
   ]
   try {
     const database = client.db(config.dbName)
