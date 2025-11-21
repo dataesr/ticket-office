@@ -25,7 +25,7 @@ async function sendEmail(
     contributionId: variation.id,
     to: variation.contact.email,
     name: variation.contact.email.split("@")[0],
-    subject: `Réponse à votre demande de déclinaison locale, référence bso-${variation.id}`,
+    subject: `Réponse à votre demande de déclinaison locale, référence bso-${api}-${variation.id}`,
     userResponse: formattedResponse,
     message: messageTemplate(variation),
     collectionName: `bso_local_variations_${api}`,
