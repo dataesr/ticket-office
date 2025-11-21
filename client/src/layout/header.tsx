@@ -1,4 +1,4 @@
-import { Button, Link } from "@dataesr/dsfr-plus";
+import { Button, Link, Logo } from "@dataesr/dsfr-plus";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -90,19 +90,12 @@ const Header: React.FC = () => {
         <div className="fr-container">
           <div className="fr-header__brand ">
             <div className="fr-header__body-row fr-enlarge-link">
-              <div className="fr-header__brand-top">
-                <div className="fr-header__logo">
-                  <p className="fr-logo">
-                    Le guichet numérique
-                    <br />
-                    DISD
-                  </p>
-                  <a href="/" title="Accueil"></a>
-                  <p className="fr-header__service-tagline">
-                    Le Guichet numérique {import.meta.env.VITE_HEADER_TAG}
-                  </p>
-                </div>
-              </div>
+              <Logo
+                splitCharacter="|"
+                text={`Ministère|de l'enseignement|supérieur,|de la recherche|et de l'espace --
+                  ${import.meta.env.VITE_HEADER_TAG}`}
+              />
+              <a href="/" title="Accueil"></a>
             </div>
             <div className="fr-header__tools">
               <Button onClick={() => setShowModal(true)}>
