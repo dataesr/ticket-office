@@ -15,6 +15,10 @@ export const MATOMO_SITES = {
     id: "50",
     name: "Works Magnet Prod",
   },
+  BSO: {
+    id: "34",
+    name: "BSO Prod",
+  },
 } as const;
 
 export type MatomoSiteKey = keyof typeof MATOMO_SITES;
