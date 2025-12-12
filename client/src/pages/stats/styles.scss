@@ -1,17 +1,5 @@
-.stats-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .stats-header {
-  margin-bottom: 2rem;
   text-align: center;
-
-  .stats-subtitle {
-    color: var(--text-mention-grey);
-    font-size: 1.125rem;
-    margin-top: 0.5rem;
-  }
 }
 
 .stats-filters {
@@ -23,56 +11,6 @@
   border-radius: 0.5rem;
   flex-wrap: wrap;
   gap: 1rem;
-
-  .filter-group {
-    label {
-      margin-bottom: 0.5rem;
-      color: var(--text-label-grey);
-    }
-
-    .fr-select,
-    .fr-input {
-      width: 100%;
-    }
-  }
-}
-
-.stats-info-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.stats-period-label {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--text-title-grey);
-}
-
-.stats-active-filters {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  .filter-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.5rem 1rem;
-    background-color: var(--background-action-high-blue-france);
-    color: var(--text-on-action-high-blue-france);
-    border-radius: 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-  }
-
-  .fr-btn {
-    padding: 0.25rem 0.5rem;
-    min-height: auto;
-  }
 }
 
 .stat-card {
@@ -157,12 +95,6 @@
 .stats-loading,
 .stats-error {
   margin-top: 2rem;
-}
-
-.quick-dates {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
 }
 
 .stat-table {

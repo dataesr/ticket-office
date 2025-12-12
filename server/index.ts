@@ -15,6 +15,7 @@ import sendMail from "./routes/reply/replyRoutes";
 import storageRoutes from "./routes/storage";
 import updateUserDataRoutes from "./routes/update-user-data";
 import matomo from "./routes/matomo";
+import certificatsRoutes from "./routes/certifcats";
 
 const ENV = Bun.env.NODE_ENV || "development";
 const PORT = parseInt(Bun.env.PORT || "3000");
@@ -65,6 +66,7 @@ const buildApi = () => {
     app.use(matomo);
     app.use(bsoLocalVariationsRoutes);
     app.use(bsoTasksRoutes);
+    app.use(certificatsRoutes);
     app.use(contactsRoutes);
     app.use(contributionObjectRoutes);
     app.use(getLastMailsSentRoutes);

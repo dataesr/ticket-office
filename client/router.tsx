@@ -10,15 +10,13 @@ import Home from "./src/pages/home";
 import LastMailsReceived from "./src/pages/last-mails-received";
 import LastMailSent from "./src/pages/last-mails-sent";
 import GetStats from "./src/pages/stats";
+import Certificats from "./src/pages/certificats";
 
 export default function Router() {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route
-          element={<Home />}
-          path="/"
-        />
+        <Route element={<Home />} path="/" />
         <Route
           element={<ContactAndContributionPage />}
           path="/scanr-contributionPage"
@@ -48,25 +46,18 @@ export default function Router() {
           path="/curiexplore-contact"
         />
         <Route
-          element={<ContactAndContributionPage fromApplication="works-magnet" />}
+          element={
+            <ContactAndContributionPage fromApplication="works-magnet" />
+          }
           path="/works-magnet-contact"
         />
         <Route
           element={<ContactAndContributionPage fromApplication="datasupr" />}
           path="/datasupr-contact"
         />
-        <Route
-          element={<LastMailSent />}
-          path="/last-mails-sent"
-        />
-        <Route
-          element={<LastMailsReceived />}
-          path="/last-mails-received"
-        />
-        <Route
-          element={<ApiOperationPage />}
-          path="/scanr-apioperations"
-        />
+        <Route element={<LastMailSent />} path="/last-mails-sent" />
+        <Route element={<LastMailsReceived />} path="/last-mails-received" />
+        <Route element={<ApiOperationPage />} path="/scanr-apioperations" />
         <Route
           element={<ContactAndContributionPage />}
           path="/scanr-removeuser"
@@ -75,14 +66,9 @@ export default function Router() {
           element={<ContactAndContributionPage />}
           path="/scanr-namechange"
         />
-        <Route
-          element={<GetStats />}
-          path="/statistiques"
-        />
-        <Route
-          element={<Error404 error={null} />}
-          path="*"
-        />
+        <Route element={<GetStats />} path="/statistiques" />
+        <Route element={<Certificats />} path="/certificats" />
+        <Route element={<Error404 error={null} />} path="*" />
       </Route>
     </Routes>
   );

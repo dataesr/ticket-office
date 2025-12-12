@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Title } from "@dataesr/dsfr-plus";
+import { Container, Title, DismissibleTag } from "@dataesr/dsfr-plus";
 import {
   useMatomoStats,
   useMatomoTopPages,
@@ -131,31 +131,24 @@ const GetStats = () => {
       )}
 
       {stats && !isLoading && !error && (
-        <div className="stats-content">
+        <div>
           {((useCustomDate && customDate) || dateInput !== "today") && (
-            <div className="stats-info-bar">
-              <div className="stats-active-filters">
-                <span className="filter-badge">
-                  📅{" "}
-                  {useCustomDate && customDate
-                    ? new Date(customDate).toLocaleDateString("fr-FR")
-                    : dateInput === "yesterday"
-                    ? "Hier"
-                    : dateInput === "last7"
-                    ? "7 derniers jours"
-                    : dateInput === "last30"
-                    ? "30 derniers jours"
-                    : dateInput}
-                </span>
-              </div>
-              <button
-                type="button"
-                className="fr-btn fr-btn--tertiary-no-outline fr-btn--sm"
+            <div className="fr-mb-3w">
+              <DismissibleTag
+                size="sm"
                 onClick={() => handleQuickDate("today")}
-                title="Réinitialiser les filtres"
               >
-                ✕ Réinitialiser
-              </button>
+                📅{" "}
+                {useCustomDate && customDate
+                  ? new Date(customDate).toLocaleDateString("fr-FR")
+                  : dateInput === "yesterday"
+                  ? "Hier"
+                  : dateInput === "last7"
+                  ? "7 derniers jours"
+                  : dateInput === "last30"
+                  ? "30 derniers jours"
+                  : dateInput}
+              </DismissibleTag>
             </div>
           )}
 

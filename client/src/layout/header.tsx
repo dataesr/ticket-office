@@ -215,6 +215,17 @@ const Header: React.FC = () => {
                   Les stats
                 </Link>
               </li>
+              <li className="fr-nav__item">
+                <Link
+                  className="fr-nav__link"
+                  href="/certificats"
+                  aria-current={
+                    pathname === "/certificats" ? "page" : undefined
+                  }
+                >
+                  Les Certificats
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
