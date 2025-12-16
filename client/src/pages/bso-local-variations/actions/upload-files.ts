@@ -1,22 +1,21 @@
-import { toast } from "react-toastify"
-import { Variation, VariationsTypes } from "../types"
-import editVariations from "./edit-variations"
-import { getContainer } from "../config/containers"
+import { toast } from "react-toastify";
+import { Variation, VariationsTypes } from "../types";
+import editVariations from "./edit-variations";
+import { getContainer } from "../config/containers";
 
 async function uploadFile(api: VariationsTypes, variation: Variation) {
-  const container = getContainer(api)
+  const container = getContainer(api);
   if (!container) {
-    throw `uploadFile: Container not found for variations api ${api}`
+    throw `uploadFile: Container not found for variations api ${api}`;
   }
 
-  const url = `/api/storage`
+  const url = `/api/storage`;
   const data = {
     container: container,
     filename: `${variation.structure?.id || variation.structure.name}.csv`,
     mimetype: "text/csv",
     buffer: variation.csv,
-  }
-  console.log("data", data)
+  };
 
   fetch(url, {
     method: "POST",
@@ -27,18 +26,18 @@ async function uploadFile(api: VariationsTypes, variation: Variation) {
   })
     .then((response) => {
       if (!response.ok)
-        throw new Error(`Error while uploading file for id ${variation.id}`)
+        throw new Error(`Error while uploading file for id ${variation.id}`);
     })
     .catch((error) => {
-      throw error
-    })
+      throw error;
+    });
 }
 
 export default async function uploadFiles(
   api: VariationsTypes,
   variations: Array<Variation>
 ) {
-  const inputs = { tags: { file: "uploaded" }, status: "ongoing" }
+  const inputs = { tags: { file: "uploaded" }, status: "ongoing" };
 
   Promise.all(variations.map((variation) => uploadFile(api, variation)))
     .then(() => {
@@ -46,17 +45,17 @@ export default async function uploadFiles(
         api,
         variations.map((variation) => variation.id),
         inputs
-      )
+      );
       toast.success(
         variations?.length > 1
           ? "Les fichiers ont été chargés sur OVH avec succès !"
           : "Le fichier à été chargé sur OVH avec succès !"
-      )
+      );
     })
     .catch((error) => {
-      console.error("uploadFiles error:", error.message)
+      console.error("uploadFiles error:", error.message);
       toast.error(
         "Une erreur est survenue lors du chargement des fichiers sur OVH."
-      )
-    })
+      );
+    });
 }

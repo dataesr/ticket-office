@@ -1,0 +1,235 @@
+.stats-header {
+  text-align: center;
+}
+
+.stats-filters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: var(--background-alt-grey);
+  border-radius: 0.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.stat-card {
+  background: var(--background-alt-grey);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-left: 4px solid var(--border-default-grey);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  &--primary {
+    border-left-color: var(--background-action-high-blue-france);
+  }
+
+  &--success {
+    border-left-color: #18753c;
+  }
+
+  &--info {
+    border-left-color: #0063cb;
+  }
+
+  &--warning {
+    border-left-color: #fc5d00;
+  }
+
+  &--secondary {
+    border-left-color: var(--border-default-grey);
+  }
+
+  &__icon {
+    font-size: 2.5rem;
+    line-height: 1;
+  }
+
+  &__content {
+    flex: 1;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: var(--text-mention-grey);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-title-grey);
+    line-height: 1.2;
+
+    &--large {
+      font-size: 2.5rem;
+    }
+  }
+
+  &__meta {
+    font-size: 0.875rem;
+    color: var(--text-mention-grey);
+    margin-top: 0.25rem;
+  }
+
+  &__description {
+    font-size: 0.875rem;
+    color: var(--text-mention-grey);
+    margin-top: 0.5rem;
+  }
+}
+
+.stats-loading,
+.stats-error {
+  margin-top: 2rem;
+}
+
+.stat-table {
+  background: var(--background-alt-grey);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  &__title {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-title-grey);
+  }
+
+  .fr-table {
+    width: 100%;
+    margin: 0;
+
+    th {
+      font-weight: 600;
+      color: var(--text-label-grey);
+      text-transform: uppercase;
+      font-size: 0.875rem;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      color: var(--text-default-grey);
+    }
+
+    .page-label {
+      font-family: monospace;
+      font-size: 0.875rem;
+      color: var(--text-label-blue-france);
+    }
+  }
+}
+
+.stat-list {
+  background: var(--background-alt-grey);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  height: 100%;
+
+  &__title {
+    margin: 0 0 1rem 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-title-grey);
+  }
+
+  &__items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-default-grey);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__label {
+    font-weight: 500;
+    color: var(--text-default-grey);
+  }
+
+  &__value {
+    font-weight: 600;
+    color: var(--text-title-grey);
+    text-align: right;
+  }
+
+  &__meta {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-mention-grey);
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-filters {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .quick-dates {
+    .fr-btn {
+      font-size: 0.875rem;
+      padding: 0.5rem 0.75rem;
+    }
+  }
+
+  .stat-card {
+    padding: 1rem;
+
+    &__icon {
+      font-size: 2rem;
+    }
+
+    &__value {
+      font-size: 1.5rem;
+
+      &--large {
+        font-size: 2rem;
+      }
+    }
+  }
+
+  .stat-table {
+    overflow-x: auto;
+
+    .fr-table {
+      font-size: 0.875rem;
+    }
+  }
+
+  .stat-list {
+    &__item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.25rem;
+    }
+
+    &__value {
+      text-align: left;
+    }
+  }
+}

@@ -332,6 +332,27 @@ export async function fetchEmails() {
             referenceId,
             collectionName: finalCollectionName,
           });
+        } else {
+          const senderName =
+            message.envelope.from && message.envelope.from.length > 0
+              ? message.envelope.from[0].name ||
+                message.envelope.from[0].address
+              : "Expéditeur inconnu";
+          const textToUse = processedContent.text || "Pas de contenu";
+          const mattermostMessage = `
+🚨 **Mail non suivi**
+📩 **Nouveau mail de ${senderName}** le ${date}
+**Extrait du message :**
+${textToUse.substring(0, 100)}...
+`;
+          try {
+            await sendMattermostNotification(mattermostMessage);
+          } catch (error) {
+            console.error(
+              "❌ Erreur notification Mattermost pour mail non suivi:",
+              error
+            );
+          }
         }
       }
 

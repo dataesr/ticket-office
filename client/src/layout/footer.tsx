@@ -17,7 +17,7 @@ export default function MainFooter() {
       <FooterBody>
         <Logo
           splitCharacter="|"
-          text="Ministère|chargé|de l'enseignement|supérieur|et de la recherche"
+          text="Ministère|chargé|de l'enseignement|supérieur|de la recherche et de l'espace"
         />
         <Link
           className="fr-footer__content-link"
