@@ -13,12 +13,17 @@ interface CertificateReport {
 
 const SITES = [
   "paysage.enseignementsup-recherche.gouv.fr",
+  "bso.dataesr.ovh",
   "scanr.enseignementsup-recherche.gouv.fr",
+  "scanr.dataesr.ovh",
+  "paysage.dataesr.ovh",
   "barometredelascienceouverte.esr.gouv.fr",
+  "paysage.staging.dataesr.ovh",
   "works-magnet.esr.gouv.fr",
   "data.esr.gouv.fr",
   "data.enseignementsup-recherche.gouv.fr",
   "curiexplore.enseignementsup-recherche.gouv.fr",
+  "cluster-production.elasticsearch.dataesr.ovh",
   "piwik.enseignementsup-recherche.pro",
   "publication.enseignementsup-recherche.gouv.fr",
 ];
