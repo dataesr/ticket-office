@@ -7,7 +7,7 @@ import bsoLocalVariationsRoutes from "./routes/bso-local-variations";
 import bsoTasksRoutes from "./routes/bso-tasks";
 import contactsRoutes from "./routes/contacts";
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
-import getLastMailsSentRoutes from "./routes/matomo";
+import getLastMailsSentRoutes from "./routes/last-mails-sent";
 import productionsRoutes from "./routes/productions";
 import getReceivedMailsRoutes from "./routes/receive-email";
 import removeUserRoutes from "./routes/remove-user";
