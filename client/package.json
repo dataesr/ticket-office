@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "bunx --bun vite",
-    "build": "bunx --bun vite build --emptyOutDir --outDir '../server/public'",
+    "dev": "vite",
+    "build": "vite build --emptyOutDir --outDir '../server/public'",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "check-updates": "npx npm-check-updates --interactive --format group",
     "update-deps": "git checkout -b upgrade-deps && npx npm-check-updates -u --target minor && bun install"

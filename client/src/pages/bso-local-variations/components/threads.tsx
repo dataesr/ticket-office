@@ -6,7 +6,7 @@ import { useState } from "react"
 
 export default function Threads({ variation }: { variation: Variation }) {
   const [modalImage, setModalImage] = useState<string | null>(null)
-  console.log(variation)
+
   return (
     <Container fluid>
       {variation?.threads?.length > 0 && (
