@@ -40,14 +40,14 @@ export default function EmailBox({ variation }: { variation: Variation }) {
               value={notificationTag}
               onChange={(event) => {
                 setNotificationTag(event.target.value)
-                setUserResponse(notificationGetTemplate(event.target.value, variation.structure?.id, commentsName))
+                setUserResponse(notificationGetTemplate(event.target.value, api, variation.structure?.id, commentsName))
               }}
             >
               <option key="custom" value="custom">
                 Réponse personnalisée
               </option>
               <option key="done" value="done" disabled={!variation.structure?.id || !commentsName}>
-                {notificationGetName("done")}
+                {notificationGetName("done", api)}
               </option>
             </select>
             <TextArea

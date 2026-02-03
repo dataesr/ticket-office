@@ -75,6 +75,7 @@ export default async function sendEmails(
         useTemplate
           ? notificationGetTemplate(
               notification,
+              api,
               variation.structure?.id,
               getCommentsName(variation.structure?.id)
             )
