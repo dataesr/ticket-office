@@ -13,6 +13,13 @@ export const newContributionEmailConfig = {
     replyToName: "L'équipe BSO",
     templateId: 272,
   },
+  datasupr: {
+    senderEmail: process.env.DATASUPR_MAIL_SENDER,
+    senderName: "L'équipe dataSupr",
+    replyToEmail: "datasupr@recherche.gouv.fr",
+    replyToName: "L'équipe dataSupr",
+    templateId: 268,
+  },
 };
 
 export const replyEmailConfig = {
@@ -28,7 +35,19 @@ export const replyEmailConfig = {
     senderName: "L'équipe BSO",
     replyToEmail: "bso@dataesr.fr",
     replyToName: "L'équipe BSO",
-    bcc: [{ name: "Baromètre français de la Science Ouverte", email: "bso@recherche.gouv.fr" }],
+    bcc: [
+      {
+        name: "Baromètre français de la Science Ouverte",
+        email: "bso@recherche.gouv.fr",
+      },
+    ],
     templateId: 272,
   },
-}
+  datasupr: {
+    senderEmail: process.env.DATASUPR_MAIL_SENDER,
+    senderName: "L'équipe dataSupr",
+    replyToEmail: "support@scanr.fr",
+    replyToName: "L'équipe dataSupr",
+    templateId: 267,
+  },
+};
