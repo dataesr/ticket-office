@@ -152,7 +152,12 @@ postContactsRoutes.post(
         };
       }
 
-      const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ${body.fromApplication.toUpperCase()}
+      const subApplication = finalContribution.extra?.subapplication;
+      const titleSuffix = subApplication ? ` concernant ${subApplication}` : "";
+      const appName =
+        body.fromApplication.charAt(0).toUpperCase() +
+        body.fromApplication.slice(1);
+      const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ${appName}${titleSuffix}
 **Nom**: ${finalContribution.name}  
 **Email**: ${finalContribution.email}  
 **Fonction**: ${finalContribution.extra?.fonction || "non renseigné"}  
