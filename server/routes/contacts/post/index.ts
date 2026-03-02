@@ -152,7 +152,7 @@ postContactsRoutes.post(
         };
       }
 
-      const subApplication = finalContribution.extra?.subapplication;
+      const subApplication = finalContribution.extra?.subApplication;
       const titleSuffix = subApplication ? ` concernant ${subApplication}` : "";
       const appName =
         body.fromApplication.charAt(0).toUpperCase() +
