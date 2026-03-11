@@ -45,9 +45,9 @@ export const replyEmailConfig = {
   },
   datasupr: {
     senderEmail: process.env.DATASUPR_MAIL_SENDER,
-    senderName: "L'équipe dataSupr",
+    senderName: "L'équipe dataEsr",
     replyToEmail: "support@scanr.fr",
-    replyToName: "L'équipe dataSupr",
-    templateId: 267,
+    replyToName: "L'équipe dataEsr",
+    templateId: 285,
   },
 };
