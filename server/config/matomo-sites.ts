@@ -19,6 +19,14 @@ export const MATOMO_SITES = {
     id: "34",
     name: "BSO Prod",
   },
+  "tableaux.dataESR (staging)": {
+    id: "51",
+    name: "Tableaux Staging",
+  },
+  "tableaux.dataESR (production)": {
+    id: "52",
+    name: "Tableaux Prod",
+  },
 } as const;
 
 export type MatomoSiteKey = keyof typeof MATOMO_SITES;
