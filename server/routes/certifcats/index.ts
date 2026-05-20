@@ -12,20 +12,24 @@ interface CertificateReport {
 }
 
 const SITES = [
-  "paysage.enseignementsup-recherche.gouv.fr",
-  "bso.dataesr.ovh",
-  "scanr.enseignementsup-recherche.gouv.fr",
-  "scanr.dataesr.ovh",
-  "paysage.dataesr.ovh",
   "barometredelascienceouverte.esr.gouv.fr",
-  "paysage.staging.dataesr.ovh",
-  "works-magnet.esr.gouv.fr",
-  "data.esr.gouv.fr",
-  "data.enseignementsup-recherche.gouv.fr",
-  "curiexplore.enseignementsup-recherche.gouv.fr",
+  "bso.dataesr.ovh",
+  "catalogue.dataesr.ovh",
   "cluster-production.elasticsearch.dataesr.ovh",
+  "curiexplore.dataesr.ovh",
+  "curiexplore.enseignementsup-recherche.gouv.fr",
+  "data.enseignementsup-recherche.gouv.fr",
+  "data.esr.gouv.fr",
+  "datafresq.dataesr.ovh",
+  "paysage.dataesr.ovh",
+  "paysage.enseignementsup-recherche.gouv.fr",
+  "paysage.staging.dataesr.ovh",
   "piwik.enseignementsup-recherche.pro",
   "publication.enseignementsup-recherche.gouv.fr",
+  "scanr.dataesr.ovh",
+  "scanr.enseignementsup-recherche.gouv.fr",
+  "works-magnet.dataesr.ovh",
+  "works-magnet.esr.gouv.fr",
 ];
 
 async function getSSLExpiryDate(hostname: string): Promise<Date> {
