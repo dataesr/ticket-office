@@ -12,15 +12,22 @@ interface CertificateReport {
 }
 
 const SITES = [
+  "api.paysage.dataesr.ovh",
   "barometredelascienceouverte.esr.gouv.fr",
   "bso.dataesr.ovh",
+  "bso.staging.dataesr.ovh",
   "catalogue.dataesr.ovh",
+  "catalogue.staging.dataesr.ovh",
   "cluster-production.elasticsearch.dataesr.ovh",
   "curiexplore.dataesr.ovh",
   "curiexplore.enseignementsup-recherche.gouv.fr",
+  "curiexplore.staging.dataesr.ovh",
   "data.enseignementsup-recherche.gouv.fr",
   "data.esr.gouv.fr",
   "datafresq.dataesr.ovh",
+  "datafresq.staging.dataesr.ovh",
+  "frenchopensciencemonitor.esr.gouv.fr",
+  "paysage-api.staging.dataesr.ovh",
   "paysage.dataesr.ovh",
   "paysage.enseignementsup-recherche.gouv.fr",
   "paysage.staging.dataesr.ovh",
@@ -28,8 +35,10 @@ const SITES = [
   "publication.enseignementsup-recherche.gouv.fr",
   "scanr.dataesr.ovh",
   "scanr.enseignementsup-recherche.gouv.fr",
+  "scanr.staging.dataesr.ovh",
   "works-magnet.dataesr.ovh",
   "works-magnet.esr.gouv.fr",
+  "works-magnet.staging.dataesr.ovh",
 ];
 
 async function getSSLExpiryDate(hostname: string): Promise<Date> {
@@ -124,9 +133,8 @@ async function checkAndNotifyCertificates() {
         if (remainingDays === 20 || remainingDays === 10) {
           const emoji =
             remainingDays === 10 ? "🚨" : remainingDays === 20 ? "⚠️" : "🔔";
-          const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${
-            expiryDate.toISOString().split("T")[0]
-          }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
+          const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${expiryDate.toISOString().split("T")[0]
+            }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
 
           await sendMattermostNotification(message, "certificats-ssl");
         }

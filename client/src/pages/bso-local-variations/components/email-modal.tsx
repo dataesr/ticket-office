@@ -46,7 +46,7 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
         <TextArea style={{ resize: "none" }} value={displayUserResponse} rows={10} readOnly={useTemplate} />
         {useTemplate && (
           <Notice type="warning" closeMode="disallow">
-            Le template n'est pas modifiable si plusieurs demandes sont selectionnées.
+            Le template n'est pas modifiable si plusieurs demandes sont sélectionnées.
           </Notice>
         )}
       </ModalContent>
