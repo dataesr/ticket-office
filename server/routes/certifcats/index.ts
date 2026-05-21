@@ -36,6 +36,8 @@ const SITES = [
   "scanr.dataesr.ovh",
   "scanr.enseignementsup-recherche.gouv.fr",
   "scanr.staging.dataesr.ovh",
+  "ticket-office.dataesr.ovh",
+  "ticket-office.staging.dataesr.ovh",
   "works-magnet.dataesr.ovh",
   "works-magnet.esr.gouv.fr",
   "works-magnet.staging.dataesr.ovh",
