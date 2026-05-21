@@ -42,7 +42,7 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
           ))}
         </ul>
         <hr />
-        <Text>Déclinaison locale integrée</Text>
+        <Text>Déclinaison locale intégrée</Text>
         <TextArea style={{ resize: "none" }} value={displayUserResponse} rows={10} readOnly={useTemplate} />
         {useTemplate && (
           <Notice type="warning" closeMode="disallow">
