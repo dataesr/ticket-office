@@ -17,7 +17,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
-  const apiBaseUrl = "/api/send-email";
+  const apiBaseUrl = "/api/reply-to-contribution";
   const selectedProfile = localStorage.getItem("selectedProfile");
 
   const sendEmail = async () => {

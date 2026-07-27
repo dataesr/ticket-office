@@ -14,7 +14,7 @@ const db = client.db(DB_NAME);
 const sendMail = new Elysia();
 
 sendMail.post(
-  "/send-email",
+  "/reply-to-contribution",
   async ({ body, set }: { body: any; set: any }) => {
     try {
       const {
@@ -185,10 +185,74 @@ sendMail.post(
       500: errorSchema,
     },
     detail: {
-      summary: "Envoi d'un e-mail",
+      summary: "Répondre à une contribution",
       description:
-        "Cette route permet d'envoyer un e-mail à un destinataire et d'enregistrer la réponse dans MongoDB dans une collection spécifique. Elle log également les emails envoyés dans une nouvelle collection 'sent_emails'.",
+        "Envoie un e-mail de réponse à un contributeur via Brevo, enregistre la réponse dans le thread de la contribution MongoDB et log l'email dans la collection 'sent_emails'.",
       tags: ["Envoi de mails"],
+      responses: {
+        200: {
+          description: "E-mail envoyé et contribution mise à jour",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  success: { type: "boolean", example: true },
+                  message: {
+                    type: "string",
+                    example:
+                      "E-mail envoyé, réponse enregistrée et email loggé dans sent_emails",
+                  },
+                  collection: { type: "string", example: "contacts" },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: "Collection non autorisée",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  success: { type: "boolean", example: false },
+                  error: { type: "string" },
+                },
+              },
+            },
+          },
+        },
+        404: {
+          description: "Contribution introuvable",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  success: { type: "boolean", example: false },
+                  error: { type: "string", example: "Document not found" },
+                },
+              },
+            },
+          },
+        },
+        500: {
+          description: "Erreur serveur",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  success: { type: "boolean", example: false },
+                  error: { type: "string" },
+                  details: { type: "string" },
+                },
+              },
+            },
+          },
+        },
+      },
     },
   }
 );

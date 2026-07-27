@@ -18,10 +18,13 @@ export const postSendSimpleEmailSchema = t.Object(
     senderName: t.Optional(
       t.String({ description: "Nom de l'expéditeur (défaut : L'équipe DISD)" })
     ),
-    message: t.Optional(t.String({ description: "Corps du message en HTML" })),
-    templateId: t.Optional(
-      t.Number({ description: "ID du template Brevo (optionnel)" })
+    message: t.Optional(
+      t.String({
+        description:
+          "Corps du message en HTML, si templateId est fourni, Brevo ignore htmlContent de toute façon côté API",
+      })
     ),
+    templateId: t.Optional(t.Number({ description: "ID du template Brevo" })),
     params: t.Optional(
       t.Record(t.String(), t.Any(), {
         description:
