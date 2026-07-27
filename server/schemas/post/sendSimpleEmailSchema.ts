@@ -8,7 +8,26 @@ export const postSendSimpleEmailSchema = t.Object(
     }),
     name: t.String({ description: "Nom du destinataire" }),
     subject: t.String({ description: "Objet de l'e-mail" }),
-    message: t.String({ description: "Corps du message" }),
+    senderEmail: t.Optional(
+      t.String({
+        format: "email",
+        description:
+          "Adresse e-mail de l'expéditeur (défaut : SCANR_MAIL_SENDER)",
+      })
+    ),
+    senderName: t.Optional(
+      t.String({ description: "Nom de l'expéditeur (défaut : L'équipe DISD)" })
+    ),
+    message: t.Optional(t.String({ description: "Corps du message en HTML" })),
+    templateId: t.Optional(
+      t.Number({ description: "ID du template Brevo (optionnel)" })
+    ),
+    params: t.Optional(
+      t.Record(t.String(), t.Any(), {
+        description:
+          "Variables injectées dans le template Brevo (ex: firstname, orderId, amount). Les clés doivent correspondre aux variables {{ params.xxx }} définies dans le template. (https://developers.brevo.com/reference/send-transac-email)",
+      })
+    ),
   },
   { additionalProperties: false }
 );

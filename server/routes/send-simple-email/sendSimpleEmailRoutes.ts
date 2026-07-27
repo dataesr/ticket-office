@@ -8,7 +8,16 @@ sendSimpleEmail.post(
   "/send-simple-email",
   async ({ body, set }) => {
     try {
-      const { to, name, subject, message } = body;
+      const {
+        to,
+        name,
+        subject,
+        message,
+        templateId,
+        params,
+        senderEmail,
+        senderName,
+      } = body;
 
       const BREVO_API_KEY = process.env.BREVO_API_KEY;
       if (!BREVO_API_KEY) {
@@ -21,12 +30,12 @@ sendSimpleEmail.post(
 
       const dataForBrevo = {
         sender: {
-          email: process.env.SCANR_MAIL_SENDER,
-          name: "L'équipe DISD",
+          email: senderEmail ?? process.env.SCANR_MAIL_SENDER,
+          name: senderName ?? "L'équipe DISD",
         },
         to: [{ email: to, name: name }],
         subject: subject,
-        htmlContent: message,
+        ...(templateId ? { templateId, params } : { htmlContent: message }),
       };
 
       const response = await fetch("https://api.brevo.com/v3/smtp/email", {
@@ -70,7 +79,7 @@ sendSimpleEmail.post(
     detail: {
       summary: "Envoi d'un e-mail simple",
       description:
-        "Envoie un e-mail simple via Brevo à un destinataire, sans enregistrement en base de données.",
+        "Envoie un e-mail simple via Brevo à un destinataire, sans enregistrement en base de données. Supporte un contenu HTML libre ou un template Brevo (templateId + params).",
       tags: ["Envoi de mails"],
       responses: {
         200: {
