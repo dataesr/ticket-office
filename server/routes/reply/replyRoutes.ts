@@ -11,9 +11,9 @@ const client = new MongoClient(MONGO_URI);
 await client.connect();
 const db = client.db(DB_NAME);
 
-const sendMail = new Elysia();
+const sendMailToContribution = new Elysia();
 
-sendMail.post(
+sendMailToContribution.post(
   "/reply-to-contribution",
   async ({ body, set }: { body: any; set: any }) => {
     try {
@@ -257,4 +257,4 @@ sendMail.post(
   }
 );
 
-export default sendMail;
+export default sendMailToContribution;

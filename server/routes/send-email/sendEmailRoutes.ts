@@ -1,10 +1,10 @@
 import { Elysia } from "elysia";
 import { errorSchema } from "../../schemas/errors/errorSchema";
-import { postSendSimpleEmailSchema } from "../../schemas/post/sendSimpleEmailSchema";
+import { postSendEmailSchema } from "../../schemas/post/sendEmailSchema";
 
-const sendSimpleEmail = new Elysia();
+const sendEmail = new Elysia();
 
-sendSimpleEmail.post(
+sendEmail.post(
   "/send-email",
   async ({ body, set }) => {
     try {
@@ -71,15 +71,15 @@ sendSimpleEmail.post(
     }
   },
   {
-    body: postSendSimpleEmailSchema,
+    body: postSendEmailSchema,
     response: {
       401: errorSchema,
       500: errorSchema,
     },
     detail: {
-      summary: "Envoi d'un e-mail simple",
+      summary: "Envoi d'un email",
       description:
-        "Envoie un e-mail simple via Brevo à un destinataire, sans enregistrement en base de données. Supporte un contenu HTML libre ou un template Brevo (templateId + params).",
+        "Envoie un e-mail via Brevo à un destinataire, sans enregistrement en base de données. Supporte un contenu HTML libre ou un template Brevo (templateId + params).",
       tags: ["Envoi de mails"],
       responses: {
         200: {
@@ -133,4 +133,4 @@ sendSimpleEmail.post(
   }
 );
 
-export default sendSimpleEmail;
+export default sendEmail;

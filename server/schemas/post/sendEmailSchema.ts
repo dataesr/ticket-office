@@ -1,6 +1,6 @@
 import { t } from "elysia";
 
-export const postSendSimpleEmailSchema = t.Object(
+export const postSendEmailSchema = t.Object(
   {
     to: t.String({
       format: "email",
