@@ -12,6 +12,7 @@ import productionsRoutes from "./routes/productions";
 import getReceivedMailsRoutes from "./routes/receive-email";
 import removeUserRoutes from "./routes/remove-user";
 import sendMail from "./routes/reply/replyRoutes";
+import sendSimpleEmail from "./routes/send-simple-email/sendSimpleEmailRoutes";
 import storageRoutes from "./routes/storage";
 import updateUserDataRoutes from "./routes/update-user-data";
 import matomo from "./routes/matomo";
@@ -74,6 +75,7 @@ const buildApi = () => {
     app.use(productionsRoutes);
     app.use(removeUserRoutes);
     app.use(sendMail);
+    app.use(sendSimpleEmail);
     app.use(storageRoutes);
     app.use(updateUserDataRoutes);
     return app;

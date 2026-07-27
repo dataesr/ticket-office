@@ -18,7 +18,6 @@ const getUrgenceColor = (urgence: string) => {
 
 const Certificats = () => {
   const { data, isLoading, error } = useCertificates();
-
   return (
     <Container className="fr-mt-5w">
       <div className="fr-mb-3w">
@@ -80,8 +79,8 @@ const Certificats = () => {
                           cert.joursRestants < 0
                             ? "fr-text--error"
                             : cert.joursRestants < 30
-                            ? "fr-text--warning"
-                            : ""
+                              ? "fr-text--warning"
+                              : ""
                         }
                       >
                         {cert.joursRestants < 0 ? "Expiré" : cert.joursRestants}

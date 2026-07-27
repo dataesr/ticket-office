@@ -142,12 +142,12 @@ const GetStats = () => {
                 {useCustomDate && customDate
                   ? new Date(customDate).toLocaleDateString("fr-FR")
                   : dateInput === "yesterday"
-                  ? "Hier"
-                  : dateInput === "last7"
-                  ? "7 derniers jours"
-                  : dateInput === "last30"
-                  ? "30 derniers jours"
-                  : dateInput}
+                    ? "Hier"
+                    : dateInput === "last7"
+                      ? "7 derniers jours"
+                      : dateInput === "last30"
+                        ? "30 derniers jours"
+                        : dateInput}
               </DismissibleTag>
             </div>
           )}
