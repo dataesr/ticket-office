@@ -7,6 +7,9 @@
     "check-updates": "npx npm-check-updates --interactive --format group",
     "update-deps": "npx npm-check-updates -u --target minor && bun install"
   },
+  "overrides": {
+    "bson": "7.2.0"
+  },
   "dependencies": {
     "@elysiajs/cors": "^1.4.0",
     "@elysiajs/static": "~1.4.7",
