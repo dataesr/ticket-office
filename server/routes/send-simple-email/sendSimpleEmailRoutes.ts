@@ -5,7 +5,7 @@ import { postSendSimpleEmailSchema } from "../../schemas/post/sendSimpleEmailSch
 const sendSimpleEmail = new Elysia();
 
 sendSimpleEmail.post(
-  "/send-simple-email",
+  "/send-email",
   async ({ body, set }) => {
     try {
       const {
