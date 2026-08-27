@@ -11,8 +11,8 @@ export const emailRecipients: { [key: string]: { to: string[] } } = {
   "works-magnet": {
     to: process.env.WORKS_MAGNET_EMAIL_RECIPIENTS?.split(",") || [],
   },
-  datasupr: {
-    to: process.env.DATASUPR_EMAIL_RECIPIENTS?.split(",") || [],
+  tableaux: {
+    to: process.env.TABLEAUX_EMAIL_RECIPIENTS?.split(",") || [],
   },
   curiexplore: {
     to: process.env.CURIEXPLORE_EMAIL_RECIPIENTS?.split(",") || [],

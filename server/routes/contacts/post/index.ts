@@ -20,7 +20,7 @@ postContactsRoutes.post(
         "scanr",
         "bso",
         "works-magnet",
-        "datasupr",
+        "tableaux",
         "curiexplore",
       ];
 

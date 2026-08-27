@@ -18,7 +18,7 @@ export function generateLinkFromAllDatas(
       bso: "/bso-contact",
       curiexplore: "/curiexplore-contact",
       "works-magnet": "/works-magnet-contact",
-      datasupr: "/datasupr-contact",
+      tableaux: "/tableaux-contact",
       default: "/scanr-contact",
     },
   };

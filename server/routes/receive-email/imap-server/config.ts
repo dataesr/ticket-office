@@ -10,8 +10,8 @@ export const config = {
   //  à voir si pour le bso on veut un mail pour prévenir, pas sur
   scanrEmailRecipients: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
   variationEmailRecipients: process.env.BSO_EMAIL_RECIPIENTS?.split(",") || [],
-  datasuprEmailRecipients:
-    process.env.DATASUPR_EMAIL_RECIPIENTS?.split(",") || [],
+  tableauxEmailRecipients:
+    process.env.TABLEAUX_EMAIL_RECIPIENTS?.split(",") || [],
 
   defaultConfig: {
     mailSender: process.env.SCANR_MAIL_SENDER,
@@ -34,10 +34,10 @@ export const config = {
       recipients: process.env.BSO_EMAIL_RECIPIENTS?.split(",") || [],
     },
     "support@datasupr.fr": {
-      mailSender: process.env.DATASUPR_MAIL_SENDER,
-      senderName: "L'équipe DataSupR",
+      mailSender: process.env.TABLEAUX_MAIL_SENDER,
+      senderName: "L'équipe Tableaux",
       templateId: 269,
-      recipients: process.env.DATASUPR_EMAIL_RECIPIENTS?.split(",") || [],
+      recipients: process.env.TABLEAUX_EMAIL_RECIPIENTS?.split(",") || [],
     },
   } as Record<
     string,
