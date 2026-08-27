@@ -47,7 +47,6 @@ const Certificats = () => {
               Rapport généré le{" "}
               {new Date(data.date).toLocaleDateString("fr-FR")}
             </p>
-            <p>Les token Matomo expire le 7 juin 2026</p>
           </div>
 
           <div className="stat-table">

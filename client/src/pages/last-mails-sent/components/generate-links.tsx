@@ -20,7 +20,7 @@ export function generateLink(
       bso: "/bso-contact",
       curiexplore: "/curiexplore-contact",
       "works-magnet": "/works-magnet-contact",
-      datasupr: "/datasupr-contact",
+      tableaux: "/tableaux-contact",
     },
     contribute_production: "/scanr-apioperations",
     "remove-user": "/scanr-removeuser",

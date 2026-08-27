@@ -173,12 +173,12 @@ const Header: React.FC = () => {
               <li className="fr-nav__item">
                 <Link
                   className="fr-nav__link"
-                  href="/datasupr-contact"
+                  href="/tableaux-contact"
                   aria-current={
-                    pathname === "/datasupr-contact" ? "page" : undefined
+                    pathname === "/tableaux-contact" ? "page" : undefined
                   }
                 >
-                  DatasupR
+                  Tableaux
                 </Link>
               </li>
               <li className="fr-nav__item">

@@ -13,11 +13,11 @@ export const newContributionEmailConfig = {
     replyToName: "L'équipe BSO",
     templateId: 272,
   },
-  datasupr: {
-    senderEmail: process.env.DATASUPR_MAIL_SENDER,
-    senderName: "L'équipe dataSupr",
+  tableaux: {
+    senderEmail: process.env.TABLEAUX_MAIL_SENDER,
+    senderName: "L'équipe Tableaux",
     replyToEmail: "datasupr@recherche.gouv.fr",
-    replyToName: "L'équipe dataSupr",
+    replyToName: "L'équipe Tableaux",
     templateId: 268,
   },
 };
@@ -43,8 +43,16 @@ export const replyEmailConfig = {
     ],
     templateId: 272,
   },
+  tableaux: {
+    senderEmail: process.env.TABLEAUX_MAIL_SENDER,
+    senderName: "L'équipe dataEsr",
+    replyToEmail: "support@scanr.fr",
+    replyToName: "L'équipe dataEsr",
+    templateId: 285,
+  },
+  // legacy: contributions déjà en base avec fromApplication "datasupr"
   datasupr: {
-    senderEmail: process.env.DATASUPR_MAIL_SENDER,
+    senderEmail: process.env.TABLEAUX_MAIL_SENDER,
     senderName: "L'équipe dataEsr",
     replyToEmail: "support@scanr.fr",
     replyToName: "L'équipe dataEsr",

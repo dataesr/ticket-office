@@ -10,7 +10,7 @@ export const postContactSchema = t.Object(
       scanr: "scanr",
       bso: "bso",
       "works-magnet": "works-magnet",
-      datasupr: "datasupr",
+      tableaux: "tableaux",
       curiexplore: "curiexplore",
     }),
     contributionType: t.Optional(t.String()),

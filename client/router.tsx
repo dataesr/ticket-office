@@ -52,8 +52,8 @@ export default function Router() {
           path="/works-magnet-contact"
         />
         <Route
-          element={<ContactAndContributionPage fromApplication="datasupr" />}
-          path="/datasupr-contact"
+          element={<ContactAndContributionPage fromApplication="tableaux" />}
+          path="/tableaux-contact"
         />
         <Route element={<LastMailSent />} path="/last-mails-sent" />
         <Route element={<LastMailsReceived />} path="/last-mails-received" />

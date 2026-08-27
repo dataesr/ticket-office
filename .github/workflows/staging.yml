@@ -14,7 +14,7 @@ jobs:
   publish-ghcr:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: oven-sh/setup-bun@v2
         with:
           bun-download-url: "https://github.com/oven-sh/bun/releases/latest/download/bun-linux-x64.zip"
@@ -59,7 +59,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - uses: dataesr/mm-notifier-action@v1.0.2
+      - uses: dataesr/mm-notifier-action@v1.0.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN}}
           mattermost_webhook_url: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
