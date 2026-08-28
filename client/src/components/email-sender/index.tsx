@@ -9,9 +9,14 @@ import {
   Col,
 } from "@dataesr/dsfr-plus";
 import { toast } from "react-toastify";
-import EmailForm from "../../components/mail-form";
-import { getCollectionNameFromUrl } from "../utils/collectionName";
-import { EmailSenderProps } from "../../types";
+import EmailForm from "../mail-form";
+import { getCollectionNameFromUrl } from "../../api/utils/collectionName";
+import { Contribution, Contribute_Production } from "../../types";
+
+type EmailSenderProps = {
+  contribution: Contribution | Contribute_Production;
+  refetch: () => void;
+};
 
 function EmailSender({ contribution, refetch }: EmailSenderProps) {
   const [, setEmailSent] = useState(false);

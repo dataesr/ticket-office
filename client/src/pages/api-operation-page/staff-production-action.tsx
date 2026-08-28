@@ -1,6 +1,6 @@
 import { Col, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import EmailSender from "../../api/send-mail";
+import EmailSender from "../../components/email-sender";
 import { StaffProductionActionsProps } from "../../types";
 import MarkdownRenderer from "../../utils/markdownRenderer";
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import EmailSender from "../../../api/send-mail";
+import EmailSender from "../../../components/email-sender";
 import { Col, Text } from "@dataesr/dsfr-plus";
 import { StaffActionsProps, Thread } from "../../../types";
 import { useLocation } from "react-router-dom";

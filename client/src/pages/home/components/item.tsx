@@ -1,6 +1,6 @@
 import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { generateLinkFromAllDatas } from "./generate-links";
+import { generateLinkFromAllDatas } from "../utils";
 import {
   BadgeColor,
   BadgeStatus,

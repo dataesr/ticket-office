@@ -126,10 +126,6 @@ export interface EmailItem {
   extractedText: string;
 }
 
-export interface EmailSenderProps {
-  contribution: Contribution | Contribute_Production;
-  refetch: () => void;
-}
 
 export interface ContributionItemProps {
   data: Contribution;
