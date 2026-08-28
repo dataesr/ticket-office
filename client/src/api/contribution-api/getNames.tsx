@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { postHeaders } from "../../config/api";
+import { fetchJson } from "../utils/fetchJson";
 import { AuthorData } from "../../types";
 
 export const useAllAuthorsData = (productionIds: string[]) => {
@@ -10,11 +10,10 @@ export const useAllAuthorsData = (productionIds: string[]) => {
     queryFn: async () => {
       if (uniqueIds.length === 0) return {};
 
-      const response = await fetch(
+      const result = await fetchJson(
         "https://scanr.enseignementsup-recherche.gouv.fr/api/scanr-publications/_search",
         {
           method: "POST",
-          headers: postHeaders,
           body: JSON.stringify({
             size: uniqueIds.length,
             _source: ["authors", "id"],
@@ -22,14 +21,10 @@ export const useAllAuthorsData = (productionIds: string[]) => {
               terms: { "id.keyword": uniqueIds },
             },
           }),
-        }
+        },
+        "Erreur réseau"
       );
 
-      if (!response.ok) {
-        throw new Error("Erreur réseau");
-      }
-
-      const result = await response.json();
       const authorsMap: Record<string, AuthorData> = {};
 
       result.hits?.hits?.forEach((hit) => {

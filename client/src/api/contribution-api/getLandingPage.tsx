@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { postHeaders } from "../../config/api";
+import { fetchJson } from "../utils/fetchJson";
 
 export const useLandingPages = (publicationIds: string[] | string[][]) => {
   const ids = Array.isArray(publicationIds)
@@ -16,11 +16,10 @@ export const useLandingPages = (publicationIds: string[] | string[][]) => {
         return { hits: { hits: [] } };
       }
 
-      const response = await fetch(
+      return fetchJson(
         "https://scanr.enseignementsup-recherche.gouv.fr/api/scanr-publications/_search",
         {
           method: "POST",
-          headers: postHeaders,
           body: JSON.stringify({
             size: Math.min(10000, ids.length),
             _source: ["landingPage", "id"],
@@ -28,14 +27,9 @@ export const useLandingPages = (publicationIds: string[] | string[][]) => {
               terms: { "id.keyword": ids },
             },
           }),
-        }
+        },
+        "Erreur réseau"
       );
-
-      if (!response.ok) {
-        throw new Error("Erreur réseau");
-      }
-
-      return response.json();
     },
     enabled: ids.length > 0,
   });

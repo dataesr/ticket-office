@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { postHeaders } from "../../config/api";
+import { fetchJson } from "../utils/fetchJson";
 
 const routes = [
   "contacts",
@@ -9,29 +9,19 @@ const routes = [
   "update-user-data",
   "bso-local-variations/publications",
   "bso-local-variations/datasets",
-]
+];
 
-const fetchAllData = async (baseApiUrl) => {
-  const fetchPromises = routes.map(async (route) => {
-    const url = `${baseApiUrl}/${route}`;
-    const response = await fetch(url, {
-      headers: postHeaders,
-    });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch from ${route}`);
-    }
-    return response.json();
-  });
-
-  return Promise.all(fetchPromises);
-};
+const fetchAllData = (baseApiUrl: string) =>
+  Promise.all(
+    routes.map((route) =>
+      fetchJson(`${baseApiUrl}/${route}`, {}, `Failed to fetch from ${route}`)
+    )
+  );
 
 const ContributionAllData = () => {
-  const fetchContributions = () => fetchAllData("/api");
-
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["allContributions"],
-    queryFn: fetchContributions,
+    queryFn: () => fetchAllData("/api"),
   });
 
   return { data, isLoading, isError, refetch };
