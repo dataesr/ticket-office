@@ -20,8 +20,7 @@ import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import ContributionProductionItem from "./contribution-production-card";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import { useAllAuthorsData } from "../../api/contribution-api/getNames";
-import useLandingPages from "../../api/contribution-api/getLandingPage";
+import { useAllAuthorsData, useLandingPages } from "../../api/scanr";
 import {
   Contribute_Production,
   ContributionProductionDataHookResponse,

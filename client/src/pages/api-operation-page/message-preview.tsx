@@ -13,7 +13,7 @@ import { useState, useCallback } from "react";
 import { FaCopy } from "react-icons/fa";
 import EditModal from "../../components/edit-modal";
 import ContributorRequests from "./contributor-requests";
-import NameFromIdref from "../../api/contribution-api/getNamesFromIdref";
+import { NameFromIdref } from "../../api/scanr";
 import { useDataList } from "./data-list-context";
 import "./styles.scss";
 import {
