@@ -244,23 +244,6 @@ export interface ExtendedSelectWithNamesProps extends SelectWithNamesProps {
   landingPage?: string;
 }
 
-export interface FormattedDateProps {
-  dateString: string;
-}
-
-export interface ContributionBadgesProps {
-  contribution: UnifiedContribution;
-}
-
-export interface ContributionItemProps {
-  contribution: UnifiedContribution;
-  index: number;
-}
-
-export interface AllContributionsProps {
-  data: UnifiedContribution[];
-  query?: string;
-}
 export interface ContributionItemProps {
   contribution: UnifiedContribution;
   index: number;

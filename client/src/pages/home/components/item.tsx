@@ -8,14 +8,14 @@ import {
   typeIcon,
   TypeLabel,
 } from "../../../utils";
-import {
-  AllContributionsProps,
-  ContributionBadgesProps,
-  ContributionItemProps,
-  FormattedDateProps,
-} from "../../../types";
+import { UnifiedContribution } from "../../../types";
 
 import MarkdownRenderer from "../../../utils/markdownRenderer";
+
+type FormattedDateProps = { dateString: string };
+type ContributionBadgesProps = { contribution: UnifiedContribution };
+type ContributionItemProps = { contribution: UnifiedContribution; index: number };
+type AllContributionsProps = { data: UnifiedContribution[]; query?: string };
 
 const FormattedDate = ({ dateString }: FormattedDateProps) => {
   const date = new Date(dateString);
@@ -174,13 +174,6 @@ const AllContributions = ({ data }: AllContributionsProps) => {
             key={contribution.id || index}
             contribution={contribution}
             index={index}
-            data={undefined}
-            highlightedQuery={""}
-            refetch={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-            allTags={[]}
-            url={""}
           />
         ))
       )}
