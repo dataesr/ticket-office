@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Col, Container, Row, Text } from "@dataesr/dsfr-plus";
-import ContributionData from "../../api/contribution-api/getData";
+import { ContributionData } from "../../api/contributions";
 import { buildURL } from "../../api/utils/buildURL";
 import Selectors from "../../components/selectors";
 import ContributorSummary from "./components/contributor-summary";

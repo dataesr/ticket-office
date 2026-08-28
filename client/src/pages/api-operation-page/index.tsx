@@ -15,7 +15,7 @@ import ExcelExportButton from "./export-to-xlsx";
 import { ClipLoader } from "react-spinners";
 import { useDataList } from "./data-list-context";
 import { buildURL } from "../../api/utils/buildURL";
-import ContributionData from "../../api/contribution-api/getData";
+import { ContributionData } from "../../api/contributions";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import ContributionProductionItem from "./contribution-production-card";

@@ -1,7 +1,7 @@
 import { Col, Container } from "@dataesr/dsfr-plus";
 import SearchSection from "../contact-contributionbyobject-page/components/search-section";
 import { useState } from "react";
-import ContributionAllData from "../../api/contribution-api/getAllData";
+import { ContributionAllData } from "../../api/contributions";
 import AllContributions from "./components/item";
 import { ClipLoader } from "react-spinners";
 
