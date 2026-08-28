@@ -2,10 +2,30 @@ import { Button, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import HighlightedMessage from "../../../components/highlighted-message";
 import { useLocation } from "react-router-dom";
 import EditModal from "../../../components/edit-modal";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import { capitalizeFirstLetter } from "../../../utils/capitalize";
 import { CopyButton } from "../../../utils/copy-button";
+import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
 import { MessagePreviewProps } from "../../../types";
+
+const SCANR_URL = "https://scanr.enseignementsup-recherche.gouv.fr";
+const DATAESR_URL = "http://185.161.45.213/ui";
+
+const OBJECT_LINKS: Record<string, { scanr: string; dataesr?: string }> = {
+  structures: {
+    scanr: `${SCANR_URL}/entite/`,
+    dataesr: `${DATAESR_URL}/organizations/`,
+  },
+  publications: {
+    scanr: `${SCANR_URL}/publication/`,
+    dataesr: `${DATAESR_URL}/publications/`,
+  },
+  persons: {
+    scanr: `${SCANR_URL}/authors/`,
+    dataesr: `${DATAESR_URL}/persons/`,
+  },
+  network: { scanr: `${SCANR_URL}/networks?` },
+};
 
 const MessagePreview: React.FC<MessagePreviewProps> = ({
   data,
@@ -15,14 +35,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 }) => {
   const location = useLocation();
   const [showModal, setShowModal] = useState(false);
-  const [copiedText, setCopiedText] = useState<string | null>(null);
-
-  const copyToClipboard = useCallback((text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedText(text);
-      setTimeout(() => setCopiedText(null), 2000);
-    });
-  }, []);
+  const { copiedText, copyToClipboard } = useCopyToClipboard();
 
   const contributorMessageClassName = location.pathname.includes(
     "contributionpage"
@@ -126,9 +139,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
             </Text>
           )}
         </Col>
-        {["structures", "publications", "persons", "network"].includes(
-          data?.objectType
-        ) && (
+        {data?.objectType && OBJECT_LINKS[data.objectType] && (
           <Row>
             {data.objectType === "structures" && (
               <>
@@ -136,7 +147,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
                   <Link
                     size="sm"
                     target="_blank"
-                    href={`https://scanr.enseignementsup-recherche.gouv.fr/entite/${data.objectId}`}
+                    href={`${OBJECT_LINKS.structures.scanr}${data.objectId}`}
                   >
                     Sur scanR
                   </Link>
@@ -145,19 +156,20 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
                   <Link
                     size="sm"
                     target="_blank"
-                    href={`http://185.161.45.213/ui/organizations/${data.objectId}`}
+                    href={`${OBJECT_LINKS.structures.dataesr}${data.objectId}`}
                   >
                     Sur dataESR
                   </Link>
                 </Col>
               </>
             )}
-            {data.objectType === "publications" && (
+            {(data.objectType === "publications" ||
+              data.objectType === "persons") && (
               <>
                 <Link
                   size="sm"
                   target="_blank"
-                  href={`https://scanr.enseignementsup-recherche.gouv.fr/publication/${data.objectId}`}
+                  href={`${OBJECT_LINKS[data.objectType].scanr}${data.objectId}`}
                 >
                   Sur scanR
                 </Link>
@@ -165,26 +177,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
                 <Link
                   size="sm"
                   target="_blank"
-                  href={`http://185.161.45.213/ui/publications/${data.objectId}`}
-                >
-                  Sur dataESR
-                </Link>
-              </>
-            )}
-            {data.objectType === "persons" && (
-              <>
-                <Link
-                  size="sm"
-                  target="_blank"
-                  href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${data.objectId}`}
-                >
-                  Sur scanR
-                </Link>
-                <br />
-                <Link
-                  size="sm"
-                  target="_blank"
-                  href={`http://185.161.45.213/ui/persons/${data.objectId}`}
+                  href={`${OBJECT_LINKS[data.objectType].dataesr}${data.objectId}`}
                 >
                   Sur dataESR
                 </Link>
@@ -194,7 +187,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
               <Link
                 size="sm"
                 target="_blank"
-                href={`https://scanr.enseignementsup-recherche.gouv.fr/networks?${data.objectId}`}
+                href={`${OBJECT_LINKS.network.scanr}${data.objectId}`}
               >
                 Sur scanR
               </Link>

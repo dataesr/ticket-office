@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Col, Container, Row, Text } from "@dataesr/dsfr-plus";
 import { ContributionData } from "../../api/contributions";
@@ -13,6 +13,7 @@ import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import { getUrlToSend } from "../../config/urlHelper";
 import { ClipLoader } from "react-spinners";
 import { Contribution, ContributionPageProps } from "../../types";
+import { filterContributions, updateUrlParams } from "./utils";
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
@@ -35,15 +36,8 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     isScanrPage ? params.get("objectType") || "all" : undefined
   );
 
-  const updateURL = (updates: Record<string, string>) => {
-    const newParams = new URLSearchParams(location.search);
-    Object.entries(updates).forEach(([key, value]) => {
-      newParams.set(key, value);
-    });
-
-    const newURL = `${window.location.pathname}?${newParams.toString()}`;
-    window.history.pushState({}, "", newURL);
-  };
+  const updateURL = (updates: Record<string, string>) =>
+    updateUrlParams(location.search, updates);
 
   const handleSetPage = (newPage: number) => {
     setPage(newPage);
@@ -115,25 +109,10 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     updateURL({ query: newQuery.join(",") });
   };
 
-  const filteredContributions = contributions.filter((contribution) => {
-    if (query.length === 0) return true;
-
-    const queryLower = query.map((q) => q.toLowerCase());
-    const nameMatches = queryLower.some((q) =>
-      contribution.name?.toLowerCase().includes(q)
-    );
-    const idMatches = queryLower.some((q) =>
-      contribution.id.toLowerCase().includes(q)
-    );
-
-    if (searchInMessage) {
-      const messageMatches = queryLower.some((q) =>
-        contribution.message?.toLowerCase().includes(q)
-      );
-      return nameMatches || idMatches || messageMatches;
-    }
-    return nameMatches || idMatches;
-  });
+  const filteredContributions = useMemo(
+    () => filterContributions(contributions, query, searchInMessage),
+    [contributions, query, searchInMessage]
+  );
 
   if (isLoading) {
     return (

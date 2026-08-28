@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
 import StaffActions from "./staff-actions";
 import {
@@ -8,7 +7,8 @@ import {
   TypeLabel,
   typeIcon,
 } from "../../../utils";
-import { FaCopy } from "react-icons/fa";
+import { CopyButton } from "../../../utils/copy-button";
+import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
 import "./styles.scss";
 import MessagePreview from "./message-preview";
 import { Contribution } from "../../../types";
@@ -28,16 +28,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
   allTags,
   url,
 }) => {
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  const copyToClipboard = () => {
-    if (!data?.id) return;
-
-    navigator.clipboard.writeText(data.id).then(() => {
-      setCopiedId(data.id);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
-  };
+  const { copiedText, copyToClipboard } = useCopyToClipboard();
 
   const firstThread = data?.threads?.[0];
   const firstResponse = firstThread?.responses?.[0];
@@ -95,19 +86,13 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
               {data?.name || ""}
               <span className="id-container">
                 ({data?.id || ""})
-                <button
-                  className={`copy-button ${
-                    copiedId === data?.id ? "copied" : ""
-                  }`}
-                  onClick={copyToClipboard}
-                  aria-label="Copier l'identifiant"
+                <CopyButton
+                  text={data?.id || ""}
+                  copiedText={copiedText}
+                  onCopy={copyToClipboard}
+                  ariaLabel="Copier l'identifiant"
                   disabled={!data?.id}
-                >
-                  {copiedId === data?.id && (
-                    <span className="copied-text">Copié</span>
-                  )}
-                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                </button>
+                />
               </span>
             </Title>
           </div>
