@@ -11,28 +11,21 @@ import {
 import { UnifiedContribution } from "../../../types";
 
 import MarkdownRenderer from "../../../utils/markdownRenderer";
+import { formatDate, formatTime } from "../../../utils/format-date";
 
 type FormattedDateProps = { dateString: string };
 type ContributionBadgesProps = { contribution: UnifiedContribution };
 type ContributionItemProps = { contribution: UnifiedContribution; index: number };
 type AllContributionsProps = { data: UnifiedContribution[]; query?: string };
 
-const FormattedDate = ({ dateString }: FormattedDateProps) => {
-  const date = new Date(dateString);
-  const formattedDate = date.toLocaleDateString("fr-FR");
-  const formattedTime = date.toLocaleTimeString("fr-FR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  return (
-    <Text size="sm">
-      <i>
-        Date de la contribution : {formattedDate} à {formattedTime}
-      </i>
-    </Text>
-  );
-};
+const FormattedDate = ({ dateString }: FormattedDateProps) => (
+  <Text size="sm">
+    <i>
+      Date de la contribution : {formatDate(dateString)} à{" "}
+      {formatTime(dateString)}
+    </i>
+  </Text>
+);
 
 const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
   let badgeContent = "Contact";

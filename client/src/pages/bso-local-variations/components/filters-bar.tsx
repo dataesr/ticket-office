@@ -1,6 +1,6 @@
 import { Col, Container, Row } from "@dataesr/dsfr-plus"
 import useUrl from "../hooks/useUrl"
-import SearchSection from "../../contact-contributionbyobject-page/components/search-section"
+import SearchSection from "../../../components/search-section"
 import { VARIATION_TAGS } from "../config/tags"
 
 export default function FiltersBar() {

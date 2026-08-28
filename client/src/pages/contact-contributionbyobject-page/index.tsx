@@ -6,7 +6,7 @@ import { buildURL } from "../../api/utils/buildURL";
 import Selectors from "../../components/selectors";
 import ContributorSummary from "./components/contributor-summary";
 import PageTitle from "./components/page-title";
-import SearchSection from "./components/search-section";
+import SearchSection from "../../components/search-section";
 import ContributionDetails from "./components/contribution-details";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";

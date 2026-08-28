@@ -1,54 +1,29 @@
+import { useMemo, useState } from "react";
 import { Col, Container } from "@dataesr/dsfr-plus";
-import SearchSection from "../contact-contributionbyobject-page/components/search-section";
-import { useState } from "react";
+import { ClipLoader } from "react-spinners";
+import SearchSection from "../../components/search-section";
 import { ContributionAllData } from "../../api/contributions";
 import AllContributions from "./components/item";
-import { ClipLoader } from "react-spinners";
+import { filterContributions } from "./utils";
+
+const LOADER_COLOR = "var(--blue-france-sun-113-625)";
 
 const Home = () => {
   const [query, setQuery] = useState<string[]>([]);
-  const [highlightedQuery, setHighlightedQuery] = useState<string>("");
+  const [highlightedQuery, setHighlightedQuery] = useState("");
 
   const { data, isLoading, isError } = ContributionAllData();
 
-  const getFilteredData = () => {
-    if (!data || data.length === 0) return [];
-    const allItems = data.flatMap((item) => item.data || []);
-    const combinedQuery = highlightedQuery || query.join(" ");
-
-    if (combinedQuery.trim() !== "") {
-      return allItems
-        .filter(
-          (item) =>
-            item.name?.toLowerCase().includes(combinedQuery.toLowerCase()) ||
-            item.email?.toLowerCase().includes(combinedQuery.toLowerCase()) ||
-            item.message?.toLowerCase().includes(combinedQuery.toLowerCase()) ||
-            item.id?.toLowerCase().includes(combinedQuery.toLowerCase())
-        )
-        .sort(
-          (a, b) =>
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-        );
-    }
-
-    const twentyFourHoursAgo = new Date();
-    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
-
-    return allItems
-      .filter((item) => new Date(item.created_at) >= twentyFourHoursAgo)
-      .sort(
-        (a, b) =>
-          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-  };
-
-  const filteredData = getFilteredData();
+  const filteredData = useMemo(() => {
+    const items = (data ?? []).flatMap((route) => route.data || []);
+    return filterContributions(items, highlightedQuery || query.join(" "));
+  }, [data, highlightedQuery, query]);
 
   const handleSearch = (value: string) => {
-    const trimmedValue = value.trim();
-    if (trimmedValue !== "") {
-      setQuery((prev) => [...prev, trimmedValue]);
-      setHighlightedQuery(trimmedValue);
+    const trimmed = value.trim();
+    if (trimmed) {
+      setQuery((prev) => [...prev, trimmed]);
+      setHighlightedQuery(trimmed);
     } else {
       setQuery([]);
       setHighlightedQuery("");
@@ -56,10 +31,8 @@ const Home = () => {
   };
 
   const handleRemoveQueryItem = (item: string) => {
-    setQuery(query.filter((q) => q !== item));
-    if (item === highlightedQuery) {
-      setHighlightedQuery("");
-    }
+    setQuery((prev) => prev.filter((q) => q !== item));
+    if (item === highlightedQuery) setHighlightedQuery("");
   };
 
   return (
@@ -77,12 +50,12 @@ const Home = () => {
 
       {isLoading ? (
         <div className="loading-container">
-          <ClipLoader color="#123abc" size={50} />
+          <ClipLoader color={LOADER_COLOR} size={50} />
         </div>
       ) : isError ? (
         <p>Oops... Une erreur est survenue.</p>
       ) : filteredData.length > 0 ? (
-        <AllContributions data={filteredData} query={highlightedQuery} />
+        <AllContributions data={filteredData} />
       ) : query.length > 0 ? (
         <p>Aucun résultat correspondant à votre recherche.</p>
       ) : null}

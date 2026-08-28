@@ -318,12 +318,6 @@ export interface PaginationProps {
 export interface TopPaginationProps extends PaginationProps {
   meta: any;
 }
-export interface SearchSectionProps {
-  query: string[];
-  handleSearch: (value: string) => void;
-  handleRemoveQueryItem: (item: string) => void;
-  isLarge?: boolean;
-}
 
 export interface ThreadResponse {
   timestamp: string | Date;
