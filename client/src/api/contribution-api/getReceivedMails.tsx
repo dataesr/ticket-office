@@ -1,20 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { postHeaders } from "../../config/api";
+import { fetchJson } from "../utils/fetchJson";
 
 const useReceivedEmails = () => {
-  const fetchReceivedEmails = async () => {
-    const response = await fetch("/api/get-received-emails", {
-      headers: postHeaders,
-    });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  };
-
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["receivedEmails"],
-    queryFn: fetchReceivedEmails,
+    queryFn: () => fetchJson("/api/get-received-emails"),
   });
   return { data, isLoading, isError, refetch };
 };

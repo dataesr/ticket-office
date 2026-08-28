@@ -1,19 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { postHeaders } from "../../config/api";
+import { fetchJson } from "../utils/fetchJson";
 
 const ContributionData = (url: string) => {
-  const fetchContributions = async () => {
-    const response = await fetch(url, {
-      headers: postHeaders,
-    });
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
-    }
-    return response.json();
-  };
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: [url],
-    queryFn: fetchContributions,
+    queryFn: () => fetchJson(url),
   });
 
   return { data, isLoading, isError, refetch };
