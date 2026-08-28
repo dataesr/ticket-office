@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
-import StaffActions from "./staff-action";
+import StaffActions from "./staff-actions";
 import {
   BadgeColor,
   BadgeStatus,
@@ -11,7 +11,15 @@ import {
 import { FaCopy } from "react-icons/fa";
 import "./styles.scss";
 import MessagePreview from "./message-preview";
-import { ContributionItemProps } from "../../../types";
+import { Contribution } from "../../../types";
+
+type ContributionItemProps = {
+  data: Contribution;
+  highlightedQuery: string;
+  refetch: () => void;
+  allTags: string[];
+  url: string;
+};
 
 const ContributionItem: React.FC<ContributionItemProps> = ({
   data,

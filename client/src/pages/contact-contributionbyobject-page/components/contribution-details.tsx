@@ -20,8 +20,6 @@ const ContributionDetails: React.FC<ContributionDetailsProps> = ({
       refetch={refetch}
       highlightedQuery={highlightedQuery}
       url={url}
-      contribution={undefined}
-      index={0}
     />
   ) : (
     <Text>Aucune contribution trouvée.</Text>

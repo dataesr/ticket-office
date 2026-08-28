@@ -127,13 +127,6 @@ export interface EmailItem {
 }
 
 
-export interface ContributionItemProps {
-  data: Contribution;
-  highlightedQuery: string;
-  refetch: () => void;
-  allTags: string[];
-  url: string;
-}
 
 export interface Inputs {
   team: string[];
@@ -240,10 +233,6 @@ export interface ExtendedSelectWithNamesProps extends SelectWithNamesProps {
   landingPage?: string;
 }
 
-export interface ContributionItemProps {
-  contribution: UnifiedContribution;
-  index: number;
-}
 
 export interface ContributionProductionItemProps {
   data: {
