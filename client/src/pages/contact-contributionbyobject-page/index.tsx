@@ -169,9 +169,10 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
           </div>
         ) : (
           <div className="fr-grid-row fr-grid-row--gutters">
-            <div className="fr-col-12 fr-col-md-4 ">
+            <div className="fr-col-12 fr-col-md-4">
               <ContributorSummary
                 contributions={filteredContributions}
+                selectedContribution={effectiveSelectedContribution}
                 onSelectContribution={setSelectedContribution}
               />
             </div>

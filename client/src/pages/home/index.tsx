@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Alert, Container, Spinner, Text, Title } from "@dataesr/dsfr-plus";
+import { Alert, Container, Spinner, Text } from "@dataesr/dsfr-plus";
 import SearchSection from "../../components/search-section";
 import { ContributionAllData } from "../../api/contributions";
 import AllContributions from "./components/item";
@@ -93,7 +93,6 @@ const Home = () => {
             Sans recherche active, seules les contributions des dernières 24
             heures sont affichées.
           </p>
-
           <SearchSection
             query={query}
             handleSearch={handleSearch}
@@ -101,7 +100,6 @@ const Home = () => {
           />
         </Container>
       </Container>
-
       <Container className="fr-py-6w">{renderResults()}</Container>
     </main>
   );

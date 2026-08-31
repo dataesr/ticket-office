@@ -1,5 +1,4 @@
 .message-base {
-  border-radius: 0.5rem;
   padding: 1rem;
   margin-bottom: 1rem;
   max-width: 75%;
@@ -57,9 +56,68 @@
   width: 100%;
 }
 
-// Aperçu tronqué du message dans la liste des contributeurs.
-.contribution-message {
-  font-style: italic;
+.contribution-list {
+  border: 1px solid var(--border-default-grey);
+}
+
+.contribution-list__header {
+  padding: 0.75rem 1rem;
+  background-color: var(--background-alt-grey);
+  border-bottom: 1px solid var(--border-default-grey);
+}
+
+.contribution-list__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.contribution-list__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--border-default-grey);
+  border-left: 0.1875rem solid transparent;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--background-alt-grey);
+  }
+
+  &--selected {
+    background-color: var(--background-alt-blue-france);
+    border-left-color: var(--text-action-high-blue-france);
+  }
+}
+
+.contribution-list__item-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.375rem;
+}
+
+.contribution-list__item-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contribution-list__item-badges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  margin-bottom: 0.375rem;
+}
+
+.contribution-list__item-excerpt {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -79,17 +137,12 @@
 .attachment-thumbnail {
   max-width: 16rem;
   height: auto;
-  border-radius: 0.25rem;
+  border: 1px solid var(--border-default-grey);
 }
 
 .attachment-preview {
   max-width: 100%;
-  border-radius: 0.25rem;
-}
-
-.fr-sidemenu__btn[aria-expanded="true"]:after,
-.fr-sidemenu__btn[aria-expanded="false"]:after {
-  display: none;
+  border: 1px solid var(--border-default-grey);
 }
 
 @media (max-width: 768px) {

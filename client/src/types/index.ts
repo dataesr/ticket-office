@@ -287,7 +287,9 @@ export interface ContributorSummaryProps {
     name: string;
     created_at: string;
     message: string;
+    threads?: Thread[];
   }[];
+  selectedContribution?: string;
   onSelectContribution: (id: string) => void;
 }
 
