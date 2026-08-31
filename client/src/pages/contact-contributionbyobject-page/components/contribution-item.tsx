@@ -1,4 +1,4 @@
-import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
+import Badge from "../../../components/badge";
 import StaffActions from "./staff-actions";
 import {
   BadgeColor,
@@ -38,90 +38,79 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
 
   return (
     <div className="contribution-item-container">
-      {/* Badges regroupés avec flexbox pour mieux s'adapter */}
-      <Row className="fr-mt-3w badge-container">
-        <div className="badge-wrapper">
-          {data?.tags?.length > 0 && (
-            <Badge size="sm" color="green-menthe" className="badge-item">
-              {data.tags.join(", ")}
-            </Badge>
-          )}
-          {data?.status && (
-            <Badge
-              size="sm"
-              color={BadgeStatus({ status: data.status })}
-              className="badge-item"
-            >
+      <ul className="fr-badges-group fr-mb-3w">
+        {data?.tags?.length > 0 && (
+          <li>
+            <Badge color="green-menthe">{data.tags.join(", ")}</Badge>
+          </li>
+        )}
+        {data?.status && (
+          <li>
+            <Badge color={BadgeStatus({ status: data.status })}>
               {StatusLabel({ status: data.status })}
             </Badge>
-          )}
-          {firstResponse?.team && (
-            <Badge size="sm" color="blue-ecume" className="badge-item">
-              {`Réponse: ${firstResponse.team}`}
-            </Badge>
-          )}
-          {data?.comment && data?.team?.length > 0 && (
-            <Badge size="sm" color="green-emeraude" className="badge-item">
-              {`Commenté par ${data.team[0]}`}
-            </Badge>
-          )}
-          {data?.objectType && (
+          </li>
+        )}
+        {firstResponse?.team && (
+          <li>
+            <Badge color="blue-ecume">{`Réponse : ${firstResponse.team}`}</Badge>
+          </li>
+        )}
+        {data?.comment && data?.team?.length > 0 && (
+          <li>
+            <Badge color="green-emeraude">{`Commenté par ${data.team[0]}`}</Badge>
+          </li>
+        )}
+        {data?.objectType && (
+          <li>
             <Badge
-              size="sm"
               color={BadgeColor({ type: data.objectType })}
-              className="badge-item"
               icon={typeIcon({ icon: data.objectType })}
             >
               {TypeLabel({ type: data.objectType })}
             </Badge>
-          )}
-        </div>
-      </Row>
+          </li>
+        )}
+      </ul>
 
-      {/* En-tête avec titre et date de création */}
-      <Row className="title-container">
-        <Col xs="12" md="8">
-          <div className="title-wrapper">
-            <Title look="h5" className="contribution-title">
-              {data?.name || ""}
-              <span className="id-container">
-                ({data?.id || ""})
-                <CopyButton
-                  text={data?.id || ""}
-                  copiedText={copiedText}
-                  onCopy={copyToClipboard}
-                  ariaLabel="Copier l'identifiant"
-                  disabled={!data?.id}
-                />
-              </span>
-            </Title>
-          </div>
+      <div className="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+        <div className="fr-col-12 fr-col-md-8">
+          <h2 className="fr-h5 fr-mb-1w">
+            {data?.name || ""}
+            <span className="fr-ml-1w fr-text--regular">
+              ({data?.id || ""})
+              <CopyButton
+                text={data?.id || ""}
+                copiedText={copiedText}
+                onCopy={copyToClipboard}
+                ariaLabel="Copier l'identifiant"
+                disabled={!data?.id}
+              />
+            </span>
+          </h2>
 
           {!firstResponse && (
-            <Notice type="info" closeMode="disallow" className="fr-mb-2w">
-              Aucune réponse apportée à ce message pour l'instant
-            </Notice>
+            <div className="fr-alert fr-alert--info fr-alert--sm fr-mb-2w">
+              <p>Aucune réponse apportée à ce message pour l'instant</p>
+            </div>
           )}
-        </Col>
-        <Col xs="12" md="4" className="date-container">
+        </div>
+        <div className="fr-col-12 fr-col-md-4 fr-text--right">
           {createdDate && (
-            <Text size="sm" className="date-text">
-              <i className="date">Reçu le {createdDate}</i>
-            </Text>
+            <p className="fr-text--sm fr-text-mention--grey fr-mb-0">
+              <i>Reçu le {createdDate}</i>
+            </p>
           )}
-        </Col>
-      </Row>
-      <Row>
-        <Col xs="12">
-          <MessagePreview
-            data={data}
-            allTags={allTags}
-            refetch={refetch}
-            highlightedQuery={highlightedQuery}
-          />
-          <StaffActions url={url} refetch={refetch} data={data} />
-        </Col>
-      </Row>
+        </div>
+      </div>
+
+      <MessagePreview
+        data={data}
+        allTags={allTags}
+        refetch={refetch}
+        highlightedQuery={highlightedQuery}
+      />
+      <StaffActions url={url} refetch={refetch} data={data} />
     </div>
   );
 };

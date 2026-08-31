@@ -1,4 +1,3 @@
-import { Text } from "@dataesr/dsfr-plus";
 import ContributionItem from "./contribution-item";
 import { ContributionDetailsProps } from "../../../types";
 
@@ -22,7 +21,7 @@ const ContributionDetails: React.FC<ContributionDetailsProps> = ({
       url={url}
     />
   ) : (
-    <Text>Aucune contribution trouvée.</Text>
+    <p>Aucune contribution trouvée.</p>
   );
 
 export default ContributionDetails;

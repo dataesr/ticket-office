@@ -1,12 +1,6 @@
 import { useState } from "react";
-import {
-  Modal,
-  ModalTitle,
-  ModalContent,
-  Row,
-  Button,
-  SelectableTag,
-} from "@dataesr/dsfr-plus";
+import Modal from "../modal";
+import { SelectableTag } from "../tag";
 import { TagSelectionModalProps } from "../../types";
 
 const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
@@ -17,14 +11,9 @@ const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const toggleTag = (tag: string) => {
-    if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((t) => t !== tag));
-    } else {
-      setSelectedTags([...selectedTags, tag]);
-    }
-  };
-  const handleConfirm = () => {
-    onClose(selectedTags);
+    setSelectedTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
   };
 
   const handleCancel = () => {
@@ -33,32 +22,43 @@ const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
   };
 
   return (
-    <Modal isOpen={isOpen} hide={() => handleCancel()}>
-      <ModalTitle>Sélectionner des tags</ModalTitle>
-      <ModalContent>
-        <Row gutters>
-          {allTags.map((tag, index) => (
-            <div key={index}>
-              <SelectableTag
-                selected={selectedTags.includes(tag)}
-                color="blue-ecume"
-                className="fr-mr-1w fr-mb-1w"
-                onClick={() => toggleTag(tag)}
-              >
-                {tag}
-              </SelectableTag>
-            </div>
-          ))}
-        </Row>
-        <Row className="fr-btn-group fr-btn-group--right fr-mt-4w">
-          <Button variant="secondary" onClick={handleCancel}>
-            Annuler
-          </Button>
-          <Button variant="primary" onClick={handleConfirm}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleCancel}
+      title="Sélectionner des tags"
+    >
+      <ul className="fr-tags-group fr-mb-4w">
+        {allTags.map((tag) => (
+          <li key={tag}>
+            <SelectableTag
+              selected={selectedTags.includes(tag)}
+              onClick={() => toggleTag(tag)}
+            >
+              {tag}
+            </SelectableTag>
+          </li>
+        ))}
+      </ul>
+      <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse">
+        <li>
+          <button
+            type="button"
+            className="fr-btn"
+            onClick={() => onClose(selectedTags)}
+          >
             Valider
-          </Button>
-        </Row>
-      </ModalContent>
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            className="fr-btn fr-btn--secondary"
+            onClick={handleCancel}
+          >
+            Annuler
+          </button>
+        </li>
+      </ul>
     </Modal>
   );
 };

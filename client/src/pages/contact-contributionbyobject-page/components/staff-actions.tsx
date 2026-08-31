@@ -1,22 +1,16 @@
 import { useState } from "react";
 import EmailSender from "../../../components/email-sender";
-import { Col, Text } from "@dataesr/dsfr-plus";
+import Modal from "../../../components/modal";
 import { StaffActionsProps, Thread } from "../../../types";
-import { useLocation } from "react-router-dom";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
-  const location = useLocation();
   const [modalImage, setModalImage] = useState<string | null>(null);
-
-  const containerClassName = location.pathname.includes("contributionpage")
-    ? "staffSide-container"
-    : "staffSideContact-container";
 
   return (
     <>
       {data?.threads?.length > 0 && (
-        <Col xs="12" className={`message-container ${containerClassName}`}>
+        <div className="message-container">
           {data.threads.map((thread: Thread, threadIndex) =>
             thread.responses.map((response, index) => {
               const responseDate = new Date(
@@ -33,7 +27,7 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
               return (
                 response.responseMessage && (
                   <div key={`${threadIndex}-${index}`} className={bubbleClass}>
-                    <Text size="sm" className="message-content">
+                    <div className="fr-text--sm message-content">
                       <MarkdownRenderer content={response?.responseMessage} />
                       <small className="message-metadata">
                         {response.attachments &&
@@ -42,19 +36,18 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
                             ([key, imageValue]) => {
                               const imgSrc = `data:${imageValue.contentType};base64,${imageValue.base64}`;
                               return (
-                                <div key={key} style={{ maxWidth: "100%" }}>
+                                <button
+                                  key={key}
+                                  type="button"
+                                  className="attachment-thumbnail-btn"
+                                  onClick={() => setModalImage(imgSrc)}
+                                >
                                   <img
-                                    onClick={() => setModalImage(imgSrc)}
-                                    style={{
-                                      maxWidth: "400px",
-                                      height: "auto",
-                                      borderRadius: "4px",
-                                      cursor: "pointer",
-                                    }}
+                                    className="attachment-thumbnail"
                                     src={imgSrc}
-                                    alt={`Image ${key}`}
+                                    alt={`Pièce jointe ${key}`}
                                   />
-                                </div>
+                                </button>
                               );
                             }
                           )}
@@ -65,31 +58,29 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
                             : response.team}
                         </span>
                       </small>
-                    </Text>
+                    </div>
                   </div>
                 )
               );
             })
           )}
-        </Col>
+        </div>
       )}
 
       <EmailSender contribution={data} refetch={refetch} />
 
-      {modalImage && (
-        <div className="image-modal" onClick={() => setModalImage(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <img src={modalImage} alt="Aperçu" />
-            <button
-              className="close-button"
-              onClick={() => setModalImage(null)}
-            >
-              ×
-            </button>
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={!!modalImage}
+        onClose={() => setModalImage(null)}
+        title="Aperçu de la pièce jointe"
+        size="lg"
+      >
+        {modalImage && (
+          <img className="attachment-preview" src={modalImage} alt="Aperçu" />
+        )}
+      </Modal>
     </>
   );
 };
+
 export default StaffActions;
