@@ -1,6 +1,6 @@
-import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
+import { Badge, Link, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { generateLinkFromAllDatas } from "./generate-links";
+import { generateLinkFromAllDatas } from "../utils";
 import {
   BadgeColor,
   BadgeStatus,
@@ -8,31 +8,20 @@ import {
   typeIcon,
   TypeLabel,
 } from "../../../utils";
-import {
-  AllContributionsProps,
-  ContributionBadgesProps,
-  ContributionItemProps,
-  FormattedDateProps,
-} from "../../../types";
+import { UnifiedContribution } from "../../../types";
 
 import MarkdownRenderer from "../../../utils/markdownRenderer";
+import { formatDate, formatTime } from "../../../utils/format-date";
 
-const FormattedDate = ({ dateString }: FormattedDateProps) => {
-  const date = new Date(dateString);
-  const formattedDate = date.toLocaleDateString("fr-FR");
-  const formattedTime = date.toLocaleTimeString("fr-FR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+type ContributionBadgesProps = { contribution: UnifiedContribution };
+type ContributionItemProps = { contribution: UnifiedContribution; index: number };
+type AllContributionsProps = { data: UnifiedContribution[]; query?: string };
 
-  return (
-    <Text size="sm">
-      <i>
-        Date de la contribution : {formattedDate} à {formattedTime}
-      </i>
-    </Text>
-  );
-};
+const getContributionTitle = (contribution: UnifiedContribution): string =>
+  contribution.name ||
+  contribution.contact?.email ||
+  contribution.email ||
+  "Contribution";
 
 const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
   let badgeContent = "Contact";
@@ -67,52 +56,57 @@ const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
       "contribute-object",
       "production",
     ].includes(contributionType);
+
   return (
-    <div>
+    <ul className="fr-badges-group">
       {contribution.objectType && (
-        <Badge
-          size="sm"
-          icon={typeIcon({ icon: contribution.objectType })}
-          color={BadgeColor({ type: contribution.objectType })}
-          className="fr-mr-1w fr-mt-1w"
-        >
-          {TypeLabel({ type: contribution.objectType })}
-        </Badge>
+        <li>
+          <Badge
+            size="sm"
+            icon={typeIcon({ icon: contribution.objectType })}
+            color={BadgeColor({ type: contribution.objectType })}
+          >
+            {TypeLabel({ type: contribution.objectType })}
+          </Badge>
+        </li>
       )}
-
       {isFromScanR && (
-        <Badge size="sm" className="fr-mr-1w fr-mb-1w" color="blue-ecume">
-          scanR
-        </Badge>
+        <li>
+          <Badge size="sm" color="blue-ecume">
+            scanR
+          </Badge>
+        </li>
       )}
-
-      <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
-        {badgeContent}
-      </Badge>
-
+      <li>
+        <Badge size="sm" color="blue-ecume">
+          {badgeContent}
+        </Badge>
+      </li>
       {contribution.fromApplication &&
         contribution.fromApplication !== "scanr" && (
-          <Badge size="sm" color="blue-ecume" className="fr-mr-1w fr-mb-1w">
-            {contribution.fromApplication}
-          </Badge>
+          <li>
+            <Badge size="sm" color="blue-ecume">
+              {contribution.fromApplication}
+            </Badge>
+          </li>
         )}
       {contribution?.csv && (
-        <Badge size="sm" color="green-menthe" className="fr-mr-1w fr-mb-1w">
-          BSO
-        </Badge>
+        <li>
+          <Badge size="sm" color="green-menthe">
+            BSO
+          </Badge>
+        </li>
       )}
-      <Badge
-        size="sm"
-        color={BadgeStatus({ status: contribution?.status })}
-        className="fr-mr-1w fr-mb-1w"
-      >
-        {StatusLabel({ status: contribution.status })}
-      </Badge>
-    </div>
+      <li>
+        <Badge size="sm" color={BadgeStatus({ status: contribution?.status })}>
+          {StatusLabel({ status: contribution.status })}
+        </Badge>
+      </li>
+    </ul>
   );
 };
 
-const ContributionItem = ({ contribution, index }: ContributionItemProps) => {
+const ContributionItem = ({ contribution }: ContributionItemProps) => {
   const link = generateLinkFromAllDatas(
     contribution.fromApplication || "",
     contribution.id,
@@ -126,66 +120,56 @@ const ContributionItem = ({ contribution, index }: ContributionItemProps) => {
   );
 
   return (
-    <Row gutters key={index}>
-      <Link
-        href={link}
-        rel="noopener noreferrer"
-        className="contribution-content"
-      >
-        <Col lg="12" md="10" sm="12">
-          <ContributionBadges contribution={contribution} />
-          <div>
-            {contribution?.name && (
-              <>
-                <i>
-                  Contribution de <strong>{contribution.name}</strong>{" "}
-                </i>
-                <br />
-                <i>{contribution?.email || ""}</i>
-              </>
-            )}
-            {contribution?.contact?.email && (
-              <i>
-                Mail du demandeur{" "}
-                <strong>{contribution?.contact?.email || ""}</strong>{" "}
-              </i>
-            )}
-            <FormattedDate dateString={contribution.created_at} />
-            {contribution?.message && (
-              <Text size="sm">
-                <MarkdownRenderer content={contribution.message} />
+    <div className="fr-card fr-card--no-icon fr-mb-3w home-contribution-card">
+      <div className="fr-card__body">
+        <div className="fr-card__content">
+          <div className="fr-card__start">
+            <ContributionBadges contribution={contribution} />
+          </div>
+          <h2 className="fr-card__title">
+            <Link href={link} rel="noopener noreferrer">
+              {getContributionTitle(contribution)}
+            </Link>
+          </h2>
+          <div className="fr-card__desc">
+            {contribution?.email && (
+              <Text as="p" size="sm" className="fr-mb-1w">
+                {contribution.email}
               </Text>
             )}
+            {contribution?.contact?.email && (
+              <Text as="p" size="sm" className="fr-mb-1w">
+                Mail du demandeur : <strong>{contribution.contact.email}</strong>
+              </Text>
+            )}
+            {contribution?.message && (
+              <div className="fr-text--sm">
+                <MarkdownRenderer content={contribution.message} />
+              </div>
+            )}
           </div>
-        </Col>
-      </Link>
-    </Row>
+          <div className="fr-card__end">
+            <p className="fr-card__detail fr-icon-calendar-line">
+              {formatDate(contribution.created_at)} à{" "}
+              {formatTime(contribution.created_at)}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
-const AllContributions = ({ data }: AllContributionsProps) => {
-  return (
-    <Container>
-      {data.length === 0 ? (
-        <p>Pas de résultat</p>
-      ) : (
-        data.map((contribution, index) => (
-          <ContributionItem
-            key={contribution.id || index}
-            contribution={contribution}
-            index={index}
-            data={undefined}
-            highlightedQuery={""}
-            refetch={function (): void {
-              throw new Error("Function not implemented.");
-            }}
-            allTags={[]}
-            url={""}
-          />
-        ))
-      )}
-    </Container>
-  );
-};
+const AllContributions = ({ data }: AllContributionsProps) => (
+  <section aria-label="Liste des contributions">
+    {data.map((contribution, index) => (
+      <ContributionItem
+        key={contribution.id || index}
+        contribution={contribution}
+        index={index}
+      />
+    ))}
+  </section>
+);
 
 export default AllContributions;

@@ -1,25 +1,25 @@
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import {
-  Button,
-  ButtonGroup,
-  Col,
-  Container,
-  Link,
-  Row,
-  Text,
-} from "@dataesr/dsfr-plus";
-import { useState, useCallback } from "react";
-import { FaCopy } from "react-icons/fa";
+import { useState } from "react";
 import EditModal from "../../components/edit-modal";
 import ContributorRequests from "./contributor-requests";
-import NameFromIdref from "../../api/contribution-api/getNamesFromIdref";
+import { NameFromIdref } from "../../api/scanr";
 import { useDataList } from "./data-list-context";
+import { CopyButton } from "../../utils/copy-button";
+import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import "./styles.scss";
 import {
   Contribute_Production,
   MessagePreviewProductionProps,
 } from "../../types";
+
+type InfoRowProps = {
+  icon: string;
+  label: string;
+  value: React.ReactNode;
+  valueClassName?: string;
+  copyText?: string;
+};
 
 const MessagePreview = ({
   data,
@@ -29,25 +29,44 @@ const MessagePreview = ({
   landingPages,
 }: MessagePreviewProductionProps) => {
   const [showModal, setShowModal] = useState(false);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [idRefClicked, setIdRefClicked] = useState(false);
   const [scanRClicked, setScanRClicked] = useState(false);
   const { dataList, setDataList } = useDataList();
   const { fullNameFromIdref: fetchedData } = NameFromIdref(data.id);
-  const copyToClipboard = useCallback((text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedId(text);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
-  }, []);
+  const { copiedText, copyToClipboard } = useCopyToClipboard();
 
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  const InfoRow = ({
+    icon,
+    label,
+    value,
+    valueClassName,
+    copyText,
+  }: InfoRowProps) => (
+    <div
+      className={`contribution-info__row${copyText ? " contribution-info__row--pinned" : ""}`}
+    >
+      <span
+        className={`fr-icon-${icon} contribution-info__icon`}
+        aria-hidden="true"
+      />
+      <div className="contribution-info__text">
+        <p className="fr-text--xs fr-text-mention--grey fr-mb-0">{label}</p>
+        <p
+          className={`fr-text--sm fr-mb-0 contribution-info__value ${valueClassName || ""}`}
+        >
+          <span className="contribution-info__value-text">{value}</span>
+          {copyText && (
+            <CopyButton
+              text={copyText}
+              copiedText={copiedText}
+              onCopy={copyToClipboard}
+              ariaLabel={`Copier : ${label.toLowerCase()}`}
+            />
+          )}
+        </p>
+      </div>
+    </div>
+  );
 
   const handleExportAllClick = () => {
     setDataList((prevState) => {
@@ -94,129 +113,115 @@ const MessagePreview = ({
   const formattedProductionId = data.objectId.replace(/\//g, "%2f");
 
   return (
-    <Container fluid>
-      {data.comment && (
-        <Row className="fr-grid-row--center">
-          <Col md="8" xs="12" className="comment">
-            <Text size="sm">
-              Commentaire ({data?.team ? data.team[0] : ""}){" "}
-              <strong> : {data.comment}</strong>
-            </Text>
-          </Col>
-        </Row>
-      )}
+    <>
       <EditModal
         refetch={refetch}
         isOpen={showModal}
-        onClose={handleCloseModal}
+        onClose={() => setShowModal(false)}
         data={data as unknown as Contribute_Production}
         allTags={allTags}
         dataProduction={[]}
       />
-      <Row className="contributorProductionSideInfo">
-        {data?.id && (
-          <Text
-            size="sm"
-            style={{ cursor: "pointer" }}
-            className="fr-icon-user-line"
-          >
-            ID de la personne concernée : {data.objectId}
-            <button
-              className={`copy-button ${
-                copiedId === data.objectId ? "copied" : ""
-              }`}
-              onClick={() => copyToClipboard(data.objectId)}
-            >
-              {copiedId === data.id && (
-                <span className="copied-text">Copié</span>
-              )}
-              <FaCopy size={14} color="#2196f3" className="copy-icon" />
-            </button>
-          </Text>
-        )}
-        {data?.id && (
-          <Link
-            className={`fr-footer__content-link ${
-              idRefClicked ? "clicked-link" : ""
-            }`}
-            target="_blank"
-            rel="noreferrer noopener external"
-            href={`https://www.idref.fr/${data.objectId.replace("idref", "")}`}
-            onClick={() => setIdRefClicked(true)}
-          >
-            IdRef
-          </Link>
-        )}
-        {data?.id && (
-          <Link
-            className={`fr-footer__content-link ${
-              scanRClicked ? "clicked-link" : ""
-            }`}
-            target="_blank"
-            rel="noreferrer noopener external"
-            href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${formattedProductionId}`}
-            onClick={() => setScanRClicked(true)}
-          >
-            scanR
-          </Link>
-        )}
-        <Text
-          size="sm"
-          bold
-          style={{
-            cursor: "pointer",
-            color: fetchedData ? "inherit" : "#f95c5e",
-          }}
-        >
-          {fetchedData ? `${fetchedData}` : "Nom non existant sur scanR"}
-          <button
-            className={`copy-button ${
-              fetchedData === data.name ? "copied" : ""
-            }`}
-            onClick={() => copyToClipboard(fetchedData)}
-          >
-            {copiedId === fetchedData && (
-              <span className="copied-text">Copié</span>
-            )}
-            <FaCopy size={14} color="#2196f3" className="copy-icon" />
-          </button>{" "}
-        </Text>
-        <Text size="sm">
-          {"Nom lié à l'idref "}
-          <span style={{ fontWeight: "bold" }}>{data.name}</span>
-        </Text>
-        {data.email && (
-          <Text size="sm" style={{ cursor: "pointer" }}>
-            Email : {data.email}
-            <button
-              className={`copy-button ${
-                copiedId === data.email ? "copied" : ""
-              }`}
-              onClick={() => copyToClipboard(data.email)}
-            >
-              {copiedId === data.email && (
-                <span className="copied-text">Copié</span>
-              )}
-              <FaCopy size={14} color="#2196f3" className="copy-icon" />
-            </button>
-          </Text>
-        )}
-      </Row>
-      <ButtonGroup isInlineFrom="xs" size="sm">
-        <Button onClick={handleOpenModal}>Editer la contribution</Button>
-        <Button onClick={handleExportAllClick}>Tout exporter</Button>
-      </ButtonGroup>
-      <Row className="fr-mb-2w">
-        <Col className="contributorProductionSide">
-          <ContributorRequests
-            authorsData={authorsData}
-            data={data}
-            coloredName={data.name}
-            landingPages={landingPages}
+
+      <div className="contribution-info contribution-info--inline-copy fr-mb-2w">
+        {data?.objectId && (
+          <InfoRow
+            icon="links-line"
+            label="ID de la personne concernée"
+            value={data.objectId}
+            copyText={data.objectId}
           />
-        </Col>
-      </Row>
-    </Container>
+        )}
+
+        <InfoRow
+          icon="user-star-line"
+          label="Nom sur scanR (via IdRef)"
+          value={fetchedData || "Nom non existant sur scanR"}
+          valueClassName={fetchedData ? "" : "fr-text-default--error"}
+          copyText={fetchedData}
+        />
+
+        <InfoRow
+          icon="user-line"
+          label="Nom renseigné dans la contribution"
+          value={data.name}
+        />
+
+        {data.email && (
+          <InfoRow
+            icon="mail-line"
+            label="Email"
+            value={data.email}
+            copyText={data.email}
+          />
+        )}
+
+        {data.comment && (
+          <InfoRow
+            icon="message-2-line"
+            label={`Commentaire${data.team?.[0] ? ` (${data.team[0]})` : ""}`}
+            value={data.comment}
+          />
+        )}
+      </div>
+
+      <div className="message-preview__actions fr-mb-3w">
+        {data?.id && (
+          <ul className="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left">
+            <li>
+              <a
+                className={`fr-btn fr-btn--tertiary fr-btn--sm fr-icon-external-link-line ${idRefClicked ? "clicked-link" : ""}`}
+                target="_blank"
+                rel="noreferrer noopener external"
+                href={`https://www.idref.fr/${data.objectId.replace("idref", "")}`}
+                onClick={() => setIdRefClicked(true)}
+              >
+                Sur IdRef
+              </a>
+            </li>
+            <li>
+              <a
+                className={`fr-btn fr-btn--tertiary fr-btn--sm fr-icon-external-link-line ${scanRClicked ? "clicked-link" : ""}`}
+                target="_blank"
+                rel="noreferrer noopener external"
+                href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${formattedProductionId}`}
+                onClick={() => setScanRClicked(true)}
+              >
+                Sur scanR
+              </a>
+            </li>
+          </ul>
+        )}
+
+        <ul className="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left message-preview__actions-main">
+          <li>
+            <button
+              type="button"
+              className="fr-btn fr-btn--sm fr-icon-download-line"
+              onClick={handleExportAllClick}
+            >
+              Tout exporter
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary fr-btn--sm fr-icon-edit-line"
+              onClick={() => setShowModal(true)}
+            >
+              Éditer la contribution
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <ContributorRequests
+        authorsData={authorsData}
+        data={data}
+        coloredName={data.name}
+        landingPages={landingPages}
+      />
+    </>
   );
 };
 

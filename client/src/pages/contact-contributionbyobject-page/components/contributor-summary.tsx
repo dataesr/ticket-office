@@ -1,11 +1,4 @@
-import {
-  Badge,
-  Col,
-  Row,
-  SideMenu,
-  SideMenuItem,
-  Text,
-} from "@dataesr/dsfr-plus";
+import Badge from "../../../components/badge";
 import {
   BadgeColor,
   BadgeStatus,
@@ -15,8 +8,18 @@ import {
 } from "../../../utils";
 import { ContributorSummaryProps } from "../../../types";
 
+const countResponses = (
+  threads?: ContributorSummaryProps["contributions"][number]["threads"]
+) =>
+  threads?.reduce(
+    (total, thread) =>
+      total + thread.responses.filter((r) => r.responseMessage).length,
+    0
+  ) ?? 0;
+
 const ContributorSummary: React.FC<ContributorSummaryProps> = ({
   contributions,
+  selectedContribution,
   onSelectContribution,
 }) => {
   const handleClick = (id: string) => {
@@ -25,63 +28,62 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
   };
 
   return (
-    <SideMenu title="Contributeurs" sticky fullHeight>
-      {contributions.map((contribution, index) => (
-        <SideMenuItem
-          key={`${contribution.id}-${index}`}
-          className="contribution-message"
-          title={
-            <>
-              <Row>
-                <Col>
-                  {contribution?.type && (
+    <nav aria-label="Contributions" className="contribution-list">
+      <p className="fr-text--sm fr-text--bold fr-mb-0 contribution-list__header">
+        {`Contributions (${contributions.length})`}
+      </p>
+      <ul className="contribution-list__items">
+        {contributions.map((contribution, index) => {
+          const isSelected = contribution.id === selectedContribution;
+          const responseCount = countResponses(contribution.threads);
+
+          return (
+            <li key={`${contribution.id}-${index}`}>
+              <button
+                type="button"
+                className={`contribution-list__item${isSelected ? " contribution-list__item--selected" : ""}`}
+                aria-current={isSelected ? "true" : undefined}
+                onClick={() => handleClick(contribution.id)}
+              >
+                <span className="contribution-list__item-row">
+                  <span className="fr-text--sm fr-text--bold fr-mb-0 contribution-list__item-name">
+                    {contribution.name}
+                  </span>
+                  <span className="fr-text--xs fr-text-mention--grey fr-mb-0">
+                    {new Date(contribution.created_at).toLocaleDateString()}
+                  </span>
+                </span>
+
+                <span className="contribution-list__item-badges">
+                  {contribution.status && (
+                    <Badge color={BadgeStatus({ status: contribution.status })}>
+                      {StatusLabel({ status: contribution.status })}
+                    </Badge>
+                  )}
+                  {contribution.type && (
                     <Badge
-                      size="sm"
                       icon={typeIcon({ icon: contribution.type })}
                       color={BadgeColor({ type: contribution.type })}
-                      className="fr-mr-1w fr-mb-1w"
                     >
                       {TypeLabel({ type: contribution.type })}
                     </Badge>
                   )}
-                  {contribution?.status && (
-                    <Badge
-                      size="sm"
-                      color={BadgeStatus({ status: contribution?.status })}
-                      className="fr-mr-1w fr-mb-1w"
-                    >
-                      {StatusLabel({ status: contribution.status })}
-                    </Badge>
-                  )}
-                  {contribution?.tags?.length > 0 &&
-                    contribution.tags
-                      .filter((tag) => tag !== "")
-                      .map((tag, key) => (
-                        <Badge
-                          key={key}
-                          size="sm"
-                          color="green-menthe"
-                          className="fr-mr-1w fr-mb-1w"
-                        >
-                          {tag}
-                        </Badge>
-                      ))}
-                </Col>
-              </Row>
-              <div>
-                <Text size="sm">
-                  {contribution.name}{" "}
-                  {new Date(contribution.created_at).toLocaleDateString()}
-                </Text>
-                <p className="contribution-message">{contribution.message}</p>
-              </div>
-            </>
-          }
-          defaultExpanded={false}
-          onClick={() => handleClick(contribution?.id)}
-        />
-      ))}
-    </SideMenu>
+                  <span className="fr-text--xs fr-text-mention--grey fr-mb-0">
+                    {responseCount > 0
+                      ? `${responseCount} réponse${responseCount > 1 ? "s" : ""}`
+                      : "Sans réponse"}
+                  </span>
+                </span>
+
+                <p className="fr-text--xs fr-text-mention--grey fr-mb-0 contribution-list__item-excerpt">
+                  {contribution.message}
+                </p>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
   );
 };
 

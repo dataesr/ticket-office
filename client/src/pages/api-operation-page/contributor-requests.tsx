@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { FaShoppingCart, FaCopy } from "react-icons/fa";
 import SelectWithNames from "./name-selector";
 import { ExternalLinks } from "./external-links";
 import { useDataList } from "./data-list-context";
-import { Col } from "@dataesr/dsfr-plus";
+import { CopyButton } from "../../utils/copy-button";
+import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import "./styles.scss";
 import { findAuthorData } from "../../utils/normalized-id-productions";
 import { ContributorRequestsProps } from "../../types";
@@ -14,69 +13,50 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
   authorsData = {},
   landingPages,
 }) => {
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const { copiedText, copyToClipboard } = useCopyToClipboard();
   const { dataList } = useDataList();
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedId(text);
-      setTimeout(() => {
-        setCopiedId(null);
-      }, 2000);
-    });
-  };
-
-  const isExported = (publicationId: string, contributionId: string) => {
-    return dataList.some(
+  const isExported = (publicationId: string, contributionId: string) =>
+    dataList.some(
       (item) =>
         item.publi_id === publicationId &&
         item.contribution_id === contributionId &&
         item.export === true
     );
-  };
 
   return (
-    <>
+    <ul className="production-request-list">
       {data?.productions.map((production) => {
-        const isCopied = copiedId === production?.id;
-
         const hasExport = isExported(production.id, data.id);
-
         const currentAuthorData = findAuthorData(production?.id, authorsData);
 
         return (
-          <Col
-            md="12"
-            className="contributorProductionContent fr-mr-1v"
-            key={production?.id}
-            style={{ position: "relative" }}
-            xs="12"
-          >
-            <div style={{ flex: 2, display: "flex", alignItems: "center" }}>
-              ID de la publication : {production.id}
-              <button
-                className={`copy-button ${isCopied ? "copied" : ""}`}
-                onClick={() => {
-                  copyToClipboard(production.id);
-                }}
-              >
-                {isCopied && <span className="copied-text">Copié</span>}
-                <FaCopy size={14} color="#2196f3" className="copy-icon" />
-              </button>
-              {!hasExport && (
-                <FaShoppingCart
-                  className="fr-ml-2w cart-icon red-cart"
-                  color="red"
-                />
-              )}
-              {hasExport && (
-                <FaShoppingCart
-                  className="fr-ml-2w cart-icon"
-                  color="#21AB8E"
-                />
-              )}
+          <li className="production-request" key={production?.id}>
+            <div className="production-request__id">
+              <span
+                className={`fr-icon-shopping-cart-2-line production-request__cart${hasExport ? " production-request__cart--done" : ""}`}
+                aria-hidden="true"
+                title={hasExport ? "Ajoutée au panier" : "Pas dans le panier"}
+              />
+              <div className="production-request__id-text">
+                <span className="fr-text--xs fr-text-mention--grey fr-mb-0">
+                  ID de la publication
+                </span>
+                <span className="fr-text--sm fr-mb-0 production-request__id-value">
+                  <span className="production-request__id-code">
+                    {production.id}
+                  </span>
+                  <CopyButton
+                    text={production.id}
+                    copiedText={copiedText}
+                    onCopy={copyToClipboard}
+                    ariaLabel="Copier l'identifiant de la publication"
+                  />
+                </span>
+              </div>
             </div>
-            <div style={{ flex: 1 }}>
+
+            <div className="production-request__select">
               <SelectWithNames
                 productionId={production.id}
                 idRef={data.objectId}
@@ -85,17 +65,18 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
                 authorData={currentAuthorData}
               />
             </div>
-            <div style={{ flex: 1 }}>
+
+            <div className="production-request__links">
               <ExternalLinks
                 landingPages={landingPages}
                 productionId={production.id}
                 name={data.name}
               />
             </div>
-          </Col>
+          </li>
         );
       })}
-    </>
+    </ul>
   );
 };
 

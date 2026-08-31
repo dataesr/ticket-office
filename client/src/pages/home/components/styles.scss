@@ -1,53 +1,22 @@
-.contribution-content {
-  margin-top: 1rem;
-  word-wrap: break-word;
-  width: 100%;
+.highlight {
+  background-color: var(--background-contrast-yellow-tournesol);
+  color: var(--text-default-grey);
+  font-weight: 700;
 }
 
 pre {
-  white-space: pre-wrap !important;
-  word-wrap: break-word !important;
+  white-space: pre-wrap;
+  word-wrap: break-word;
   overflow-x: auto;
-  background-color: #000;
   max-width: 100%;
-  padding: 1em;
-  border-radius: 5px;
-  color: #fff;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background-color: var(--background-contrast-grey);
+  color: var(--text-default-grey);
 }
 
-.copy-button {
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-
-.copied-text {
-  color: #4caf50;
-  margin-right: 0.5rem;
-}
-
-@media (max-width: 768px) {
-  .email-item {
-    padding: 1rem;
+.home-contribution-card {
+  .fr-card__desc {
+    overflow-wrap: anywhere;
   }
-  .email-content {
-    font-size: 0.9rem;
-  }
-  .copy-icon {
-    display: inline-block;
-    margin-left: 0.5rem;
-  }
-}
-.highlight {
-  background-color: yellow;
-  font-weight: bold;
-}
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(62, 111, 225, 0.6), 0 0 50px rgba(62, 111, 225, 0.4);
-  animation: neon-glow 1.5s ease-in-out infinite alternate;
 }

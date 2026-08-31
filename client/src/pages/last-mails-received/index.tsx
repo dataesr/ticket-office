@@ -1,7 +1,7 @@
 import { Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus";
 import { ClipLoader } from "react-spinners";
 import LastMailsReceivedItem from "./components/item";
-import useReceivedEmails from "../../api/contribution-api/getReceivedMails";
+import { useReceivedEmails } from "../../api/mails";
 
 const LastMailsReceived: React.FC = () => {
   const { data, isLoading, isError } = useReceivedEmails();

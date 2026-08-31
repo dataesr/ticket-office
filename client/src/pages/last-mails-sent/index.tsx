@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
-import useSentEmails from "../../api/contribution-api/getSentMails";
+import { useSentEmails } from "../../api/mails";
 import Selectors from "./components/selectors";
 import LastMailsSentItem from "./components/item";
 import { ClipLoader } from "react-spinners";

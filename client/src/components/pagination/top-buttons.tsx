@@ -1,32 +1,18 @@
-import { Button, Text } from "@dataesr/dsfr-plus";
+import { TopPaginationProps } from "../../types";
 
-const TopPaginationButtons = ({ meta, page, maxPage, setPage }) => {
+const TopPaginationButtons = ({
+  meta,
+  page,
+  pageSize = 20,
+}: TopPaginationProps & { pageSize?: number }) => {
+  const total = meta?.total ?? 0;
+  const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
+  const to = Math.min(page * pageSize, total);
+
   return (
-    <>
-      <Text size="sm" bold>
-        Résultats: 1-20 de {meta?.total}
-      </Text>
-      <Button
-        onClick={() => setPage(1)}
-        disabled={page === 1}
-        title="Page 1"
-        className="fr-mr-1w"
-        variant="secondary"
-        size="sm"
-      >
-        Première page
-      </Button>
-      <Button
-        onClick={() => setPage(maxPage)}
-        disabled={page === maxPage}
-        title={`Page ${maxPage}`}
-        className="fr-mr-1w"
-        variant="secondary"
-        size="sm"
-      >
-        Dernière page
-      </Button>
-    </>
+    <p className="fr-text--sm fr-text--bold fr-mb-2w">
+      Résultats : {from}-{to} sur {total}
+    </p>
   );
 };
 

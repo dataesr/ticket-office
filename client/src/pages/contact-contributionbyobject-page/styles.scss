@@ -1,0 +1,20 @@
+.contribution-top-page {
+  &__banner {
+    background: linear-gradient(
+      15deg,
+      var(--background-default-grey) 0%,
+      var(--background-flat-success) 100%
+    );
+  }
+}
+
+.page-header-row {
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &__search {
+    flex: 1 1 20rem;
+    min-width: 16rem;
+  }
+}

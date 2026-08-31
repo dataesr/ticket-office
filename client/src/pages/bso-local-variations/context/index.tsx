@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useState } from "react"
 import { useLocation } from "react-router-dom"
 
-import ContributionData from "../../../api/contribution-api/getData"
+import { ContributionData } from "../../../api/contributions"
 import { buildURL } from "../../../api/utils/buildURL"
 import useBsoConfig from "../hooks/useBsoConfig"
 import useUrl from "../hooks/useUrl"

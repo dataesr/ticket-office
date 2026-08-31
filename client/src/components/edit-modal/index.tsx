@@ -1,19 +1,18 @@
-import { useState } from "react";
-import {
-  Modal,
-  ModalTitle,
-  ModalContent,
-  Col,
-  TextArea,
-  Button,
-  Row,
-  DismissibleTag,
-  Text,
-} from "@dataesr/dsfr-plus";
-import { postHeaders } from "../../config/api";
+import { useId, useState } from "react";
 import { toast } from "react-toastify";
+import Modal from "../modal";
+import { DismissibleTag } from "../tag";
+import { postHeaders } from "../../config/api";
 import TagSelectionModal from "./modal-select-tags";
 import { EditModalProps, Inputs } from "../../types";
+
+const getBasePath = (pathname: string) => {
+  if (pathname.includes("contributionPage")) return "contribute";
+  if (pathname.includes("scanr-removeuser")) return "remove-user";
+  if (pathname.includes("scanr-namechange")) return "update-user-data";
+  if (pathname.includes("apioperations")) return "production";
+  return "contacts";
+};
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -22,6 +21,11 @@ const EditModal: React.FC<EditModalProps> = ({
   refetch,
   allTags,
 }) => {
+  const statusSelectId = useId();
+  const tagsInputId = useId();
+  const extraTextareaId = useId();
+  const commentTextareaId = useId();
+
   const [showTagModal, setShowTagModal] = useState(false);
   const [tagInput, setTagInput] = useState("");
   const selectedProfile = localStorage.getItem("selectedProfile");
@@ -50,56 +54,35 @@ const EditModal: React.FC<EditModalProps> = ({
     contributionType: data?.contributionType || "",
   });
 
-  let basePath = "contacts";
-
-  if (window.location.pathname.includes("contributionPage")) {
-    basePath = "contribute";
-  } else if (window.location.pathname.includes("scanr-removeuser")) {
-    basePath = "remove-user";
-  } else if (window.location.pathname.includes("scanr-namechange")) {
-    basePath = "update-user-data";
-  } else if (window.location.pathname.includes("apioperations")) {
-    basePath = "production";
-  }
-
-  const url = `/api/${basePath}/${data?.id}`;
+  const url = `/api/${getBasePath(window.location.pathname)}/${data?.id}`;
 
   const handleInputChange = (key: keyof Inputs, value: any) => {
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      [key]: value,
-    }));
+    setInputs((prevInputs) => ({ ...prevInputs, [key]: value }));
   };
 
   const handleSubmit = async () => {
     try {
       const extraEntries = inputs.extra.split("\n").reduce((acc, line) => {
         const [key, value] = line.split(":").map((part) => part.trim());
-        if (key && value) {
-          acc[key] = value;
-        }
+        if (key && value) acc[key] = value;
         return acc;
       }, {} as Record<string, string>);
-
-      const body = JSON.stringify({
-        ...inputs,
-        team: [selectedProfile],
-        extra: extraEntries,
-      });
 
       const response = await fetch(url, {
         method: "PATCH",
         headers: postHeaders,
-        body,
+        body: JSON.stringify({
+          ...inputs,
+          team: [selectedProfile],
+          extra: extraEntries,
+        }),
       });
 
-      if (response.ok) {
-        refetch();
-        onClose();
-        toast.success("Les modifications ont été enregistrées avec succès !");
-      } else {
-        throw new Error("Erreur lors de la mise à jour");
-      }
+      if (!response.ok) throw new Error("Erreur lors de la mise à jour");
+
+      refetch();
+      onClose();
+      toast.success("Les modifications ont été enregistrées avec succès !");
     } catch (error) {
       console.error("Erreur lors de la soumission:", error);
       toast.error("Une erreur est survenue lors de l'enregistrement");
@@ -118,10 +101,6 @@ const EditModal: React.FC<EditModalProps> = ({
     }
   };
 
-  const handleOpenTagModal = () => {
-    setShowTagModal(true);
-  };
-
   const handleTagRemove = (tagToRemove: string) => {
     handleInputChange(
       "tags",
@@ -131,91 +110,124 @@ const EditModal: React.FC<EditModalProps> = ({
 
   return (
     <>
-      <Modal isOpen={isOpen} hide={onClose}>
-        <ModalTitle>Édition</ModalTitle>
-        <ModalContent>
-          <Col xs="12" className="fr-mb-1w">
-            <label htmlFor="statusInput">Statut</label>
-            <select
-              id="statusInput"
-              name="status"
-              value={inputs.status}
-              onChange={(e) => handleInputChange("status", e.target.value)}
-              className="fr-select"
-            >
-              <option value="treated">Traité</option>
-              <option value="new">Nouveau</option>
-              <option value="ongoing">En traitement</option>
-            </select>
-          </Col>
-          <Row gutters>
-            <Col md="6" xs="12">
-              <TextArea
-                label="Ajouter des tags"
-                hint="Séparez les tags par des virgules"
+      <Modal isOpen={isOpen} onClose={onClose} title="Édition">
+        <div className="fr-select-group fr-mb-3w">
+          <label className="fr-label" htmlFor={statusSelectId}>
+            Statut
+          </label>
+          <select
+            id={statusSelectId}
+            className="fr-select"
+            value={inputs.status}
+            onChange={(e) => handleInputChange("status", e.target.value)}
+          >
+            <option value="treated">Traité</option>
+            <option value="new">Nouveau</option>
+            <option value="ongoing">En traitement</option>
+          </select>
+        </div>
+
+        <div className="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+          <div className="fr-col-12 fr-col-md-6">
+            <div className="fr-input-group">
+              <label className="fr-label" htmlFor={tagsInputId}>
+                Ajouter des tags
+                <span className="fr-hint-text">
+                  Séparez les tags par des virgules
+                </span>
+              </label>
+              <input
+                id={tagsInputId}
+                type="text"
+                className="fr-input"
                 value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
               />
-              {tagInput && (
-                <Button
-                  onClick={handleTagInputChange}
-                  variant="secondary"
-                  size="sm"
-                >
-                  Valider
-                </Button>
-              )}
-            </Col>
-            <Col md="6" xs="12">
-              {inputs.tags.map((tag, index) => (
-                <span key={index}>
-                  <DismissibleTag
-                    size="sm"
-                    className="fr-mt-1w"
-                    onClick={() => handleTagRemove(tag)}
-                  >
-                    <Text size="sm">{tag}</Text>
-                  </DismissibleTag>
-                </span>
-              ))}
-            </Col>
-          </Row>
-          <Button
-            onClick={handleOpenTagModal}
-            variant="secondary"
-            size="sm"
-            className="fr-mt-2w fr-mb-2w"
-          >
-            Sélectionner des tags
-          </Button>
-          <Row gutters>
-            <Col md="6" xs="12">
-              <TextArea
-                label="Ajouter des extra"
+            </div>
+            {tagInput && (
+              <button
+                type="button"
+                className="fr-btn fr-btn--secondary fr-btn--sm fr-mt-1w"
+                onClick={handleTagInputChange}
+              >
+                Valider
+              </button>
+            )}
+          </div>
+          <div className="fr-col-12 fr-col-md-6">
+            {inputs.tags.length > 0 && (
+              <ul className="fr-tags-group">
+                {inputs.tags.map((tag) => (
+                  <li key={tag}>
+                    <DismissibleTag onClick={() => handleTagRemove(tag)}>
+                      {tag}
+                    </DismissibleTag>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="fr-btn fr-btn--secondary fr-btn--sm fr-mb-3w"
+          onClick={() => setShowTagModal(true)}
+        >
+          Sélectionner des tags
+        </button>
+
+        <div className="fr-grid-row fr-grid-row--gutters fr-mb-3w">
+          <div className="fr-col-12 fr-col-md-6">
+            <div className="fr-input-group">
+              <label className="fr-label" htmlFor={extraTextareaId}>
+                Ajouter des extra
+                <span className="fr-hint-text">Exemple : clé: valeur</span>
+              </label>
+              <textarea
+                id={extraTextareaId}
+                className="fr-input"
+                rows={4}
                 value={inputs.extra}
                 onChange={(e) => handleInputChange("extra", e.target.value)}
-                hint="Exemple : clé: valeur"
               />
-            </Col>
-            <Col md="6" xs="12">
-              <TextArea
-                label="Commentaire"
+            </div>
+          </div>
+          <div className="fr-col-12 fr-col-md-6">
+            <div className="fr-input-group">
+              <label className="fr-label" htmlFor={commentTextareaId}>
+                Commentaire
+                <span className="fr-hint-text">Ajouter un commentaire</span>
+              </label>
+              <textarea
+                id={commentTextareaId}
+                className="fr-input"
+                rows={4}
                 value={inputs.comment}
                 onChange={(e) => handleInputChange("comment", e.target.value)}
-                hint="Ajouter un commentaire"
               />
-            </Col>
-          </Row>
-          <Row className="fr-btn-group fr-btn-group--right fr-mt-4w">
-            <Button variant="secondary" onClick={onClose}>
-              Annuler
-            </Button>
-            <Button variant="primary" onClick={handleSubmit}>
+            </div>
+          </div>
+        </div>
+
+        <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse">
+          <li>
+            <button type="button" className="fr-btn" onClick={handleSubmit}>
               Enregistrer
-            </Button>
-          </Row>
-        </ModalContent>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary"
+              onClick={onClose}
+            >
+              Annuler
+            </button>
+          </li>
+        </ul>
       </Modal>
+
       <TagSelectionModal
         isOpen={showTagModal}
         allTags={filteredTags}

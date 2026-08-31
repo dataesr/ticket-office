@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Badge, Col, Row, Text, Notice, Title } from "@dataesr/dsfr-plus";
-import StaffActions from "./staff-action";
+import Badge from "../../../components/badge";
+import EditModal from "../../../components/edit-modal";
+import StaffActions from "./staff-actions";
 import {
   BadgeColor,
   BadgeStatus,
@@ -8,10 +9,19 @@ import {
   TypeLabel,
   typeIcon,
 } from "../../../utils";
-import { FaCopy } from "react-icons/fa";
+import { CopyButton } from "../../../utils/copy-button";
+import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
 import "./styles.scss";
 import MessagePreview from "./message-preview";
-import { ContributionItemProps } from "../../../types";
+import { Contribution } from "../../../types";
+
+type ContributionItemProps = {
+  data: Contribution;
+  highlightedQuery: string;
+  refetch: () => void;
+  allTags: string[];
+  url: string;
+};
 
 const ContributionItem: React.FC<ContributionItemProps> = ({
   data,
@@ -20,16 +30,8 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
   allTags,
   url,
 }) => {
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  const copyToClipboard = () => {
-    if (!data?.id) return;
-
-    navigator.clipboard.writeText(data.id).then(() => {
-      setCopiedId(data.id);
-      setTimeout(() => setCopiedId(null), 2000);
-    });
-  };
+  const { copiedText, copyToClipboard } = useCopyToClipboard();
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const firstThread = data?.threads?.[0];
   const firstResponse = firstThread?.responses?.[0];
@@ -38,97 +40,96 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
     : "";
 
   return (
-    <div className="contribution-item-container">
-      {/* Badges regroupés avec flexbox pour mieux s'adapter */}
-      <Row className="fr-mt-3w badge-container">
-        <div className="badge-wrapper">
+    <div className="contribution-item">
+      <div className="contribution-item__header">
+        <ul className="fr-badges-group fr-mb-1w">
           {data?.tags?.length > 0 && (
-            <Badge size="sm" color="green-menthe" className="badge-item">
-              {data.tags.join(", ")}
-            </Badge>
+            <li>
+              <Badge color="green-menthe">{data.tags.join(", ")}</Badge>
+            </li>
           )}
           {data?.status && (
-            <Badge
-              size="sm"
-              color={BadgeStatus({ status: data.status })}
-              className="badge-item"
-            >
-              {StatusLabel({ status: data.status })}
-            </Badge>
+            <li>
+              <Badge color={BadgeStatus({ status: data.status })}>
+                {StatusLabel({ status: data.status })}
+              </Badge>
+            </li>
           )}
           {firstResponse?.team && (
-            <Badge size="sm" color="blue-ecume" className="badge-item">
-              {`Réponse: ${firstResponse.team}`}
-            </Badge>
+            <li>
+              <Badge color="blue-ecume">{`Réponse : ${firstResponse.team}`}</Badge>
+            </li>
           )}
           {data?.comment && data?.team?.length > 0 && (
-            <Badge size="sm" color="green-emeraude" className="badge-item">
-              {`Commenté par ${data.team[0]}`}
-            </Badge>
+            <li>
+              <Badge color="green-emeraude">{`Commenté par ${data.team[0]}`}</Badge>
+            </li>
           )}
           {data?.objectType && (
-            <Badge
-              size="sm"
-              color={BadgeColor({ type: data.objectType })}
-              className="badge-item"
-              icon={typeIcon({ icon: data.objectType })}
+            <li>
+              <Badge
+                color={BadgeColor({ type: data.objectType })}
+                icon={typeIcon({ icon: data.objectType })}
+              >
+                {TypeLabel({ type: data.objectType })}
+              </Badge>
+            </li>
+          )}
+        </ul>
+
+        <div className="contribution-item__header-row">
+          <h2 className="fr-h5 fr-mb-0">
+            {data?.name || ""}
+            <span className="fr-ml-1w fr-text--regular fr-text--sm">
+              ({data?.id || ""})
+              <CopyButton
+                text={data?.id || ""}
+                copiedText={copiedText}
+                onCopy={copyToClipboard}
+                ariaLabel="Copier l'identifiant"
+                disabled={!data?.id}
+              />
+            </span>
+          </h2>
+          <div className="contribution-item__actions">
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary fr-btn--sm fr-icon-edit-line fr-btn--icon-left"
+              onClick={() => setShowEditModal(true)}
             >
-              {TypeLabel({ type: data.objectType })}
-            </Badge>
-          )}
-        </div>
-      </Row>
-
-      {/* En-tête avec titre et date de création */}
-      <Row className="title-container">
-        <Col xs="12" md="8">
-          <div className="title-wrapper">
-            <Title look="h5" className="contribution-title">
-              {data?.name || ""}
-              <span className="id-container">
-                ({data?.id || ""})
-                <button
-                  className={`copy-button ${
-                    copiedId === data?.id ? "copied" : ""
-                  }`}
-                  onClick={copyToClipboard}
-                  aria-label="Copier l'identifiant"
-                  disabled={!data?.id}
-                >
-                  {copiedId === data?.id && (
-                    <span className="copied-text">Copié</span>
-                  )}
-                  <FaCopy size={14} color="#2196f3" className="copy-icon" />
-                </button>
-              </span>
-            </Title>
+              Éditer
+            </button>
+            {createdDate && (
+              <p className="fr-text--sm fr-text-mention--grey fr-mb-0 contribution-item__date">
+                Reçu le {createdDate}
+              </p>
+            )}
           </div>
+        </div>
+      </div>
 
-          {!firstResponse && (
-            <Notice type="info" closeMode="disallow" className="fr-mb-2w">
-              Aucune réponse apportée à ce message pour l'instant
-            </Notice>
-          )}
-        </Col>
-        <Col xs="12" md="4" className="date-container">
-          {createdDate && (
-            <Text size="sm" className="date-text">
-              <i className="date">Reçu le {createdDate}</i>
-            </Text>
-          )}
-        </Col>
-      </Row>
-      <Row>
-        <Col xs="12">
-          <MessagePreview
-            data={data}
-            allTags={allTags}
-            refetch={refetch}
-            highlightedQuery={highlightedQuery}
-          />
-          <StaffActions url={url} refetch={refetch} data={data} />
-        </Col>
-      </Row>
+      <div className="contribution-item__body">
+        {!firstResponse && (
+          <div className="fr-alert fr-alert--info fr-alert--sm fr-mb-3w">
+            <p>Aucune réponse apportée à ce message pour l'instant</p>
+          </div>
+        )}
+
+        <MessagePreview
+          data={data}
+          highlightedQuery={highlightedQuery}
+        />
+        <StaffActions url={url} refetch={refetch} data={data} />
+      </div>
+
+      <EditModal
+        refetch={refetch}
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        data={data}
+        allTags={allTags}
+        dataProduction={[]}
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { Badge, Col, Container, Link, Row, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import collectionNameMapping, { generateLink } from "./generate-links";
+import collectionNameMapping, { generateLink } from "../utils";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 interface Email {

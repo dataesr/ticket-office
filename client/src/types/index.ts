@@ -126,18 +126,7 @@ export interface EmailItem {
   extractedText: string;
 }
 
-export interface EmailSenderProps {
-  contribution: Contribution | Contribute_Production;
-  refetch: () => void;
-}
 
-export interface ContributionItemProps {
-  data: Contribution;
-  highlightedQuery: string;
-  refetch: () => void;
-  allTags: string[];
-  url: string;
-}
 
 export interface Inputs {
   team: string[];
@@ -189,8 +178,6 @@ export interface SelectWithNamesProps {
 export interface MessagePreviewProps {
   data: any;
   highlightedQuery?: string;
-  refetch: () => void;
-  allTags: string[];
 }
 export interface MessagePreviewProductionProps {
   data: any;
@@ -244,27 +231,6 @@ export interface ExtendedSelectWithNamesProps extends SelectWithNamesProps {
   landingPage?: string;
 }
 
-export interface FormattedDateProps {
-  dateString: string;
-}
-
-export interface ContributionBadgesProps {
-  contribution: UnifiedContribution;
-}
-
-export interface ContributionItemProps {
-  contribution: UnifiedContribution;
-  index: number;
-}
-
-export interface AllContributionsProps {
-  data: UnifiedContribution[];
-  query?: string;
-}
-export interface ContributionItemProps {
-  contribution: UnifiedContribution;
-  index: number;
-}
 
 export interface ContributionProductionItemProps {
   data: {
@@ -319,7 +285,9 @@ export interface ContributorSummaryProps {
     name: string;
     created_at: string;
     message: string;
+    threads?: Thread[];
   }[];
+  selectedContribution?: string;
   onSelectContribution: (id: string) => void;
 }
 
@@ -334,12 +302,6 @@ export interface PaginationProps {
 
 export interface TopPaginationProps extends PaginationProps {
   meta: any;
-}
-export interface SearchSectionProps {
-  query: string[];
-  handleSearch: (value: string) => void;
-  handleRemoveQueryItem: (item: string) => void;
-  isLarge?: boolean;
 }
 
 export interface ThreadResponse {

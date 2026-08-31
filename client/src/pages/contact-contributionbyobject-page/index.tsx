@@ -1,18 +1,20 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Col, Container, Row, Text } from "@dataesr/dsfr-plus";
-import ContributionData from "../../api/contribution-api/getData";
+import { ClipLoader } from "react-spinners";
+import { ContributionData } from "../../api/contributions";
 import { buildURL } from "../../api/utils/buildURL";
 import Selectors from "../../components/selectors";
 import ContributorSummary from "./components/contributor-summary";
-import PageTitle from "./components/page-title";
-import SearchSection from "./components/search-section";
+import SearchSection from "../../components/search-section";
 import ContributionDetails from "./components/contribution-details";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import { getUrlToSend } from "../../config/urlHelper";
-import { ClipLoader } from "react-spinners";
 import { Contribution, ContributionPageProps } from "../../types";
+import { filterContributions, getPageTitle, updateUrlParams } from "./utils";
+import "./styles.scss";
+
+const PAGE_SIZE = 20;
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
@@ -35,15 +37,8 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     isScanrPage ? params.get("objectType") || "all" : undefined
   );
 
-  const updateURL = (updates: Record<string, string>) => {
-    const newParams = new URLSearchParams(location.search);
-    Object.entries(updates).forEach(([key, value]) => {
-      newParams.set(key, value);
-    });
-
-    const newURL = `${window.location.pathname}?${newParams.toString()}`;
-    window.history.pushState({}, "", newURL);
-  };
+  const updateURL = (updates: Record<string, string>) =>
+    updateUrlParams(location.search, updates);
 
   const handleSetPage = (newPage: number) => {
     setPage(newPage);
@@ -77,7 +72,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     page,
     searchInMessage,
     fromApplication?.toString(),
-    "20",
+    PAGE_SIZE.toString(),
     undefined,
     objectType
   );
@@ -87,7 +82,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   const { data, isLoading, isError, refetch } = ContributionData(url);
   const contributions: Contribution[] = data?.data || [];
   const meta = data?.meta;
-  const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
+  const maxPage = meta ? Math.ceil(meta.total / PAGE_SIZE) : 1;
 
   const tagsData = ContributionData(urlToSend);
   const allTags = tagsData?.data?.data?.map((tag) => tag?.tags);
@@ -115,96 +110,91 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     updateURL({ query: newQuery.join(",") });
   };
 
-  const filteredContributions = contributions.filter((contribution) => {
-    if (query.length === 0) return true;
+  const filteredContributions = useMemo(
+    () => filterContributions(contributions, query, searchInMessage),
+    [contributions, query, searchInMessage]
+  );
 
-    const queryLower = query.map((q) => q.toLowerCase());
-    const nameMatches = queryLower.some((q) =>
-      contribution.name?.toLowerCase().includes(q)
-    );
-    const idMatches = queryLower.some((q) =>
-      contribution.id.toLowerCase().includes(q)
-    );
-
-    if (searchInMessage) {
-      const messageMatches = queryLower.some((q) =>
-        contribution.message?.toLowerCase().includes(q)
-      );
-      return nameMatches || idMatches || messageMatches;
-    }
-    return nameMatches || idMatches;
-  });
-
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <ClipLoader color="#123abc" size={50} />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Container className="fr-my-5w">
-        <Text>Erreur lors du chargement des données.</Text>
-      </Container>
-    );
-  }
+  const pageTitle = getPageTitle(location.pathname);
 
   return (
-    <Container className="fr-my-5w">
-      <PageTitle pathname={location.pathname} />
-      <Row gutters className="fr-mb-3w">
-        <Col md="8" xs="12">
-          <SearchSection
-            query={query}
-            handleSearch={handleSearch}
-            handleRemoveQueryItem={handleRemoveQueryItem}
-          />
-          <TopPaginationButtons
-            meta={meta}
-            page={page}
-            maxPage={maxPage}
-            setPage={handleSetPage}
-          />
-        </Col>
-        <Col offsetLg="1">
-          <Selectors
-            sort={sort}
-            status={status}
-            setSort={handleSetSort}
-            setStatus={handleSetStatus}
-            searchInMessage={searchInMessage}
-            setSearchInMessage={handleSetSearchInMessage}
-            objectType={objectType}
-            setObjectType={handleSetObjectType}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs="12" sm="12" md="4">
-          <ContributorSummary
-            contributions={filteredContributions}
-            onSelectContribution={setSelectedContribution}
-          />
-        </Col>
-        <Col xs="12" sm="12" md="8">
-          <ContributionDetails
-            filteredContributions={filteredContributions}
-            selectedContribution={effectiveSelectedContribution}
-            refetch={refetch}
-            highlightedQuery={highlightedQuery}
-            allTags={allTags}
-            url={url}
-          />
-        </Col>
-      </Row>
-      <BottomPaginationButtons
-        page={page}
-        maxPage={maxPage}
-        setPage={handleSetPage}
-      />
-    </Container>
+    <main id="content" className="contribution-top-page">
+      <section className="contribution-top-page__banner">
+        <div className="fr-container fr-py-8w">
+          <h1 className="fr-mb-1w">{pageTitle}</h1>
+          <p className="fr-mb-3w fr-text--sm">
+            Vous pouvez consulter les contributions des utilisateurs et les
+            objets auxquels ils ont contribué.
+          </p>
+          <div className="page-header-row">
+            <div className="page-header-row__search">
+              <SearchSection
+                query={query}
+                handleSearch={handleSearch}
+                handleRemoveQueryItem={handleRemoveQueryItem}
+              />
+            </div>
+            <Selectors
+              layout="inline"
+              sort={sort}
+              status={status}
+              setSort={handleSetSort}
+              setStatus={handleSetStatus}
+              searchInMessage={searchInMessage}
+              setSearchInMessage={handleSetSearchInMessage}
+              objectType={objectType}
+              setObjectType={handleSetObjectType}
+            />
+          </div>
+        </div>
+      </section>
+      <div className="fr-container fr-py-6w">
+        <TopPaginationButtons
+          meta={meta}
+          page={page}
+          maxPage={maxPage}
+          setPage={handleSetPage}
+          pageSize={PAGE_SIZE}
+        />
+
+        {isLoading ? (
+          <div className="fr-grid-row fr-grid-row--center fr-py-10w">
+            <ClipLoader color="var(--blue-france-sun-113-625)" size={50} />
+          </div>
+        ) : isError ? (
+          <div className="fr-alert fr-alert--error">
+            <p className="fr-alert__title">Erreur</p>
+            <p>Erreur lors du chargement des données.</p>
+          </div>
+        ) : (
+          <div className="fr-grid-row fr-grid-row--gutters">
+            <div className="fr-col-12 fr-col-md-4">
+              <ContributorSummary
+                contributions={filteredContributions}
+                selectedContribution={effectiveSelectedContribution}
+                onSelectContribution={setSelectedContribution}
+              />
+            </div>
+            <div className="fr-col-12 fr-col-md-8">
+              <ContributionDetails
+                filteredContributions={filteredContributions}
+                selectedContribution={effectiveSelectedContribution}
+                refetch={refetch}
+                highlightedQuery={highlightedQuery}
+                allTags={allTags}
+                url={url}
+              />
+            </div>
+          </div>
+        )}
+
+        <BottomPaginationButtons
+          page={page}
+          maxPage={maxPage}
+          setPage={handleSetPage}
+        />
+      </div>
+    </main>
   );
 };
 

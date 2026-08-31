@@ -1,7 +1,18 @@
-import { Col, Toggle } from "@dataesr/dsfr-plus";
 import { useLocation } from "react-router-dom";
+import "./styles.scss";
 
-const Selectors = ({
+type SelectorsProps = {
+  sort: string;
+  status: string;
+  setSort: (value: string) => void;
+  setStatus: (value: string) => void;
+  searchInMessage?: boolean;
+  setSearchInMessage?: (value: boolean) => void;
+  objectType?: string;
+  setObjectType?: (value: string) => void;
+  layout?: "stacked" | "inline";
+};
+const Selectors: React.FC<SelectorsProps> = ({
   sort,
   status,
   setSort,
@@ -10,72 +21,90 @@ const Selectors = ({
   setSearchInMessage,
   objectType,
   setObjectType,
+  layout = "stacked",
 }) => {
   const location = useLocation();
   const isScanrContributionPage = location.pathname.includes(
     "/scanr-contributionPage"
   );
-
-  const handleSortChange = (event) => {
-    setSort(event.target.value);
-  };
-
-  const handleStatusChange = (event) => {
-    setStatus(event.target.value);
-  };
-
-  const handleObjectTypeChange = (event) => {
-    setObjectType(event.target.value);
-  };
+  const isInline = layout === "inline";
+  const groupClassName = isInline
+    ? "fr-select-group fr-mb-0"
+    : "fr-select-group fr-mb-2w";
 
   return (
-    <Col xs="12" offsetLg="1">
-      <Col className="fr-mb-1w">
-        <select value={sort} onChange={handleSortChange} className="fr-select">
+    <div className={isInline ? "filter-bar" : undefined}>
+      <div className={groupClassName}>
+        <label className="fr-label fr-sr-only" htmlFor="sort-select">
+          Trier par date
+        </label>
+        <select
+          id="sort-select"
+          className="fr-select"
+          value={sort}
+          onChange={(e) => setSort(e.target.value)}
+        >
           <option value="DESC">Plus récentes</option>
           <option value="ASC">Plus anciennes</option>
         </select>
-      </Col>
+      </div>
 
       {isScanrContributionPage && setObjectType && (
-        <Col className="fr-mb-1w">
+        <div className={groupClassName}>
+          <label className="fr-label fr-sr-only" htmlFor="object-type-select">
+            Type d'objet
+          </label>
           <select
-            value={objectType || "all"}
-            onChange={handleObjectTypeChange}
+            id="object-type-select"
             className="fr-select"
-            aria-label="Type d'objet"
+            value={objectType || "all"}
+            onChange={(e) => setObjectType(e.target.value)}
           >
-            <option value="all">Tous les types d'objets</option>
+            <option value="all">Tous les types</option>
             <option value="persons">Personnes</option>
             <option value="structures">Structures</option>
             <option value="publications">Publications</option>
             <option value="projects">Projets</option>
             <option value="network">Réseaux</option>
           </select>
-        </Col>
+        </div>
       )}
 
-      <select
-        value={status}
-        onChange={handleStatusChange}
-        className="fr-select"
-      >
-        <option value="choose">Toutes les contributions</option>
-        <option value="new">Nouvelles contributions</option>
-        <option value="ongoing">Contribution en traitement</option>
-        <option value="treated">Contributions traitées</option>
-      </select>
+      <div className={groupClassName}>
+        <label className="fr-label fr-sr-only" htmlFor="status-select">
+          Filtrer par statut
+        </label>
+        <select
+          id="status-select"
+          className="fr-select"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="choose">Tous les statuts</option>
+          <option value="new">Nouvelles</option>
+          <option value="ongoing">En traitement</option>
+          <option value="treated">Traitées</option>
+        </select>
+      </div>
 
       {setSearchInMessage && (
-        <Toggle
-          checked={searchInMessage}
-          id="searchInMessage"
-          name="Rechercher dans les messages"
-          onChange={(e) => setSearchInMessage(e.target.checked)}
-          label="Rechercher dans les messages"
-        />
+        <div className="fr-toggle fr-mb-0 filter-bar__toggle">
+          <input
+            type="checkbox"
+            className="fr-toggle__input"
+            id="search-in-message-toggle"
+            checked={searchInMessage}
+            onChange={(e) => setSearchInMessage(e.target.checked)}
+          />
+          <label
+            className="fr-toggle__label"
+            htmlFor="search-in-message-toggle"
+          >
+            {isInline ? "Dans les messages" : "Rechercher dans les messages"}
+          </label>
+        </div>
       )}
-    </Col>
+    </div>
   );
 };
 

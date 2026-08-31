@@ -1,3 +1,8 @@
+import {
+  CONTACT_PATHS,
+  withContributionQuery,
+} from "../../utils/contribution-links";
+
 const collectionNameMapping: { [key: string]: string } = {
   contribute: "Contribution par objets",
   contacts: "Formulaire de contact",
@@ -8,20 +13,14 @@ const collectionNameMapping: { [key: string]: string } = {
 };
 
 export default collectionNameMapping;
+
 export function generateLink(
   collectionName: string,
   fromApplication?: string,
   id?: string
 ): string {
   const basePathMap: { [key: string]: { [key: string]: string } | string } = {
-    contacts: {
-      scanr: "/scanr-contact",
-      paysage: "/paysage-contact",
-      bso: "/bso-contact",
-      curiexplore: "/curiexplore-contact",
-      "works-magnet": "/works-magnet-contact",
-      tableaux: "/tableaux-contact",
-    },
+    contacts: CONTACT_PATHS,
     contribute_production: "/scanr-apioperations",
     "remove-user": "/scanr-removeuser",
     "update-user-data": "/scanr-namechange",
@@ -30,14 +29,14 @@ export function generateLink(
   };
 
   let basePath = "";
-
   if (collectionName === "contacts" && fromApplication) {
-    basePath = basePathMap[collectionName][fromApplication] || "";
+    basePath =
+      (basePathMap[collectionName] as { [key: string]: string })[
+        fromApplication
+      ] || "";
   } else {
     basePath = (basePathMap[collectionName] as string) || "";
   }
 
-  return id
-    ? `${basePath}?page=1&query=${id}&searchInMessage=false&sort=DESC&status=choose`
-    : basePath;
+  return withContributionQuery(basePath, id);
 }
