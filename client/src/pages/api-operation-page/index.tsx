@@ -1,14 +1,5 @@
 import { useState } from "react";
-import {
-  Col,
-  Container,
-  DismissibleTag,
-  Notice,
-  Row,
-  SearchBar,
-  Text,
-  Title,
-} from "@dataesr/dsfr-plus";
+import { Col, Container, Notice, Row, Text, Title } from "@dataesr/dsfr-plus";
 import { useLocation } from "react-router-dom";
 
 import ExcelExportButton from "./export-to-xlsx";
@@ -16,6 +7,7 @@ import { ClipLoader } from "react-spinners";
 import { useDataList } from "./data-list-context";
 import { buildURL } from "../../api/utils/buildURL";
 import { ContributionData } from "../../api/contributions";
+import SearchSection from "../../components/search-section";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import ContributionProductionItem from "./contribution-production-card";
@@ -25,6 +17,7 @@ import {
   Contribute_Production,
   ContributionProductionDataHookResponse,
 } from "../../types";
+import "./styles.scss";
 
 const ContributionPage: React.FC = () => {
   const location = useLocation();
@@ -152,94 +145,86 @@ const ContributionPage: React.FC = () => {
   }
 
   return (
-    <Container className="fr-my-5w">
-      <Row gutters className="fr-mb-3w">
-        <Col md="12" xs="12">
-          <Title as="h1">Lier des publications</Title>
-        </Col>
-        <Col>
-          <SearchBar
-            className="fr-mb-1w"
-            onSearch={(value) => handleSearch(value || "")}
-            isLarge
-            buttonLabel="Rechercher"
-            placeholder="Rechercher par nom ou ID"
-          />
-          <div className="fr-mb-1w">
-            {query
-              .filter((item) => item.trim() !== "")
-              .map((item, index) => (
-                <DismissibleTag
-                  key={index}
-                  color="purple-glycine"
-                  className="fr-mr-1w"
-                  onClick={() => handleRemoveQueryItem(item)}
-                >
-                  {item}
-                </DismissibleTag>
-              ))}
-          </div>
-          <TopPaginationButtons
-            meta={meta}
-            page={page}
-            maxPage={maxPage}
-            setPage={handleSetPage}
-          />
-        </Col>
-        <Col md="3" offsetLg="1">
-          <Selectors
-            sort={sort}
-            status={status}
-            setSort={handleSetSort}
-            setStatus={handleSetStatus}
-            searchInMessage={true}
-            objectType={undefined}
-            setObjectType={undefined}
-          />
-        </Col>
-      </Row>
-
-      <div className="fr-mb-3w">
-        {!isLoading &&
-        filteredContributions.length === 0 &&
-        status === "new" ? (
-          <Notice type="success" closeMode="disallow" className="fr-mb-3w">
-            <Text bold>Félicitations ! Vous êtes à jour !</Text>
-            <Text>
-              Il n'y a actuellement aucune nouvelle contribution à traiter.
-            </Text>
-          </Notice>
-        ) : !isLoading && filteredContributions.length === 0 ? (
-          <Notice type="info" closeMode="disallow" className="fr-mb-3w">
-            Aucune contribution ne correspond à votre recherche.
-          </Notice>
-        ) : isPageLoading ? (
-          <div className="fr-my-5w text-center">
-            <ClipLoader color="#000091" size={50} />
-          </div>
-        ) : (
-          filteredContributions.map((contribution) => (
-            <ContributionProductionItem
-              key={contribution.id}
-              data={{ ...contribution, threads: contribution.threads || [] }}
-              refetch={refetch}
-              allTags={fetchedData?.tags || []}
-              authorsData={authorsData}
-              landingPages={landingPages}
+    <main id="content" className="contribution-top-page">
+      <section className="contribution-top-page__banner">
+        <div className="fr-container fr-py-8w">
+          <h1 className="fr-mb-1w">Lier des publications</h1>
+          <p className="fr-mb-3w fr-text--sm">
+            Associez les publications proposées par les contributeurs aux
+            profils correspondants.
+          </p>
+          <div className="page-header-row">
+            <div className="page-header-row__search">
+              <SearchSection
+                query={query}
+                handleSearch={handleSearch}
+                handleRemoveQueryItem={handleRemoveQueryItem}
+              />
+            </div>
+            <Selectors
+              layout="inline"
+              sort={sort}
+              status={status}
+              setSort={handleSetSort}
+              setStatus={handleSetStatus}
+              searchInMessage={true}
+              objectType={undefined}
+              setObjectType={undefined}
             />
-          ))
-        )}
-      </div>
-      {dataList.some((item) => item.export === true) && (
-        <ExcelExportButton refetch={refetch} />
-      )}
+          </div>
+        </div>
+      </section>
 
-      <BottomPaginationButtons
-        page={page}
-        maxPage={maxPage}
-        setPage={handleSetPage}
-      />
-    </Container>
+      <Container className="fr-py-6w">
+        <TopPaginationButtons
+          meta={meta}
+          page={page}
+          maxPage={maxPage}
+          setPage={handleSetPage}
+        />
+
+        <div className="fr-mb-3w">
+          {!isLoading &&
+          filteredContributions.length === 0 &&
+          status === "new" ? (
+            <Notice type="success" closeMode="disallow" className="fr-mb-3w">
+              <Text bold>Félicitations ! Vous êtes à jour !</Text>
+              <Text>
+                Il n'y a actuellement aucune nouvelle contribution à traiter.
+              </Text>
+            </Notice>
+          ) : !isLoading && filteredContributions.length === 0 ? (
+            <Notice type="info" closeMode="disallow" className="fr-mb-3w">
+              Aucune contribution ne correspond à votre recherche.
+            </Notice>
+          ) : isPageLoading ? (
+            <div className="fr-my-5w text-center">
+              <ClipLoader color="#000091" size={50} />
+            </div>
+          ) : (
+            filteredContributions.map((contribution) => (
+              <ContributionProductionItem
+                key={contribution.id}
+                data={{ ...contribution, threads: contribution.threads || [] }}
+                refetch={refetch}
+                allTags={fetchedData?.tags || []}
+                authorsData={authorsData}
+                landingPages={landingPages}
+              />
+            ))
+          )}
+        </div>
+        {dataList.some((item) => item.export === true) && (
+          <ExcelExportButton refetch={refetch} />
+        )}
+
+        <BottomPaginationButtons
+          page={page}
+          maxPage={maxPage}
+          setPage={handleSetPage}
+        />
+      </Container>
+    </main>
   );
 };
 
