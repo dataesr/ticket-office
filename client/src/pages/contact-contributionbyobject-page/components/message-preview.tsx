@@ -26,6 +26,13 @@ const OBJECT_LINKS: Record<string, { scanr: string; dataesr?: string }> = {
   network: { scanr: `${SCANR_URL}/networks?` },
 };
 
+type InfoRowProps = {
+  icon: string;
+  label: string;
+  value: React.ReactNode;
+  copyText?: string;
+};
+
 const MessagePreview: React.FC<MessagePreviewProps> = ({
   data,
   highlightedQuery,
@@ -42,101 +49,103 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
     ? "contributorSideMessage"
     : "contributorSideContactMessage";
 
+  const InfoRow = ({ icon, label, value, copyText }: InfoRowProps) => (
+    <div className="contribution-info__row">
+      <span
+        className={`fr-icon-${icon} contribution-info__icon`}
+        aria-hidden="true"
+      />
+      <div className="contribution-info__text">
+        <p className="fr-text--xs fr-text-mention--grey fr-mb-0">{label}</p>
+        <p className="fr-text--sm fr-mb-0 contribution-info__value">
+          {value}
+          {copyText && (
+            <CopyButton
+              text={copyText}
+              copiedText={copiedText}
+              onCopy={copyToClipboard}
+              ariaLabel={`Copier : ${label.toLowerCase()}`}
+            />
+          )}
+        </p>
+      </div>
+    </div>
+  );
+
+  const extraEntries = data?.extra
+    ? Object.entries(data.extra).filter(([, value]) => value !== "")
+    : [];
+
   return (
     <>
-      <div className="fr-grid-row fr-grid-row--gutters fr-mb-2w">
-        <div className="fr-col-12 fr-col-md-6">
-          {data?.objectId && data?.objectType !== "network" && (
-            <p className="fr-text--sm">
-              ID de l'objet concerné :{" "}
-              <strong>
-                {data.objectId?.length > 50
-                  ? data.objectId.slice(0, 47) + "..."
-                  : data.objectId}
-              </strong>
-              <CopyButton
-                text={data.objectId}
-                copiedText={copiedText}
-                onCopy={copyToClipboard}
-              />
-            </p>
-          )}
-          <p className="fr-text--sm">
-            Nom :{" "}
-            {data?.name ? <strong>{data.name}</strong> : "non renseigné"}
-            {data?.name && (
-              <CopyButton
-                text={data.name}
-                copiedText={copiedText}
-                onCopy={copyToClipboard}
-              />
-            )}
-          </p>
-          {data?.email && (
-            <p className="fr-text--sm">
-              Email : <strong>{data?.email}</strong>
-              <CopyButton
-                text={data.email}
-                copiedText={copiedText}
-                onCopy={copyToClipboard}
-              />
-            </p>
-          )}
-        </div>
-        <div className="fr-col-12 fr-col-md-6">
-          {data?.extra && (
-            <ul className="fr-raw-list">
-              {Object.entries(data.extra).map(([key, value]) => {
-                if (value === "") return null;
+      <div className="contribution-info fr-mb-2w">
+        <InfoRow
+          icon="user-line"
+          label="Nom"
+          value={data?.name || "Non renseigné"}
+          copyText={data?.name}
+        />
 
-                const displayKey =
-                  key === "subApplication"
-                    ? "Sujet"
-                    : capitalizeFirstLetter(key);
+        {data?.email && (
+          <InfoRow
+            icon="mail-line"
+            label="Email"
+            value={data.email}
+            copyText={data.email}
+          />
+        )}
 
-                const capitalizedValue =
-                  typeof value === "string"
-                    ? value.charAt(0).toUpperCase() + value.slice(1)
-                    : String(value);
+        {data?.objectId && data?.objectType !== "network" && (
+          <InfoRow
+            icon="links-line"
+            label="ID de l'objet concerné"
+            value={data.objectId}
+            copyText={data.objectId}
+          />
+        )}
 
-                return (
-                  <li key={key}>
-                    <p className="fr-text--sm">
-                      {displayKey} : <strong>{capitalizedValue}</strong>
-                      <CopyButton
-                        text={capitalizedValue}
-                        copiedText={copiedText}
-                        onCopy={copyToClipboard}
-                      />
-                    </p>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
-        </div>
+        {data?.team?.length > 0 && (
+          <InfoRow
+            icon="team-line"
+            label="Traité par"
+            value={`${data.team[0]} le ${new Date(
+              data.treated_at
+            ).toLocaleDateString()} à ${new Date(
+              data.treated_at
+            ).toLocaleTimeString()}`}
+          />
+        )}
+
+        {data?.comment && (
+          <InfoRow
+            icon="message-2-line"
+            label={`Commentaire${data.team?.[0] ? ` (${data.team[0]})` : ""}`}
+            value={data.comment}
+          />
+        )}
+
+        {extraEntries.map(([key, value]) => {
+          const displayKey =
+            key === "subApplication" ? "Sujet" : capitalizeFirstLetter(key);
+          const displayValue =
+            typeof value === "string"
+              ? value.charAt(0).toUpperCase() + value.slice(1)
+              : String(value);
+
+          return (
+            <InfoRow
+              key={key}
+              icon="file-text-line"
+              label={displayKey}
+              value={displayValue}
+              copyText={displayValue}
+            />
+          );
+        })}
       </div>
 
-      {data?.team?.length > 0 && (
-        <p className="fr-text--sm">
-          Traité par :{" "}
-          <strong>
-            {data.team[0]} le{" "}
-            {new Date(data.treated_at).toLocaleDateString()} à{" "}
-            {new Date(data.treated_at).toLocaleTimeString()}
-          </strong>
-        </p>
-      )}
-
-      {data?.comment && (
-        <p className="fr-text--sm">
-          Commentaire ({data.team ? data.team[0] : ""})
-          {" "}: <strong>{data.comment}</strong>
-        </p>
-      )}
-
       {data?.objectType && OBJECT_LINKS[data.objectType] && (
-        <ul className="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left fr-mb-2w">
+        <ul className="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left fr-mb-3w">
           {data.objectType === "structures" && (
             <>
               <li>
@@ -201,7 +210,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
         </ul>
       )}
 
-      <div className={`${contributorMessageClassName} fr-mt-3w fr-mb-3w`}>
+      <div className={`${contributorMessageClassName} fr-mb-3w`}>
         <HighlightedMessage
           message={data?.message}
           highlightedQuery={highlightedQuery}
@@ -210,7 +219,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 
       <button
         type="button"
-        className="fr-btn fr-mb-5w"
+        className="fr-btn fr-btn--secondary fr-btn--sm fr-icon-edit-line fr-btn--icon-left fr-mb-5w"
         onClick={() => setShowModal(true)}
       >
         Éditer la contribution

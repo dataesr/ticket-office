@@ -77,6 +77,41 @@
   padding: 1.5rem;
 }
 
+.contribution-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+.contribution-info__row {
+  display: flex;
+  flex: 1 1 15rem;
+  gap: 0.625rem;
+}
+
+.contribution-info__icon {
+  flex-shrink: 0;
+  color: var(--text-mention-grey);
+  margin-top: 0.125rem;
+}
+
+.contribution-info__text {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.contribution-info__value {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  overflow-wrap: anywhere;
+
+  .fr-btn {
+    flex-shrink: 0;
+  }
+}
+
 .contribution-list {
   border: 1px solid var(--border-default-grey);
 }
