@@ -52,8 +52,29 @@
   font-weight: 700;
 }
 
-.contribution-item-container {
-  width: 100%;
+.contribution-item {
+  border: 1px solid var(--border-default-grey);
+}
+
+.contribution-item__header {
+  padding: 1rem 1.5rem;
+  background-color: var(--background-alt-grey);
+  border-bottom: 1px solid var(--border-default-grey);
+}
+
+.contribution-item__header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.contribution-item__date {
+  white-space: nowrap;
+}
+
+.contribution-item__body {
+  padding: 1.5rem;
 }
 
 .contribution-list {
@@ -148,5 +169,11 @@
 @media (max-width: 768px) {
   .message-base {
     max-width: 90%;
+  }
+
+  .contribution-item__header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
   }
 }
