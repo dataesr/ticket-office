@@ -1,0 +1,9 @@
+.contribution-top-page {
+  &__banner {
+    background: linear-gradient(
+      15deg,
+      var(--background-default-grey) 0%,
+      var(--background-flat-error) 100%
+    );
+  }
+}

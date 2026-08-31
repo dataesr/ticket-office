@@ -1,86 +1,45 @@
-:root {
-  --border-radius-sm: 10px;
-  --border-radius-lg: 20px;
-  --margin-spacing: 1rem;
-  --padding-base: 15px;
-  --font-size-message: 0.9rem;
-}
-
 .message-base {
-  border-radius: var(--border-radius-sm);
-  margin-bottom: var(--margin-spacing);
-  padding: var(--padding-base);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  max-width: 75%;
   overflow-wrap: break-word;
-  word-break: break-word;
-  white-space: normal;
-  overflow: hidden;
-  max-width: 100%;
-
-  * {
-    max-width: 100%;
-  }
 
   p {
-    font-size: var(--font-size-message);
+    font-size: 0.9rem;
+    margin-bottom: 0;
   }
 }
 
-.contributorSideMessage {
+.contributorSideMessage,
+.contributorSideContactMessage {
   @extend .message-base;
   background-color: var(--background-alt-green-emeraude);
   border: 1px solid var(--background-alt-green-emeraude);
-  margin-right: 25%;
-}
-
-.contributorSideContactMessage {
-  @extend .message-base;
-  background-color: var(--background-alt-brown-caramel);
-  border: 1px solid var(--background-alt-brown-caramel);
-  margin-right: 25%;
 }
 
 .user-side {
   @extend .message-base;
-  text-align: left;
   background-color: var(--background-alt-pink-macaron);
-  border-radius: var(--border-radius-lg);
-  margin-top: var(--margin-spacing);
 }
 
 .staffSide {
   @extend .message-base;
-  text-align: right;
-  width: 80%;
-  border-radius: var(--border-radius-lg);
   margin-left: auto;
-  margin-right: 3%;
-  margin-top: var(--margin-spacing);
-}
-
-.staffSideContact {
-  @extend .staffSide;
-  padding: 20px;
 }
 
 .message-container {
-  width: 100%;
-  padding: 0;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .message-bubble {
-  margin-bottom: 1rem;
-  border-radius: 12px;
-  max-width: 85%;
-  padding: 1rem;
   position: relative;
 }
 
 .message-content {
   margin: 0;
-  overflow-wrap: break-word;
-  word-break: break-word;
 }
 
 .message-metadata {
@@ -91,209 +50,50 @@
 }
 
 .message-author {
-  font-weight: bold;
+  font-weight: 700;
 }
 
 .contribution-item-container {
   width: 100%;
 }
 
-.badge-container {
-  margin-bottom: 1rem;
-}
-
-.badge-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.badge-item {
-  margin: 0;
-}
-
-.title-container {
-  margin-bottom: 1rem;
-}
-
-.title-wrapper {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.contribution-title {
-  margin-bottom: 0.5rem;
-  word-break: break-word;
-}
-
-.id-container {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-left: 0.5rem;
-}
-
-.copy-button {
-  position: relative;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.25rem;
-  display: inline-flex;
-  align-items: center;
-  margin-left: 0.25rem;
-}
-
-.copied-text {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #000;
-  color: #fff;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-size: 12px;
-}
-
-.date-container {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-}
-
-.date-text {
-  font-style: italic;
-  color: #666;
-}
-
-.comment {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  background-color: var(--background-alt-blue-cumulus);
-  margin-bottom: 20px;
-  width: 100%;
-  max-width: 100%;
-}
-
+// Aperçu tronqué du message dans la liste des contributeurs.
 .contribution-message {
   font-style: italic;
-  font-size: 11px;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: normal;
-  max-width: 100%;
   display: -webkit-box;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 
-// Surcharge DSFR
+.attachment-thumbnail-btn {
+  display: block;
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0.5rem 0;
+  cursor: pointer;
+}
+
+.attachment-thumbnail {
+  max-width: 16rem;
+  height: auto;
+  border-radius: 0.25rem;
+}
+
+.attachment-preview {
+  max-width: 100%;
+  border-radius: 0.25rem;
+}
+
 .fr-sidemenu__btn[aria-expanded="true"]:after,
 .fr-sidemenu__btn[aria-expanded="false"]:after {
   display: none;
 }
 
 @media (max-width: 768px) {
-  .contributorSideMessage,
-  .contributorSideContactMessage {
-    margin-right: 10%;
-  }
-
-  .staffSide,
-  .staffSideContact {
-    width: 90%;
-    margin-left: 10%;
-  }
-
-  .message-bubble {
+  .message-base {
     max-width: 90%;
   }
-
-  .title-container {
-    flex-direction: column;
-  }
-
-  .date-container {
-    justify-content: flex-start;
-    margin-top: -0.5rem;
-    margin-bottom: 1rem;
-  }
-
-  .id-container {
-    display: flex;
-    margin-left: 0;
-    margin-top: 0.25rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .contributorSideMessage,
-  .contributorSideContactMessage,
-  .staffSide,
-  .staffSideContact {
-    width: 95%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  .message-bubble {
-    max-width: 95%;
-    padding: 0.75rem;
-  }
-
-  .message-metadata {
-    font-size: 0.7rem;
-  }
-
-  .contribution-title {
-    font-size: 1rem;
-  }
-
-  .badge-wrapper {
-    width: 100%;
-  }
-}
-.image-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.75);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  position: relative;
-  max-width: 90%;
-  max-height: 90%;
-}
-
-.modal-content img {
-  max-width: 100%;
-  max-height: 100%;
-  border-radius: 8px;
-  box-shadow: 0 0 15px #000;
-}
-
-.close-button {
-  position: absolute;
-  top: -10px;
-  right: -10px;
-  background: white;
-  color: black;
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  font-size: 20px;
-  cursor: pointer;
-  box-shadow: 0 0 10px #000;
 }

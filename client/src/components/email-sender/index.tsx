@@ -1,14 +1,6 @@
 import { useState } from "react";
-import {
-  Container,
-  Modal,
-  ModalTitle,
-  ModalContent,
-  Alert,
-  Row,
-  Col,
-} from "@dataesr/dsfr-plus";
 import { toast } from "react-toastify";
+import Modal from "../modal";
 import EmailForm from "../mail-form";
 import { getCollectionNameFromUrl } from "../../api/utils/collectionName";
 import { Contribution, Contribute_Production } from "../../types";
@@ -19,7 +11,6 @@ type EmailSenderProps = {
 };
 
 function EmailSender({ contribution, refetch }: EmailSenderProps) {
-  const [, setEmailSent] = useState(false);
   const [userResponse, setUserResponse] = useState("");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const apiBaseUrl = "/api/reply-to-contribution";
@@ -27,13 +18,11 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
   const sendEmail = async () => {
     const formattedResponse = userResponse.replace(/\n/g, "<br/>");
-
-    const currentUrl = window.location.href;
-    const collectionName = getCollectionNameFromUrl(currentUrl);
+    const collectionName = getCollectionNameFromUrl(window.location.href);
 
     const emailPayload = {
       contributionId: contribution.id,
-      collectionName: collectionName,
+      collectionName,
       to: contribution.email,
       name: contribution.name,
       subject: `Réponse à votre contribution, référence ${collectionName}-${contribution.id}`,
@@ -45,9 +34,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     try {
       const response = await fetch(apiBaseUrl, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(emailPayload),
       });
 
@@ -55,7 +42,6 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      setEmailSent(true);
       refetch();
       setUserResponse("");
       toast.success("Mail envoyé!");
@@ -65,48 +51,35 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
     }
   };
 
-  const handlePreview = () => {
-    setShowPreviewModal(true);
-  };
   return (
     <>
-      <Container>
-        <EmailForm
-          userResponse={userResponse}
-          setUserResponse={setUserResponse}
-          handlePreview={handlePreview}
-          sendEmail={sendEmail}
-          contribution={contribution}
-        />
-      </Container>
-      <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>
-        <ModalTitle>Prévisualisation du mail</ModalTitle>
-        <ModalContent>
-          <Row gutters>
-            <Col xs="12">
-              <p>
-                De: {`${selectedProfile} de l'équipe scanR <support@scanr.fr>`}
-              </p>
-              <p>À: {`${contribution?.name} <${contribution?.email}>`}</p>
-              <p>
-                Objet: Réponse à votre contribution, référence{" "}
-                {contribution?.id}
-              </p>
-              <div>
-                <h4>Message:</h4>
-                {userResponse ? (
-                  <pre style={{ whiteSpace: "pre-wrap" }}>{userResponse}</pre>
-                ) : (
-                  <Alert
-                    variant="warning"
-                    title="Alerte"
-                    description="Attention ! Vous n'avez pas encore rédigé de réponse."
-                  />
-                )}
-              </div>
-            </Col>
-          </Row>
-        </ModalContent>
+      <EmailForm
+        userResponse={userResponse}
+        setUserResponse={setUserResponse}
+        handlePreview={() => setShowPreviewModal(true)}
+        sendEmail={sendEmail}
+        contribution={contribution}
+      />
+
+      <Modal
+        isOpen={showPreviewModal}
+        onClose={() => setShowPreviewModal(false)}
+        title="Prévisualisation du mail"
+      >
+        <p>De : {`${selectedProfile} de l'équipe scanR <support@scanr.fr>`}</p>
+        <p>À : {`${contribution?.name} <${contribution?.email}>`}</p>
+        <p>
+          Objet : Réponse à votre contribution, référence {contribution?.id}
+        </p>
+        <p className="fr-text--bold fr-mb-1w">Message :</p>
+        {userResponse ? (
+          <pre className="fr-p-2w">{userResponse}</pre>
+        ) : (
+          <div className="fr-alert fr-alert--warning">
+            <p className="fr-alert__title">Alerte</p>
+            <p>Attention ! Vous n'avez pas encore rédigé de réponse.</p>
+          </div>
+        )}
       </Modal>
     </>
   );

@@ -1,19 +1,20 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { Col, Container, Row, Text } from "@dataesr/dsfr-plus";
+import { ClipLoader } from "react-spinners";
 import { ContributionData } from "../../api/contributions";
 import { buildURL } from "../../api/utils/buildURL";
 import Selectors from "../../components/selectors";
 import ContributorSummary from "./components/contributor-summary";
-import PageTitle from "./components/page-title";
 import SearchSection from "../../components/search-section";
 import ContributionDetails from "./components/contribution-details";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import { getUrlToSend } from "../../config/urlHelper";
-import { ClipLoader } from "react-spinners";
 import { Contribution, ContributionPageProps } from "../../types";
-import { filterContributions, updateUrlParams } from "./utils";
+import { filterContributions, getPageTitle, updateUrlParams } from "./utils";
+import "./styles.scss";
+
+const PAGE_SIZE = 20;
 
 const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   fromApplication,
@@ -71,7 +72,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     page,
     searchInMessage,
     fromApplication?.toString(),
-    "20",
+    PAGE_SIZE.toString(),
     undefined,
     objectType
   );
@@ -81,7 +82,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   const { data, isLoading, isError, refetch } = ContributionData(url);
   const contributions: Contribution[] = data?.data || [];
   const meta = data?.meta;
-  const maxPage = meta ? Math.ceil(meta.total / 10) : 1;
+  const maxPage = meta ? Math.ceil(meta.total / PAGE_SIZE) : 1;
 
   const tagsData = ContributionData(urlToSend);
   const allTags = tagsData?.data?.data?.map((tag) => tag?.tags);
@@ -114,76 +115,86 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     [contributions, query, searchInMessage]
   );
 
-  if (isLoading) {
-    return (
-      <div className="loading-container">
-        <ClipLoader color="#123abc" size={50} />
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <Container className="fr-my-5w">
-        <Text>Erreur lors du chargement des données.</Text>
-      </Container>
-    );
-  }
+  const pageTitle = getPageTitle(location.pathname);
 
   return (
-    <Container className="fr-my-5w">
-      <PageTitle pathname={location.pathname} />
-      <Row gutters className="fr-mb-3w">
-        <Col md="8" xs="12">
+    <main id="content" className="contribution-top-page">
+      <section className="contribution-top-page__banner">
+        <div className="fr-container fr-py-8w">
+          <h1 className="fr-mb-1w">{pageTitle}</h1>
+          <p className="fr-mb-5w fr-text--sm">
+            Vous pouvez consulter les contributions des utilisateurs et les
+            objets auxquels ils ont contribué.
+          </p>
           <SearchSection
             query={query}
             handleSearch={handleSearch}
             handleRemoveQueryItem={handleRemoveQueryItem}
           />
-          <TopPaginationButtons
-            meta={meta}
-            page={page}
-            maxPage={maxPage}
-            setPage={handleSetPage}
-          />
-        </Col>
-        <Col offsetLg="1">
-          <Selectors
-            sort={sort}
-            status={status}
-            setSort={handleSetSort}
-            setStatus={handleSetStatus}
-            searchInMessage={searchInMessage}
-            setSearchInMessage={handleSetSearchInMessage}
-            objectType={objectType}
-            setObjectType={handleSetObjectType}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col xs="12" sm="12" md="4">
-          <ContributorSummary
-            contributions={filteredContributions}
-            onSelectContribution={setSelectedContribution}
-          />
-        </Col>
-        <Col xs="12" sm="12" md="8">
-          <ContributionDetails
-            filteredContributions={filteredContributions}
-            selectedContribution={effectiveSelectedContribution}
-            refetch={refetch}
-            highlightedQuery={highlightedQuery}
-            allTags={allTags}
-            url={url}
-          />
-        </Col>
-      </Row>
-      <BottomPaginationButtons
-        page={page}
-        maxPage={maxPage}
-        setPage={handleSetPage}
-      />
-    </Container>
+        </div>
+      </section>
+      <div className="fr-container fr-py-6w">
+        <div className="fr-grid-row fr-grid-row--gutters fr-mb-3w">
+          <div className="fr-col-12 fr-col-md-9">
+            <TopPaginationButtons
+              meta={meta}
+              page={page}
+              maxPage={maxPage}
+              setPage={handleSetPage}
+              pageSize={PAGE_SIZE}
+            />
+          </div>
+          <div className="fr-col-12 fr-col-md-3">
+            <Selectors
+              sort={sort}
+              status={status}
+              setSort={handleSetSort}
+              setStatus={handleSetStatus}
+              searchInMessage={searchInMessage}
+              setSearchInMessage={handleSetSearchInMessage}
+              objectType={objectType}
+              setObjectType={handleSetObjectType}
+            />
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="fr-grid-row fr-grid-row--center fr-py-10w">
+            <ClipLoader color="var(--blue-france-sun-113-625)" size={50} />
+          </div>
+        ) : isError ? (
+          <div className="fr-alert fr-alert--error">
+            <p className="fr-alert__title">Erreur</p>
+            <p>Erreur lors du chargement des données.</p>
+          </div>
+        ) : (
+          <div className="fr-grid-row fr-grid-row--gutters">
+            <div className="fr-col-12 fr-col-md-4 ">
+              <ContributorSummary
+                contributions={filteredContributions}
+                onSelectContribution={setSelectedContribution}
+              />
+            </div>
+            <div className="fr-col-12 fr-col-md-8">
+              <ContributionDetails
+                filteredContributions={filteredContributions}
+                selectedContribution={effectiveSelectedContribution}
+                refetch={refetch}
+                highlightedQuery={highlightedQuery}
+                allTags={allTags}
+                url={url}
+              />
+            </div>
+          </div>
+        )}
+
+        <BottomPaginationButtons
+          page={page}
+          maxPage={maxPage}
+          setPage={handleSetPage}
+        />
+      </div>
+    </main>
   );
 };
 
