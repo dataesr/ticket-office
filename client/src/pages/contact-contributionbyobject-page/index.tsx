@@ -122,30 +122,20 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
       <section className="contribution-top-page__banner">
         <div className="fr-container fr-py-8w">
           <h1 className="fr-mb-1w">{pageTitle}</h1>
-          <p className="fr-mb-5w fr-text--sm">
+          <p className="fr-mb-3w fr-text--sm">
             Vous pouvez consulter les contributions des utilisateurs et les
             objets auxquels ils ont contribué.
           </p>
-          <SearchSection
-            query={query}
-            handleSearch={handleSearch}
-            handleRemoveQueryItem={handleRemoveQueryItem}
-          />
-        </div>
-      </section>
-      <div className="fr-container fr-py-6w">
-        <div className="fr-grid-row fr-grid-row--gutters fr-mb-3w">
-          <div className="fr-col-12 fr-col-md-9">
-            <TopPaginationButtons
-              meta={meta}
-              page={page}
-              maxPage={maxPage}
-              setPage={handleSetPage}
-              pageSize={PAGE_SIZE}
-            />
-          </div>
-          <div className="fr-col-12 fr-col-md-3">
+          <div className="page-header-row">
+            <div className="page-header-row__search">
+              <SearchSection
+                query={query}
+                handleSearch={handleSearch}
+                handleRemoveQueryItem={handleRemoveQueryItem}
+              />
+            </div>
             <Selectors
+              layout="inline"
               sort={sort}
               status={status}
               setSort={handleSetSort}
@@ -157,6 +147,15 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
             />
           </div>
         </div>
+      </section>
+      <div className="fr-container fr-py-6w">
+        <TopPaginationButtons
+          meta={meta}
+          page={page}
+          maxPage={maxPage}
+          setPage={handleSetPage}
+          pageSize={PAGE_SIZE}
+        />
 
         {isLoading ? (
           <div className="fr-grid-row fr-grid-row--center fr-py-10w">

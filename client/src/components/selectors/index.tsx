@@ -1,4 +1,5 @@
 import { useLocation } from "react-router-dom";
+import "./styles.scss";
 
 type SelectorsProps = {
   sort: string;
@@ -9,8 +10,8 @@ type SelectorsProps = {
   setSearchInMessage?: (value: boolean) => void;
   objectType?: string;
   setObjectType?: (value: string) => void;
+  layout?: "stacked" | "inline";
 };
-
 const Selectors: React.FC<SelectorsProps> = ({
   sort,
   status,
@@ -20,15 +21,20 @@ const Selectors: React.FC<SelectorsProps> = ({
   setSearchInMessage,
   objectType,
   setObjectType,
+  layout = "stacked",
 }) => {
   const location = useLocation();
   const isScanrContributionPage = location.pathname.includes(
     "/scanr-contributionPage"
   );
+  const isInline = layout === "inline";
+  const groupClassName = isInline
+    ? "fr-select-group fr-mb-0"
+    : "fr-select-group fr-mb-2w";
 
   return (
-    <div>
-      <div className="fr-select-group fr-mb-2w">
+    <div className={isInline ? "filter-bar" : undefined}>
+      <div className={groupClassName}>
         <label className="fr-label fr-sr-only" htmlFor="sort-select">
           Trier par date
         </label>
@@ -44,7 +50,7 @@ const Selectors: React.FC<SelectorsProps> = ({
       </div>
 
       {isScanrContributionPage && setObjectType && (
-        <div className="fr-select-group fr-mb-2w">
+        <div className={groupClassName}>
           <label className="fr-label fr-sr-only" htmlFor="object-type-select">
             Type d'objet
           </label>
@@ -54,7 +60,7 @@ const Selectors: React.FC<SelectorsProps> = ({
             value={objectType || "all"}
             onChange={(e) => setObjectType(e.target.value)}
           >
-            <option value="all">Tous les types d'objets</option>
+            <option value="all">Tous les types</option>
             <option value="persons">Personnes</option>
             <option value="structures">Structures</option>
             <option value="publications">Publications</option>
@@ -64,7 +70,7 @@ const Selectors: React.FC<SelectorsProps> = ({
         </div>
       )}
 
-      <div className="fr-select-group fr-mb-2w">
+      <div className={groupClassName}>
         <label className="fr-label fr-sr-only" htmlFor="status-select">
           Filtrer par statut
         </label>
@@ -74,15 +80,15 @@ const Selectors: React.FC<SelectorsProps> = ({
           value={status}
           onChange={(e) => setStatus(e.target.value)}
         >
-          <option value="choose">Toutes les contributions</option>
-          <option value="new">Nouvelles contributions</option>
-          <option value="ongoing">Contribution en traitement</option>
-          <option value="treated">Contributions traitées</option>
+          <option value="choose">Tous les statuts</option>
+          <option value="new">Nouvelles</option>
+          <option value="ongoing">En traitement</option>
+          <option value="treated">Traitées</option>
         </select>
       </div>
 
       {setSearchInMessage && (
-        <div className="fr-toggle">
+        <div className="fr-toggle fr-mb-0 filter-bar__toggle">
           <input
             type="checkbox"
             className="fr-toggle__input"
@@ -94,7 +100,7 @@ const Selectors: React.FC<SelectorsProps> = ({
             className="fr-toggle__label"
             htmlFor="search-in-message-toggle"
           >
-            Rechercher dans les messages
+            {isInline ? "Dans les messages" : "Rechercher dans les messages"}
           </label>
         </div>
       )}

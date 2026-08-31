@@ -7,3 +7,14 @@
     );
   }
 }
+
+.page-header-row {
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &__search {
+    flex: 1 1 20rem;
+    min-width: 16rem;
+  }
+}
