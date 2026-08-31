@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { postHeaders } from "../../config/api";
+import "./styles.scss";
 
 const TEMPLATES = [
   { label: "Accès API scanR", value: "API" },
@@ -102,58 +103,57 @@ function EmailForm({
   if (!contribution?.email) return null;
 
   return (
-    <div className="fr-grid-row fr-grid-row--gutters">
-      <div className="fr-col-12 fr-col-md-10">
-        <div className="fr-select-group fr-mb-2w">
-          <label className="fr-label" htmlFor={templateSelectId}>
-            Choisissez un template de réponse
-          </label>
-          <select
-            id={templateSelectId}
-            className="fr-select"
-            value={selectedTemplate}
-            onChange={handleTemplateChange}
+    <div className="email-composer">
+      <div className="fr-select-group fr-mb-3w">
+        <select
+          id={templateSelectId}
+          className="fr-select"
+          value={selectedTemplate}
+          onChange={handleTemplateChange}
+        >
+          <option value="">Sélectionnez un template</option>
+          {TEMPLATES.map((template) => (
+            <option key={template.value} value={template.value}>
+              {template.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="fr-input-group fr-mb-3w">
+        <label className="fr-label fr-text--bold" htmlFor={responseTextareaId}>
+          Votre réponse
+        </label>
+        <textarea
+          id={responseTextareaId}
+          className="fr-input"
+          rows={6}
+          placeholder="Votre réponse..."
+          value={userResponse}
+          onChange={(e) => setUserResponse(e.target.value)}
+        />
+      </div>
+
+      <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse fr-btns-group--inline fr-btns-group--icon-left fr-mb-0">
+        <li>
+          <button
+            type="button"
+            className="fr-btn fr-icon-send-plane-line"
+            onClick={sendEmail}
           >
-            <option value="">Sélectionnez un template</option>
-            {TEMPLATES.map((template) => (
-              <option key={template.value} value={template.value}>
-                {template.label}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="fr-input-group">
-          <label className="fr-label" htmlFor={responseTextareaId}>
-            Votre réponse
-          </label>
-          <textarea
-            id={responseTextareaId}
-            className="fr-input"
-            rows={5}
-            placeholder="Votre réponse..."
-            value={userResponse}
-            onChange={(e) => setUserResponse(e.target.value)}
-          />
-        </div>
-      </div>
-      <div className="fr-col-12 fr-col-md-2">
-        <ul className="fr-btns-group fr-btns-group--sm">
-          <li>
-            <button
-              type="button"
-              className="fr-btn fr-btn--secondary"
-              onClick={handlePreview}
-            >
-              Prévisualiser le mail
-            </button>
-          </li>
-          <li>
-            <button type="button" className="fr-btn" onClick={sendEmail}>
-              {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
-            </button>
-          </li>
-        </ul>
-      </div>
+            {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
+          </button>
+        </li>
+        <li>
+          <button
+            type="button"
+            className="fr-btn fr-btn--secondary fr-icon-eye-line"
+            onClick={handlePreview}
+          >
+            Prévisualiser le mail
+          </button>
+        </li>
+      </ul>
     </div>
   );
 }
