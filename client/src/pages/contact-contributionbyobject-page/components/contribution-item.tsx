@@ -1,4 +1,6 @@
+import { useState } from "react";
 import Badge from "../../../components/badge";
+import EditModal from "../../../components/edit-modal";
 import StaffActions from "./staff-actions";
 import {
   BadgeColor,
@@ -29,6 +31,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
   url,
 }) => {
   const { copiedText, copyToClipboard } = useCopyToClipboard();
+  const [showEditModal, setShowEditModal] = useState(false);
 
   const firstThread = data?.threads?.[0];
   const firstResponse = firstThread?.responses?.[0];
@@ -88,11 +91,20 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
               />
             </span>
           </h2>
-          {createdDate && (
-            <p className="fr-text--sm fr-text-mention--grey fr-mb-0 contribution-item__date">
-              Reçu le {createdDate}
-            </p>
-          )}
+          <div className="contribution-item__actions">
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary fr-btn--sm fr-icon-edit-line fr-btn--icon-left"
+              onClick={() => setShowEditModal(true)}
+            >
+              Éditer
+            </button>
+            {createdDate && (
+              <p className="fr-text--sm fr-text-mention--grey fr-mb-0 contribution-item__date">
+                Reçu le {createdDate}
+              </p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -105,12 +117,19 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
 
         <MessagePreview
           data={data}
-          allTags={allTags}
-          refetch={refetch}
           highlightedQuery={highlightedQuery}
         />
         <StaffActions url={url} refetch={refetch} data={data} />
       </div>
+
+      <EditModal
+        refetch={refetch}
+        isOpen={showEditModal}
+        onClose={() => setShowEditModal(false)}
+        data={data}
+        allTags={allTags}
+        dataProduction={[]}
+      />
     </div>
   );
 };

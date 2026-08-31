@@ -178,8 +178,6 @@ export interface SelectWithNamesProps {
 export interface MessagePreviewProps {
   data: any;
   highlightedQuery?: string;
-  refetch: () => void;
-  allTags: string[];
 }
 export interface MessagePreviewProductionProps {
   data: any;

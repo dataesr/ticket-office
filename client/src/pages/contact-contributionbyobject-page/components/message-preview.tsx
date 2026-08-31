@@ -1,7 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
 import HighlightedMessage from "../../../components/highlighted-message";
-import EditModal from "../../../components/edit-modal";
 import { capitalizeFirstLetter } from "../../../utils/capitalize";
 import { CopyButton } from "../../../utils/copy-button";
 import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
@@ -36,11 +34,8 @@ type InfoRowProps = {
 const MessagePreview: React.FC<MessagePreviewProps> = ({
   data,
   highlightedQuery,
-  refetch,
-  allTags,
 }) => {
   const location = useLocation();
-  const [showModal, setShowModal] = useState(false);
   const { copiedText, copyToClipboard } = useCopyToClipboard();
 
   const contributorMessageClassName = location.pathname.includes(
@@ -216,23 +211,6 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
           highlightedQuery={highlightedQuery}
         />
       </div>
-
-      <button
-        type="button"
-        className="fr-btn fr-btn--secondary fr-btn--sm fr-icon-edit-line fr-btn--icon-left fr-mb-5w"
-        onClick={() => setShowModal(true)}
-      >
-        Éditer la contribution
-      </button>
-
-      <EditModal
-        refetch={refetch}
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        data={data}
-        allTags={allTags}
-        dataProduction={[]}
-      />
     </>
   );
 };

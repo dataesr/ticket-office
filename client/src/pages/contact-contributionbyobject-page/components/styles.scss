@@ -64,9 +64,16 @@
 
 .contribution-item__header-row {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.contribution-item__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.375rem;
 }
 
 .contribution-item__date {
@@ -209,6 +216,13 @@
   .contribution-item__header-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.25rem;
+    gap: 0.5rem;
+  }
+
+  .contribution-item__actions {
+    flex-direction: row-reverse;
+    align-items: center;
+    align-self: stretch;
+    justify-content: space-between;
   }
 }
