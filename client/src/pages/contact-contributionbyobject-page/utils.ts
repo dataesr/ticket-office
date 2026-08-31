@@ -1,5 +1,12 @@
 import { Contribution } from "../../types";
 
+export const getPageTitle = (pathname: string): string => {
+  if (pathname.includes("contributionPage")) return "Contribution par objets";
+  if (pathname.includes("removeuser")) return "Demande de suppression";
+  if (pathname.includes("namechange")) return "Demande de changement de nom";
+  return "Contribution via formulaire de contact";
+};
+
 export const filterContributions = (
   contributions: Contribution[],
   query: string[],

@@ -193,7 +193,6 @@ const ContributionPage: React.FC = () => {
             setSort={handleSetSort}
             setStatus={handleSetStatus}
             searchInMessage={true}
-            setSearchInMessage={""}
             objectType={undefined}
             setObjectType={undefined}
           />

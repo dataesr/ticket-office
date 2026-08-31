@@ -62,9 +62,7 @@ const Home = () => {
           variant="info"
           closeMode="disallow"
           title={
-            hasActiveSearch
-              ? "Aucun résultat"
-              : "Aucune contribution récente"
+            hasActiveSearch ? "Aucun résultat" : "Aucune contribution récente"
           }
           description={
             hasActiveSearch
@@ -89,14 +87,12 @@ const Home = () => {
     <main id="content">
       <Container fluid className="home-header__wrapper">
         <Container className="fr-py-8w">
-          <Title as="h1" look="h2" className="fr-mb-1w">
-            Bureau des contributions
-          </Title>
-          <Text as="p" size="lead" className="fr-mb-5w">
+          <h1 className="fr-mb-1w">Bureau des contributions</h1>
+          <p className="fr-mb-5w fr-text--sm">
             Recherchez et traitez les contributions reçues via scanR et le BSO.
             Sans recherche active, seules les contributions des dernières 24
             heures sont affichées.
-          </Text>
+          </p>
 
           <SearchSection
             query={query}

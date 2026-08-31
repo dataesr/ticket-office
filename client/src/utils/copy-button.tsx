@@ -1,5 +1,3 @@
-import { FaCopy } from "react-icons/fa";
-
 export const CopyButton = ({
   text,
   copiedText,
@@ -12,14 +10,26 @@ export const CopyButton = ({
   onCopy: (text: string) => void;
   ariaLabel?: string;
   disabled?: boolean;
-}) => (
-  <button
-    className={`copy-button ${copiedText === text ? "copied" : ""}`}
-    onClick={() => onCopy(text)}
-    aria-label={ariaLabel}
-    disabled={disabled}
-  >
-    {copiedText === text && <span className="copied-text">Copié</span>}
-    <FaCopy size={14} color="#2196f3" className="copy-icon" />
-  </button>
-);
+}) => {
+  const isCopied = copiedText === text;
+  const classes = [
+    "fr-btn",
+    "fr-btn--tertiary-no-outline",
+    "fr-btn--sm",
+    isCopied ? "fr-icon-check-line" : "fr-icon-clipboard-line",
+  ];
+  if (isCopied) classes.push("fr-btn--icon-left");
+
+  return (
+    <button
+      type="button"
+      className={classes.join(" ")}
+      onClick={() => onCopy(text)}
+      title={ariaLabel || "Copier"}
+      aria-label={ariaLabel || (isCopied ? "Copié" : "Copier")}
+      disabled={disabled}
+    >
+      {isCopied ? "Copié" : "Copier"}
+    </button>
+  );
+};
