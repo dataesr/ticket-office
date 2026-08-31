@@ -1,17 +1,10 @@
-import {
-  Accordion,
-  AccordionGroup,
-  Badge,
-  Col,
-  Container,
-  Row,
-  Text,
-} from "@dataesr/dsfr-plus";
+import { Accordion, AccordionGroup } from "@dataesr/dsfr-plus";
 import "./styles.scss";
+import Badge from "../../components/badge";
 import StaffProductionActions from "./staff-production-action";
-import { useState } from "react";
-import { FaCopy } from "react-icons/fa";
 import { BadgeStatus, StatusLabel } from "../../utils/index";
+import { CopyButton } from "../../utils/copy-button";
+import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import MessagePreview from "./message-preview";
 import { ContributionProductionItemProps } from "../../types";
 
@@ -22,71 +15,53 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
   authorsData,
   landingPages,
 }) => {
-  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const { copiedText, copyToClipboard } = useCopyToClipboard();
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      setCopiedId(text);
-      setTimeout(() => {
-        setCopiedId(null);
-      }, 2000);
-    });
-  };
+  const productionsCount = data.productions.length;
+  const receivedDate = new Date(data.created_at).toLocaleDateString();
 
   const renderAccordion = () => (
-    <Container fluid className="accordion">
-      <Row>
-        <Col xs="12">
-          {data?.status && (
-            <Badge
-              size="sm"
-              color={BadgeStatus({ status: data?.status })}
-              className="fr-mr-1w fr-mb-1w"
-            >
+    <div className="production-item-summary">
+      <ul className="fr-badges-group fr-mb-1w">
+        {data?.status && (
+          <li>
+            <Badge color={BadgeStatus({ status: data?.status })}>
               {StatusLabel({ status: data.status })}
             </Badge>
-          )}
-          {data.tag && (
-            <Badge
-              size="sm"
-              color="green-menthe"
-              className="fr-mr-1w fr-mb-1w status"
-            >
-              {data.tag}
-            </Badge>
-          )}
-          <Badge
-            size="sm"
-            color="green-emeraude"
-            className="fr-mr-1w fr-mb-1w status"
-          >
-            {data.productions.length.toString() + " Publications à lier "}
+          </li>
+        )}
+        {data.tag && (
+          <li>
+            <Badge color="green-menthe">{data.tag}</Badge>
+          </li>
+        )}
+        <li>
+          <Badge color="green-emeraude" icon="links-line">
+            {`${productionsCount} publication${productionsCount > 1 ? "s" : ""} à lier`}
           </Badge>
-        </Col>
-        <Text size="sm">
-          <i className="date">
-            Reçu le {new Date(data.created_at).toLocaleDateString()}
-          </i>
-        </Text>
-      </Row>
-      <Row>
-        <Col xs="12">
-          <Text size="sm" bold className="name">
-            {data?.name} ({data?.id})
-            <button
-              className={`copy-button ${copiedId === data?.id ? "copied" : ""}`}
-              onClick={() => copyToClipboard(data?.id)}
-            >
-              {copiedId === data?.id && (
-                <span className="copied-text">Copié</span>
-              )}
-              <FaCopy size={14} color="#2196f3" className="copy-icon" />
-            </button>
-          </Text>
-        </Col>
-      </Row>
-    </Container>
+        </li>
+      </ul>
+
+      <div className="production-item-summary__row">
+        <p className="fr-text--sm fr-text--bold fr-mb-0">
+          {data?.name}
+          <span className="fr-ml-1w fr-text--regular fr-text--sm">
+            ({data?.id})
+            <CopyButton
+              text={data?.id}
+              copiedText={copiedText}
+              onCopy={copyToClipboard}
+              ariaLabel="Copier l'identifiant"
+            />
+          </span>
+        </p>
+        <p className="fr-text--sm fr-text-mention--grey fr-mb-0">
+          Reçu le {receivedDate}
+        </p>
+      </div>
+    </div>
   );
+
   return (
     <AccordionGroup>
       <Accordion title={renderAccordion}>
