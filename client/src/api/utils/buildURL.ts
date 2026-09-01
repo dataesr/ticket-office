@@ -22,7 +22,9 @@ export const buildURL = (
     baseUrl = "update-user-data";
   } else if (location?.pathname?.includes("apioperations")) {
     baseUrl = "production";
-  } else if (location?.pathname?.includes("bso-local-variations-publications")) {
+  } else if (
+    location?.pathname?.includes("bso-local-variations-publications")
+  ) {
     baseUrl = "bso-local-variations/publications";
   } else if (location?.pathname?.includes("bso-local-variations-datasets")) {
     baseUrl = "bso-local-variations/datasets";
@@ -61,10 +63,10 @@ export const buildURL = (
     ? `&fromApplication=${fromApplication.toLocaleLowerCase()}`
     : "";
   if (["new", "ongoing", "treated", "question"].includes(status)) {
-    where.status = status
+    where.status = status;
   }
 
-  if (baseUrl === "variations" && tags) {
+  if (baseUrl.startsWith("bso-local-variations") && tags) {
     if (["none", "uploaded"].includes(tags?.file))
       where["tags.file"] = tags.file;
     if (["none", "ongoing", "done"].includes(tags?.notification))

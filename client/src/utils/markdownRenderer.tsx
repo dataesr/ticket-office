@@ -12,7 +12,7 @@ const convertUrlsToMarkdownLinks = (content) => {
   return content.replace(urlRegex, (url) => `[${url}](${url})`);
 };
 
-const preprocessContent = (content) => {
+const preprocessContent = (content, clean = false) => {
   if (!content) return "";
 
   let processed = content.replace(/<br\s*\/?>/gi, "\n");
@@ -22,7 +22,7 @@ const preprocessContent = (content) => {
     (_, url, text) => `[${text}](${url})`
   );
 
-  processed = cleanResponseMessage(processed);
+  if (clean) processed = cleanResponseMessage(processed);
 
   processed = convertUrlsToMarkdownLinks(processed);
 
@@ -58,8 +58,11 @@ const renderers = {
   },
 };
 
-const MarkdownRenderer: React.FC<{ content: string }> = ({ content }) => {
-  const processedContent = preprocessContent(content);
+const MarkdownRenderer: React.FC<{ content: string; clean?: boolean }> = ({
+  content,
+  clean = false,
+}) => {
+  const processedContent = preprocessContent(content, clean);
   return (
     <Text>
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={renderers}>
