@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Col,
   Container,
@@ -11,7 +11,11 @@ import {
 } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
+import TopPaginationButtons from "../../../components/pagination/top-buttons";
+import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
 import type { EmailItem } from "../../../types";
+
+const PAGE_SIZE = 10;
 
 interface LastMailsReceivedProps {
   data: {
@@ -106,6 +110,9 @@ const EmailItem: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
 };
 
 const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
+  const [trackedPage, setTrackedPage] = useState(1);
+  const [untrackedPage, setUntrackedPage] = useState(1);
+
   const emails = Array.isArray(data.emails)
     ? data.emails.flat()
     : Object.values(data.emails).flat();
@@ -121,14 +128,48 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
     .filter((email) => !isTrackedEmail(email))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+  const trackedMaxPage = Math.max(
+    1,
+    Math.ceil(trackedEmails.length / PAGE_SIZE)
+  );
+  const untrackedMaxPage = Math.max(
+    1,
+    Math.ceil(untrackedEmails.length / PAGE_SIZE)
+  );
+  const safeTrackedPage = Math.min(trackedPage, trackedMaxPage);
+  const safeUntrackedPage = Math.min(untrackedPage, untrackedMaxPage);
+
+  const trackedPageEmails = trackedEmails.slice(
+    (safeTrackedPage - 1) * PAGE_SIZE,
+    safeTrackedPage * PAGE_SIZE
+  );
+  const untrackedPageEmails = untrackedEmails.slice(
+    (safeUntrackedPage - 1) * PAGE_SIZE,
+    safeUntrackedPage * PAGE_SIZE
+  );
+
   return (
     <Container fluid>
       <Tabs>
         <Tab label="Mails Suivis">
           {trackedEmails.length > 0 ? (
-            trackedEmails.map((email) => (
-              <EmailItem key={email._id} email={email} />
-            ))
+            <>
+              <TopPaginationButtons
+                meta={{ total: trackedEmails.length }}
+                page={safeTrackedPage}
+                maxPage={trackedMaxPage}
+                setPage={setTrackedPage}
+                pageSize={PAGE_SIZE}
+              />
+              {trackedPageEmails.map((email) => (
+                <EmailItem key={email._id} email={email} />
+              ))}
+              <BottomPaginationButtons
+                page={safeTrackedPage}
+                maxPage={trackedMaxPage}
+                setPage={setTrackedPage}
+              />
+            </>
           ) : (
             <Notice type="info" closeMode="disallow" className="fr-mb-2w">
               Aucun email suivi n'a été reçu.
@@ -144,9 +185,23 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
           </Notice>
 
           {untrackedEmails.length > 0 ? (
-            untrackedEmails.map((email) => (
-              <EmailItem key={email._id} email={email} showSubject={true} />
-            ))
+            <>
+              <TopPaginationButtons
+                meta={{ total: untrackedEmails.length }}
+                page={safeUntrackedPage}
+                maxPage={untrackedMaxPage}
+                setPage={setUntrackedPage}
+                pageSize={PAGE_SIZE}
+              />
+              {untrackedPageEmails.map((email) => (
+                <EmailItem key={email._id} email={email} showSubject={true} />
+              ))}
+              <BottomPaginationButtons
+                page={safeUntrackedPage}
+                maxPage={untrackedMaxPage}
+                setPage={setUntrackedPage}
+              />
+            </>
           ) : (
             <Notice type="info" closeMode="disallow" className="fr-mb-2w">
               Aucun email non suivi n'a été reçu.

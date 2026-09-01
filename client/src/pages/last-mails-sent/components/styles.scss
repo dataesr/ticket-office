@@ -40,3 +40,31 @@
     margin-left: 0.5rem;
   }
 }
+
+.mails-header-row {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &__search {
+    flex: 1 1 20rem;
+    min-width: 16rem;
+  }
+}
+
+.mails-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 0.75rem;
+
+  .fr-select {
+    min-width: 11rem;
+  }
+
+  &__date .fr-input {
+    width: 9.5rem;
+  }
+}
