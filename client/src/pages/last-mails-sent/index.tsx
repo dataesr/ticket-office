@@ -19,7 +19,6 @@ const LastMailsSent: React.FC = () => {
 
   const { data, isLoading, isError } = useSentEmails();
   const sentEmails: EmailItem[] = data ? data.emails : [];
-  const maxPage = Math.ceil((data?.emails.length || 0) / 10);
 
   const uniqueProfiles = Array.from(
     new Set(sentEmails.map((email) => email.selectedProfile))
@@ -29,6 +28,16 @@ const LastMailsSent: React.FC = () => {
     status === "all"
       ? sentEmails
       : sentEmails.filter((email) => email.selectedProfile === status);
+
+  const maxPage = Math.max(1, Math.ceil(filteredEmails.length / 10));
+  const safePage = Math.min(page, maxPage);
+
+  const pageEmails = [...filteredEmails]
+    .sort(
+      (a: any, b: any) =>
+        new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime()
+    )
+    .slice((safePage - 1) * 10, safePage * 10);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -86,7 +95,7 @@ const LastMailsSent: React.FC = () => {
       <Col md="6" xs="12" lg="12">
         <LastMailsSentItem
           data={{
-            emails: filteredEmails as any,
+            emails: pageEmails as any,
           }}
         />
       </Col>
