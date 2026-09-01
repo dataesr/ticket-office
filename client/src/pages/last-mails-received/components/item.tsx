@@ -1,14 +1,5 @@
-import React, { useState } from "react";
-import {
-  Col,
-  Container,
-  Row,
-  Text,
-  Tabs,
-  Tab,
-  Notice,
-  Link,
-} from "@dataesr/dsfr-plus";
+import { useState } from "react";
+import { Tabs, Tab, Notice } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
 import TopPaginationButtons from "../../../components/pagination/top-buttons";
@@ -23,89 +14,59 @@ interface LastMailsReceivedProps {
   };
 }
 
-const EmailContent: React.FC<{ content: string }> = ({ content }) => (
-  <Text size="sm">
-    <MarkdownRenderer content={content} />
-  </Text>
-);
-
-const FormattedDate: React.FC<{ date: string }> = ({ date }) => {
-  const sentDate = new Date(date);
-  const formattedDate = sentDate.toLocaleDateString("fr-FR");
-  const formattedTime = sentDate.toLocaleTimeString("fr-FR", {
+const EmailCard: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
+  email,
+  showSubject = false,
+}) => {
+  const receivedDate = new Date(email.date);
+  const formattedDate = receivedDate.toLocaleDateString("fr-FR");
+  const formattedTime = receivedDate.toLocaleTimeString("fr-FR", {
     hour: "2-digit",
     minute: "2-digit",
   });
+  const sender = email.from?.[0];
+  const images = email.images ? Object.values(email.images) : [];
 
   return (
-    <Text size="sm">
-      <i>
-        Reçu le {formattedDate} à {formattedTime}
-      </i>
-    </Text>
-  );
-};
-
-const EmailHeader: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
-  email,
-  showSubject = false,
-}) => (
-  <Row>
-    <Col md="10" xs="12" lg="10">
-      <Text className="fr-mb-0">
-        Envoyé par{" "}
-        <strong>
-          <i>{email.from[0].name}</i>
-        </strong>
-      </Text>
-      <Text className="fr-mb-1">
-        Adresse mail{" "}
-        <strong>
-          <i>{email.from[0].address}</i>
-        </strong>
-      </Text>
-      {showSubject && (
-        <Text className="fr-mb-1">
-          Objet{" "}
-          <strong>
-            <i>{email.subject}</i>
-          </strong>
-        </Text>
-      )}
-    </Col>
-    <Col>
-      <FormattedDate date={email.date} />
-    </Col>
-  </Row>
-);
-
-const EmailItem: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
-  email,
-  showSubject,
-}) => {
-  return (
-    <Row gutters key={email._id}>
-      <Col lg="12" md="10" sm="12" className="fr-mb-1w fr-mt-2w">
-        <Link href={email.href} className="fr-footer__top-link">
-          <EmailHeader email={email} showSubject={showSubject} />
-          <Text className="received-mail">
-            <EmailContent content={email.extractedText} />
-          </Text>
-          <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {email.images &&
-              Object.values(email.images)?.map((imageValue) => (
-                <>
-                  <img
-                    width={"400px"}
-                    src={`data:${imageValue.contentType};base64, ${imageValue.base64}`}
-                    alt="test"
-                  />
-                </>
-              ))}
+    <a className="mail-card" href={email.href} rel="noopener noreferrer">
+      <div className="mail-card__header">
+        <div className="mail-card__header-row">
+          <div>
+            <p className="fr-text--sm fr-mb-0">
+              Envoyé par <strong>{sender?.name || "Expéditeur inconnu"}</strong>
+            </p>
+            {sender?.address && (
+              <p className="fr-text--xs fr-text-mention--grey fr-mb-0">
+                {sender.address}
+              </p>
+            )}
+            {showSubject && (
+              <p className="fr-text--sm fr-mb-0 fr-mt-1v">
+                Objet : <strong>{email.subject}</strong>
+              </p>
+            )}
           </div>
-        </Link>
-      </Col>
-    </Row>
+          <p className="fr-text--sm fr-text-mention--grey fr-mb-0 mail-card__date">
+            Reçu le {formattedDate} à {formattedTime}
+          </p>
+        </div>
+      </div>
+
+      <div className="mail-card__body fr-text--sm">
+        <MarkdownRenderer content={email.extractedText} />
+        {images.length > 0 && (
+          <div className="mail-card__images">
+            {images.map((image, index) => (
+              <img
+                key={index}
+                src={`data:${image.contentType};base64,${image.base64}`}
+                alt={`Pièce jointe ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </a>
   );
 };
 
@@ -117,9 +78,10 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
     ? data.emails.flat()
     : Object.values(data.emails).flat();
 
-  const isTrackedEmail = (email) =>
+  const isTrackedEmail = (email: EmailItem) =>
     email.subject.includes(" à votre contribution, référence") ||
     email.subject.includes("déclinaison locale, référence");
+
   const trackedEmails = emails
     .filter(isTrackedEmail)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -128,6 +90,9 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
     .filter((email) => !isTrackedEmail(email))
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
+  // On ne rend qu'une page d'emails à la fois : chaque email peut embarquer des
+  // images en base64, donc tout afficher d'un coup est lourd. Une pagination
+  // indépendante par onglet borne le nombre d'éléments (et d'images) rendus.
   const trackedMaxPage = Math.max(
     1,
     Math.ceil(trackedEmails.length / PAGE_SIZE)
@@ -149,67 +114,69 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
   );
 
   return (
-    <Container fluid>
-      <Tabs>
-        <Tab label="Mails Suivis">
-          {trackedEmails.length > 0 ? (
-            <>
-              <TopPaginationButtons
-                meta={{ total: trackedEmails.length }}
-                page={safeTrackedPage}
-                maxPage={trackedMaxPage}
-                setPage={setTrackedPage}
-                pageSize={PAGE_SIZE}
-              />
+    <Tabs>
+      <Tab label="Mails Suivis">
+        {trackedEmails.length > 0 ? (
+          <>
+            <TopPaginationButtons
+              meta={{ total: trackedEmails.length }}
+              page={safeTrackedPage}
+              maxPage={trackedMaxPage}
+              setPage={setTrackedPage}
+              pageSize={PAGE_SIZE}
+            />
+            <div className="mail-list">
               {trackedPageEmails.map((email) => (
-                <EmailItem key={email._id} email={email} />
+                <EmailCard key={email._id} email={email} />
               ))}
-              <BottomPaginationButtons
-                page={safeTrackedPage}
-                maxPage={trackedMaxPage}
-                setPage={setTrackedPage}
-              />
-            </>
-          ) : (
-            <Notice type="info" closeMode="disallow" className="fr-mb-2w">
-              Aucun email suivi n'a été reçu.
-            </Notice>
-          )}
-        </Tab>
-        <Tab label="Mails Non Suivis">
+            </div>
+            <BottomPaginationButtons
+              page={safeTrackedPage}
+              maxPage={trackedMaxPage}
+              setPage={setTrackedPage}
+            />
+          </>
+        ) : (
           <Notice type="info" closeMode="disallow" className="fr-mb-2w">
-            Les mails non-suivis correspondent aux mails envoyés spontanément
-            par un utilisateur. Ils ne sont pas en réponse à une contribution.
-            Pour retrouver les contributions d'un utilisateur, rendez vous dans
-            la page accueil et renseignez son nom dans la barre de recherche.
+            Aucun email suivi n'a été reçu.
           </Notice>
+        )}
+      </Tab>
+      <Tab label="Mails Non Suivis">
+        <Notice type="info" closeMode="disallow" className="fr-mb-2w">
+          Les mails non-suivis correspondent aux mails envoyés spontanément par
+          un utilisateur. Ils ne sont pas en réponse à une contribution. Pour
+          retrouver les contributions d'un utilisateur, rendez vous dans la page
+          accueil et renseignez son nom dans la barre de recherche.
+        </Notice>
 
-          {untrackedEmails.length > 0 ? (
-            <>
-              <TopPaginationButtons
-                meta={{ total: untrackedEmails.length }}
-                page={safeUntrackedPage}
-                maxPage={untrackedMaxPage}
-                setPage={setUntrackedPage}
-                pageSize={PAGE_SIZE}
-              />
+        {untrackedEmails.length > 0 ? (
+          <>
+            <TopPaginationButtons
+              meta={{ total: untrackedEmails.length }}
+              page={safeUntrackedPage}
+              maxPage={untrackedMaxPage}
+              setPage={setUntrackedPage}
+              pageSize={PAGE_SIZE}
+            />
+            <div className="mail-list">
               {untrackedPageEmails.map((email) => (
-                <EmailItem key={email._id} email={email} showSubject={true} />
+                <EmailCard key={email._id} email={email} showSubject={true} />
               ))}
-              <BottomPaginationButtons
-                page={safeUntrackedPage}
-                maxPage={untrackedMaxPage}
-                setPage={setUntrackedPage}
-              />
-            </>
-          ) : (
-            <Notice type="info" closeMode="disallow" className="fr-mb-2w">
-              Aucun email non suivi n'a été reçu.
-            </Notice>
-          )}
-        </Tab>
-      </Tabs>
-    </Container>
+            </div>
+            <BottomPaginationButtons
+              page={safeUntrackedPage}
+              maxPage={untrackedMaxPage}
+              setPage={setUntrackedPage}
+            />
+          </>
+        ) : (
+          <Notice type="info" closeMode="disallow" className="fr-mb-2w">
+            Aucun email non suivi n'a été reçu.
+          </Notice>
+        )}
+      </Tab>
+    </Tabs>
   );
 };
 
