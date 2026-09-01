@@ -53,7 +53,7 @@ const EmailCard: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
       </div>
 
       <div className="mail-card__body fr-text--sm">
-        <MarkdownRenderer content={email.extractedText} />
+        <MarkdownRenderer content={email.extractedText} clean />
         {images.length > 0 && (
           <div className="mail-card__images">
             {images.map((image, index) => (
