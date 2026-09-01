@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import EditModal from "../../components/edit-modal";
 import ContributorRequests from "./contributor-requests";
-import { NameFromIdref } from "../../api/scanr";
 import { useDataList } from "./data-list-context";
 import { CopyButton } from "../../utils/copy-button";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
@@ -27,12 +26,13 @@ const MessagePreview = ({
   allTags,
   authorsData,
   landingPages,
+  idrefNames,
 }: MessagePreviewProductionProps) => {
   const [showModal, setShowModal] = useState(false);
   const [idRefClicked, setIdRefClicked] = useState(false);
   const [scanRClicked, setScanRClicked] = useState(false);
   const { dataList, setDataList } = useDataList();
-  const { fullNameFromIdref: fetchedData } = NameFromIdref(data.id);
+  const fetchedData = idrefNames[data.objectId] || "";
   const { copiedText, copyToClipboard } = useCopyToClipboard();
 
   const InfoRow = ({

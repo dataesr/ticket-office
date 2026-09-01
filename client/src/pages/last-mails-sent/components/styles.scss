@@ -1,20 +1,60 @@
-.email-row {
-  overflow: hidden;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  border-bottom: 1px solid #f0f0f0;
-}
-.sent-mail {
-  border-radius: 20px;
-  padding: 10px;
-  word-wrap: break-word;
-  overflow: hidden;
-  background-color: var(--background-alt-blue-ecume);
-  margin-bottom: -1px;
+.mails-top-page__banner {
+  background: linear-gradient(
+    15deg,
+    var(--background-default-grey) 0%,
+    var(--background-flat-success) 100%
+  );
 }
 
-.sent-mail p {
-  font-size: 0.9em;
+.mail-list {
+  display: block;
+}
+
+.mail-card {
+  display: block;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-default-grey);
+  background-color: var(--background-default-grey);
+  color: inherit;
+  text-decoration: none;
+  background-image: none;
+  overflow-wrap: anywhere;
+
+  &:hover {
+    background-color: var(--background-alt-grey);
+  }
+}
+
+.mail-card__header {
+  padding: 1rem 1.5rem;
+  background-color: var(--background-alt-grey);
+  border-bottom: 1px solid var(--border-default-grey);
+}
+
+.mail-card__header-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+.mail-card__date {
+  white-space: nowrap;
+}
+
+.mail-card__body {
+  padding: 1.5rem;
+
+  p {
+    margin-bottom: 0;
+  }
 }
 
 .copy-button {
@@ -38,5 +78,33 @@
   .copy-icon {
     display: inline-block;
     margin-left: 0.5rem;
+  }
+}
+
+.mails-header-row {
+  display: flex;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  &__search {
+    flex: 1 1 20rem;
+    min-width: 16rem;
+  }
+}
+
+.mails-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 0.75rem;
+
+  .fr-select {
+    min-width: 11rem;
+  }
+
+  &__date .fr-input {
+    width: 9.5rem;
   }
 }

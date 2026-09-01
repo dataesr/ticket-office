@@ -12,7 +12,7 @@ import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import ContributionProductionItem from "./contribution-production-card";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import { useAllAuthorsData, useLandingPages } from "../../api/scanr";
+import { useIdrefNames, usePublicationsData } from "../../api/scanr";
 import {
   Contribute_Production,
   ContributionProductionDataHookResponse,
@@ -115,19 +115,18 @@ const ContributionPage: React.FC = () => {
 
   const {
     authorsData,
-    isLoading: isLoadingAuthors,
-    isError: isErrorAuthors,
-  } = useAllAuthorsData(allProductionIds);
-
-  const {
     landingPages,
-    isLoading: isLoadingLandingPages,
-    isError: isErrorLandingPages,
-  } = useLandingPages(allProductionIds);
+    isLoading: isLoadingPublications,
+    isError: isErrorPublications,
+  } = usePublicationsData(allProductionIds);
 
-  const isPageLoading = isLoading || isLoadingAuthors || isLoadingLandingPages;
+  const { idrefNames } = useIdrefNames(
+    filteredContributions.map((contribution) => contribution.objectId)
+  );
 
-  if (isError || isErrorAuthors || isErrorLandingPages) {
+  const isPageLoading = isLoading || isLoadingPublications;
+
+  if (isError || isErrorPublications) {
     return (
       <Container className="fr-my-5w">
         <Row gutters>
@@ -210,6 +209,7 @@ const ContributionPage: React.FC = () => {
                 allTags={fetchedData?.tags || []}
                 authorsData={authorsData}
                 landingPages={landingPages}
+                idrefNames={idrefNames}
               />
             ))
           )}
