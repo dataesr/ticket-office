@@ -14,6 +14,7 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
   allTags,
   authorsData,
   landingPages,
+  idrefNames,
 }) => {
   const { copiedText, copyToClipboard } = useCopyToClipboard();
 
@@ -76,6 +77,7 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
           }}
           refetch={refetch}
           landingPages={landingPages}
+          idrefNames={idrefNames}
         />
         <StaffProductionActions data={data} refetch={refetch} />
       </Accordion>

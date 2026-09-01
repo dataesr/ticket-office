@@ -12,7 +12,7 @@ import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
 import ContributionProductionItem from "./contribution-production-card";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import { usePublicationsData } from "../../api/scanr";
+import { useIdrefNames, usePublicationsData } from "../../api/scanr";
 import {
   Contribute_Production,
   ContributionProductionDataHookResponse,
@@ -120,6 +120,10 @@ const ContributionPage: React.FC = () => {
     isError: isErrorPublications,
   } = usePublicationsData(allProductionIds);
 
+  const { idrefNames } = useIdrefNames(
+    filteredContributions.map((contribution) => contribution.objectId)
+  );
+
   const isPageLoading = isLoading || isLoadingPublications;
 
   if (isError || isErrorPublications) {
@@ -205,6 +209,7 @@ const ContributionPage: React.FC = () => {
                 allTags={fetchedData?.tags || []}
                 authorsData={authorsData}
                 landingPages={landingPages}
+                idrefNames={idrefNames}
               />
             ))
           )}

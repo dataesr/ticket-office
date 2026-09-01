@@ -186,6 +186,7 @@ export interface MessagePreviewProductionProps {
   allTags: string[];
   authorsData: AuthorData;
   landingPages: Record<string, string>;
+  idrefNames: Record<string, string>;
 }
 
 export interface ContributionProductionDataResponse {
@@ -248,6 +249,7 @@ export interface ContributionProductionItemProps {
   allTags: any[];
   authorsData: any;
   landingPages: any;
+  idrefNames: Record<string, string>;
 }
 export interface ExcelExportButtonProps {
   refetch: () => void;

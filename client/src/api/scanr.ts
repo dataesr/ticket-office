@@ -60,18 +60,41 @@ export const usePublicationsData = (productionIds: string[]) => {
   };
 };
 
-export const NameFromIdref = (id: string) => {
-  const { data, refetch } = useQuery({
-    queryKey: [SCANR_PERSONS, id],
-    queryFn: () =>
-      fetchJson(SCANR_PERSONS, {
-        method: "POST",
-        body: JSON.stringify({
-          _source: ["id", "fullName"],
-          query: { bool: { filter: [{ term: { id } }] } },
-        }),
-      }),
+export const useIdrefNames = (idrefIds: string[]) => {
+  const uniqueIds = [...new Set(idrefIds.filter(Boolean))];
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["scanr-persons-batch", uniqueIds.join(",")],
+    queryFn: async () => {
+      const result = await fetchJson(
+        SCANR_PERSONS,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            size: Math.min(10000, uniqueIds.length),
+            _source: ["id", "fullName"],
+            query: {
+              terms: { "id.keyword": uniqueIds },
+            },
+          }),
+        },
+        "Erreur réseau"
+      );
+
+      const names: Record<string, string> = {};
+      result.hits?.hits?.forEach((hit) => {
+        const id = hit._source?.id || hit._id;
+        if (id) names[id] = hit._source?.fullName || "";
+      });
+
+      return names;
+    },
+    enabled: uniqueIds.length > 0,
   });
-  const fullNameFromIdref = data?.hits?.hits[0]?._source?.fullName || "";
-  return { fullNameFromIdref, refetch };
+
+  return {
+    idrefNames: data || {},
+    isLoading: isLoading && uniqueIds.length > 0,
+    isError,
+  };
 };
