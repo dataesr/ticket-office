@@ -13,6 +13,7 @@ import {
   getApplications,
   getObjectTypeOptions,
 } from "./utils";
+import "./components/styles.scss";
 import { EmailItem } from "../../types";
 
 const PAGE_SIZE = 10;
@@ -104,59 +105,64 @@ const LastMailsSent: React.FC = () => {
     );
 
   return (
-    <Container className="fr-my-5w">
-      <h1 className="fr-mb-1w">Derniers mails envoyés</h1>
-      <p className="fr-mb-3w fr-text--sm">
-        Filtrez les réponses envoyées par type d'objet, application, profil,
-        période ou mot-clé.
-      </p>
+    <main id="content" className="mails-top-page">
+      <section className="mails-top-page__banner">
+        <div className="fr-container fr-py-8w">
+          <h1 className="fr-mb-1w">Derniers mails envoyés</h1>
+          <p className="fr-mb-3w fr-text--sm">
+            Filtrez les réponses envoyées par type d'objet, application, profil,
+            période ou mot-clé.
+          </p>
 
-      <div className="mails-header-row fr-mb-3w">
-        <div className="mails-header-row__search">
-          <SearchSection
-            query={query}
-            handleSearch={handleSearch}
-            handleRemoveQueryItem={handleRemoveQueryItem}
-            isLarge={false}
-          />
+          <div className="mails-header-row">
+            <div className="mails-header-row__search">
+              <SearchSection
+                query={query}
+                handleSearch={handleSearch}
+                handleRemoveQueryItem={handleRemoveQueryItem}
+              />
+            </div>
+            <MailFilters
+              profile={profile}
+              profiles={uniqueProfiles}
+              onProfile={withPageReset(setProfile)}
+              objectType={objectType}
+              objectTypes={objectTypeOptions}
+              onObjectType={withPageReset(setObjectType)}
+              application={application}
+              applications={applications}
+              onApplication={withPageReset(setApplication)}
+              dateFrom={dateFrom}
+              onDateFrom={withPageReset(setDateFrom)}
+              dateTo={dateTo}
+              onDateTo={withPageReset(setDateTo)}
+            />
+          </div>
         </div>
-        <MailFilters
-          profile={profile}
-          profiles={uniqueProfiles}
-          onProfile={withPageReset(setProfile)}
-          objectType={objectType}
-          objectTypes={objectTypeOptions}
-          onObjectType={withPageReset(setObjectType)}
-          application={application}
-          applications={applications}
-          onApplication={withPageReset(setApplication)}
-          dateFrom={dateFrom}
-          onDateFrom={withPageReset(setDateFrom)}
-          dateTo={dateTo}
-          onDateTo={withPageReset(setDateTo)}
+      </section>
+
+      <Container className="fr-py-6w">
+        <TopPaginationButtons
+          meta={{ total: filteredEmails.length }}
+          page={safePage}
+          maxPage={maxPage}
+          setPage={setPage}
+          pageSize={PAGE_SIZE}
         />
-      </div>
 
-      <TopPaginationButtons
-        meta={{ total: filteredEmails.length }}
-        page={safePage}
-        maxPage={maxPage}
-        setPage={setPage}
-        pageSize={PAGE_SIZE}
-      />
+        <LastMailsSentItem
+          data={{
+            emails: pageEmails as any,
+          }}
+        />
 
-      <LastMailsSentItem
-        data={{
-          emails: pageEmails as any,
-        }}
-      />
-
-      <BottomPaginationButtons
-        page={safePage}
-        maxPage={maxPage}
-        setPage={setPage}
-      />
-    </Container>
+        <BottomPaginationButtons
+          page={safePage}
+          maxPage={maxPage}
+          setPage={setPage}
+        />
+      </Container>
+    </main>
   );
 };
 
