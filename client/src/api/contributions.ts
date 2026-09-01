@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { fetchJson } from "./utils/fetchJson";
 
 export const ContributionData = (url: string) => {
@@ -20,15 +20,20 @@ const routes = [
   "bso-local-variations/datasets",
 ];
 
-export const ContributionAllData = () => {
+export const ContributionAllData = (maxResults = 200) => {
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["allContributions"],
+    queryKey: ["allContributions", maxResults],
     queryFn: () =>
       Promise.all(
         routes.map((route) =>
-          fetchJson(`/api/${route}`, {}, `Failed to fetch from ${route}`)
+          fetchJson(
+            `/api/${route}?sort=-created_at&max_results=${maxResults}`,
+            {},
+            `Failed to fetch from ${route}`
+          )
         )
       ),
+    placeholderData: keepPreviousData,
   });
 
   return { data, isLoading, isError, refetch };

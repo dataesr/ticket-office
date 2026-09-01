@@ -10,15 +10,17 @@ const Home = () => {
   const [query, setQuery] = useState<string[]>([]);
   const [highlightedQuery, setHighlightedQuery] = useState("");
 
-  const { data, isLoading, isError } = ContributionAllData();
+  const hasActiveSearch =
+    query.length > 0 || highlightedQuery.trim().length > 0;
+
+  const { data, isLoading, isError } = ContributionAllData(
+    hasActiveSearch ? 2000 : 200
+  );
 
   const filteredData = useMemo(() => {
     const items = (data ?? []).flatMap((route) => route.data || []);
     return filterContributions(items, highlightedQuery || query.join(" "));
   }, [data, highlightedQuery, query]);
-
-  const hasActiveSearch =
-    query.length > 0 || highlightedQuery.trim().length > 0;
 
   const handleSearch = (value: string) => {
     const trimmed = value.trim();
