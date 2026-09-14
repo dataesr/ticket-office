@@ -12,8 +12,8 @@ if (process.env.APP_ENV === "production" || process.env.APP_ENV === "staging") {
     fetchEmails().catch((error) => {
       console.error("Erreur lors de la vérification des emails:", error);
     });
-  }, 15 * 60 * 1000);
-  // 15 minutes = 900 000 ms
+  }, 4 * 60 * 60 * 1000);
+  // 4 heures = 14 400 000 ms
 } else {
   console.log(
     "Mode développement ou staging: vérification des emails désactivée"
