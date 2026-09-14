@@ -1,15 +1,11 @@
 import { Elysia } from "elysia";
-import * as tls from "tls";
 import { sendMattermostNotification } from "../../utils/sendMattermostNotification";
-
-interface CertificateReport {
-  site: string;
-  expiration: string;
-  joursRestants: number;
-  statut: string;
-  urgence: "Critique" | "Élevée" | "Moyenne" | "Faible";
-  error?: string;
-}
+import {
+  CertificateReport,
+  calculateRemainingDays,
+  generateStatusAndUrgency,
+  getSSLExpiryDate,
+} from "../../utils/certificateChecker";
 
 const SITES = [
   "api.paysage.dataesr.ovh",
@@ -43,78 +39,33 @@ const SITES = [
   "works-magnet.staging.dataesr.ovh",
 ];
 
-async function getSSLExpiryDate(hostname: string): Promise<Date> {
-  return new Promise((resolve, reject) => {
-    const options = {
-      host: hostname,
-      port: 443,
-      servername: hostname,
-      rejectUnauthorized: false,
-    };
+const NOTIFICATION_THRESHOLDS = [20, 10];
 
-    const socket = tls.connect(options, () => {
-      const cert = socket.getPeerCertificate();
-      socket.end();
+const notifiedThresholds = new Map<string, Set<number>>();
 
-      if (!cert || !cert.valid_to) {
-        reject(new Error("Impossible de récupérer le certificat"));
-        return;
-      }
-
-      resolve(new Date(cert.valid_to));
-    });
-
-    socket.on("error", (error) => {
-      reject(error);
-    });
-
-    socket.setTimeout(5000, () => {
-      socket.destroy();
-      reject(new Error("Timeout"));
-    });
-  });
-}
-
-function calculateRemainingDays(expirationDate: Date): number {
-  const today = new Date();
-  const diffTime = expirationDate.getTime() - today.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-}
-
-function generateStatusAndUrgency(remainingDays: number): {
-  status: string;
-  urgency: "Critique" | "Élevée" | "Moyenne" | "Faible";
-} {
-  if (remainingDays < 0) {
-    return {
-      status: "Expiré",
-      urgency: "Critique",
-    };
-  } else if (remainingDays < 30) {
-    return {
-      status: `Expire dans ${remainingDays} jours`,
-      urgency: "Critique",
-    };
-  } else if (remainingDays < 60) {
-    return {
-      status: `Expire dans ${remainingDays} jours`,
-      urgency: "Élevée",
-    };
-  } else if (remainingDays < 90) {
-    return {
-      status: `Expire dans ${remainingDays} jours`,
-      urgency: "Moyenne",
-    };
-  } else {
-    const months = Math.floor(remainingDays / 30);
-    return {
-      status: `Valide (${months} mois)`,
-      urgency: "Faible",
-    };
+function getNotificationThreshold(
+  site: string,
+  remainingDays: number
+): number | null {
+  if (remainingDays > Math.max(...NOTIFICATION_THRESHOLDS)) {
+    notifiedThresholds.delete(site);
+    return null;
   }
+
+  const notified = notifiedThresholds.get(site) ?? new Set<number>();
+
+  for (const threshold of NOTIFICATION_THRESHOLDS) {
+    if (remainingDays <= threshold && !notified.has(threshold)) {
+      notified.add(threshold);
+      notifiedThresholds.set(site, notified);
+      return threshold;
+    }
+  }
+
+  return null;
 }
 
-async function checkAndNotifyCertificates() {
+async function checkAndNotifyCertificates(notify: boolean) {
   const report: CertificateReport[] = [];
 
   await Promise.all(
@@ -132,11 +83,15 @@ async function checkAndNotifyCertificates() {
           urgence: urgency,
         });
 
-        if (remainingDays === 20 || remainingDays === 10) {
-          const emoji =
-            remainingDays === 10 ? "🚨" : remainingDays === 20 ? "⚠️" : "🔔";
-          const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${expiryDate.toISOString().split("T")[0]
-            }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
+        const threshold = notify
+          ? getNotificationThreshold(site, remainingDays)
+          : null;
+
+        if (threshold !== null) {
+          const emoji = threshold === 10 ? "🚨" : "⚠️";
+          const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${
+            expiryDate.toISOString().split("T")[0]
+          }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
 
           await sendMattermostNotification(message, "certificats-ssl");
         }
@@ -156,10 +111,25 @@ async function checkAndNotifyCertificates() {
   return report;
 }
 
+if (process.env.APP_ENV === "production" || process.env.APP_ENV === "staging") {
+  setInterval(
+    () => {
+      checkAndNotifyCertificates(true).catch((error) => {
+        console.error("Erreur lors de la vérification des certificats:", error);
+      });
+    },
+    24 * 60 * 60 * 1000
+  );
+} else {
+  console.log(
+    "Mode développement: vérification périodique des certificats désactivée"
+  );
+}
+
 export const certificatsRoutes = new Elysia({ prefix: "/certificats" }).get(
   "/",
   async () => {
-    const rapport = await checkAndNotifyCertificates();
+    const rapport = await checkAndNotifyCertificates(false);
 
     const rapportTrie = rapport.sort(
       (a, b) => a.joursRestants - b.joursRestants
