@@ -111,15 +111,32 @@ async function checkAndNotifyCertificates(notify: boolean) {
   return report;
 }
 
+const DAILY_CHECK_HOUR = 8;
+// (8 heure du matin, si tout va bien)
+
+function msUntilNextRun(hour: number): number {
+  const now = new Date();
+  const next = new Date(now);
+  next.setHours(hour, 0, 0, 0);
+
+  if (next <= now) {
+    next.setDate(next.getDate() + 1);
+  }
+
+  return next.getTime() - now.getTime();
+}
+
+function runDailyCheck() {
+  checkAndNotifyCertificates(true).catch((error) => {
+    console.error("Erreur lors de la vérification des certificats:", error);
+  });
+}
+
 if (process.env.APP_ENV === "production" || process.env.APP_ENV === "staging") {
-  setInterval(
-    () => {
-      checkAndNotifyCertificates(true).catch((error) => {
-        console.error("Erreur lors de la vérification des certificats:", error);
-      });
-    },
-    24 * 60 * 60 * 1000
-  );
+  setTimeout(() => {
+    runDailyCheck();
+    setInterval(runDailyCheck, 24 * 60 * 60 * 1000);
+  }, msUntilNextRun(DAILY_CHECK_HOUR));
 } else {
   console.log(
     "Mode développement: vérification périodique des certificats désactivée"
