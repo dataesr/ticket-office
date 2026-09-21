@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "version": "3.5.18",
+  "version": "3.5.19",
   "scripts": {
     "dev": "bun run --watch index.ts",
     "start": "bun run index.ts",
