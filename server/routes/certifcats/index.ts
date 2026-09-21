@@ -76,9 +76,9 @@ async function checkAndNotifyCertificates(notify: boolean) {
         const { status, urgency } = generateStatusAndUrgency(remainingDays);
 
         report.push({
-          site,
           expiration: expiryDate.toISOString().split("T")[0],
           joursRestants: remainingDays,
+          site,
           statut: status,
           urgence: urgency,
         });
@@ -89,9 +89,8 @@ async function checkAndNotifyCertificates(notify: boolean) {
 
         if (threshold !== null) {
           const emoji = threshold === 10 ? "🚨" : "⚠️";
-          const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${
-            expiryDate.toISOString().split("T")[0]
-          }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
+          const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${expiryDate.toISOString().split("T")[0]
+            }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
 
           await sendMattermostNotification(message, "certificats-ssl");
         }
@@ -111,32 +110,22 @@ async function checkAndNotifyCertificates(notify: boolean) {
   return report;
 }
 
-const DAILY_CHECK_HOUR = 8;
-// (8 heure du matin, si tout va bien)
-
-function msUntilNextRun(hour: number): number {
-  const now = new Date();
-  const next = new Date(now);
-  next.setHours(hour, 0, 0, 0);
-
-  if (next <= now) {
-    next.setDate(next.getDate() + 1);
+// If not in dev mode (run in local)
+if (process.env.APP_ENV === 'production') {
+  // Initial delay until midnight
+  function getDelayUntilMidnight() {
+    const now: Date = new Date()
+    const nextMorning:Date = new Date(now)
+    nextMorning.setDate(nextMorning.getDate() + 1) // Set to next day
+    nextMorning.setHours(8, 0, 0, 0) // Set to next day at 08:00:00.000
+    return nextMorning.getTime() - now.getTime() // Difference in milliseconds
   }
-
-  return next.getTime() - now.getTime();
-}
-
-function runDailyCheck() {
-  checkAndNotifyCertificates(true).catch((error) => {
-    console.error("Erreur lors de la vérification des certificats:", error);
-  });
-}
-
-if (process.env.APP_ENV === "production" || process.env.APP_ENV === "staging") {
+  const initialDelay = getDelayUntilMidnight();
+  // Run once at 8 AM, then every 24 hours
   setTimeout(() => {
-    runDailyCheck();
-    setInterval(runDailyCheck, 24 * 60 * 60 * 1000);
-  }, msUntilNextRun(DAILY_CHECK_HOUR));
+    checkAndNotifyCertificates(true) // Run once at 8 AM
+    setInterval(() => checkAndNotifyCertificates(true), 24 * 60 * 60 * 1000) // Repeat every 24 hours
+  }, initialDelay)
 } else {
   console.log(
     "Mode développement: vérification périodique des certificats désactivée"
@@ -147,14 +136,9 @@ export const certificatsRoutes = new Elysia({ prefix: "/certificats" }).get(
   "/",
   async () => {
     const rapport = await checkAndNotifyCertificates(false);
-
-    const rapportTrie = rapport.sort(
-      (a, b) => a.joursRestants - b.joursRestants
-    );
-
     return {
+      certificates: rapport.sort((a, b) => a.joursRestants - b.joursRestants),
       date: new Date().toISOString().split("T")[0],
-      certificats: rapportTrie,
     };
   }
 );
