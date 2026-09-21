@@ -35,9 +35,16 @@ Create a .env.local (ask me mine) under the `/server` folder.
 Server is started at http://localhost:3000.
 Client is started at http://localhost:5173.
 
-## Deploy
+## Deployment
 
-`bun run deploy --level=[patch|minor|major]`
+The version number follows [semver](https://semver.org/).
+
+To deploy in production, simply run this command from your staging branch :
+
+`bun run deploy:[patch|minor|major]`
+
+⚠️ Obviously, only members of the [dataesr organization](https://github.com/dataesr/) have rights to push on the repo.
+
 
 ## Issues
 
