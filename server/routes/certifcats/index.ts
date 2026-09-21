@@ -111,7 +111,7 @@ async function checkAndNotifyCertificates(notify: boolean) {
 }
 
 // If not in dev mode (run in local)
-if (import.meta.env.MODE !== 'development') {
+if (process.env.APP_ENV === 'production') {
   // Initial delay until midnight
   function getDelayUntilMidnight() {
     const now: Date = new Date()
