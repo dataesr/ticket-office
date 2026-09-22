@@ -1,17 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 
 interface Certificate {
-  site: string;
+  error?: string;
   expiration: string;
   joursRestants: number;
+  site: string;
   statut: string;
   urgence: "Critique" | "Élevée" | "Moyenne" | "Faible";
-  error?: string;
 }
 
 interface CertificatesResponse {
+  certificates: Certificate[];
   date: string;
-  certificats: Certificate[];
 }
 
 export const useCertificates = () => {

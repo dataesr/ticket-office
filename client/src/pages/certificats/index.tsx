@@ -61,34 +61,34 @@ const Certificats = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.certificats.map((cert, index) => (
+                {data.certificates.map((certificate, index) => (
                   <tr key={index}>
                     <td>
-                      <strong>{cert.site}</strong>
-                      {cert.error && (
+                      <strong>{certificate.site}</strong>
+                      {certificate.error && (
                         <div className="fr-text fr-text--error">
-                          {cert.error}
+                          {certificate.error}
                         </div>
                       )}
                     </td>
-                    <td>{cert.expiration}</td>
+                    <td>{certificate.expiration}</td>
                     <td>
                       <span
                         className={
-                          cert.joursRestants < 0
+                          certificate.joursRestants < 0
                             ? "fr-text--error"
-                            : cert.joursRestants < 30
+                            : certificate.joursRestants < 30
                               ? "fr-text--warning"
                               : ""
                         }
                       >
-                        {cert.joursRestants < 0 ? "Expiré" : cert.joursRestants}
+                        {certificate.joursRestants < 0 ? "Expiré" : certificate.joursRestants}
                       </span>
                     </td>
-                    <td>{cert.statut}</td>
+                    <td>{certificate.statut}</td>
                     <td>
-                      <Badge color={getUrgenceColor(cert.urgence)} size="sm">
-                        {cert.urgence}
+                      <Badge color={getUrgenceColor(certificate.urgence)} size="sm">
+                        {certificate.urgence}
                       </Badge>
                     </td>
                   </tr>
@@ -104,7 +104,7 @@ const Certificats = () => {
                   <div className="fr-card__content">
                     <h3 className="fr-card__title">
                       {
-                        data.certificats.filter((c) => c.urgence === "Critique")
+                        data.certificates.filter((certificate) => certificate.urgence === "Critique")
                           .length
                       }
                     </h3>
@@ -119,7 +119,7 @@ const Certificats = () => {
                   <div className="fr-card__content">
                     <h3 className="fr-card__title">
                       {
-                        data.certificats.filter((c) => c.urgence === "Élevée")
+                        data.certificates.filter((certificate) => certificate.urgence === "Élevée")
                           .length
                       }
                     </h3>
@@ -134,7 +134,7 @@ const Certificats = () => {
                   <div className="fr-card__content">
                     <h3 className="fr-card__title">
                       {
-                        data.certificats.filter((c) => c.urgence === "Moyenne")
+                        data.certificates.filter((certificate) => certificate.urgence === "Moyenne")
                           .length
                       }
                     </h3>
@@ -149,7 +149,7 @@ const Certificats = () => {
                   <div className="fr-card__content">
                     <h3 className="fr-card__title">
                       {
-                        data.certificats.filter((c) => c.urgence === "Faible")
+                        data.certificates.filter((certificate) => certificate.urgence === "Faible")
                           .length
                       }
                     </h3>
