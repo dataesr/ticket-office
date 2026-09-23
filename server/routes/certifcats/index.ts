@@ -117,13 +117,13 @@ if (process.env.APP_ENV === 'production') {
     const now: Date = new Date()
     const nextMorning:Date = new Date(now)
     nextMorning.setDate(nextMorning.getDate() + 1) // Set to next day
-    nextMorning.setHours(8, 0, 0, 0) // Set to next day at 08:00:00.000
+    nextMorning.setHours(6, 0, 0, 0) // Set to next day at 06:00:00.000, server time
     return nextMorning.getTime() - now.getTime() // Difference in milliseconds
   }
   const initialDelay = getDelayUntilMidnight();
-  // Run once at 8 AM, then every 24 hours
+  // Run once at 6 AM, then every 24 hours, server time
   setTimeout(() => {
-    checkAndNotifyCertificates(true) // Run once at 8 AM
+    checkAndNotifyCertificates(true) // Run once at 6 AM, server time
     setInterval(() => checkAndNotifyCertificates(true), 24 * 60 * 60 * 1000) // Repeat every 24 hours
   }, initialDelay)
 } else {
