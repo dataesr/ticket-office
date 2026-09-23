@@ -16,7 +16,7 @@ import sendEmail from "./routes/send-email/sendEmailRoutes";
 import storageRoutes from "./routes/storage";
 import updateUserDataRoutes from "./routes/update-user-data";
 import matomo from "./routes/matomo";
-import certificatsRoutes from "./routes/certifcats";
+import certificatsRoutes from "./routes/certificates";
 
 const ENV = Bun.env.NODE_ENV || "development";
 const PORT = parseInt(Bun.env.PORT || "3000");
