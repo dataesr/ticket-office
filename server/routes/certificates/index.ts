@@ -89,8 +89,9 @@ async function checkAndNotifyCertificates(notify: boolean) {
 
         if (threshold !== null) {
           const emoji = threshold === 10 ? "🚨" : "⚠️";
-          const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${expiryDate.toISOString().split("T")[0]
-            }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
+          const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${
+            expiryDate.toISOString().split("T")[0]
+          }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
 
           await sendMattermostNotification(message, "certificats-ssl");
         }
@@ -111,21 +112,21 @@ async function checkAndNotifyCertificates(notify: boolean) {
 }
 
 // If not in dev mode (run in local)
-if (process.env.APP_ENV === 'production') {
+if (process.env.APP_ENV === "production") {
   // Initial delay until midnight
   function getDelayUntilMidnight() {
-    const now: Date = new Date()
-    const nextMorning:Date = new Date(now)
-    nextMorning.setDate(nextMorning.getDate() + 1) // Set to next day
-    nextMorning.setHours(6, 0, 0, 0) // Set to next day at 06:00:00.000, server time
-    return nextMorning.getTime() - now.getTime() // Difference in milliseconds
+    const now: Date = new Date();
+    const nextMorning: Date = new Date(now);
+    nextMorning.setDate(nextMorning.getDate() + 1); // Set to next day
+    nextMorning.setHours(6, 0, 0, 0); // Set to next day at 06:00:00.000, server time
+    return nextMorning.getTime() - now.getTime(); // Difference in milliseconds
   }
   const initialDelay = getDelayUntilMidnight();
   // Run once at 6 AM, then every 24 hours, server time
   setTimeout(() => {
-    checkAndNotifyCertificates(true) // Run once at 6 AM, server time
-    setInterval(() => checkAndNotifyCertificates(true), 24 * 60 * 60 * 1000) // Repeat every 24 hours
-  }, initialDelay)
+    checkAndNotifyCertificates(true); // Run once at 6 AM, server time
+    setInterval(() => checkAndNotifyCertificates(true), 24 * 60 * 60 * 1000); // Repeat every 24 hours
+  }, initialDelay);
 } else {
   console.log(
     "Mode développement: vérification périodique des certificats désactivée"
