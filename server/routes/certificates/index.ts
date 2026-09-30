@@ -1,12 +1,11 @@
 import { Elysia } from "elysia";
-
+import { sendMattermostNotification } from "../../utils/sendMattermostNotification";
 import {
   CertificateReport,
   calculateRemainingDays,
   generateStatusAndUrgency,
   getSSLExpiryDate,
 } from "../../utils/certificateChecker";
-import { sendMattermostNotification } from "../../utils/sendMattermostNotification";
 
 const SITES = [
   "api.paysage.dataesr.ovh",
@@ -88,7 +87,7 @@ async function checkAndNotifyCertificates(notify: boolean) {
           ? getNotificationThreshold(site, remainingDays)
           : null;
 
-        if (remainingDays <= 20 ) {
+        if (threshold !== null) {
           const emoji = threshold === 10 ? "🚨" : "⚠️";
           const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${expiryDate.toISOString().split("T")[0]
             }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
