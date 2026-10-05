@@ -26,7 +26,7 @@ jobs:
         run: |
           bun i
           bunx --bun vite build client --mode staging --emptyOutDir --outDir '../server/public'
-          docker build -t ${{ github.repository }} .
+          docker build -f Dockerfile-staging -t ${{ github.repository }} .
 
       - name: Get Tag
         id: version
