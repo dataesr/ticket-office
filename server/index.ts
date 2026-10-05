@@ -3,6 +3,7 @@ import { staticPlugin } from "@elysiajs/static";
 import { swagger } from "@elysiajs/swagger";
 import { Elysia } from "elysia";
 
+import { HttpError } from "./utils/httpError";
 import bsoLocalVariationsRoutes from "./routes/bso-local-variations";
 import bsoTasksRoutes from "./routes/bso-tasks";
 import contactsRoutes from "./routes/contacts";
@@ -84,6 +85,10 @@ const buildApi = () =>
 const createApp = async () => {
   return new Elysia()
     .onError(({ code, error, set }) => {
+      if (error instanceof HttpError) {
+        set.status = error.status;
+        return { message: error.message, code: error.code };
+      }
       if (code === "VALIDATION") {
         set.status = 422;
         return { message: "Paramètres de requête invalides", code };

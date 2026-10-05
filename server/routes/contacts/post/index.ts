@@ -7,6 +7,7 @@ import { ObjectId } from "mongodb";
 import { emailRecipients } from "./emailRecipents";
 import { newContributionEmailConfig } from "../../../utils/configEmail";
 import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
+import { sendBrevoEmail } from "../../../utils/brevo";
 
 type postContactSchemaType = typeof postContactSchema.static;
 
@@ -62,15 +63,6 @@ const postContactsRoutes = new Elysia().post(
     };
     const url = process.env.BASE_API_URL;
     const contributionLink = `${url}/${body.fromApplication}-contact?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`;
-
-    const BREVO_API_KEY = process.env.BREVO_API_KEY;
-    if (!BREVO_API_KEY) {
-      set.status = 500;
-      return {
-        message: "BREVO_API_KEY is not defined",
-        code: "MISSING_API_KEY",
-      };
-    }
 
     const recipients = emailRecipients[body.fromApplication];
     if (!recipients) {
@@ -133,22 +125,7 @@ const postContactsRoutes = new Elysia().post(
       };
     }
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": BREVO_API_KEY,
-      },
-      body: JSON.stringify(dataForBrevo),
-    });
-
-    if (!response.ok) {
-      set.status = 500;
-      return {
-        message: `Erreur d'envoi d'email: ${response.statusText}`,
-        code: "EMAIL_SEND_FAILED",
-      };
-    }
+    await sendBrevoEmail(dataForBrevo);
 
     const subApplication = finalContribution.extra?.subApplication;
     const titleSuffix = subApplication ? ` concernant ${subApplication}` : "";

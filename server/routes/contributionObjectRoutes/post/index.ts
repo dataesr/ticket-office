@@ -8,6 +8,7 @@ import { emailRecipients } from "../../contacts/post/emailRecipents"
 import { newContributionEmailConfig } from "../../../utils/configEmail"
 import { sendMattermostNotification } from "../../../utils/sendMattermostNotification"
 import { getObjectTypeLabel } from "../post/utils"
+import { sendBrevoEmail } from "../../../utils/brevo"
 
 type postContributionObjectSchemaType =
   typeof postContributionObjectSchema.static
@@ -53,15 +54,6 @@ const postContributionObjectRoutes = new Elysia().post(
     const url = process.env.BASE_API_URL
     const contributionLink = `${url}/scanr-contributionPage?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`
 
-    const BREVO_API_KEY = process.env.BREVO_API_KEY
-    if (!BREVO_API_KEY) {
-      set.status = 500
-      return {
-        message: "BREVO_API_KEY is not defined",
-        code: "MISSING_API_KEY",
-      }
-    }
-
     const recipients = emailRecipients["contribute"] || {
       to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
     }
@@ -95,22 +87,7 @@ const postContributionObjectRoutes = new Elysia().post(
       },
     }
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": BREVO_API_KEY,
-      },
-      body: JSON.stringify(dataForBrevo),
-    })
-
-    if (!response.ok) {
-      set.status = 500
-      return {
-        message: `Erreur d'envoi d'email: ${response.statusText}`,
-        code: "EMAIL_SEND_FAILED",
-      }
-    }
+    await sendBrevoEmail(dataForBrevo)
 
     const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ScanR concernant ${getObjectTypeLabel(
       finalContribution.objectType

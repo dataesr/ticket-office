@@ -10,6 +10,7 @@ import {
 import { postVariationSchema } from "../../../schemas/post/variationSchema";
 import { replyEmailConfig } from "../../../utils/configEmail";
 import { sendMattermostNotification } from "../../../utils/sendMattermostNotification";
+import { sendBrevoEmail } from "../../../utils/brevo";
 
 const postBsoLocalVariationsRoute = new Elysia().post(
   "/bso-local-variations/:api",
@@ -40,12 +41,6 @@ const postBsoLocalVariationsRoute = new Elysia().post(
       ...newVariation,
       id: result.insertedId.toHexString(),
     };
-
-    const BREVO_API_KEY = process.env.BREVO_API_KEY;
-    if (!BREVO_API_KEY) {
-      set.status = 500;
-      return { message: "BREVO_API_KEY is not defined" };
-    }
 
     const message = `<ul><li>Nom de la structure: ${
       newVariation.structure.name
@@ -82,22 +77,7 @@ const postBsoLocalVariationsRoute = new Elysia().post(
       },
     };
 
-    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "api-key": BREVO_API_KEY,
-      },
-      body: JSON.stringify(dataForBrevo),
-    });
-
-    if (!response.ok) {
-      set.status = 500;
-      return {
-        message: `Erreur d'envoi d'email: ${response.statusText}`,
-        code: "EMAIL_SEND_FAILED",
-      };
-    }
+    await sendBrevoEmail(dataForBrevo);
 
     const url = process.env.BASE_API_URL;
     const variationLink = `${url}/bso-local-variations-${api}?page=1&query=${finalVariation.id}&searchInMessage=false&sort=DESC&status=choose`;
