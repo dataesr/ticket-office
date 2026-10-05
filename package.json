@@ -28,7 +28,7 @@
     "server",
     "client"
   ],
-  "version": "4.0.12",
+  "version": "4.1.0",
   "devDependencies": {
     "baseline-browser-mapping": "^2.11.19"
   }
