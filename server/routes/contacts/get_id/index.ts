@@ -6,24 +6,25 @@ import { errorSchema } from "../../../schemas/errors/errorSchema"
 
 type contactType = typeof contactSchema.static
 
-const getContactByIdRoutes = new Elysia()
-
-getContactByIdRoutes.get(
+const getContactByIdRoutes = new Elysia().get(
   "/contacts/:id",
-  async ({ params: { id } }) => {
+  async ({ params: { id }, set }) => {
     const contact = await db
       .collection("contacts")
-      .findOne<contactType>({
-        id: new ObjectId(id),
-      })
-      .catch((error) => error(500, "Failed to fetch contact"))
-    if (!contact) return { message: "Une erreur s'est produite" }
+      .findOne<contactType>({ id: new ObjectId(id) })
+
+    if (!contact) {
+      set.status = 404
+      return { message: "Contact non trouvé" }
+    }
+
     return contact
   },
   {
     response: {
       200: contactSchema,
       401: errorSchema,
+      404: errorSchema,
       500: errorSchema,
     },
     detail: {

@@ -62,28 +62,40 @@ const swaggerConfig = {
   },
 };
 
-const buildApi = () => {
-  return new Elysia().group("/api", (app) => {
-    app.use(matomo);
-    app.use(bsoLocalVariationsRoutes);
-    app.use(bsoTasksRoutes);
-    app.use(certificatsRoutes);
-    app.use(contactsRoutes);
-    app.use(contributionObjectRoutes);
-    app.use(getLastMailsSentRoutes);
-    app.use(getReceivedMailsRoutes);
-    app.use(productionsRoutes);
-    app.use(removeUserRoutes);
-    app.use(sendMailToContribution);
-    app.use(sendEmail);
-    app.use(storageRoutes);
-    app.use(updateUserDataRoutes);
-    return app;
-  });
-};
+const buildApi = () =>
+  new Elysia().group("/api", (app) =>
+    app
+      .use(matomo)
+      .use(bsoLocalVariationsRoutes)
+      .use(bsoTasksRoutes)
+      .use(certificatsRoutes)
+      .use(contactsRoutes)
+      .use(contributionObjectRoutes)
+      .use(getLastMailsSentRoutes)
+      .use(getReceivedMailsRoutes)
+      .use(productionsRoutes)
+      .use(removeUserRoutes)
+      .use(sendMailToContribution)
+      .use(sendEmail)
+      .use(storageRoutes)
+      .use(updateUserDataRoutes)
+  );
 
 const createApp = async () => {
   return new Elysia()
+    .onError(({ code, error, set }) => {
+      if (code === "VALIDATION") {
+        set.status = 422;
+        return { message: "Paramètres de requête invalides", code };
+      }
+      if (code === "NOT_FOUND") {
+        set.status = 404;
+        return { message: "Ressource introuvable", code };
+      }
+      console.error("[server] Erreur non gérée:", error);
+      set.status = 500;
+      return { message: "Erreur interne du serveur", code };
+    })
     .use(cors({ origin: "*" }))
     .use(swagger({ path: "/swagger", ...swaggerConfig }))
     .use(buildApi())
