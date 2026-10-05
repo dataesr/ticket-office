@@ -83,21 +83,20 @@ const buildApi = () => {
 };
 
 const createApp = async () => {
-  return (
-    new Elysia()
-      .use(cors({ origin: "*" }))
-      .use(swagger({ path: "/swagger", ...swaggerConfig }))
-      .use(buildApi())
-      // TODO: Workaround pour bug Elysia 1.4.15 - retirer quand fixé pour full staticPlugin
-      .get("/assets/*.js", ({ request, set }) => {
-        const pathname = new URL(request.url).pathname;
-        set.headers["Content-Type"] = "application/javascript";
-        return Bun.file(`public${pathname}`);
+  return new Elysia()
+    .use(cors({ origin: "*" }))
+    .use(swagger({ path: "/swagger", ...swaggerConfig }))
+    .use(buildApi())
+    .use(
+      await staticPlugin({
+        assets: "public",
+        prefix: "",
+        indexHTML: false,
+        alwaysStatic: true,
       })
-      .use(staticPlugin({ assets: "public", prefix: "", indexHTML: false }))
-      .get("*", () => Bun.file("public/index.html"))
-      .listen(PORT)
-  );
+    )
+    .get("*", () => Bun.file("public/index.html"))
+    .listen(PORT);
 };
 
 createApp()
