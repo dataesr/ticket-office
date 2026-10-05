@@ -3,6 +3,7 @@ import db from "../../../libs/mongo"
 import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
 import { contributionObjectSchema } from "../../../schemas/get/contributionsObjectSchema"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
+import { normalizeContributionUpdate } from "../../../utils/contributionUpdate"
 
 type ContributionType = typeof contributionObjectSchema.static
 
@@ -17,38 +18,7 @@ const contributionObjectPutRoutes = new Elysia().patch(
     body: any
     set: any
   }) => {
-    const updateData = { ...body }
-
-    if (
-      updateData.status &&
-      ["ongoing", "treated"].includes(updateData.status)
-    ) {
-      updateData.treated_at = new Date()
-    }
-
-    if (updateData.team && Array.isArray(updateData.team)) {
-      const userWhoModified = updateData.team[0]
-      if (!updateData.team.includes(userWhoModified)) {
-        updateData.team.push(userWhoModified)
-      }
-    }
-
-    if (updateData.threads) {
-      updateData.threads = updateData.threads.map(
-        (thread: { responses: any[] }) => {
-          thread.responses = thread.responses?.map(
-            (response: { read: boolean }) => {
-              if (response.read === false) {
-                response.read = true
-              }
-              return response
-            }
-          )
-          return thread
-        }
-      )
-    }
-
+    const updateData = normalizeContributionUpdate({ ...body })
     updateData.modified_at = new Date()
 
     const updateResult = await db

@@ -3,41 +3,14 @@ import db from "../../../libs/mongo"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema"
 import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
+import { normalizeContributionUpdate } from "../../../utils/contributionUpdate"
 
 type updateUserDataType = typeof updateDatasSchema.static
 
 const updateUserDataPutRoutes = new Elysia().patch(
   "/update-user-data/:id",
   async ({ params: { id }, body, set }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date()
-    }
-
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0]
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified)
-      }
-    }
-
-    if (body.threads) {
-      body.threads = body.threads.map(
-        (thread: {
-          responses?: any[]
-          threadId: string
-          timestamp?: string | Date | null
-          message?: string
-        }) => {
-          thread.responses = thread.responses?.map((response) => {
-            if (response.read === false) {
-              response.read = true
-            }
-            return response
-          })
-          return thread
-        }
-      )
-    }
+    normalizeContributionUpdate(body)
 
     const { acknowledged } = await db
       .collection("update-user-data")

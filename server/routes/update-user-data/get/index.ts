@@ -1,6 +1,6 @@
 import { Elysia } from "elysia"
 import { validateQueryParams } from "../../../utils/queryValidator"
-import db from "../../../libs/mongo"
+import { findPaginated } from "../../../utils/paginatedQuery"
 import { responseSchema } from "../../../schemas/get/updateDatasSchema"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 
@@ -12,33 +12,16 @@ const getUpdateUserDataRoutes = new Elysia().get(
       return { message: "Invalid query parameters" }
     }
 
-    const {
-      where = "{}",
-      sort = "created_at",
-      page = 1,
-      max_results = "",
-    } = query
+    const { where = "{}", sort, page, max_results } = query
     const filters = JSON.parse(where as string)
 
-    const limit = parseInt(max_results as string, 10) || 2000
-    const skip = (parseInt(String(page), 10) - 1) * limit
+    const { rows, total } = await findPaginated("update-user-data", filters, {
+      sort,
+      page,
+      max_results,
+    })
 
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
-    const sortOrder = sort.startsWith("-") ? -1 : 1
-
-    const totalContacts = await db
-      .collection("update-user-data")
-      .countDocuments(filters)
-
-    const contribution = await db
-      .collection("update-user-data")
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-
-    const formattedContribution = contribution.map((contrib: any) => ({
+    const formattedContribution = rows.map((contrib: any) => ({
       id: contrib.id.toString(),
       treated_at: contrib.treated_at || new Date(),
       email: contrib.email || "",
@@ -58,7 +41,7 @@ const getUpdateUserDataRoutes = new Elysia().get(
     return {
       data: formattedContribution,
       meta: {
-        total: totalContacts,
+        total,
       },
     }
   },

@@ -1,9 +1,9 @@
 import { Elysia, t } from "elysia"
 
-import db from "../../../libs/mongo"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import { responseSchema } from "../../../schemas/get/variationsSchema"
 import { validateQueryParams } from "../../../utils/queryValidator"
+import { findPaginated } from "../../../utils/paginatedQuery"
 import { variationParams } from "../../../schemas/get_id/variationSchema"
 
 const getBsoLocalVariationsRoute = new Elysia().get(
@@ -14,38 +14,19 @@ const getBsoLocalVariationsRoute = new Elysia().get(
       return { message: "Invalid query parameters" }
     }
 
-    const {
-      where = "{}",
-      sort = "created_at",
-      page = 1,
-      max_results = "",
-    } = query
+    const { where = "{}", sort, page, max_results } = query
     const filters = JSON.parse(where as string)
 
-    const limit = max_results || 2000
-    const skip = (page - 1) * limit
-
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
-    const sortOrder = sort.startsWith("-") ? -1 : 1
-
-    const collection = `bso_local_variations_${api}`
-
-    const totalVariations = await db
-      .collection(collection)
-      .countDocuments(filters)
-
-    const variations: unknown = await db
-      .collection(collection)
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
+    const { rows, total } = await findPaginated(
+      `bso_local_variations_${api}`,
+      filters,
+      { sort, page, max_results }
+    )
 
     return {
-      data: variations,
+      data: rows,
       meta: {
-        total: totalVariations,
+        total,
       },
     } as typeof responseSchema.static
   },

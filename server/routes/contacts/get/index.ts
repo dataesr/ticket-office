@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia"
 import { validateQueryParams } from "../../../utils/queryValidator"
-import db from "../../../libs/mongo"
+import { findPaginated } from "../../../utils/paginatedQuery"
 import { responseSchema } from "../../../schemas/get/contactSchema"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 
@@ -14,9 +14,9 @@ const getContactRoutes = new Elysia().get(
 
     const {
       where = "{}",
-      sort = "created_at",
-      page = 1,
-      max_results = "",
+      sort,
+      page,
+      max_results,
       fromApplication,
       status,
     } = query
@@ -36,24 +36,13 @@ const getContactRoutes = new Elysia().get(
       filters.status = status
     }
 
-    const limit = parseInt(max_results as string, 10) || 2000
-    const pageNum =
-      typeof page === "number" ? page : parseInt(page as string, 10) || 1
-    const skip = (pageNum - 1) * limit
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
-    const sortOrder = sort.startsWith("-") ? -1 : 1
+    const { rows, total } = await findPaginated("contacts", filters, {
+      sort,
+      page,
+      max_results,
+    })
 
-    const totalContacts = await db.collection("contacts").countDocuments(filters)
-
-    const contacts = await db
-      .collection("contacts")
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-
-    const formattedContacts = contacts.map((contact: any) => ({
+    const formattedContacts = rows.map((contact: any) => ({
       id: contact.id || "",
       fromApplication: contact.fromApplication || "",
       treated_at: contact.treated_at || new Date(),
@@ -74,7 +63,7 @@ const getContactRoutes = new Elysia().get(
     return {
       data: formattedContacts,
       meta: {
-        total: totalContacts,
+        total,
       },
     }
   },

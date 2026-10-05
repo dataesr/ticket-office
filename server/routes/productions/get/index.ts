@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia"
 import { validateQueryParams } from "../../../utils/queryValidator"
-import db from "../../../libs/mongo"
+import { findPaginated } from "../../../utils/paginatedQuery"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import { responseSchema } from "../../../schemas/get/productionSchema"
 
@@ -12,33 +12,16 @@ const getProductionsRoutes = new Elysia().get(
       return { message: "Invalid query parameters" }
     }
 
-    const {
-      where = "{}",
-      sort = "created_at",
-      page = 1,
-      max_results = "",
-    } = query
+    const { where = "{}", sort, page, max_results } = query
     const filters = JSON.parse(where as string)
 
-    const limit = parseInt(max_results as string, 10) || 2000
-    const skip = (parseInt(String(page), 10) - 1) * limit
+    const { rows, total } = await findPaginated(
+      "contribute_productions",
+      filters,
+      { sort, page, max_results }
+    )
 
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
-    const sortOrder = sort.startsWith("-") ? -1 : 1
-
-    const totalContacts = await db
-      .collection("contribute_productions")
-      .countDocuments(filters)
-
-    const productions = await db
-      .collection("contribute_productions")
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-
-    const formattedProductions = productions.map((production: any) => ({
+    const formattedProductions = rows.map((production: any) => ({
       id: production.id.toString(),
       objectId: production.objectId.toString(),
       organisation: production.organisation || "",
@@ -60,7 +43,7 @@ const getProductionsRoutes = new Elysia().get(
     return {
       data: formattedProductions,
       meta: {
-        total: totalContacts,
+        total,
       },
     }
   },

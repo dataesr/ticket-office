@@ -3,6 +3,7 @@ import db from "../../../libs/mongo"
 import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
 import { contactSchema } from "../../../schemas/get/contactSchema"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
+import { normalizeContributionUpdate } from "../../../utils/contributionUpdate"
 
 type ContactType = typeof contactSchema.static
 
@@ -11,35 +12,7 @@ const contactPutRoutes = new Elysia().patch(
   async ({ params, body, set }) => {
     const { id } = params
 
-    const updateData = { ...body }
-
-    if (
-      updateData.status &&
-      ["ongoing", "treated"].includes(updateData.status)
-    ) {
-      updateData.treated_at = new Date()
-    }
-
-    if (updateData.team && Array.isArray(updateData.team)) {
-      const userWhoModified = updateData.team[0]
-      if (!updateData.team.includes(userWhoModified)) {
-        updateData.team.push(userWhoModified)
-      }
-    }
-
-    if (updateData.threads) {
-      updateData.threads = updateData.threads.map((thread) => {
-        if (thread.responses) {
-          thread.responses = thread.responses.map((response) => {
-            if (response.read === false) {
-              response.read = true
-            }
-            return response
-          })
-        }
-        return thread
-      })
-    }
+    const updateData = normalizeContributionUpdate({ ...body })
 
     const { acknowledged } = await db
       .collection("contacts")

@@ -3,36 +3,14 @@ import db from "../../../libs/mongo"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import { productionSchema } from "../../../schemas/get/productionSchema"
 import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema"
+import { normalizeContributionUpdate } from "../../../utils/contributionUpdate"
 
 type productionType = typeof productionSchema.static
 
 const productionsPutRoutes = new Elysia().patch(
   "/production/:id",
   async ({ params: { id }, body, set }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date()
-    }
-
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0]
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified)
-      }
-    }
-
-    if (body.threads) {
-      body.threads = body.threads.map(
-        (thread: { responses?: any[]; threadId: string }) => {
-          thread.responses = thread.responses?.map((response) => {
-            if (response.read === false) {
-              response.read = true
-            }
-            return response
-          })
-          return thread
-        }
-      )
-    }
+    normalizeContributionUpdate(body)
 
     const { acknowledged } = await db
       .collection("contribute_productions")

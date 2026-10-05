@@ -1,6 +1,6 @@
 import { Elysia, t } from "elysia"
 import { validateQueryParams } from "../../../utils/queryValidator"
-import db from "../../../libs/mongo"
+import { findPaginated } from "../../../utils/paginatedQuery"
 import { responseSchema } from "../../../schemas/get/contributionsObjectSchema"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 
@@ -12,57 +12,38 @@ const getContributionObjectRoutes = new Elysia().get(
       return { message: "Invalid query parameters" }
     }
 
-    const {
-      where = "{}",
-      sort = "created_at",
-      page = 1,
-      max_results = "",
-    } = query
+    const { where = "{}", sort, page, max_results } = query
     const filters = JSON.parse(where as string)
 
-    const limit = parseInt(max_results as string, 10) || 2000
-    const skip = (parseInt(String(page), 10) - 1) * limit
+    const { rows, total } = await findPaginated("contribute", filters, {
+      sort,
+      page,
+      max_results,
+    })
 
-    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
-    const sortOrder = sort.startsWith("-") ? -1 : 1
-
-    const totalContacts = await db
-      .collection("contribute")
-      .countDocuments(filters)
-
-    const contributionObject = await db
-      .collection("contribute")
-      .find(filters)
-      .sort({ [sortField]: sortOrder })
-      .skip(skip)
-      .limit(limit)
-      .toArray()
-
-    const formattedContribution = contributionObject.map(
-      (contributionObject: any) => ({
-        id: contributionObject.id.toString(),
-        treated_at: contributionObject.treated_at || new Date(),
-        email: contributionObject.email || "",
-        name: contributionObject.name || "",
-        objectId: contributionObject.objectId || "",
-        objectType: contributionObject.objectType || "",
-        message: contributionObject.message || "",
-        comment: contributionObject.comment || "",
-        modified_at: contributionObject.modified_at || new Date(),
-        created_at: contributionObject.created_at || new Date(),
-        status: contributionObject.status || "",
-        team: contributionObject.team || [],
-        tags: contributionObject.tags || [],
-        threads: contributionObject.threads || [],
-        extra: contributionObject.extra || {},
-        contributionType: "contribute-object",
-      })
-    )
+    const formattedContribution = rows.map((contributionObject: any) => ({
+      id: contributionObject.id.toString(),
+      treated_at: contributionObject.treated_at || new Date(),
+      email: contributionObject.email || "",
+      name: contributionObject.name || "",
+      objectId: contributionObject.objectId || "",
+      objectType: contributionObject.objectType || "",
+      message: contributionObject.message || "",
+      comment: contributionObject.comment || "",
+      modified_at: contributionObject.modified_at || new Date(),
+      created_at: contributionObject.created_at || new Date(),
+      status: contributionObject.status || "",
+      team: contributionObject.team || [],
+      tags: contributionObject.tags || [],
+      threads: contributionObject.threads || [],
+      extra: contributionObject.extra || {},
+      contributionType: "contribute-object",
+    }))
 
     return {
       data: formattedContribution,
       meta: {
-        total: totalContacts,
+        total,
       },
     }
   },

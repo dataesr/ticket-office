@@ -3,41 +3,14 @@ import db from "../../../libs/mongo.js"
 import { deleteSchema } from "../../../schemas/get/deleteSchema.ts.js"
 import { editContributionSchema } from "../../../schemas/patch_id/editContributionSchema.js"
 import { errorSchema } from "../../../schemas/errors/errorSchema.js"
+import { normalizeContributionUpdate } from "../../../utils/contributionUpdate.js"
 
 type removeUserType = typeof deleteSchema.static
 
 const removeUserPutRoutes = new Elysia().patch(
   "/remove-user/:id",
   async ({ params: { id }, body, set }) => {
-    if (body.status && ["ongoing", "treated"].includes(body.status)) {
-      body.treated_at = new Date()
-    }
-
-    if (body.team && Array.isArray(body.team)) {
-      const userWhoModified = body.team[0]
-      if (!body.team.includes(userWhoModified)) {
-        body.team.push(userWhoModified)
-      }
-    }
-
-    if (body.threads) {
-      body.threads = body.threads.map(
-        (thread: {
-          responses?: any[]
-          threadId: string
-          timestamp?: string | Date | null
-          message?: string | null
-        }) => {
-          thread.responses = thread.responses?.map((response) => {
-            if (response.read === false) {
-              response.read = true
-            }
-            return response
-          })
-          return thread
-        }
-      )
-    }
+    normalizeContributionUpdate(body)
 
     const { acknowledged } = await db
       .collection("remove-user")
