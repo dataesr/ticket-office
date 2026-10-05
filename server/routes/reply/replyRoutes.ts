@@ -1,15 +1,9 @@
 import { Elysia } from "elysia";
-import { MongoClient, ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
+import db from "../../libs/mongo";
 import { errorSchema } from "../../schemas/errors/errorSchema";
 import { replyEmailConfig } from "../../utils/configEmail";
 import { ReplyEmailConfig } from "../../types";
-
-const MONGO_URI = process.env.MONGO_URI || "";
-const DB_NAME = process.env.MONGO_DATABASE || "";
-
-const client = new MongoClient(MONGO_URI);
-await client.connect();
-const db = client.db(DB_NAME);
 
 const sendMailToContribution = new Elysia().post(
   "/reply-to-contribution",

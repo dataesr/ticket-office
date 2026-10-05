@@ -1,20 +1,11 @@
 import { Elysia } from "elysia"
-import { MongoClient } from "mongodb"
+import db from "../../../libs/mongo"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
-
-const MONGO_URI = process.env.MONGO_URI || ""
-const DB_NAME = process.env.MONGO_DATABASE || ""
-
-const client = new MongoClient(MONGO_URI)
-await client.connect()
-const db = client.db(DB_NAME)
 
 const lastSentMail = new Elysia().get(
   "/get-sent-emails",
   async () => {
-    const sentEmailsCollection = db.collection("sent_emails")
-
-    const sentEmails = await sentEmailsCollection.find().toArray()
+    const sentEmails = await db.collection("sent_emails").find().toArray()
 
     return {
       emails: sentEmails,

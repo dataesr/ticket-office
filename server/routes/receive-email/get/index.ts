@@ -1,33 +1,18 @@
 import { Elysia } from "elysia";
-import { MongoClient } from "mongodb";
+import db from "../../../libs/mongo";
 import { errorSchema } from "../../../schemas/errors/errorSchema";
 
-const MONGO_URI = process.env.MONGO_URI || "";
-const DB_NAME = process.env.MONGO_DATABASE || "";
-
-const client = new MongoClient(MONGO_URI);
-await client.connect();
-const db = client.db(DB_NAME);
-
-const lastReceivedMail = new Elysia();
-
-lastReceivedMail.get(
+const lastReceivedMail = new Elysia().get(
   "/get-received-emails",
-  async ({ set }) => {
-    try {
-      const receivedEmailsCollection = db.collection("received_emails");
+  async () => {
+    const receivedEmails = await db
+      .collection("received_emails")
+      .find({}, { projection: { rawContent: 0 } })
+      .toArray();
 
-      const receivedEmails = await receivedEmailsCollection
-        .find({}, { projection: { rawContent: 0 } })
-        .toArray();
-
-      return {
-        emails: receivedEmails,
-      };
-    } catch (error) {
-      set.status = 500;
-      return { message: "Error processing request" };
-    }
+    return {
+      emails: receivedEmails,
+    };
   },
   {
     response: {
