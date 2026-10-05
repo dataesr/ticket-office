@@ -6,10 +6,9 @@ import removeUserPutRoutes from "./patch"
 import { Elysia } from "elysia"
 
 export const removeUserRoutes = new Elysia()
-
-removeUserRoutes.use(getRemoveUserRoutes)
-removeUserRoutes.use(getRemoveUserByIdRoutes)
-removeUserRoutes.use(postRemoveUserRoutes)
-removeUserRoutes.use(removeUserPutRoutes)
+  .use(getRemoveUserRoutes)
+  .use(getRemoveUserByIdRoutes)
+  .use(postRemoveUserRoutes)
+  .use(removeUserPutRoutes)
 
 export default removeUserRoutes

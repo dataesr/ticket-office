@@ -5,28 +5,21 @@ import { deleteSchema } from "../../../schemas/get/deleteSchema.ts"
 
 type removeUserType = typeof deleteSchema.static
 
-const getRemoveUserByIdRoutes = new Elysia()
-
-getRemoveUserByIdRoutes.get(
+const getRemoveUserByIdRoutes = new Elysia().get(
   "/remove-user/:id",
   async ({ params: { id }, set }) => {
-    try {
-      const contribution = await db
-        .collection("remove-user")
-        .findOne<removeUserType>({
-          id: new ObjectId(id),
-        })
+    const contribution = await db
+      .collection("remove-user")
+      .findOne<removeUserType>({
+        id: new ObjectId(id),
+      })
 
-      if (!contribution) {
-        set.status = 404
-        return { message: "Une erreur s'est produite" }
-      }
-
-      return contribution
-    } catch (error) {
-      set.status = 500
-      return { message: "Failed to fetch remove-user" }
+    if (!contribution) {
+      set.status = 404
+      return { message: "Une erreur s'est produite" }
     }
+
+    return contribution
   },
   {
     response: {

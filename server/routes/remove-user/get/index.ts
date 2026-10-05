@@ -4,69 +4,62 @@ import db from "../../../libs/mongo"
 import { responseSchema } from "../../../schemas/get/deleteSchema.ts"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 
-const getRemoveUserRoutes = new Elysia()
-
-getRemoveUserRoutes.get(
+const getRemoveUserRoutes = new Elysia().get(
   "/remove-user",
   async ({ query, set }) => {
-    try {
-      if (!validateQueryParams(query)) {
-        set.status = 422
-        return { message: "Invalid query parameters" }
-      }
+    if (!validateQueryParams(query)) {
+      set.status = 422
+      return { message: "Invalid query parameters" }
+    }
 
-      const {
-        where = "{}",
-        sort = "created_at",
-        page = 1,
-        max_results = "",
-      } = query
-      const filters = JSON.parse(where as string)
+    const {
+      where = "{}",
+      sort = "created_at",
+      page = 1,
+      max_results = "",
+    } = query
+    const filters = JSON.parse(where as string)
 
-      const limit = parseInt(max_results as string, 10) || 2000
-      const skip = (parseInt(String(page), 10) - 1) * limit
+    const limit = parseInt(max_results as string, 10) || 2000
+    const skip = (parseInt(String(page), 10) - 1) * limit
 
-      const sortField = sort.startsWith("-") ? sort.substring(1) : sort
-      const sortOrder = sort.startsWith("-") ? -1 : 1
+    const sortField = sort.startsWith("-") ? sort.substring(1) : sort
+    const sortOrder = sort.startsWith("-") ? -1 : 1
 
-      const totalContacts = await db
-        .collection("remove-user")
-        .countDocuments(filters)
+    const totalContacts = await db
+      .collection("remove-user")
+      .countDocuments(filters)
 
-      const deletation = await db
-        .collection("remove-user")
-        .find(filters)
-        .sort({ [sortField]: sortOrder })
-        .skip(skip)
-        .limit(limit)
-        .toArray()
+    const deletation = await db
+      .collection("remove-user")
+      .find(filters)
+      .sort({ [sortField]: sortOrder })
+      .skip(skip)
+      .limit(limit)
+      .toArray()
 
-      const formattedDeletation = deletation.map((deletation: any) => ({
-        id: deletation.id.toString(),
-        treated_at: deletation.treated_at || new Date(),
-        email: deletation.email || "",
-        name: deletation.name || "",
-        message: deletation.message || "",
-        comment: deletation.comment || "",
-        modified_at: deletation.modified_at || new Date(),
-        created_at: deletation.created_at || new Date(),
-        status: deletation.status || "",
-        team: deletation.team || [],
-        tags: deletation.tags || [],
-        threads: deletation.threads || [],
-        extra: deletation.extra || {},
-        contributionType: "remove-user",
-      }))
+    const formattedDeletation = deletation.map((deletation: any) => ({
+      id: deletation.id.toString(),
+      treated_at: deletation.treated_at || new Date(),
+      email: deletation.email || "",
+      name: deletation.name || "",
+      message: deletation.message || "",
+      comment: deletation.comment || "",
+      modified_at: deletation.modified_at || new Date(),
+      created_at: deletation.created_at || new Date(),
+      status: deletation.status || "",
+      team: deletation.team || [],
+      tags: deletation.tags || [],
+      threads: deletation.threads || [],
+      extra: deletation.extra || {},
+      contributionType: "remove-user",
+    }))
 
-      return {
-        data: formattedDeletation,
-        meta: {
-          total: totalContacts,
-        },
-      }
-    } catch (error) {
-      set.status = 500
-      return { message: "Error processing request" }
+    return {
+      data: formattedDeletation,
+      meta: {
+        total: totalContacts,
+      },
     }
   },
   {

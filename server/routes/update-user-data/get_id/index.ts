@@ -5,28 +5,21 @@ import { updateDatasSchema } from "../../../schemas/get/updateDatasSchema"
 
 type updateUserDataType = typeof updateDatasSchema.static
 
-const getUpdateUserDataByIdRoutes = new Elysia()
-
-getUpdateUserDataByIdRoutes.get(
+const getUpdateUserDataByIdRoutes = new Elysia().get(
   "/update-user-data/:id",
   async ({ params: { id }, set }) => {
-    try {
-      const contribution = await db
-        .collection("update-user-data")
-        .findOne<updateUserDataType>({
-          id: new ObjectId(id),
-        })
+    const contribution = await db
+      .collection("update-user-data")
+      .findOne<updateUserDataType>({
+        id: new ObjectId(id),
+      })
 
-      if (!contribution) {
-        set.status = 404
-        return { message: "Une erreur s'est produite" }
-      }
-
-      return contribution
-    } catch (error) {
-      set.status = 500
-      return { message: "Failed to fetch contribution from update-user-data" }
+    if (!contribution) {
+      set.status = 404
+      return { message: "Une erreur s'est produite" }
     }
+
+    return contribution
   },
   {
     detail: {
