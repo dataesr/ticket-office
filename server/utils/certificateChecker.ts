@@ -58,17 +58,17 @@ export const generateStatusAndUrgency = (
       status: "Expiré",
       urgency: "Critique",
     };
-  } else if (remainingDays < 30) {
+  } else if (remainingDays <= 5) {
     return {
       status: `Expire dans ${remainingDays} jours`,
       urgency: "Critique",
     };
-  } else if (remainingDays < 60) {
+  } else if (remainingDays <= 10) {
     return {
       status: `Expire dans ${remainingDays} jours`,
       urgency: "Élevée",
     };
-  } else if (remainingDays < 90) {
+  } else if (remainingDays <= 30) {
     return {
       status: `Expire dans ${remainingDays} jours`,
       urgency: "Moyenne",

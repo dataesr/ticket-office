@@ -75,9 +75,9 @@ const Certificats = () => {
                     <td>
                       <span
                         className={
-                          certificate.joursRestants < 0
+                          certificate.joursRestants <= 5
                             ? "fr-text--error"
-                            : certificate.joursRestants < 30
+                            : certificate.joursRestants <= 30
                               ? "fr-text--warning"
                               : ""
                         }

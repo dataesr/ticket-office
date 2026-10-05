@@ -39,30 +39,9 @@ const SITES = [
   "works-magnet.staging.dataesr.ovh",
 ];
 
-const NOTIFICATION_THRESHOLDS = [20, 10];
-
-const notifiedThresholds = new Map<string, Set<number>>();
-
-function getNotificationThreshold(
-  site: string,
-  remainingDays: number
-): number | null {
-  if (remainingDays > Math.max(...NOTIFICATION_THRESHOLDS)) {
-    notifiedThresholds.delete(site);
-    return null;
-  }
-
-  const notified = notifiedThresholds.get(site) ?? new Set<number>();
-
-  for (const threshold of NOTIFICATION_THRESHOLDS) {
-    if (remainingDays <= threshold && !notified.has(threshold)) {
-      notified.add(threshold);
-      notifiedThresholds.set(site, notified);
-      return threshold;
-    }
-  }
-
-  return null;
+function shouldNotifyCertificate(remainingDays: number): boolean {
+  if (remainingDays <= 5) return true;
+  return remainingDays === 30 || remainingDays === 10;
 }
 
 async function checkAndNotifyCertificates(notify: boolean) {
@@ -83,15 +62,15 @@ async function checkAndNotifyCertificates(notify: boolean) {
           urgence: urgency,
         });
 
-        const threshold = notify
-          ? getNotificationThreshold(site, remainingDays)
-          : null;
-
-        if (threshold !== null) {
-          const emoji = threshold === 10 ? "🚨" : "⚠️";
+        if (notify && shouldNotifyCertificate(remainingDays)) {
+          const expired = remainingDays < 0;
+          const emoji = expired ? "🔴" : remainingDays <= 5 ? "🚨" : "⚠️";
+          const joursLigne = expired
+            ? `**Certificat EXPIRÉ depuis ${-remainingDays} jour(s)**`
+            : `**Jours restants:** ${remainingDays} jours`;
           const message = `${emoji} **Alerte Certificat SSL**\n\n**Site:** ${site}\n**Expiration:** ${
             expiryDate.toISOString().split("T")[0]
-          }\n**Jours restants:** ${remainingDays} jours\n**Urgence:** ${urgency}`;
+          }\n${joursLigne}\n**Urgence:** ${urgency}`;
 
           await sendMattermostNotification(message, "certificats-ssl");
         }
