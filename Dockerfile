@@ -6,7 +6,7 @@ COPY ./server/package.json .
 RUN bun i --production
 COPY ./server .
 
-ENV APP_ENV=production
+ENV NODE_ENV=production
 CMD ["bun", "run", "index.ts"]
 
 EXPOSE 3000

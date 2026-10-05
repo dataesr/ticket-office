@@ -5,17 +5,14 @@ import { validateConfig } from "./imap-server/config";
 
 validateConfig();
 
-if (process.env.APP_ENV === "production") {
+if (process.env.APP_ENV === "production" || process.env.APP_ENV === "staging") {
   console.log("Démarrage de la vérification périodique des emails...");
-  setInterval(
-    () => {
-      console.log("Vérification des emails...");
-      fetchEmails().catch((error) => {
-        console.error("Erreur lors de la vérification des emails:", error);
-      });
-    },
-    4 * 60 * 60 * 1000
-  );
+  setInterval(() => {
+    console.log("Vérification des emails...");
+    fetchEmails().catch((error) => {
+      console.error("Erreur lors de la vérification des emails:", error);
+    });
+  }, 4 * 60 * 60 * 1000);
   // 4 heures = 14 400 000 ms
 } else {
   console.log(
