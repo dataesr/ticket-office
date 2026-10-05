@@ -4,8 +4,7 @@ import uploadFileRoute from "./upload-file"
 import { Elysia } from "elysia"
 
 export const storageRoutes = new Elysia()
-
-storageRoutes.use(getFileRoute)
-storageRoutes.use(uploadFileRoute)
+  .use(getFileRoute)
+  .use(uploadFileRoute)
 
 export default storageRoutes

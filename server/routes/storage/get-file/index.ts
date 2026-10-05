@@ -2,8 +2,6 @@ import { Elysia, NotFoundError, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import Storage from "../../../libs/swift-client"
 
-const getFileRoute = new Elysia()
-
 export const responseSchema = t.Object(
   {
     fileContent: t.String(),
@@ -11,7 +9,7 @@ export const responseSchema = t.Object(
   { additionalProperties: true }
 )
 
-getFileRoute.get(
+const getFileRoute = new Elysia().get(
   "/storage/:container/:filename",
   async ({ params: { container, filename } }) => {
     const response = (await Storage.get(container, filename).catch((err) => {

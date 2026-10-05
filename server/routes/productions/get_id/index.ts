@@ -5,28 +5,21 @@ import { productionSchema } from "../../../schemas/get/productionSchema"
 
 type productionType = typeof productionSchema.static
 
-const getProductionByIdRoutes = new Elysia()
-
-getProductionByIdRoutes.get(
+const getProductionByIdRoutes = new Elysia().get(
   "/production/:id",
   async ({ params: { id }, set }) => {
-    try {
-      const production = await db
-        .collection("contribute_productions")
-        .findOne<productionType>({
-          id: new ObjectId(id),
-        })
+    const production = await db
+      .collection("contribute_productions")
+      .findOne<productionType>({
+        id: new ObjectId(id),
+      })
 
-      if (!production) {
-        set.status = 404
-        return { message: "Une erreur s'est produite" }
-      }
-
-      return production
-    } catch (error) {
-      set.status = 500
-      return { message: "Failed to fetch production" }
+    if (!production) {
+      set.status = 404
+      return { message: "Une erreur s'est produite" }
     }
+
+    return production
   },
   {
     detail: {

@@ -8,23 +8,18 @@ type contributionObjectType = typeof contactSchema.static
 const getContributionObjectByIdRoutes = new Elysia().get(
   "/contribute/:id",
   async ({ params: { id }, set }) => {
-    try {
-      const contribution = await db
-        .collection("contribute")
-        .findOne<contributionObjectType>({
-          id: new ObjectId(id),
-        })
+    const contribution = await db
+      .collection("contribute")
+      .findOne<contributionObjectType>({
+        id: new ObjectId(id),
+      })
 
-      if (!contribution) {
-        set.status = 404
-        return { message: "Une erreur s'est produite" }
-      }
-
-      return contribution
-    } catch (error) {
-      set.status = 500
-      return { message: "Failed to fetch contribution" }
+    if (!contribution) {
+      set.status = 404
+      return { message: "Une erreur s'est produite" }
     }
+
+    return contribution
   },
   {
     response: {

@@ -9,22 +9,15 @@ const client = new MongoClient(MONGO_URI)
 await client.connect()
 const db = client.db(DB_NAME)
 
-const lastSentMail = new Elysia()
-
-lastSentMail.get(
+const lastSentMail = new Elysia().get(
   "/get-sent-emails",
-  async ({ set }) => {
-    try {
-      const sentEmailsCollection = db.collection("sent_emails")
+  async () => {
+    const sentEmailsCollection = db.collection("sent_emails")
 
-      const sentEmails = await sentEmailsCollection.find().toArray()
+    const sentEmails = await sentEmailsCollection.find().toArray()
 
-      return {
-        emails: sentEmails,
-      }
-    } catch (error) {
-      set.status = 500
-      return { message: "Error processing request" }
+    return {
+      emails: sentEmails,
     }
   },
   {

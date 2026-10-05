@@ -5,11 +5,10 @@ import contributionObjectPutRoutes from "./patch";
 
 import { Elysia } from "elysia";
 
-export const contributionObjectRoutes = new Elysia();
-
-contributionObjectRoutes.use(getContributionObjectRoutes);
-contributionObjectRoutes.use(getContributionObjectByIdRoutes);
-contributionObjectRoutes.use(postContributionObjectRoutes);
-contributionObjectRoutes.use(contributionObjectPutRoutes);
+export const contributionObjectRoutes = new Elysia()
+  .use(getContributionObjectRoutes)
+  .use(getContributionObjectByIdRoutes)
+  .use(postContributionObjectRoutes)
+  .use(contributionObjectPutRoutes);
 
 export default contributionObjectRoutes;

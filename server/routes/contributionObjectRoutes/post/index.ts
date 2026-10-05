@@ -12,127 +12,118 @@ import { getObjectTypeLabel } from "../post/utils"
 type postContributionObjectSchemaType =
   typeof postContributionObjectSchema.static
 
-const postContributionObjectRoutes = new Elysia()
-
-postContributionObjectRoutes.post(
+const postContributionObjectRoutes = new Elysia().post(
   "/contribute",
   async ({ set, body }) => {
-    try {
-      const extraLowercase = Object.keys(body.extra || {}).reduce(
-        (acc, key) => ({
-          ...acc,
-          [key]: body.extra ? (body.extra as any)[key].toLowerCase() : "",
-        }),
-        {} as { [key: string]: string }
-      )
+    const extraLowercase = Object.keys(body.extra || {}).reduce(
+      (acc, key) => ({
+        ...acc,
+        [key]: body.extra ? (body.extra as any)[key].toLowerCase() : "",
+      }),
+      {} as { [key: string]: string }
+    )
 
-      const _id = new ObjectId()
-      const newContribution = {
-        ...body,
-        _id,
-        extra: extraLowercase,
-        id: _id.toHexString(),
-        created_at: new Date(),
-        status: "new",
+    const _id = new ObjectId()
+    const newContribution = {
+      ...body,
+      _id,
+      extra: extraLowercase,
+      id: _id.toHexString(),
+      created_at: new Date(),
+      status: "new",
+    }
+
+    if (!body.objectId && !body.objectType) {
+      set.status = 400
+      return { message: "objectId is required when objectType is provided" }
+    }
+
+    const result = await db.collection("contribute").insertOne(newContribution)
+
+    if (!result.insertedId) {
+      set.status = 500
+      return { message: "Failed to create the contribution" }
+    }
+
+    const finalContribution = {
+      ...newContribution,
+      id: result.insertedId.toHexString(),
+    }
+
+    const url = process.env.BASE_API_URL
+    const contributionLink = `${url}/scanr-contributionPage?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`
+
+    const BREVO_API_KEY = process.env.BREVO_API_KEY
+    if (!BREVO_API_KEY) {
+      set.status = 500
+      return {
+        message: "BREVO_API_KEY is not defined",
+        code: "MISSING_API_KEY",
       }
+    }
 
-      if (!body.objectId && !body.objectType) {
-        set.status = 400
-        return { message: "objectId is required when objectType is provided" }
+    const recipients = emailRecipients["contribute"] || {
+      to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
+    }
+    const selectedConfig = newContributionEmailConfig.scanr
+
+    const fonction = finalContribution.extra?.fonction || "non renseigné"
+    const dataForBrevo = {
+      sender: {
+        email: selectedConfig.senderEmail,
+        name: selectedConfig.senderName,
+      },
+      to: recipients.to.map((email) => ({
+        email,
+        name: email.split("@")[0],
+      })),
+      replyTo: {
+        email: selectedConfig.replyToEmail,
+        name: selectedConfig.replyToName,
+      },
+      subject: "Nouvelle contribution par objet créée",
+      templateId: 268,
+      params: {
+        date: new Date().toLocaleDateString("fr-FR"),
+        title: `Nouvelle contribution créée via formulaire de contact }`,
+        name: finalContribution.name,
+        email: finalContribution.email,
+        fonction: fonction,
+        id: finalContribution.id,
+        link: contributionLink,
+        message: `${finalContribution.message}`,
+      },
+    }
+
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": BREVO_API_KEY,
+      },
+      body: JSON.stringify(dataForBrevo),
+    })
+
+    if (!response.ok) {
+      set.status = 500
+      return {
+        message: `Erreur d'envoi d'email: ${response.statusText}`,
+        code: "EMAIL_SEND_FAILED",
       }
+    }
 
-      const result = await db
-        .collection("contribute")
-        .insertOne(newContribution)
+    const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ScanR concernant ${getObjectTypeLabel(
+      finalContribution.objectType
+    )}
 
-      if (!result.insertedId) {
-        set.status = 500
-        return { message: "Failed to create the contribution" }
-      }
-
-      const finalContribution = {
-        ...newContribution,
-        id: result.insertedId.toHexString(),
-      }
-
-      const url = process.env.BASE_API_URL
-      const contributionLink = `${url}/scanr-contributionPage?page=1&query=${finalContribution.id}&searchInMessage=false&sort=DESC&status=choose`
-
-      const BREVO_API_KEY = process.env.BREVO_API_KEY
-      if (!BREVO_API_KEY) {
-        set.status = 500
-        return {
-          message: "BREVO_API_KEY is not defined",
-          code: "MISSING_API_KEY",
-        }
-      }
-
-      const recipients = emailRecipients["contribute"] || {
-        to: process.env.SCANR_EMAIL_RECIPIENTS?.split(",") || [],
-      }
-      const selectedConfig = newContributionEmailConfig.scanr
-
-      const fonction = finalContribution.extra?.fonction || "non renseigné"
-      const dataForBrevo = {
-        sender: {
-          email: selectedConfig.senderEmail,
-          name: selectedConfig.senderName,
-        },
-        to: recipients.to.map((email) => ({
-          email,
-          name: email.split("@")[0],
-        })),
-        replyTo: {
-          email: selectedConfig.replyToEmail,
-          name: selectedConfig.replyToName,
-        },
-        subject: "Nouvelle contribution par objet créée",
-        templateId: 268,
-        params: {
-          date: new Date().toLocaleDateString("fr-FR"),
-          title: `Nouvelle contribution créée via formulaire de contact }`,
-          name: finalContribution.name,
-          email: finalContribution.email,
-          fonction: fonction,
-          id: finalContribution.id,
-          link: contributionLink,
-          message: `${finalContribution.message}`,
-        },
-      }
-
-      const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": BREVO_API_KEY,
-        },
-        body: JSON.stringify(dataForBrevo),
-      })
-
-      if (!response.ok) {
-        set.status = 500
-        return {
-          message: `Erreur d'envoi d'email: ${response.statusText}`,
-          code: "EMAIL_SEND_FAILED",
-        }
-      }
-
-      const mattermostMessage = `:mega: 🚀 Bip...Bip - Nouvelle contribution créée pour ScanR concernant ${getObjectTypeLabel(
-        finalContribution.objectType
-      )}
-
-**Nom**: ${finalContribution.name}  
-**Email**: ${finalContribution.email}  
-**Fonction**: ${finalContribution.extra?.fonction || "non renseigné"}  
+**Nom**: ${finalContribution.name}
+**Email**: ${finalContribution.email}
+**Fonction**: ${finalContribution.extra?.fonction || "non renseigné"}
 🔗 [Voir la contribution](${contributionLink})`
 
-      await sendMattermostNotification(mattermostMessage)
+    await sendMattermostNotification(mattermostMessage)
 
-      return finalContribution
-    } catch (error) {
-      set.status = 500
-      return { message: "Error processing request" }
-    }
+    return finalContribution
   },
   {
     body: postContributionObjectSchema,

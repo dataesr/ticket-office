@@ -3,8 +3,7 @@ import getTaskStatus from "./get_id"
 import updateIndex from "./post"
 
 export const bsoTasksRoutes = new Elysia()
-
-bsoTasksRoutes.use(getTaskStatus)
-bsoTasksRoutes.use(updateIndex)
+  .use(getTaskStatus)
+  .use(updateIndex)
 
 export default bsoTasksRoutes

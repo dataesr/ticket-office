@@ -7,11 +7,10 @@ import patchBsoLocalVariationsPublicationsByIdRoute from "./patch_id"
 import postBsoLocalVariationsPublicationsRoute from "./post"
 
 export const bsoLocalVariationsPublicationsRoutes = new Elysia()
-
-bsoLocalVariationsPublicationsRoutes.use(getBsoLocalVariationsPublicationsRoute)
-bsoLocalVariationsPublicationsRoutes.use(getBsoLocalVariationsPublicationsByIdRoute)
-bsoLocalVariationsPublicationsRoutes.use(patchBsoLocalVariationsPublicationsRoute)
-bsoLocalVariationsPublicationsRoutes.use(patchBsoLocalVariationsPublicationsByIdRoute)
-bsoLocalVariationsPublicationsRoutes.use(postBsoLocalVariationsPublicationsRoute)
+  .use(getBsoLocalVariationsPublicationsRoute)
+  .use(getBsoLocalVariationsPublicationsByIdRoute)
+  .use(patchBsoLocalVariationsPublicationsRoute)
+  .use(patchBsoLocalVariationsPublicationsByIdRoute)
+  .use(postBsoLocalVariationsPublicationsRoute)
 
 export default bsoLocalVariationsPublicationsRoutes

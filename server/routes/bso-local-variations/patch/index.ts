@@ -10,37 +10,32 @@ import { variationParams } from "../../../schemas/get_id/variationSchema"
 const patchBsoLocalVariationsRoute = new Elysia().patch(
   "/bso-local-variations/:api",
   async ({ body, params: { api }, set }) => {
-    try {
-      const { ids, data } = body
+    const { ids, data } = body
 
-      if (data.status === "treated") {
-        data.treated_at = new Date()
-      }
-
-      const collection = `bso_local_variations_${api}`
-      const { acknowledged } = await db
-        .collection(collection)
-        .updateMany(
-          { id: { $in: ids } },
-          { $set: { ...dot(data), modified_at: new Date() } }
-        )
-
-      if (!acknowledged) {
-        set.status = 500
-        return { message: "Erreur interne du serveur" }
-      }
-
-      const updatedVariations: unknown = await db
-        .collection(collection)
-        .find({ id: { $in: ids } })
-        .limit(Math.min(ids.length, 2000))
-        .toArray()
-
-      return updatedVariations as typeof variationListSchema.static
-    } catch (error) {
-      set.status = 500
-      return { message: "Error processing request" }
+    if (data.status === "treated") {
+      data.treated_at = new Date()
     }
+
+    const collection = `bso_local_variations_${api}`
+    const { acknowledged } = await db
+      .collection(collection)
+      .updateMany(
+        { id: { $in: ids } },
+        { $set: { ...dot(data), modified_at: new Date() } }
+      )
+
+    if (!acknowledged) {
+      set.status = 500
+      return { message: "Erreur interne du serveur" }
+    }
+
+    const updatedVariations: unknown = await db
+      .collection(collection)
+      .find({ id: { $in: ids } })
+      .limit(Math.min(ids.length, 2000))
+      .toArray()
+
+    return updatedVariations as typeof variationListSchema.static
   },
   {
     body: editVariationsSchema,

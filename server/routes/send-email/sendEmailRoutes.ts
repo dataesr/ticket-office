@@ -2,9 +2,7 @@ import { Elysia } from "elysia";
 import { errorSchema } from "../../schemas/errors/errorSchema";
 import { postSendEmailSchema } from "../../schemas/post/sendEmailSchema";
 
-const sendEmail = new Elysia();
-
-sendEmail.post(
+const sendEmail = new Elysia().post(
   "/send-email",
   async ({ body, set }) => {
     try {

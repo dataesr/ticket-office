@@ -2,8 +2,6 @@ import { Elysia, t } from "elysia"
 import { errorSchema } from "../../../schemas/errors/errorSchema"
 import Storage from "../../../libs/swift-client"
 
-const uploadFileRoute = new Elysia()
-
 const bodySchema = t.Object(
   {
     buffer: t.Any(),
@@ -24,29 +22,24 @@ const responseSchema = t.Object({
   container: t.String(),
 })
 
-uploadFileRoute.post(
+const uploadFileRoute = new Elysia().post(
   "/storage",
   async ({ set, body }) => {
-    try {
-      const { buffer, container, filename, mimetype } = body
-      const response: any = await Storage.put(buffer, container, filename, {
-        contentType: mimetype,
-      })
+    const { buffer, container, filename, mimetype } = body
+    const response: any = await Storage.put(buffer, container, filename, {
+      contentType: mimetype,
+    })
 
-      if (!response?.name && !response?.size) {
-        set.status = 500
-        return { message: "Failed to upload the file" }
-      }
-
-      return {
-        name: response.name,
-        etag: response.etag,
-        lastModified: response.lastModified,
-        container: response.container,
-      }
-    } catch (error) {
+    if (!response?.name && !response?.size) {
       set.status = 500
-      return { message: "Error processing request" }
+      return { message: "Failed to upload the file" }
+    }
+
+    return {
+      name: response.name,
+      etag: response.etag,
+      lastModified: response.lastModified,
+      container: response.container,
     }
   },
   {
