@@ -111,37 +111,38 @@ async function checkAndNotifyCertificates(notify: boolean) {
   return report;
 }
 
-// If not in dev mode (run in local)
-if (process.env.APP_ENV === "production") {
-  // Initial delay until midnight
-  function getDelayUntilMidnight() {
-    const now: Date = new Date();
-    const nextMorning: Date = new Date(now);
-    nextMorning.setDate(nextMorning.getDate() + 1); // Set to next day
-    nextMorning.setHours(6, 0, 0, 0); // Set to next day at 06:00:00.000, server time
-    return nextMorning.getTime() - now.getTime(); // Difference in milliseconds
-  }
-  const initialDelay = getDelayUntilMidnight();
-  // Run once at 6 AM, then every 24 hours, server time
-  setTimeout(() => {
-    checkAndNotifyCertificates(true); // Run once at 6 AM, server time
-    setInterval(() => checkAndNotifyCertificates(true), 24 * 60 * 60 * 1000); // Repeat every 24 hours
-  }, initialDelay);
-} else {
-  console.log(
-    "Mode développement: vérification périodique des certificats désactivée"
-  );
+function getDelayUntilMidnight() {
+  const now: Date = new Date();
+  const nextMorning: Date = new Date(now);
+  nextMorning.setDate(nextMorning.getDate() + 1); // Set to next day
+  nextMorning.setHours(6, 0, 0, 0); // Set to next day at 06:00:00.000, server time
+  return nextMorning.getTime() - now.getTime(); // Difference in milliseconds
 }
 
-export const certificatsRoutes = new Elysia({ prefix: "/certificats" }).get(
-  "/",
-  async () => {
+// Run once at 6 AM, then every 24 hours, server time
+function scheduleCertificateChecks() {
+  setTimeout(() => {
+    checkAndNotifyCertificates(true);
+    setInterval(() => checkAndNotifyCertificates(true), 24 * 60 * 60 * 1000);
+  }, getDelayUntilMidnight());
+}
+
+export const certificatsRoutes = new Elysia({ prefix: "/certificats" })
+  .onStart(() => {
+    if (process.env.APP_ENV === "production") {
+      scheduleCertificateChecks();
+    } else {
+      console.log(
+        "Mode développement: vérification périodique des certificats désactivée"
+      );
+    }
+  })
+  .get("/", async () => {
     const rapport = await checkAndNotifyCertificates(false);
     return {
       certificates: rapport.sort((a, b) => a.joursRestants - b.joursRestants),
       date: new Date().toISOString().split("T")[0],
     };
-  }
-);
+  });
 
 export default certificatsRoutes;
