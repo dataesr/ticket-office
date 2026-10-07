@@ -90,38 +90,67 @@ async function checkAndNotifyCertificates(notify: boolean) {
   return report;
 }
 
-function getDelayUntilMidnight() {
-  const now: Date = new Date();
-  const nextMorning: Date = new Date(now);
-  nextMorning.setDate(nextMorning.getDate() + 1); // Set to next day
-  nextMorning.setHours(6, 0, 0, 0); // Set to next day at 06:00:00.000, server time
-  return nextMorning.getTime() - now.getTime(); // Difference in milliseconds
+const CHECK_HOUR = 6;
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+
+export function getNextCheckDate(now: Date = new Date()): Date {
+  const next = new Date(now);
+  next.setHours(CHECK_HOUR, 0, 0, 0);
+  if (next.getTime() <= now.getTime()) {
+    next.setDate(next.getDate() + 1);
+  }
+  return next;
+}
+
+async function runScheduledCheck() {
+  console.log("[certificats] Vérification quotidienne en cours...");
+  try {
+    const report = await checkAndNotifyCertificates(true);
+    const alerts = report.filter(
+      (certificate) =>
+        !certificate.error && shouldNotifyCertificate(certificate.joursRestants)
+    );
+    const errors = report.filter((certificate) => certificate.error);
+    console.log(
+      `[certificats] ${report.length} sites vérifiés, ${alerts.length} alerte(s), ${errors.length} en erreur`
+    );
+  } catch (error) {
+    console.error("[certificats] Échec de la vérification:", error);
+  }
 }
 
 // Run once at 6 AM, then every 24 hours, server time
 function scheduleCertificateChecks() {
+  const nextCheck = getNextCheckDate();
+  console.log(
+    `[certificats] Prochaine vérification planifiée le ${nextCheck.toISOString()}`
+  );
   setTimeout(() => {
-    checkAndNotifyCertificates(true);
-    setInterval(() => checkAndNotifyCertificates(true), 24 * 60 * 60 * 1000);
-  }, getDelayUntilMidnight());
+    runScheduledCheck();
+    setInterval(runScheduledCheck, ONE_DAY_MS);
+  }, nextCheck.getTime() - Date.now());
 }
 
-export const certificatsRoutes = new Elysia({ prefix: "/certificats" })
-  .onStart(() => {
-    if (process.env.APP_ENV === "production") {
-      scheduleCertificateChecks();
-    } else {
-      console.log(
-        "Mode développement: vérification périodique des certificats désactivée"
-      );
-    }
-  })
-  .get("/", async () => {
+export function startCertificateChecks() {
+  if (process.env.APP_ENV === "production") {
+    console.log("Démarrage de la vérification périodique des certificats...");
+    scheduleCertificateChecks();
+  } else {
+    console.log(
+      "Mode développement: vérification périodique des certificats désactivée"
+    );
+  }
+}
+
+export const certificatsRoutes = new Elysia({ prefix: "/certificats" }).get(
+  "/",
+  async () => {
     const rapport = await checkAndNotifyCertificates(false);
     return {
       certificates: rapport.sort((a, b) => a.joursRestants - b.joursRestants),
       date: new Date().toISOString().split("T")[0],
     };
-  });
+  }
+);
 
 export default certificatsRoutes;

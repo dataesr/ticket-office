@@ -10,14 +10,18 @@ import contactsRoutes from "./routes/contacts";
 import contributionObjectRoutes from "./routes/contributionObjectRoutes";
 import getLastMailsSentRoutes from "./routes/last-mails-sent";
 import productionsRoutes from "./routes/productions";
-import getReceivedMailsRoutes from "./routes/receive-email";
+import getReceivedMailsRoutes, {
+  startEmailChecks,
+} from "./routes/receive-email";
 import removeUserRoutes from "./routes/remove-user";
 import sendMailToContribution from "./routes/reply/replyRoutes";
 import sendEmail from "./routes/send-email/sendEmailRoutes";
 import storageRoutes from "./routes/storage";
 import updateUserDataRoutes from "./routes/update-user-data";
 import matomo from "./routes/matomo";
-import certificatsRoutes from "./routes/certificates";
+import certificatsRoutes, {
+  startCertificateChecks,
+} from "./routes/certificates";
 
 const ENV = Bun.env.NODE_ENV || "development";
 const PORT = parseInt(Bun.env.PORT || "3000");
@@ -128,6 +132,16 @@ createApp()
       ➜ Local:          ${serverUrl}
       ➜ Documentation:  ${serverUrl}swagger
     `);
+
+    // Jobs de fond : lancés explicitement une fois le serveur démarré.
+    // Chacun est isolé pour qu'un échec n'empêche pas l'autre de démarrer.
+    for (const startJob of [startCertificateChecks, startEmailChecks]) {
+      try {
+        startJob();
+      } catch (error) {
+        console.error(`[jobs] Échec du démarrage de ${startJob.name}:`, error);
+      }
+    }
   })
   .catch((error) => {
     console.error("Error while starting the server", error);

@@ -44,7 +44,7 @@ export const getSSLExpiryDate = async (hostname: string): Promise<Date> => {
 export const calculateRemainingDays = (expirationDate: Date): number => {
   const today = new Date();
   const diffTime = expirationDate.getTime() - today.getTime();
-  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return Math.floor(diffTime / (1000 * 60 * 60 * 24));
 };
 
 export const generateStatusAndUrgency = (
