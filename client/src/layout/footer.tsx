@@ -1,13 +1,13 @@
-import { Container, Link, Logo } from "@dataesr/dsfr-plus"
+import { Container, Link, Logo } from "@dataesr/dsfr-plus";
 
-import { version } from "../../../package.json"
+import { version } from "../../../package.json";
 import {
   Footer,
   FooterBody,
   FooterBottom,
   FooterTop,
-} from "../components/footer"
-import SwitchTheme from "./switch-theme"
+} from "../components/footer";
+import SwitchTheme from "./switch-theme";
 
 export default function MainFooter() {
   return (
@@ -58,20 +58,20 @@ export default function MainFooter() {
         </Link>
       </FooterBody>
       <FooterBottom>
-        <li className="fr-footer__bottom-item">
-          <button
-            aria-controls="fr-theme-modal"
-            className="fr-footer__bottom-link fr-icon-theme-fill fr-btn--icon-left"
-            data-fr-opened="false"
-          >
-            Paramètres d'affichage
-          </button>
-        </li>
-        <li className="fr-footer__bottom-item">
-          <a className="fr-footer__bottom-link" href={`https://github.com/dataesr/ticket-office/releases/tag/v${version}`} target='_blank'>
-            Version de l'application {version}
-          </a>
-        </li>
+        <button
+          aria-controls="fr-theme-modal"
+          className="fr-footer__bottom-link fr-icon-theme-fill fr-btn--icon-left"
+          data-fr-opened="false"
+        >
+          Paramètres d'affichage
+        </button>
+        <a
+          className="fr-footer__bottom-link"
+          href={`https://github.com/dataesr/ticket-office/releases/tag/v${version}`}
+          target="_blank"
+        >
+          Version de l'application {version}
+        </a>
       </FooterBottom>
       <SwitchTheme />
     </Footer>
