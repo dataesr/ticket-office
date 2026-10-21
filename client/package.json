@@ -11,7 +11,7 @@
     "update-deps": "git checkout -b upgrade-deps && npx npm-check-updates -u --target minor && bun install"
   },
   "dependencies": {
-    "@dataesr/dsfr-plus": "0.5.5",
+    "@dataesr/dsfr-plus": "0.6.7",
     "@tanstack/react-query": "^5.90.10",
     "@tanstack/react-query-devtools": "^5.90.2",
     "@types/react-select": "^5.0.1",
