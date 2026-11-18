@@ -15,7 +15,7 @@
       "name": "client",
       "version": "4.1.1",
       "dependencies": {
-        "@dataesr/dsfr-plus": "0.6.7",
+        "@dataesr/dsfr-plus": "^1.15.0",
         "@tanstack/react-query": "^5.90.10",
         "@tanstack/react-query-devtools": "^5.90.2",
         "@types/react-select": "^5.0.1",
@@ -120,7 +120,7 @@
 
     "@borewit/text-codec": ["@borewit/text-codec@0.1.1", "", {}, "sha512-5L/uBxmjaCIX5h8Z+uu+kA9BQLkc/Wl06UGR5ajNRxu+/XjonB5i8JpgFMrPj3LXTCPA0pv8yxUvbUi+QthGGA=="],
 
-    "@dataesr/dsfr-plus": ["@dataesr/dsfr-plus@0.6.7", "", { "dependencies": { "classnames": "2.3.2", "react-aria": "^3.52.1", "react-polymorphed": "^2.2.1", "react-stately": "^3.50.0" }, "peerDependencies": { "@gouvfr/dsfr": "1.11.0", "react": ">=18.2.0", "react-dom": ">=18.2.0" } }, "sha512-irrw4V93DDBZ5nB/5bKKeVuj6BS05H4dRHszM0tpp6CFmu0h/9DC5kuy7uxDzTnKIOaAeOYea29y19iOCjr5Cg=="],
+    "@dataesr/dsfr-plus": ["@dataesr/dsfr-plus@1.15.0", "", { "dependencies": { "classnames": "^2.5.1", "react-aria": "^3.53.1", "react-polymorphed": "^2.2.2", "react-stately": "^3.51.0" }, "peerDependencies": { "@gouvfr/dsfr": "^1.15.4", "react": ">=18.2.0", "react-dom": ">=18.2.0" } }, "sha512-rAuqVKZ1s1/aoM/r7DjDW3y7F2Zx8pXR5nzVIzz24MuwwawdrrkcvcBSTbCX35cKti3gbUOxmG5OUtBP5deWJw=="],
 
     "@elysiajs/cors": ["@elysiajs/cors@1.4.2", "", { "peerDependencies": { "elysia": ">= 1.4.0" } }, "sha512-FTCcbH35brTLigF1W7BYySRZomgI/dBEMK9BgK9RP9Nez7zmpGh4koL/Yr1BFv8nYz7CfhRvcM8d/c+XnwMaVQ=="],
 
@@ -534,7 +534,7 @@
 
     "chokidar": ["chokidar@4.0.3", "", { "dependencies": { "readdirp": "^4.0.1" } }, "sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA=="],
 
-    "classnames": ["classnames@2.3.2", "", {}, "sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw=="],
+    "classnames": ["classnames@2.5.1", "", {}, "sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow=="],
 
     "client": ["client@workspace:client"],
 
