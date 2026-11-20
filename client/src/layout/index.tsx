@@ -10,6 +10,7 @@ import {
   Nav,
   NavItem,
   Service,
+  Skiplinks,
 } from "@dataesr/dsfr-plus";
 
 import { version } from "../../../package.json";
@@ -45,6 +46,13 @@ export default function Layout() {
 
   return (
     <>
+      <Skiplinks
+        links={[
+          { href: "#content", label: "Contenu" },
+          { href: "#navigation", label: "Menu" },
+          { href: "#footer", label: "Pied de page" },
+        ]}
+      />
       <Header>
         <Logo
           splitCharacter="|"
@@ -59,7 +67,7 @@ export default function Layout() {
             {profile ? `Salut ${profile} !` : "Mon profil"}
           </Button>
         </FastAccess>
-        <Nav>
+        <Nav id="navigation">
           {navLink("/", "Accueil")}
           <NavItem title="scanR" current={pathname.startsWith("/scanr")}>
             {navLink("/scanr-contributionPage", "Contribution par objet")}
