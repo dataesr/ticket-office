@@ -39,12 +39,15 @@ Client is started at http://localhost:5173.
 
 The version number follows [semver](https://semver.org/).
 
-To deploy in production, simply run this command from your staging branch :
+To deploy in production, commit your changes, then run this command from your staging branch :
 
-`bun run deploy:[patch|minor|major]`
+```
+bun run deploy patch   # 4.1.1 → 4.1.2
+bun run deploy minor   # 4.1.1 → 4.2.0
+bun run deploy major   # 4.1.1 → 5.0.0
+```
 
 ⚠️ Obviously, only members of the [dataesr organization](https://github.com/dataesr/) have rights to push on the repo.
-
 
 ## Issues
 
