@@ -40,7 +40,7 @@ export default function FiltersBar() {
             onChange={(e) => handleStatusChange(e.target.value)}
             className="fr-select"
           >
-            <option value={"choose"}>Tous les status</option>
+            <option value={"choose"}>Tous les statuts</option>
             <option value={"new"}>Nouveau</option>
             <option value={"ongoing"}>En cours</option>
             <option value={"treated"}>Traité</option>

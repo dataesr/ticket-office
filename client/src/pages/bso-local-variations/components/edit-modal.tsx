@@ -97,115 +97,33 @@ export default function EditModal({ variations, isOpen, onClose }: EditModalProp
   }
 
   return (
-    <>
-      <Modal isOpen={isOpen} hide={onClose}>
-        <ModalTitle>{singleVariation ? "Éditer la demande" : `Éditer ${variations.length} demandes`}</ModalTitle>
-        <ModalContent>
-          <Tabs>
-            {singleVariation && (
-              <Tab label="Infos" icon="user-line">
-                <TextInput
-                  label="Email de contact"
-                  defaultValue={singleVariation.contact.email}
-                  onChange={(e) => handleContactChange("email", e.target.value)}
-                />
-                <TextInput
-                  label="Nom de la structure"
-                  defaultValue={singleVariation.structure.name}
-                  onChange={(e) => handleStructureChange("name", e.target.value)}
-                />
-                <TextInput
-                  label="ID de la structure"
-                  defaultValue={singleVariation.structure?.id}
-                  onChange={(e) => handleStructureChange("id", e.target.value)}
-                />
-                <TextInput
-                  label="Acronyme de la structure"
-                  defaultValue={singleVariation.structure?.acronym}
-                  onChange={(e) => handleStructureChange("acronym", e.target.value)}
-                />
-                <Container fluid style={{ display: "flex", width: "100%", alignItems: "center" }}>
-                  <div style={{ flexGrow: 1 }}>
-                    <Button variant="secondary" onClick={handleClose}>
-                      Annuler
-                    </Button>
-                  </div>
-                  <Button variant="primary" onClick={handleSubmit}>
-                    Enregistrer
-                  </Button>
-                </Container>
-              </Tab>
-            )}
-            <Tab label="Status" icon="checkbox-line">
-              <div className="fr-select-group">
-                <label htmlFor="statusInput" className="fr-label">
-                  Statut
-                </label>
-                <select
-                  id="statusInput"
-                  name="status"
-                  value={inputs?.status || singleVariation?.status || "none"}
-                  onChange={(e) => handleInputChange("status", e.target.value)}
-                  className="fr-select"
-                >
-                  <option value={"new"}>Nouveau</option>
-                  <option value={"ongoing"}>En cours</option>
-                  <option value={"treated"}>Traité</option>
-                  <option value={"question"}>Question</option>
-                  <option value={"ko"}>KO</option>
-                </select>
-              </div>
-              <hr />
-              <Row gutters>
-                <Col md="6" xs="12">
-                  <div className="fr-select-group">
-                    <label htmlFor="fileTagInput" className="fr-label">
-                      Fichier
-                    </label>
-                    <select
-                      id="fileTagInput"
-                      name="fileTag"
-                      value={inputs?.tags?.file || singleVariation?.tags?.file || "none"}
-                      onChange={(e) => handleTagChange("file", e.target.value)}
-                      className="fr-select"
-                    >
-                      {Object.entries(VARIATION_TAGS.file).map(([key, { name }]) => (
-                        <option key={key} value={key}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <br />
-                </Col>
-                <Col md="6" xs="12">
-                  <div className="fr-select-group">
-                    <label htmlFor="notificationTagInput" className="fr-label">
-                      Messages
-                    </label>
-                    <select
-                      id="notificationTagInput"
-                      name="notificationTag"
-                      value={inputs?.tags?.notification || singleVariation?.tags?.notification || "none"}
-                      onChange={(e) => handleTagChange("notification", e.target.value)}
-                      className="fr-select"
-                    >
-                      {Object.entries(VARIATION_TAGS.notification).map(([key, { name }]) => (
-                        <option key={key} value={key}>
-                          {name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </Col>
-              </Row>
-              <hr />
-              <TextArea
-                label="Commentaire"
-                value={inputs.comment}
-                onChange={(e) => handleInputChange("comment", e.target.value)}
+    <Modal isOpen={isOpen} hide={onClose}>
+      <ModalTitle>{singleVariation ? "Éditer la demande" : `Éditer ${variations.length} demandes`}</ModalTitle>
+      <ModalContent>
+        <Tabs>
+          {singleVariation && (
+            <Tab label="Infos" icon="user-line">
+              <TextInput
+                label="Email de contact"
+                defaultValue={singleVariation.contact.email}
+                onChange={(e) => handleContactChange("email", e.target.value)}
               />
-              <Container style={{ display: "flex", width: "100%", alignItems: "center" }}>
+              <TextInput
+                label="Nom de la structure"
+                defaultValue={singleVariation.structure.name}
+                onChange={(e) => handleStructureChange("name", e.target.value)}
+              />
+              <TextInput
+                label="ID de la structure"
+                defaultValue={singleVariation.structure?.id}
+                onChange={(e) => handleStructureChange("id", e.target.value)}
+              />
+              <TextInput
+                label="Acronyme de la structure"
+                defaultValue={singleVariation.structure?.acronym}
+                onChange={(e) => handleStructureChange("acronym", e.target.value)}
+              />
+              <Container fluid style={{ display: "flex", width: "100%", alignItems: "center" }}>
                 <div style={{ flexGrow: 1 }}>
                   <Button variant="secondary" onClick={handleClose}>
                     Annuler
@@ -216,9 +134,89 @@ export default function EditModal({ variations, isOpen, onClose }: EditModalProp
                 </Button>
               </Container>
             </Tab>
-          </Tabs>
-        </ModalContent>
-      </Modal>
-    </>
+          )}
+          <Tab label="Statut" icon="checkbox-line">
+            <div className="fr-select-group">
+              <label htmlFor="statusInput" className="fr-label">
+                Statut
+              </label>
+              <select
+                id="statusInput"
+                name="status"
+                value={inputs?.status || singleVariation?.status || "none"}
+                onChange={(e) => handleInputChange("status", e.target.value)}
+                className="fr-select"
+              >
+                <option value={"new"}>Nouveau</option>
+                <option value={"ongoing"}>En cours</option>
+                <option value={"treated"}>Traité</option>
+                <option value={"question"}>Question</option>
+                <option value={"ko"}>KO</option>
+              </select>
+            </div>
+            <hr />
+            <Row gutters>
+              <Col md="6" xs="12">
+                <div className="fr-select-group">
+                  <label htmlFor="fileTagInput" className="fr-label">
+                    Fichier
+                  </label>
+                  <select
+                    id="fileTagInput"
+                    name="fileTag"
+                    value={inputs?.tags?.file || singleVariation?.tags?.file || "none"}
+                    onChange={(e) => handleTagChange("file", e.target.value)}
+                    className="fr-select"
+                  >
+                    {Object.entries(VARIATION_TAGS.file).map(([key, { name }]) => (
+                      <option key={key} value={key}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <br />
+              </Col>
+              <Col md="6" xs="12">
+                <div className="fr-select-group">
+                  <label htmlFor="notificationTagInput" className="fr-label">
+                    Messages
+                  </label>
+                  <select
+                    id="notificationTagInput"
+                    name="notificationTag"
+                    value={inputs?.tags?.notification || singleVariation?.tags?.notification || "none"}
+                    onChange={(e) => handleTagChange("notification", e.target.value)}
+                    className="fr-select"
+                  >
+                    {Object.entries(VARIATION_TAGS.notification).map(([key, { name }]) => (
+                      <option key={key} value={key}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </Col>
+            </Row>
+            <hr />
+            <TextArea
+              label="Commentaire"
+              value={inputs.comment}
+              onChange={(e) => handleInputChange("comment", e.target.value)}
+            />
+            <Container style={{ display: "flex", width: "100%", alignItems: "center" }}>
+              <div style={{ flexGrow: 1 }}>
+                <Button variant="secondary" onClick={handleClose}>
+                  Annuler
+                </Button>
+              </div>
+              <Button variant="primary" onClick={handleSubmit}>
+                Enregistrer
+              </Button>
+            </Container>
+          </Tab>
+        </Tabs>
+      </ModalContent>
+    </Modal>
   )
 }
