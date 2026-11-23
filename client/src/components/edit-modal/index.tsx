@@ -232,7 +232,10 @@ const EditModal: React.FC<EditModalProps> = ({
         isOpen={showTagModal}
         allTags={filteredTags}
         onClose={(selectedTags) => {
-          handleInputChange("tags", selectedTags);
+          setInputs((prev) => ({
+            ...prev,
+            tags: [...new Set([...prev.tags, ...selectedTags])],
+          }));
           setShowTagModal(false);
         }}
       />
