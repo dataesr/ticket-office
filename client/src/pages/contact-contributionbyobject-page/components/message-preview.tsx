@@ -14,7 +14,7 @@ const OBJECT_LINKS: Record<string, { scanr: string; dataesr?: string }> = {
     dataesr: `${DATAESR_URL}/organizations/`,
   },
   publications: {
-    scanr: `${SCANR_URL}/publication/`,
+    scanr: `${SCANR_URL}/publications/`,
     dataesr: `${DATAESR_URL}/publications/`,
   },
   persons: {
@@ -173,7 +173,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
                   className="fr-btn fr-btn--tertiary fr-btn--sm fr-icon-external-link-line"
                   target="_blank"
                   rel="noopener noreferrer"
-                  href={`${OBJECT_LINKS[data.objectType].scanr}${data.objectId}`}
+                  href={`${OBJECT_LINKS[data.objectType].scanr}${encodeURIComponent(data.objectId)}`}
                 >
                   Sur scanR
                 </a>
