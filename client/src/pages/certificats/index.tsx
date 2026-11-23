@@ -68,8 +68,6 @@ const OrganismeBadge = ({ organisme }: { organisme: Organisme }) => (
   </Badge>
 );
 
-console.log(CERTIFICATE_OWNERS, "coucou");
-
 const Certificats = () => {
   const { data, isLoading, error } = useCertificates();
   return (

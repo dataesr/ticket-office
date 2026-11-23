@@ -14,13 +14,13 @@ export const variationSchema = t.Object(
     tags: t.Object({
       file: t.Enum({ none: "none", uploaded: "uploaded" }),
       index: t.Optional(t.String()),
-      notification: t.Enum({ none: "none", ongoing: "ongoing", done: "done" }),
+      notification: t.Enum({ done: "done", none: "none", ongoing: "ongoing", scanr: "scanr" }),
     }),
     csv: t.String(),
     created_at: t.Optional(t.Union([t.String(), t.Date()])),
     modified_at: t.Optional(t.Union([t.String(), t.Date()])),
     treated_at: t.Optional(t.Union([t.String(), t.Date()])),
-    status: t.Enum({ ko: "ko", new: "new", ongoing: "ongoing", question: "question", treated: "treated" }),
+    status: t.Enum({ ko: "ko", new: "new", ongoing: "ongoing", question: "question", scanr: "scanr", treated: "treated" }),
     team: t.Optional(t.String()),
     comment: t.Optional(t.String()),
     threads: t.Optional(

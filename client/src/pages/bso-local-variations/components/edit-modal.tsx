@@ -149,6 +149,7 @@ export default function EditModal({ variations, isOpen, onClose }: EditModalProp
               >
                 <option value={"new"}>Nouveau</option>
                 <option value={"ongoing"}>En cours</option>
+                <option value={"scanr"}>En attente de scanR</option>
                 <option value={"treated"}>Traité</option>
                 <option value={"question"}>Question</option>
                 <option value={"ko"}>KO</option>

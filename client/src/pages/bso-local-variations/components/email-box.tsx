@@ -49,6 +49,9 @@ export default function EmailBox({ variation }: { variation: Variation }) {
               <option key="done" value="done" disabled={!variation.structure?.id || !commentsName}>
                 {notificationGetName("done", api)}
               </option>
+              <option key="scanr" value="scanr" disabled={!variation.structure?.id || !commentsName}>
+                {notificationGetName("scanr", api)}
+              </option>
             </select>
             <TextArea
               style={{ resize: "none" }}

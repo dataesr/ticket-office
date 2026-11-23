@@ -4,10 +4,8 @@ import editVariations from "./edit-variations";
 import { notificationGetTemplate } from "../config/notifications";
 
 const messageTemplate = (variation: Variation) =>
-  `<ul><li>Nom de la structure: ${
-    variation.structure.name
-  }</li><li>Identifiant de la structure: ${
-    variation.structure?.id || "Non renseigné"
+  `<ul><li>Nom de la structure: ${variation.structure.name
+  }</li><li>Identifiant de la structure: ${variation.structure?.id || "Non renseigné"
   }</li><li>Date de la demande: ${new Date(
     variation.created_at
   ).toLocaleDateString()}</li></ul>`;
@@ -56,16 +54,20 @@ export default async function sendEmails(
   useTemplate?: boolean,
   getCommentsName?: (id: string) => string
 ) {
+  const nextStatusFromNotification = {
+    "done": "scanr",
+    "scanr": "treated",
+  }
+
   // Set status as treated if final notification sent
   const inputs = {
-    tags: { notification: notification },
-    status: notification === "done" ? "treated" : "ongoing",
+    status: nextStatusFromNotification[notification] ?? "ongoing",
+    tags: { notification },
   };
 
   // If single variation and notification is custom, set correct status (should only happen from email-box)
   if (variations.length === 1 && notification === "custom")
-    inputs.status =
-      variations[0].tags?.notification === "done" ? "treated" : "ongoing";
+    inputs.status = nextStatusFromNotification[variations[0].tags?.notification] ?? "ongoing";
 
   Promise.all(
     variations.map((variation) =>
@@ -74,17 +76,17 @@ export default async function sendEmails(
         variation,
         useTemplate
           ? notificationGetTemplate(
-              notification,
-              api,
-              variation.structure?.id,
-              getCommentsName(variation.structure?.id)
-            )
+            notification,
+            api,
+            variation.structure?.id,
+            getCommentsName(variation.structure?.id)
+          )
           : response
       )
     )
   )
     .then(() => {
-      if (["custom", "ongoing", "done"].includes(notification)) {
+      if (["custom", "done", "scanr", "ongoing"].includes(notification)) {
         editVariations(
           api,
           variations.map((variation) => variation.id),
@@ -94,7 +96,7 @@ export default async function sendEmails(
       toast.success(
         variations?.length > 1
           ? "Les emails ont été envoyés avec succès !"
-          : "L'email à été envoyé avec succès !"
+          : "L'email a été envoyé avec succès !"
       );
     })
     .catch((error) => {

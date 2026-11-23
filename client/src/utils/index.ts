@@ -37,7 +37,9 @@ export const BadgeStatus = ({ status }) => {
     case "ongoing":
       badgeStatus = "brown-cafe-creme";
       break;
-
+    case "scanr":
+      badgeStatus = "blue-ecume";
+      break;
     default:
       badgeStatus = "purple-glycine";
   }
@@ -56,7 +58,9 @@ export const StatusLabel = ({ status }) => {
     case "ongoing":
       statusLabel = "En cours";
       break;
-
+    case "scanr":
+      statusLabel = "En attente de scanR";
+      break;
     default:
       statusLabel = status
   }
