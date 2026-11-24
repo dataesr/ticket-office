@@ -59,7 +59,6 @@ const BottomPaginationButtons = ({
         </li>
         {getPageEntries(page, maxPage).map((entry, index) =>
           entry === "ellipsis" ? (
-            // eslint-disable-next-line react/no-array-index-key
             <li key={`ellipsis-${index}`}>
               <span aria-hidden="true">…</span>
             </li>
