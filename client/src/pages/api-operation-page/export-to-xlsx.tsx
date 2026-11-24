@@ -5,6 +5,7 @@ import { Badge } from "@dataesr/dsfr-plus";
 import { useDataList } from "./data-list-context";
 import "./styles.scss";
 import { postHeaders } from "../../config/api";
+import { getApiRoute } from "../../config/api-routes";
 import { ContributionData, ExcelExportButtonProps } from "../../types";
 
 const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
@@ -32,11 +33,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
     );
 
   const markAsTreated = async (contributionIds: string[]) => {
-    const basePath = window.location.pathname.includes("contributionpage")
-      ? "contribute"
-      : window.location.pathname.includes("apioperations")
-        ? "contribute_productions"
-        : "contacts";
+    const basePath = getApiRoute(window.location.pathname);
 
     try {
       const responses = await Promise.all(
