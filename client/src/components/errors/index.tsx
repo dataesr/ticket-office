@@ -2,7 +2,7 @@ import { Notice } from "@dataesr/dsfr-plus";
 
 export default function Error404({ error }: { error?: unknown }) {
   return (
-    <div className="fr-container">
+    <main id="content" className="fr-container">
       <div className="fr-my-7w fr-mt-md-12w fr-mb-md-10w fr-grid-row fr-grid-row--gutters fr-grid-row--middle fr-grid-row--center">
         <div className="fr-py-0 fr-col-12 fr-col-md-6">
           <h1>Erreur !</h1>
@@ -60,6 +60,6 @@ export default function Error404({ error }: { error?: unknown }) {
           </svg>
         </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -81,12 +81,16 @@ const LastMailsSent: React.FC = () => {
     };
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <main id="content">
+        <Loader />
+      </main>
+    );
   }
 
   if (isError)
     return (
-      <Container className="fr-my-5w">
+      <Container as="main" id="content" className="fr-my-5w">
         <Text>Erreur lors du chargement des emails envoyés.</Text>
       </Container>
     );

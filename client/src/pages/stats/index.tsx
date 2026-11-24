@@ -103,7 +103,7 @@ const GetStats = () => {
     MATOMO_SITES[site as keyof typeof MATOMO_SITES]?.name || "Site";
 
   return (
-    <>
+    <main id="content">
       <PageBanner
         title="Statistiques Matomo"
         description={`Statistiques de ${currentSiteName}`}
@@ -167,7 +167,7 @@ const GetStats = () => {
           </div>
         )}
       </Container>
-    </>
+    </main>
   );
 };
 
