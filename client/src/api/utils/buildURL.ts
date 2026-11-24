@@ -2,7 +2,7 @@ import { VariationTags } from "../../pages/bso-local-variations/types";
 import { escapeRegex } from "./escapeRegex";
 
 export const buildURL = (
-  location: any,
+  location: { pathname: string },
   sort: string,
   status: string,
   query: string,
@@ -33,7 +33,7 @@ export const buildURL = (
 
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
 
-  const where: any = {};
+  const where: Record<string, unknown> = {};
   if (typeof query === "string" && query.trim() !== "") {
     const isObjectId = /^[0-9a-fA-F]{24}$/.test(query);
 
@@ -41,7 +41,7 @@ export const buildURL = (
       where.id = query;
     } else {
       const contains = { $regex: escapeRegex(query), $options: "i" };
-      where.$or =
+      const or: Record<string, unknown>[] =
         baseUrl === "variations"
           ? [
               { "structure.name": contains },
@@ -51,8 +51,9 @@ export const buildURL = (
           : [{ name: contains }, { id: contains }];
 
       if (searchInMessages) {
-        where.$or.push({ message: contains });
+        or.push({ message: contains });
       }
+      where.$or = or;
     }
   }
 
