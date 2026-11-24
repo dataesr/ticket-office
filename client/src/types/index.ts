@@ -54,6 +54,7 @@ export interface Contribute_Production extends BaseContribution {
 }
 
 export interface UnifiedContribution {
+  collectionName: string;
   contact?: { email?: string };
   csv?: string;
   id: string;

@@ -1,8 +1,3 @@
-import {
-  CONTACT_PATHS,
-  withContributionQuery,
-} from "../../utils/contribution-links";
-
 const collectionNameMapping: { [key: string]: string } = {
   contribute: "Contribution par objets",
   contacts: "Formulaire de contact",
@@ -106,30 +101,3 @@ export const filterSentEmails = (
     return true;
   });
 };
-
-export function generateLink(
-  collectionName: string,
-  fromApplication?: string,
-  id?: string
-): string {
-  const basePathMap: { [key: string]: { [key: string]: string } | string } = {
-    contacts: CONTACT_PATHS,
-    contribute_production: "/scanr-apioperations",
-    "remove-user": "/scanr-removeuser",
-    "update-user-data": "/scanr-namechange",
-    contribute: "/scanr-contributionPage",
-    bso_local_variations_publications: "/bso-local-variations-publications",
-  };
-
-  let basePath = "";
-  if (collectionName === "contacts" && fromApplication) {
-    basePath =
-      (basePathMap[collectionName] as { [key: string]: string })[
-        fromApplication
-      ] || "";
-  } else {
-    basePath = (basePathMap[collectionName] as string) || "";
-  }
-
-  return withContributionQuery(basePath, id);
-}

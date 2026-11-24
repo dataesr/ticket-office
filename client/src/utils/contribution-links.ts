@@ -1,13 +1,12 @@
-export const CONTACT_PATHS: Record<string, string> = {
-  scanr: "/scanr-contact",
-  paysage: "/paysage-contact",
-  bso: "/bso-contact",
-  curiexplore: "/curiexplore-contact",
-  "works-magnet": "/works-magnet-contact",
-  tableaux: "/tableaux-contact",
-};
+import { getPagePath } from "../config/api-routes";
 
-export const withContributionQuery = (basePath: string, id?: string) =>
-  id
-    ? `${basePath}?page=1&query=${id}&searchInMessage=false&sort=DESC&status=choose`
-    : basePath;
+export const getContributionLink = (
+  collectionName: string,
+  fromApplication?: string,
+  id?: string
+) => {
+  const path = getPagePath(collectionName, fromApplication);
+  return id
+    ? `${path}?page=1&query=${id}&searchInMessage=false&sort=DESC&status=choose`
+    : path;
+};

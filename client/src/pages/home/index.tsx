@@ -16,10 +16,10 @@ const Home = () => {
 
   const { data, isLoading, isError } = ContributionAllData(search.trim());
 
-  const filteredData = useMemo(() => {
-    const items = (data ?? []).flatMap((route) => route.data || []);
-    return filterContributions(items, search);
-  }, [data, search]);
+  const filteredData = useMemo(
+    () => filterContributions(data ?? [], search),
+    [data, search]
+  );
 
   const handleSearch = (value: string) => {
     const trimmed = value.trim();

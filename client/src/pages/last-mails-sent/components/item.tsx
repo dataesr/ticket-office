@@ -1,6 +1,7 @@
 import "./styles.scss";
 import { Badge } from "@dataesr/dsfr-plus";
-import collectionNameMapping, { generateLink, SentEmail } from "../utils";
+import collectionNameMapping, { SentEmail } from "../utils";
+import { getContributionLink } from "../../../utils/contribution-links";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
 
 interface LastMailsSentProps {
@@ -18,7 +19,7 @@ const SCANR_COLLECTIONS = [
 const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => (
   <div className="mail-list">
     {data.emails.map((mail, index) => {
-      const link = generateLink(
+      const link = getContributionLink(
         mail.collectionName,
         mail.fromApplication,
         mail.contributionId

@@ -1,6 +1,5 @@
 import { Badge, Link, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import { generateLinkFromAllDatas } from "../utils";
 import {
   BadgeColor,
   BadgeStatus,
@@ -9,12 +8,16 @@ import {
   TypeLabel,
 } from "../../../utils";
 import { UnifiedContribution } from "../../../types";
+import { getContributionLink } from "../../../utils/contribution-links";
 
 import MarkdownRenderer from "../../../utils/markdownRenderer";
 import { formatDate, formatTime } from "../../../utils/format-date";
 
 type ContributionBadgesProps = { contribution: UnifiedContribution };
-type ContributionItemProps = { contribution: UnifiedContribution; index: number };
+type ContributionItemProps = {
+  contribution: UnifiedContribution;
+  index: number;
+};
 type AllContributionsProps = { data: UnifiedContribution[]; query?: string };
 
 const getContributionTitle = (contribution: UnifiedContribution): string =>
@@ -107,16 +110,10 @@ const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
 };
 
 const ContributionItem = ({ contribution }: ContributionItemProps) => {
-  const link = generateLinkFromAllDatas(
-    contribution.fromApplication || "",
-    contribution.id,
-    contribution.objectId,
-    contribution.productions
-      ? JSON.stringify(contribution.productions)
-      : undefined,
-    contribution.message,
-    contribution.contributionType,
-    !!contribution.csv
+  const link = getContributionLink(
+    contribution.collectionName,
+    contribution.fromApplication,
+    contribution.id
   );
 
   return (
@@ -139,7 +136,8 @@ const ContributionItem = ({ contribution }: ContributionItemProps) => {
             )}
             {contribution?.contact?.email && (
               <Text as="p" size="sm" className="fr-mb-1w">
-                Mail du demandeur : <strong>{contribution.contact.email}</strong>
+                Mail du demandeur :{" "}
+                <strong>{contribution.contact.email}</strong>
               </Text>
             )}
             {contribution?.message && (

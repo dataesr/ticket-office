@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { API_ROUTES } from "../config/api-routes";
+import { COLLECTIONS } from "../config/api-routes";
 import { escapeRegex } from "./utils/escapeRegex";
 import { fetchJson } from "./utils/fetchJson";
 
@@ -35,17 +35,23 @@ const buildWhere = (search: string) => {
 export const ContributionAllData = (search = "") => {
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["allContributions", search],
-    queryFn: () => {
+    queryFn: async () => {
       const maxResults = search ? 2000 : 200;
       const where = encodeURIComponent(JSON.stringify(buildWhere(search)));
-      return Promise.all(
-        API_ROUTES.map((route) =>
+      const responses = await Promise.all(
+        COLLECTIONS.map(({ api }) =>
           fetchJson(
-            `/api/${route}?sort=-created_at&max_results=${maxResults}&where=${where}`,
+            `/api/${api}?sort=-created_at&max_results=${maxResults}&where=${where}`,
             {},
-            `Failed to fetch from ${route}`
+            `Failed to fetch from ${api}`
           )
         )
+      );
+      return responses.flatMap(({ data }, index) =>
+        (data || []).map((item) => ({
+          ...item,
+          collectionName: COLLECTIONS[index].collection,
+        }))
       );
     },
     placeholderData: keepPreviousData,
