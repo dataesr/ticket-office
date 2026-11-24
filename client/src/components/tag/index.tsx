@@ -29,31 +29,3 @@ export function DismissibleTag({
     </button>
   );
 }
-
-type SelectableTagProps = TagProps & {
-  selected: boolean;
-  onClick: () => void;
-};
-
-export function SelectableTag({
-  children,
-  size = "sm",
-  className,
-  selected,
-  onClick,
-}: SelectableTagProps) {
-  const classes = ["fr-tag"];
-  if (size === "sm") classes.push("fr-tag--sm");
-  if (className) classes.push(className);
-
-  return (
-    <button
-      type="button"
-      className={classes.join(" ")}
-      aria-pressed={selected}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}

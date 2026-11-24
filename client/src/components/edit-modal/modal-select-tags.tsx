@@ -1,6 +1,6 @@
 import { useState } from "react";
+import { SelectableTag } from "@dataesr/dsfr-plus";
 import Modal from "../modal";
-import { SelectableTag } from "../tag";
 import { TagSelectionModalProps } from "../../types";
 
 const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
@@ -31,6 +31,8 @@ const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
         {allTags.map((tag) => (
           <li key={tag}>
             <SelectableTag
+              type="button"
+              size="sm"
               selected={selectedTags.includes(tag)}
               onClick={() => toggleTag(tag)}
             >
