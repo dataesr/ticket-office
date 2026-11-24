@@ -11,5 +11,10 @@ export default [
   reactHooks.configs.flat.recommended,
   reactRefresh.configs.vite,
   prettier,
-  { languageOptions: { globals: globals.browser } },
+  {
+    languageOptions: { globals: globals.browser },
+    rules: {
+      "@typescript-eslint/no-unused-vars": ["error", { ignoreRestSiblings: true }],
+    },
+  },
 ];
