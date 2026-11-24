@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Container, Text } from "@dataesr/dsfr-plus";
 import Loader from "../../components/loader";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
@@ -20,9 +20,10 @@ import "./components/styles.scss";
 const PAGE_SIZE = 10;
 
 const LastMailsSent: React.FC = () => {
-  const location = useLocation();
-  const [query, setQuery] = useState<string[]>([]);
-  const [page, setPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const page = parseInt(searchParams.get("page") || "1");
+  const queryParam = searchParams.get("query");
+  const query = queryParam ? queryParam.split(",") : [];
   const [profile, setProfile] = useState("all");
   const [objectType, setObjectType] = useState("all");
   const [application, setApplication] = useState("all");
@@ -56,37 +57,29 @@ const LastMailsSent: React.FC = () => {
     )
     .slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    setPage(parseInt(params.get("page") || "1"));
-    const queryParam = params.get("query") || "";
-    setQuery(queryParam ? queryParam.split(",") : []);
-  }, [location.search]);
+  const updateUrl = (newPage: number, newQuery = query) => {
+    const params = new URLSearchParams({ page: newPage.toString() });
+    if (newQuery.length > 0) params.set("query", newQuery.join(","));
+    setSearchParams(params);
+  };
 
-  useEffect(() => {
-    const params = new URLSearchParams();
-    params.set("page", page.toString());
-    if (query.length > 0) params.set("query", query.join(","));
-    window.history.pushState({}, "", `${window.location.pathname}?${params}`);
-  }, [page, query]);
+  const setPage = (newPage: number) => updateUrl(newPage);
 
   const handleSearch = (value: string) => {
     const trimmed = value.trim();
-    if (trimmed && !query.includes(trimmed)) {
-      setQuery([...query, trimmed]);
-      setPage(1);
-    }
+    if (trimmed && !query.includes(trimmed)) updateUrl(1, [...query, trimmed]);
   };
 
-  const handleRemoveQueryItem = (item: string) => {
-    setQuery(query.filter((q) => q !== item));
-    setPage(1);
-  };
+  const handleRemoveQueryItem = (item: string) =>
+    updateUrl(
+      1,
+      query.filter((q) => q !== item)
+    );
 
   const withPageReset =
     (setter: (value: string) => void) => (value: string) => {
       setter(value);
-      setPage(1);
+      if (page !== 1) setPage(1);
     };
 
   if (isLoading) {
