@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import HighlightedMessage from "../../../components/highlighted-message";
 import { capitalizeFirstLetter } from "../../../utils/capitalize";
 import { CopyButton } from "../../../components/copy-button";
@@ -67,14 +66,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
   data,
   highlightedQuery,
 }) => {
-  const location = useLocation();
   const copy = useCopyToClipboard();
-
-  const contributorMessageClassName = location.pathname.includes(
-    "contributionpage"
-  )
-    ? "contributorSideMessage"
-    : "contributorSideContactMessage";
 
   const extraEntries = data?.extra
     ? Object.entries(data.extra).filter(([, value]) => value !== "")
@@ -220,7 +212,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
         </ul>
       )}
 
-      <div className={`${contributorMessageClassName} fr-mb-3w`}>
+      <div className="contributorSideMessage fr-mb-3w">
         <HighlightedMessage
           message={data?.message}
           highlightedQuery={highlightedQuery}

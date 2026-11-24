@@ -10,8 +10,7 @@
   }
 }
 
-.contributorSideMessage,
-.contributorSideContactMessage {
+.contributorSideMessage {
   @extend .message-base;
   background-color: var(--background-alt-green-emeraude);
   border: 1px solid var(--background-alt-green-emeraude);
