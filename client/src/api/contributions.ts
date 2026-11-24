@@ -1,4 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { escapeRegex } from "./utils/escapeRegex";
 import { fetchJson } from "./utils/fetchJson";
 
 export const ContributionData = (url: string) => {
@@ -22,9 +23,6 @@ const routes = [
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const SEARCH_FIELDS = ["name", "email", "message", "id"];
-
-const escapeRegex = (value: string) =>
-  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const buildWhere = (search: string) => {
   if (search) {

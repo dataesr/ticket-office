@@ -1,4 +1,5 @@
 import { VariationTags } from "../../pages/bso-local-variations/types";
+import { escapeRegex } from "./escapeRegex";
 
 export const buildURL = (
   location: any,
@@ -39,22 +40,18 @@ export const buildURL = (
     if (isObjectId) {
       where.id = query;
     } else {
+      const contains = { $regex: escapeRegex(query), $options: "i" };
       where.$or =
         baseUrl === "variations"
           ? [
-              { "structure.name": { $regex: `.*${query}.*`, $options: "i" } },
-              { "structure.id": { $regex: `.*${query}.*`, $options: "i" } },
-              { "contact.email": { $regex: `.*${query}.*`, $options: "i" } },
+              { "structure.name": contains },
+              { "structure.id": contains },
+              { "contact.email": contains },
             ]
-          : [
-              { name: { $regex: `.*${query}.*`, $options: "i" } },
-              { id: { $regex: `.*${query}.*`, $options: "i" } },
-            ];
+          : [{ name: contains }, { id: contains }];
 
       if (searchInMessages) {
-        where.$or.push({
-          message: { $regex: `.*${query}.*`, $options: "i" },
-        });
+        where.$or.push({ message: contains });
       }
     }
   }
@@ -77,7 +74,9 @@ export const buildURL = (
   }
 
   const whereQuery =
-    Object.keys(where).length > 0 ? `&where=${JSON.stringify(where)}` : "";
+    Object.keys(where).length > 0
+      ? `&where=${encodeURIComponent(JSON.stringify(where))}`
+      : "";
 
   return `/api/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
 };
