@@ -32,7 +32,7 @@ export const useContributionFilters = (withObjectType = false) => {
   );
 
   const updateURL = (updates: Record<string, string>) =>
-    updateUrlParams(location.search, updates);
+    updateUrlParams(window.location.search, updates);
 
   const setPage = (newPage: number) => {
     setPageState(newPage);
