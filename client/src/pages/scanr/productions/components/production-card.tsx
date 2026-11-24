@@ -92,7 +92,12 @@ const ProductionCard = ({
           threads={contribution.threads}
           contributorName={contribution.name}
         />
-        <EmailSender contribution={contribution} refetch={refetch} />
+        <EmailSender
+          contribution={contribution}
+          refetch={refetch}
+          apiRoute="production"
+          collectionName="contribute_productions"
+        />
       </Accordion>
     </AccordionGroup>
   );

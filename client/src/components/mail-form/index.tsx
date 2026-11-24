@@ -2,7 +2,6 @@ import { useId, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { postHeaders } from "../../config/api";
-import { getApiRoute } from "../../config/api-routes";
 
 const TEMPLATES = [
   { label: "Accès API scanR", value: "API" },
@@ -48,13 +47,14 @@ function EmailForm({
   handlePreview,
   sendEmail,
   contribution,
+  apiRoute,
 }) {
   const templateSelectId = useId();
   const responseTextareaId = useId();
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [tags, setTags] = useState<string[]>(contribution?.tags || []);
 
-  const url = `/api/${getApiRoute(window.location.pathname)}/${contribution?.id}`;
+  const url = `/api/${apiRoute}/${contribution?.id}`;
 
   const { mutate: updateTags } = useMutation({
     mutationFn: async (updatedTags: string[]) => {

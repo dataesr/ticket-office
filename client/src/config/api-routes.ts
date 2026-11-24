@@ -38,8 +38,6 @@ const findRoute = (pathname: string) =>
 
 export const COLLECTIONS = [CONTACTS, ...ROUTES];
 export const getApiRoute = (pathname: string) => findRoute(pathname).api;
-export const getCollectionName = (pathname: string) =>
-  findRoute(pathname).collection;
 export const getPagePath = (collection: string, fromApplication = "") =>
   collection === CONTACTS.collection
     ? (CONTACT_PATHS[fromApplication] ?? "/scanr-contact")

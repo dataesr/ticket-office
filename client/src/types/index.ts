@@ -100,6 +100,7 @@ export interface EditModalProps {
   data: Contribution | Contribute_Production;
   refetch: () => void;
   allTags: string[];
+  apiRoute: string;
 }
 
 export interface ProfileModalProps {

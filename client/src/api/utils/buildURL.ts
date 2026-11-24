@@ -2,8 +2,8 @@ import { getApiRoute } from "../../config/api-routes";
 import { VariationTags } from "../../pages/bso-local-variations/types";
 import { escapeRegex } from "./escapeRegex";
 
-export const buildURL = (
-  location: { pathname: string },
+export const buildApiURL = (
+  baseUrl: string,
   sort: string,
   status: string,
   query: string,
@@ -14,8 +14,6 @@ export const buildURL = (
   tags?: VariationTags,
   objectType?: string
 ): string => {
-  const baseUrl = getApiRoute(location.pathname);
-
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
 
   const where: Record<string, unknown> = {};
@@ -66,3 +64,13 @@ export const buildURL = (
 
   return `/api/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
 };
+
+type UrlFilters =
+  Parameters<typeof buildApiURL> extends [string, ...infer Filters]
+    ? Filters
+    : never;
+
+export const buildURL = (
+  location: { pathname: string },
+  ...filters: UrlFilters
+): string => buildApiURL(getApiRoute(location.pathname), ...filters);

@@ -1,11 +1,10 @@
 import { Col, Container, Notice, Row, Text, Title } from "@dataesr/dsfr-plus";
-import { useLocation } from "react-router-dom";
 
 import ExportBasket from "./components/export-basket";
 import Loader from "../../../components/loader";
 import PageBanner from "../../../components/page-banner";
 import { useDataList } from "./data-list-context";
-import { buildURL } from "../../../api/utils/buildURL";
+import { buildApiURL } from "../../../api/utils/buildURL";
 import { ContributionData } from "../../../api/contributions";
 import SearchSection from "../../../components/search-section";
 import TopPaginationButtons from "../../../components/pagination/top-buttons";
@@ -23,7 +22,6 @@ import "./styles.scss";
 const PAGE_SIZE = 20;
 
 const ProductionsPage = () => {
-  const location = useLocation();
   const {
     sort,
     setSort,
@@ -37,8 +35,8 @@ const ProductionsPage = () => {
   } = useProductionFilters();
   const { dataList } = useDataList();
 
-  const url = buildURL(
-    location,
+  const url = buildApiURL(
+    "production",
     sort,
     status,
     query.join(" "),

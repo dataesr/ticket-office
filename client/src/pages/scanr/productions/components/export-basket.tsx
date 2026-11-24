@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { Badge } from "@dataesr/dsfr-plus";
 import { useDataList } from "../data-list-context";
 import { postHeaders } from "../../../../config/api";
-import { getApiRoute } from "../../../../config/api-routes";
 import { ContributionData } from "../../../../types";
 import { downloadXlsx } from "../utils";
 
@@ -34,12 +33,10 @@ const ExportBasket = ({ refetch }: ExportBasketProps) => {
     );
 
   const markAsTreated = async (contributionIds: string[]) => {
-    const basePath = getApiRoute(window.location.pathname);
-
     try {
       const responses = await Promise.all(
         [...new Set(contributionIds)].map((id) =>
-          fetch(`/api/${basePath}/${id}`, {
+          fetch(`/api/production/${id}`, {
             method: "PATCH",
             headers: postHeaders,
             body: JSON.stringify({ status: "treated" }),

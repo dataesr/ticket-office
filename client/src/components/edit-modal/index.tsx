@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { Modal, ModalContent, ModalTitle } from "@dataesr/dsfr-plus";
 import { DismissibleTag } from "../tag";
 import { postHeaders } from "../../config/api";
-import { getApiRoute } from "../../config/api-routes";
 import TagSelectionModal from "./modal-select-tags";
 import { EditModalProps, Inputs } from "../../types";
 
@@ -13,6 +12,7 @@ const EditModal: React.FC<EditModalProps> = ({
   onClose,
   refetch,
   allTags,
+  apiRoute,
 }) => {
   const statusSelectId = useId();
   const tagsInputId = useId();
@@ -47,7 +47,7 @@ const EditModal: React.FC<EditModalProps> = ({
     contributionType: data?.contributionType || "",
   });
 
-  const url = `/api/${getApiRoute(window.location.pathname)}/${data?.id}`;
+  const url = `/api/${apiRoute}/${data?.id}`;
 
   const handleInputChange = (key: keyof Inputs, value: Inputs[keyof Inputs]) => {
     setInputs((prevInputs) => ({ ...prevInputs, [key]: value }));

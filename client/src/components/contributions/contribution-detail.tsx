@@ -15,6 +15,7 @@ type ContributionDetailProps = {
   highlightedQuery: string;
   refetch: () => void;
   allTags: string[];
+  apiRoute: string;
 };
 
 const ContributionDetail = ({
@@ -22,6 +23,7 @@ const ContributionDetail = ({
   highlightedQuery,
   refetch,
   allTags,
+  apiRoute,
 }: ContributionDetailProps) => {
   const { copiedText, copyToClipboard } = useCopyToClipboard();
   const [showEditModal, setShowEditModal] = useState(false);
@@ -90,7 +92,12 @@ const ContributionDetail = ({
           threads={contribution?.threads}
           contributorName={contribution?.name}
         />
-        <EmailSender contribution={contribution} refetch={refetch} />
+        <EmailSender
+          contribution={contribution}
+          refetch={refetch}
+          apiRoute={apiRoute}
+          collectionName={apiRoute}
+        />
       </div>
 
       <EditModal
@@ -99,6 +106,7 @@ const ContributionDetail = ({
         onClose={() => setShowEditModal(false)}
         data={contribution}
         allTags={allTags}
+        apiRoute={apiRoute}
       />
     </div>
   );

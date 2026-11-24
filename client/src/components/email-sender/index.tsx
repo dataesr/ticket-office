@@ -2,15 +2,21 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { Modal, ModalContent, ModalTitle } from "@dataesr/dsfr-plus";
 import EmailForm from "../mail-form";
-import { getCollectionName } from "../../config/api-routes";
 import { Contribution, Contribute_Production } from "../../types";
 
 type EmailSenderProps = {
   contribution: Contribution | Contribute_Production;
   refetch: () => void;
+  apiRoute: string;
+  collectionName: string;
 };
 
-function EmailSender({ contribution, refetch }: EmailSenderProps) {
+function EmailSender({
+  contribution,
+  refetch,
+  apiRoute,
+  collectionName,
+}: EmailSenderProps) {
   const [userResponse, setUserResponse] = useState("");
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const apiBaseUrl = "/api/reply-to-contribution";
@@ -18,7 +24,6 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
   const sendEmail = async () => {
     const formattedResponse = userResponse.replace(/\n/g, "<br/>");
-    const collectionName = getCollectionName(window.location.pathname);
 
     const emailPayload = {
       contributionId: contribution.id,
@@ -58,13 +63,16 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
         setUserResponse={setUserResponse}
         handlePreview={() => setShowPreviewModal(true)}
         sendEmail={sendEmail}
+        apiRoute={apiRoute}
         contribution={contribution}
       />
 
       <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>
         <ModalTitle>Prévisualisation du mail</ModalTitle>
         <ModalContent>
-          <p>De : {`${selectedProfile} de l'équipe scanR <support@scanr.fr>`}</p>
+          <p>
+            De : {`${selectedProfile} de l'équipe scanR <support@scanr.fr>`}
+          </p>
           <p>À : {`${contribution?.name} <${contribution?.email}>`}</p>
           <p>
             Objet : Réponse à votre contribution, référence {contribution?.id}

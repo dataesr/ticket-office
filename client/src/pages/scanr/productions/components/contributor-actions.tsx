@@ -118,6 +118,7 @@ const ContributorActions = ({
         onClose={() => setShowModal(false)}
         data={contribution}
         allTags={allTags}
+        apiRoute="production"
       />
     </div>
   );

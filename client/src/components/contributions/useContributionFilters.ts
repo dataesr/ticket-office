@@ -11,7 +11,7 @@ const updateUrlParams = (search: string, updates: Record<string, string>) => {
   );
 };
 
-export const useContributionFilters = (withObjectType: boolean) => {
+export const useContributionFilters = (withObjectType = false) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
 
