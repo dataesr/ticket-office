@@ -29,43 +29,52 @@ type InfoRowProps = {
   label: string;
   value: React.ReactNode;
   copyText?: string;
+  copiedText: string | null;
+  copyToClipboard: (text: string) => void;
 };
+
+const InfoRow = ({
+  icon,
+  label,
+  value,
+  copyText,
+  copiedText,
+  copyToClipboard,
+}: InfoRowProps) => (
+  <div className="contribution-info__row">
+    <span
+      className={`fr-icon-${icon} contribution-info__icon`}
+      aria-hidden="true"
+    />
+    <div className="contribution-info__text">
+      <p className="fr-text--xs fr-text-mention--grey fr-mb-0">{label}</p>
+      <p className="fr-text--sm fr-mb-0 contribution-info__value">
+        {value}
+        {copyText && (
+          <CopyButton
+            text={copyText}
+            copiedText={copiedText}
+            onCopy={copyToClipboard}
+            ariaLabel={`Copier : ${label.toLowerCase()}`}
+          />
+        )}
+      </p>
+    </div>
+  </div>
+);
 
 const MessagePreview: React.FC<MessagePreviewProps> = ({
   data,
   highlightedQuery,
 }) => {
   const location = useLocation();
-  const { copiedText, copyToClipboard } = useCopyToClipboard();
+  const copy = useCopyToClipboard();
 
   const contributorMessageClassName = location.pathname.includes(
     "contributionpage"
   )
     ? "contributorSideMessage"
     : "contributorSideContactMessage";
-
-  const InfoRow = ({ icon, label, value, copyText }: InfoRowProps) => (
-    <div className="contribution-info__row">
-      <span
-        className={`fr-icon-${icon} contribution-info__icon`}
-        aria-hidden="true"
-      />
-      <div className="contribution-info__text">
-        <p className="fr-text--xs fr-text-mention--grey fr-mb-0">{label}</p>
-        <p className="fr-text--sm fr-mb-0 contribution-info__value">
-          {value}
-          {copyText && (
-            <CopyButton
-              text={copyText}
-              copiedText={copiedText}
-              onCopy={copyToClipboard}
-              ariaLabel={`Copier : ${label.toLowerCase()}`}
-            />
-          )}
-        </p>
-      </div>
-    </div>
-  );
 
   const extraEntries = data?.extra
     ? Object.entries(data.extra).filter(([, value]) => value !== "")
@@ -75,6 +84,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
     <>
       <div className="contribution-info fr-mb-2w">
         <InfoRow
+          {...copy}
           icon="user-line"
           label="Nom"
           value={data?.name || "Non renseigné"}
@@ -83,6 +93,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 
         {data?.email && (
           <InfoRow
+            {...copy}
             icon="mail-line"
             label="Email"
             value={data.email}
@@ -92,6 +103,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 
         {data?.objectId && data?.objectType !== "network" && (
           <InfoRow
+            {...copy}
             icon="links-line"
             label="ID de l'objet concerné"
             value={data.objectId}
@@ -101,6 +113,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 
         {data?.team?.length > 0 && (
           <InfoRow
+            {...copy}
             icon="team-line"
             label="Traité par"
             value={`${data.team[0]} le ${new Date(
@@ -113,6 +126,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 
         {data?.comment && (
           <InfoRow
+            {...copy}
             icon="message-2-line"
             label={`Commentaire${data.team?.[0] ? ` (${data.team[0]})` : ""}`}
             value={data.comment}
@@ -129,6 +143,7 @@ const MessagePreview: React.FC<MessagePreviewProps> = ({
 
           return (
             <InfoRow
+              {...copy}
               key={key}
               icon="file-text-line"
               label={displayKey}
