@@ -41,7 +41,7 @@ const ContributionsSideMenu = ({
 
   return (
     <SideMenu
-      title={`Contributions (${contributions.length})`}
+      title="Contributions"
       aria-label="Contributions"
       fullHeight
     >

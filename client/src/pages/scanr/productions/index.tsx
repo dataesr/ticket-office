@@ -7,7 +7,7 @@ import { useDataList } from "./data-list-context";
 import { buildApiURL } from "../../../api/utils/buildURL";
 import { ContributionData } from "../../../api/contributions";
 import SearchSection from "../../../components/search-section";
-import TopPaginationButtons from "../../../components/pagination/top-buttons";
+import ResultsBar from "../../../components/pagination/results-bar";
 import Selectors from "../../../components/selectors";
 import ProductionCard from "./components/production-card";
 import { useProductionFilters } from "./hooks/useProductionFilters";
@@ -126,7 +126,7 @@ const ProductionsPage = () => {
       </PageBanner>
 
       <Container className="fr-py-6w">
-        <TopPaginationButtons
+        <ResultsBar
           meta={meta}
           page={page}
           maxPage={maxPage}
@@ -167,11 +167,13 @@ const ProductionsPage = () => {
           <ExportBasket refetch={refetch} />
         )}
 
-        <BottomPaginationButtons
-          page={page}
-          maxPage={maxPage}
-          setPage={setPage}
-        />
+        <Row horizontalAlign="right">
+          <BottomPaginationButtons
+            page={page}
+            maxPage={maxPage}
+            setPage={setPage}
+          />
+        </Row>
       </Container>
     </main>
   );

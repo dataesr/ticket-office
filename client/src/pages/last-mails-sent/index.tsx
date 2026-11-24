@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Container, Text } from "@dataesr/dsfr-plus";
+import { Container, Row, Text } from "@dataesr/dsfr-plus";
 import Loader from "../../components/loader";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import TopPaginationButtons from "../../components/pagination/top-buttons";
+import ResultsBar from "../../components/pagination/results-bar";
 import SearchSection from "../../components/search-section";
 import PageBanner from "../../components/page-banner";
 import { useSentEmails } from "../../api/mails";
@@ -52,9 +52,7 @@ const LastMailsSent: React.FC = () => {
   const safePage = Math.min(page, maxPage);
 
   const pageEmails = [...filteredEmails]
-    .sort(
-      (a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime()
-    )
+    .sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime())
     .slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   const updateUrl = (newPage: number, newQuery = query) => {
@@ -122,7 +120,7 @@ const LastMailsSent: React.FC = () => {
       </PageBanner>
 
       <Container className="fr-py-6w">
-        <TopPaginationButtons
+        <ResultsBar
           meta={{ total: filteredEmails.length }}
           page={safePage}
           maxPage={maxPage}
@@ -132,11 +130,13 @@ const LastMailsSent: React.FC = () => {
 
         <LastMailsSentItem data={{ emails: pageEmails }} />
 
-        <BottomPaginationButtons
-          page={safePage}
-          maxPage={maxPage}
-          setPage={setPage}
-        />
+        <Row horizontalAlign="right">
+          <BottomPaginationButtons
+            page={safePage}
+            maxPage={maxPage}
+            setPage={setPage}
+          />
+        </Row>
       </Container>
     </main>
   );

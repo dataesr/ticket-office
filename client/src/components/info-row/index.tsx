@@ -20,7 +20,7 @@ const InfoRow = ({
   copiedText,
   copyToClipboard,
 }: InfoRowProps) => (
-  <Col xs={12} md={6}>
+  <Col xs={12} md={6} xl={3}>
     <Text size="xs" className="fr-text-mention--grey fr-mb-0">
       <span
         className={`fr-icon-${icon} fr-icon--sm fr-mr-1v`}

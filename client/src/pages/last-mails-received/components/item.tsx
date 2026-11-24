@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Tabs, Tab, Notice } from "@dataesr/dsfr-plus";
+import { Notice, Row, Tab, Tabs } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import MarkdownRenderer from "../../../components/markdown-renderer";
-import TopPaginationButtons from "../../../components/pagination/top-buttons";
+import ResultsBar from "../../../components/pagination/results-bar";
 import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
 import type { EmailItem } from "../../../types";
 
@@ -118,7 +118,7 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
       <Tab label="Mails Suivis">
         {trackedEmails.length > 0 ? (
           <>
-            <TopPaginationButtons
+            <ResultsBar
               meta={{ total: trackedEmails.length }}
               page={safeTrackedPage}
               maxPage={trackedMaxPage}
@@ -130,11 +130,13 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                 <EmailCard key={email._id} email={email} />
               ))}
             </div>
-            <BottomPaginationButtons
-              page={safeTrackedPage}
-              maxPage={trackedMaxPage}
-              setPage={setTrackedPage}
-            />
+            <Row horizontalAlign="right">
+              <BottomPaginationButtons
+                page={safeTrackedPage}
+                maxPage={trackedMaxPage}
+                setPage={setTrackedPage}
+              />
+            </Row>
           </>
         ) : (
           <Notice type="info" closeMode="disallow" className="fr-mb-2w">
@@ -152,7 +154,7 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
 
         {untrackedEmails.length > 0 ? (
           <>
-            <TopPaginationButtons
+            <ResultsBar
               meta={{ total: untrackedEmails.length }}
               page={safeUntrackedPage}
               maxPage={untrackedMaxPage}
@@ -164,11 +166,13 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
                 <EmailCard key={email._id} email={email} showSubject={true} />
               ))}
             </div>
-            <BottomPaginationButtons
-              page={safeUntrackedPage}
-              maxPage={untrackedMaxPage}
-              setPage={setUntrackedPage}
-            />
+            <Row horizontalAlign="right">
+              <BottomPaginationButtons
+                page={safeUntrackedPage}
+                maxPage={untrackedMaxPage}
+                setPage={setUntrackedPage}
+              />
+            </Row>
           </>
         ) : (
           <Notice type="info" closeMode="disallow" className="fr-mb-2w">

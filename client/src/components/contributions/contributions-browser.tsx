@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Alert, Col, Container, Row, Text } from "@dataesr/dsfr-plus";
 import Loader from "../loader";
-import BottomPaginationButtons from "../pagination/bottom-buttons";
-import TopPaginationButtons from "../pagination/top-buttons";
+import ResultsBar from "../pagination/results-bar";
 import ContributionDetail from "./contribution-detail";
 import ContributionsSideMenu from "./contributions-side-menu";
 import { PAGE_SIZE, useContributions } from "./useContributions";
@@ -28,7 +27,7 @@ const ContributionsBrowser = ({
 
   return (
     <Container className="fr-py-6w">
-      <TopPaginationButtons
+      <ResultsBar
         meta={meta}
         page={filters.page}
         maxPage={maxPage}
@@ -47,14 +46,14 @@ const ContributionsBrowser = ({
         />
       ) : (
         <Row gutters>
-          <Col xs={12} md={4}>
+          <Col xs={12} md={4} lg={3}>
             <ContributionsSideMenu
               contributions={contributions}
               selectedId={selectedId}
               onSelect={setSelectedContribution}
             />
           </Col>
-          <Col xs={12} md={8}>
+          <Col xs={12} md={8} lg={9}>
             {contributions.length > 0 ? (
               <ContributionDetail
                 key={selectedId}
@@ -72,11 +71,6 @@ const ContributionsBrowser = ({
           </Col>
         </Row>
       )}
-      <BottomPaginationButtons
-        page={filters.page}
-        maxPage={maxPage}
-        setPage={filters.setPage}
-      />
     </Container>
   );
 };

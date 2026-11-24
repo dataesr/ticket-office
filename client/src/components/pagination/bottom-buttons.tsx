@@ -27,13 +27,14 @@ const BottomPaginationButtons = ({
   page,
   maxPage,
   setPage,
-}: PaginationProps) => {
+  className = "fr-mt-5w",
+}: PaginationProps & { className?: string }) => {
   if (maxPage <= 1) return null;
 
   return (
     <nav
       role="navigation"
-      className="fr-pagination fr-mt-5w"
+      className={`fr-pagination ${className}`}
       aria-label="Pagination"
     >
       <ul className="fr-pagination__list">
@@ -60,7 +61,12 @@ const BottomPaginationButtons = ({
         {getPageEntries(page, maxPage).map((entry, index) =>
           entry === "ellipsis" ? (
             <li key={`ellipsis-${index}`}>
-              <span aria-hidden="true">…</span>
+              <span
+                className="fr-pagination__link fr-displayed-lg"
+                aria-hidden="true"
+              >
+                …
+              </span>
             </li>
           ) : (
             <li key={entry}>
