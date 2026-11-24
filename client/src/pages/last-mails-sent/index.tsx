@@ -13,9 +13,9 @@ import {
   filterSentEmails,
   getApplications,
   getObjectTypeOptions,
+  SentEmail,
 } from "./utils";
 import "./components/styles.scss";
-import { EmailItem } from "../../types";
 
 const PAGE_SIZE = 10;
 
@@ -30,7 +30,7 @@ const LastMailsSent: React.FC = () => {
   const [dateTo, setDateTo] = useState("");
 
   const { data, isLoading, isError } = useSentEmails();
-  const sentEmails: EmailItem[] = data ? data.emails : [];
+  const sentEmails: SentEmail[] = data ? data.emails : [];
 
   const uniqueProfiles = Array.from(
     new Set(sentEmails.map((email) => email.selectedProfile))
@@ -52,8 +52,7 @@ const LastMailsSent: React.FC = () => {
 
   const pageEmails = [...filteredEmails]
     .sort(
-      (a: any, b: any) =>
-        new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime()
+      (a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime()
     )
     .slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
@@ -138,11 +137,7 @@ const LastMailsSent: React.FC = () => {
           pageSize={PAGE_SIZE}
         />
 
-        <LastMailsSentItem
-          data={{
-            emails: pageEmails as any,
-          }}
-        />
+        <LastMailsSentItem data={{ emails: pageEmails }} />
 
         <BottomPaginationButtons
           page={safePage}

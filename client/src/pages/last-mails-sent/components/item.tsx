@@ -1,22 +1,11 @@
 import "./styles.scss";
 import { Badge } from "@dataesr/dsfr-plus";
-import collectionNameMapping, { generateLink } from "../utils";
+import collectionNameMapping, { generateLink, SentEmail } from "../utils";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
-
-interface Email {
-  collectionName: string;
-  fromApplication?: string;
-  contributionId: string;
-  sentAt: string;
-  selectedProfile: string;
-  name: string;
-  to: string;
-  userResponse: string;
-}
 
 interface LastMailsSentProps {
   data: {
-    emails: Email[];
+    emails: SentEmail[];
   };
 }
 

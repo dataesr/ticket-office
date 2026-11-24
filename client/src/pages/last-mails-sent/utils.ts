@@ -16,6 +16,20 @@ const collectionNameMapping: { [key: string]: string } = {
 
 export default collectionNameMapping;
 
+export interface SentEmail {
+  _id: string;
+  collectionName: string;
+  contributionId: string;
+  fromApplication?: string;
+  message: string | null;
+  name: string | null;
+  selectedProfile: string;
+  sentAt: string;
+  subject: string;
+  to: string;
+  userResponse: string;
+}
+
 export interface SentMailFilters {
   profile: string;
   objectType: string;
@@ -26,7 +40,7 @@ export interface SentMailFilters {
 }
 
 export const getObjectTypeOptions = (
-  emails: any[]
+  emails: SentEmail[]
 ): { value: string; label: string }[] =>
   [...new Set(emails.map((email) => email.collectionName).filter(Boolean))]
     .map((name) => ({
@@ -35,15 +49,15 @@ export const getObjectTypeOptions = (
     }))
     .sort((a, b) => a.label.localeCompare(b.label));
 
-export const getApplications = (emails: any[]): string[] =>
+export const getApplications = (emails: SentEmail[]): string[] =>
   [
     ...new Set(emails.map((email) => email.fromApplication).filter(Boolean)),
   ].sort();
 
 export const filterSentEmails = (
-  emails: any[],
+  emails: SentEmail[],
   filters: SentMailFilters
-): any[] => {
+): SentEmail[] => {
   const from = filters.dateFrom ? new Date(filters.dateFrom).getTime() : null;
   const to = filters.dateTo
     ? new Date(`${filters.dateTo}T23:59:59`).getTime()
