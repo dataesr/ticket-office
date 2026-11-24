@@ -1,5 +1,4 @@
 import { Link, Text, Title } from "@dataesr/dsfr-plus";
-import "./styles.scss";
 import MarkdownRenderer from "../../../components/markdown-renderer";
 import { UnifiedContribution } from "../../../types";
 import { getContributionLink } from "../../../utils/contribution-links";
@@ -17,7 +16,7 @@ const ContributionCard = ({ contribution }: ContributionCardProps) => {
   );
 
   return (
-    <div className="fr-card fr-card--no-icon fr-mb-3w home-contribution-card">
+    <div className="fr-card fr-card--no-icon fr-mb-3w">
       <div className="fr-card__body">
         <div className="fr-card__content">
           <div className="fr-card__start">

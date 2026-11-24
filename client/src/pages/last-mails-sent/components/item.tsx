@@ -1,5 +1,4 @@
-import "./styles.scss";
-import { Badge } from "@dataesr/dsfr-plus";
+import { Badge, BadgeGroup, Link, Text, Title } from "@dataesr/dsfr-plus";
 import collectionNameMapping, { SentEmail } from "../utils";
 import { getContributionLink } from "../../../utils/contribution-links";
 import MarkdownRenderer from "../../../components/markdown-renderer";
@@ -17,8 +16,8 @@ const SCANR_COLLECTIONS = [
 ];
 
 const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => (
-  <div className="mail-list">
-    {data.emails.map((mail, index) => {
+  <>
+    {data.emails.map((mail) => {
       const link = getContributionLink(
         mail.collectionName,
         mail.fromApplication,
@@ -34,61 +33,53 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => (
         collectionNameMapping[mail.collectionName] || mail.collectionName;
 
       return (
-        <a
-          className="mail-card"
-          href={link}
-          rel="noopener noreferrer"
-          key={mail.contributionId || index}
-        >
-          <div className="mail-card__header">
-            <ul className="fr-badges-group fr-mb-1w">
-              <li>
-                <Badge size="sm" color="green-menthe">
-                  {label}
-                </Badge>
-              </li>
-              {SCANR_COLLECTIONS.includes(label) && (
-                <li>
-                  <Badge size="sm" color="blue-ecume">
-                    scanR
+        <div className="fr-card fr-card--no-icon fr-enlarge-link fr-mb-3w" key={mail._id}>
+          <div className="fr-card__body">
+            <div className="fr-card__content">
+              <div className="fr-card__start">
+                <BadgeGroup>
+                  <Badge size="sm" color="green-menthe">
+                    {label}
                   </Badge>
-                </li>
-              )}
-              {label === "Demande de bso local" && (
-                <li>
-                  <Badge size="sm" color="blue-ecume">
-                    BSO
-                  </Badge>
-                </li>
-              )}
-              {mail.fromApplication && (
-                <li>
-                  <Badge size="sm" color="blue-ecume">
-                    {mail.fromApplication}
-                  </Badge>
-                </li>
-              )}
-            </ul>
-
-            <div className="mail-card__header-row">
-              <p className="fr-text--sm fr-mb-0">
-                Réponse de <strong>{mail.selectedProfile}</strong> à{" "}
-                <strong>{mail.name}</strong>
-                <span className="fr-text-mention--grey"> ({mail.to})</span>
-              </p>
-              <p className="fr-text--sm fr-text-mention--grey fr-mb-0 mail-card__date">
-                Envoyé le {formattedDate} à {formattedTime}
-              </p>
+                  {SCANR_COLLECTIONS.includes(label) && (
+                    <Badge size="sm" color="blue-ecume">
+                      scanR
+                    </Badge>
+                  )}
+                  {label === "Demande de bso local" && (
+                    <Badge size="sm" color="blue-ecume">
+                      BSO
+                    </Badge>
+                  )}
+                  {mail.fromApplication && (
+                    <Badge size="sm" color="blue-ecume">
+                      {mail.fromApplication}
+                    </Badge>
+                  )}
+                </BadgeGroup>
+              </div>
+              <Title as="h2" className="fr-card__title">
+                <Link href={link}>
+                  Réponse de {mail.selectedProfile} à {mail.name}
+                </Link>
+              </Title>
+              <div className="fr-card__desc">
+                <Text size="sm" className="fr-text-mention--grey fr-mb-1w">
+                  {mail.to}
+                </Text>
+                <MarkdownRenderer content={mail.userResponse} />
+              </div>
+              <div className="fr-card__end">
+                <Text className="fr-card__detail fr-icon-calendar-line">
+                  Envoyé le {formattedDate} à {formattedTime}
+                </Text>
+              </div>
             </div>
           </div>
-
-          <div className="mail-card__body fr-text--sm">
-            <MarkdownRenderer content={mail.userResponse} />
-          </div>
-        </a>
+        </div>
       );
     })}
-  </div>
+  </>
 );
 
 export default LastMailsSentItem;

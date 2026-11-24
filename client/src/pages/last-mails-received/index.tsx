@@ -3,7 +3,6 @@ import Loader from "../../components/loader";
 import PageBanner from "../../components/page-banner";
 import LastMailsReceivedItem from "./components/item";
 import { useReceivedEmails } from "../../api/mails";
-import "./components/styles.scss";
 
 const LastMailsReceived: React.FC = () => {
   const { data, isLoading, isError } = useReceivedEmails();
