@@ -20,19 +20,45 @@ const routes = [
   "bso-local-variations/datasets",
 ];
 
-export const ContributionAllData = (maxResults = 200) => {
+const DAY_MS = 24 * 60 * 60 * 1000;
+const SEARCH_FIELDS = ["name", "email", "message", "id"];
+
+const escapeRegex = (value: string) =>
+  value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const buildWhere = (search: string) => {
+  if (search) {
+    const $regex = escapeRegex(search);
+    return {
+      $or: SEARCH_FIELDS.map((field) => ({
+        [field]: { $regex, $options: "i" },
+      })),
+    };
+  }
+  const since = new Date(Date.now() - DAY_MS).toISOString();
+  return {
+    $expr: {
+      $gte: ["$created_at", { $dateFromString: { dateString: since } }],
+    },
+  };
+};
+
+export const ContributionAllData = (search = "") => {
   const { data, isLoading, isError, refetch } = useQuery({
-    queryKey: ["allContributions", maxResults],
-    queryFn: () =>
-      Promise.all(
+    queryKey: ["allContributions", search],
+    queryFn: () => {
+      const maxResults = search ? 2000 : 200;
+      const where = encodeURIComponent(JSON.stringify(buildWhere(search)));
+      return Promise.all(
         routes.map((route) =>
           fetchJson(
-            `/api/${route}?sort=-created_at&max_results=${maxResults}`,
+            `/api/${route}?sort=-created_at&max_results=${maxResults}&where=${where}`,
             {},
             `Failed to fetch from ${route}`
           )
         )
-      ),
+      );
+    },
     placeholderData: keepPreviousData,
   });
 
