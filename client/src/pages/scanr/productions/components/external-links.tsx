@@ -22,9 +22,10 @@ export const ExternalLinks: React.FC<ExternalLinksProps> = ({
   return (
     <>
       <Link
-        className={`fr-ml-2w fr-footer__content-link ${
-          scanRClicked ? "clicked-link" : ""
-        }`}
+        className="fr-mr-2w"
+        size="sm"
+        icon={scanRClicked ? "check-line" : undefined}
+        iconPosition="left"
         target="_blank"
         rel="noreferrer noopener external"
         href={`https://scanr.enseignementsup-recherche.gouv.fr/${scanRPath}/${formattedProductionId}`}
@@ -35,9 +36,10 @@ export const ExternalLinks: React.FC<ExternalLinksProps> = ({
 
       {landingPage && (
         <Link
-          className={`fr-ml-2w fr-mr-2w fr-footer__content-link ${
-            landingPageClicked ? "clicked-link" : ""
-          }`}
+          className="fr-mr-2w"
+          size="sm"
+          icon={landingPageClicked ? "check-line" : undefined}
+          iconPosition="left"
           target="_blank"
           rel="noreferrer noopener external"
           href={landingPage}
@@ -48,9 +50,9 @@ export const ExternalLinks: React.FC<ExternalLinksProps> = ({
       )}
 
       <Link
-        className={`fr-ml-2w fr-footer__content-link ${
-          googleClicked ? "clicked-link" : ""
-        }`}
+        size="sm"
+        icon={googleClicked ? "check-line" : undefined}
+        iconPosition="left"
         target="_blank"
         rel="noreferrer noopener external"
         href={`https://google.com/search?q=${name}`}

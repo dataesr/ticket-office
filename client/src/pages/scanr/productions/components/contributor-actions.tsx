@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { Button, ButtonGroup } from "@dataesr/dsfr-plus";
+import { Button, ButtonGroup, Col, Row } from "@dataesr/dsfr-plus";
 import EditModal from "../../../../components/edit-modal";
 import { useDataList } from "../data-list-context";
 import { Contribute_Production } from "../../../../types";
@@ -48,61 +48,66 @@ const ContributorActions = ({
   };
 
   return (
-    <div className="message-preview__actions fr-mb-3w">
-      {contribution.id && (
-        <ButtonGroup isInlineFrom="xs">
-          <Button
-            as="a"
-            variant="tertiary"
-            size="sm"
-            icon="external-link-line"
-            iconPosition="left"
-            className={idRefClicked ? "clicked-link" : ""}
-            target="_blank"
-            rel="noreferrer noopener external"
-            href={`https://www.idref.fr/${contribution.objectId.replace("idref", "")}`}
-            onClick={() => setIdRefClicked(true)}
-          >
-            Sur IdRef
-          </Button>
-          <Button
-            as="a"
-            variant="tertiary"
-            size="sm"
-            icon="external-link-line"
-            iconPosition="left"
-            className={scanRClicked ? "clicked-link" : ""}
-            target="_blank"
-            rel="noreferrer noopener external"
-            href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${contribution.objectId.replace(/\//g, "%2f")}`}
-            onClick={() => setScanRClicked(true)}
-          >
-            Sur scanR
-          </Button>
-        </ButtonGroup>
-      )}
-
-      <ButtonGroup isInlineFrom="xs" className="message-preview__actions-main">
-        <Button
-          type="button"
-          size="sm"
-          icon="download-line"
-          iconPosition="left"
-          onClick={handleExportAllClick}
-        >
-          Tout exporter
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          icon="edit-line"
-          iconPosition="left"
-          onClick={() => setShowModal(true)}
-        >
-          Éditer la contribution
-        </Button>
-      </ButtonGroup>
+    <>
+      <Row gutters verticalAlign="middle" className="fr-mb-1w">
+        <Col xs={12} md={6}>
+          {contribution.id && (
+            <ButtonGroup isInlineFrom="xs">
+              <Button
+                as="a"
+                variant="tertiary"
+                size="sm"
+                icon={idRefClicked ? "check-line" : "external-link-line"}
+                iconPosition="left"
+                target="_blank"
+                rel="noreferrer noopener external"
+                href={`https://www.idref.fr/${contribution.objectId.replace("idref", "")}`}
+                onClick={() => setIdRefClicked(true)}
+              >
+                Sur IdRef
+              </Button>
+              <Button
+                as="a"
+                variant="tertiary"
+                size="sm"
+                icon={scanRClicked ? "check-line" : "external-link-line"}
+                iconPosition="left"
+                target="_blank"
+                rel="noreferrer noopener external"
+                href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${contribution.objectId.replace(/\//g, "%2f")}`}
+                onClick={() => setScanRClicked(true)}
+              >
+                Sur scanR
+              </Button>
+            </ButtonGroup>
+          )}
+        </Col>
+        <Col xs={12} md={6}>
+          <Row horizontalAlign="right">
+            <ButtonGroup isInlineFrom="xs">
+              <Button
+                type="button"
+                size="sm"
+                icon="download-line"
+                iconPosition="left"
+                onClick={handleExportAllClick}
+              >
+                Tout exporter
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                icon="edit-line"
+                iconPosition="left"
+                onClick={() => setShowModal(true)}
+              >
+                Éditer la contribution
+              </Button>
+            </ButtonGroup>
+          </Row>
+        </Col>
+      </Row>
 
       <EditModal
         refetch={refetch}
@@ -112,7 +117,7 @@ const ContributorActions = ({
         allTags={allTags}
         apiRoute="production"
       />
-    </div>
+    </>
   );
 };
 

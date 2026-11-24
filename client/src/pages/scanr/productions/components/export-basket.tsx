@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import { Badge, Button, Text } from "@dataesr/dsfr-plus";
+import { Badge, Button, ButtonGroup, Col, Row, Text } from "@dataesr/dsfr-plus";
 import { useDataList } from "../data-list-context";
 import { postHeaders } from "../../../../config/api";
 import { ContributionData } from "../../../../types";
@@ -139,96 +139,85 @@ const ExportBasket = ({ refetch }: ExportBasketProps) => {
       className="export-basket"
       aria-label="Panier des publications à exporter"
     >
-      <div className="export-basket__header">
-        <Text size="sm" className="fr-text--bold fr-mb-0">
-          Publications à exporter
-        </Text>
-        <div className="export-basket__header-actions">
+      <Row verticalAlign="middle" className="fr-background-alt--grey fr-p-2w">
+        <Col>
+          <Text size="sm" className="fr-text--bold fr-mb-0">
+            Publications à exporter
+          </Text>
           <Badge size="sm" color="blue-ecume">
             {`${displayItems.length} publication${displayItems.length > 1 ? "s" : ""}`}
           </Badge>
-          <Button
-            type="button"
-            variant="text"
-            size="sm"
-            icon={isMinimized ? "arrow-down-s-line" : "arrow-up-s-line"}
-            onClick={() => setIsMinimized((prev) => !prev)}
-            aria-expanded={!isMinimized}
-            aria-label={isMinimized ? "Déplier le panier" : "Replier le panier"}
-            title={isMinimized ? "Déplier le panier" : "Replier le panier"}
-          />
-        </div>
-      </div>
+        </Col>
+        <Button
+          type="button"
+          variant="text"
+          size="sm"
+          icon={isMinimized ? "arrow-down-s-line" : "arrow-up-s-line"}
+          onClick={() => setIsMinimized((prev) => !prev)}
+          aria-expanded={!isMinimized}
+          aria-label={isMinimized ? "Déplier le panier" : "Replier le panier"}
+          title={isMinimized ? "Déplier le panier" : "Replier le panier"}
+        />
+      </Row>
 
       {!isMinimized &&
         (displayItems.length > 0 ? (
-          <ul className="export-basket__list">
+          <ul className="fr-raw-list">
             {displayItems.map((item) => (
-              <li className="export-basket__item" key={item.publi_id}>
-                <div className="export-basket__item-text">
-                  <Text
-                    as="span"
+              <li className="fr-px-2w fr-py-1w" key={item.publi_id}>
+                <Text size="sm" className="fr-text--bold fr-mb-0">
+                  {item.publi_id}
+                  <Button
+                    type="button"
+                    variant="text"
                     size="sm"
-                    className="fr-text--bold fr-mb-0 export-basket__item-id"
-                  >
-                    {item.publi_id}
-                  </Text>
-                  <Text
-                    as="span"
-                    size="xs"
-                    className="fr-text-mention--grey fr-mb-0"
-                  >
-                    à lier à {item.fullName}
-                  </Text>
-                </div>
-                <Button
-                  type="button"
-                  variant="text"
-                  size="sm"
-                  icon="delete-line"
-                  onClick={() => handleRemoveClick(item.publi_id)}
-                  aria-label={`Retirer ${item.fullName} du panier`}
-                  title={`Retirer ${item.fullName} du panier`}
-                />
+                    icon="delete-line"
+                    onClick={() => handleRemoveClick(item.publi_id)}
+                    aria-label={`Retirer ${item.fullName} du panier`}
+                    title={`Retirer ${item.fullName} du panier`}
+                  />
+                </Text>
+                <Text size="xs" className="fr-text-mention--grey fr-mb-0">
+                  à lier à {item.fullName}
+                </Text>
               </li>
             ))}
           </ul>
         ) : (
-          <Text
-            size="sm"
-            className="fr-text-mention--grey export-basket__empty"
-          >
+          <Text size="sm" className="fr-text-mention--grey fr-p-2w fr-m-0">
             Aucune publication dans le panier.
           </Text>
         ))}
 
-      <div className="export-basket__actions">
-        <Button
-          type="button"
-          size="sm"
-          icon="download-line"
-          onClick={handleExportClick}
-        >
-          Exporter
-        </Button>
-        <Button
-          type="button"
-          variant="secondary"
-          size="sm"
-          icon="clipboard-line"
-          onClick={handleCopyToClipboardClick}
-        >
-          Copier et marquer comme traité
-        </Button>
-        <Button
-          type="button"
-          variant="tertiary"
-          size="sm"
-          icon="delete-line"
-          onClick={handleClearClick}
-        >
-          Vider le panier
-        </Button>
+      <div className="fr-px-3w fr-pt-2w">
+        <ButtonGroup size="sm">
+          <Button
+            type="button"
+            icon="download-line"
+            iconPosition="left"
+            onClick={handleExportClick}
+          >
+            Exporter
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            icon="clipboard-line"
+            iconPosition="left"
+            onClick={handleCopyToClipboardClick}
+          >
+            Copier et marquer comme traité
+          </Button>
+          <Button
+            type="button"
+            variant="tertiary"
+            icon="delete-line"
+            iconPosition="left"
+            onClick={handleClearClick}
+          >
+            Vider le panier
+          </Button>
+        </ButtonGroup>
       </div>
     </aside>
   );
