@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Badge } from "@dataesr/dsfr-plus";
 import EditModal from "../../../components/edit-modal";
-import StaffActions from "./staff-actions";
+import EmailSender from "../../../components/email-sender";
+import ResponseThread from "../../../components/response-thread";
 import {
   BadgeColor,
   BadgeStatus,
@@ -118,7 +119,8 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
           data={data}
           highlightedQuery={highlightedQuery}
         />
-        <StaffActions refetch={refetch} data={data} />
+        <ResponseThread threads={data?.threads} contributorName={data?.name} />
+        <EmailSender contribution={data} refetch={refetch} />
       </div>
 
       <EditModal

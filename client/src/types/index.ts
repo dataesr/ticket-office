@@ -215,11 +215,6 @@ export interface ExcelExportButtonProps {
   refetch: () => void;
 }
 
-export interface StaffProductionActionsProps {
-  data?: Contribute_Production;
-  refetch: () => void;
-}
-
 export interface ContributionDetailsProps {
   filteredContributions: Contribution[];
   selectedContribution: string | number;
@@ -253,10 +248,6 @@ export interface TopPaginationProps extends PaginationProps {
   meta?: { total?: number };
 }
 
-export interface StaffActionsProps {
-  refetch: () => void;
-  data: Contribution;
-}
 export interface ContributionPageProps {
   fromApplication?: string;
 }

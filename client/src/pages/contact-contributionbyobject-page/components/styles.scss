@@ -1,54 +1,19 @@
-.message-base {
-  padding: 1rem;
-  margin-bottom: 1rem;
+.contributorSideMessage {
   max-width: 75%;
+  margin-bottom: 1rem;
+  padding: 1rem;
   overflow-wrap: break-word;
+  background-color: var(--background-alt-green-emeraude);
+  border: 1px solid var(--background-alt-green-emeraude);
 
   p {
     font-size: 0.9rem;
     margin-bottom: 0;
   }
-}
 
-.contributorSideMessage {
-  @extend .message-base;
-  background-color: var(--background-alt-green-emeraude);
-  border: 1px solid var(--background-alt-green-emeraude);
-}
-
-.user-side {
-  @extend .message-base;
-  background-color: var(--background-alt-pink-macaron);
-}
-
-.staffSide {
-  @extend .message-base;
-  margin-left: auto;
-}
-
-.message-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.message-bubble {
-  position: relative;
-}
-
-.message-content {
-  margin: 0;
-}
-
-.message-metadata {
-  display: block;
-  margin-top: 0.5rem;
-  font-size: 0.8rem;
-  opacity: 0.8;
-}
-
-.message-author {
-  font-weight: 700;
+  @media (max-width: 768px) {
+    max-width: 90%;
+  }
 }
 
 .contribution-item {
@@ -152,31 +117,7 @@
   -webkit-box-orient: vertical;
 }
 
-.attachment-thumbnail-btn {
-  display: block;
-  border: 0;
-  background: none;
-  padding: 0;
-  margin: 0.5rem 0;
-  cursor: pointer;
-}
-
-.attachment-thumbnail {
-  max-width: 16rem;
-  height: auto;
-  border: 1px solid var(--border-default-grey);
-}
-
-.attachment-preview {
-  max-width: 100%;
-  border: 1px solid var(--border-default-grey);
-}
-
 @media (max-width: 768px) {
-  .message-base {
-    max-width: 90%;
-  }
-
   .contribution-item__header-row {
     flex-direction: column;
     align-items: flex-start;

@@ -1,6 +1,7 @@
 import { Accordion, AccordionGroup, Badge } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import StaffProductionActions from "./staff-production-action";
+import EmailSender from "../../components/email-sender";
+import ResponseThread from "../../components/response-thread";
 import { BadgeStatus, StatusLabel } from "../../utils/index";
 import { CopyButton } from "../../components/copy-button";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
@@ -73,7 +74,8 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
           landingPages={landingPages}
           idrefNames={idrefNames}
         />
-        <StaffProductionActions data={data} refetch={refetch} />
+        <ResponseThread threads={data.threads} contributorName={data.name} />
+        <EmailSender contribution={data} refetch={refetch} />
       </Accordion>
     </AccordionGroup>
   );
