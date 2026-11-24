@@ -1,21 +1,3 @@
-.production-item-summary {
-  width: 100%;
-  text-align: left;
-}
-
-.production-item-summary__row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 1rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-}
-
 .message-preview__actions {
   display: flex;
   align-items: flex-start;

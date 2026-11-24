@@ -13,6 +13,14 @@ const ContributorInfo = ({ contribution, idrefName }: ContributorInfoProps) => {
 
   return (
     <Row gutters className="fr-mb-2w">
+      <InfoRow
+        {...copy}
+        icon="file-text-line"
+        label="ID de la contribution"
+        value={contribution.id}
+        copyText={contribution.id}
+      />
+
       {contribution.objectId && (
         <InfoRow
           {...copy}
