@@ -10,7 +10,7 @@ export function extractReferenceInfo(subject: string): {
 } {
   if (!subject) return { referenceId: null, collectionName: "contacts" };
 
-  const cleanSubject = subject.replace(/Re:\s*|\[?[*]?PUB[*]?\]?/gi, "").trim();
+  const cleanSubject = subject.replace(/Re:\s*|\[?[*]?\bPUB\b[*]?\]?/gi, "").trim();
 
   const referencePatterns = [
     /référence[\s:]+([a-zA-Z0-9_-]+)-([a-fA-F0-9]{24})/i,

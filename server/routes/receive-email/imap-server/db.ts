@@ -48,6 +48,25 @@ export async function lookupCorrectCollection(
   }
 }
 
+export async function findFromApplication(
+  referenceId: string,
+  collectionName: string
+): Promise<string | undefined> {
+  const client = await getMongoClient()
+  try {
+    const contribution = await client
+      .db(config.dbName)
+      .collection(collectionName)
+      .findOne({ id: referenceId }, { projection: { fromApplication: 1 } })
+    return contribution?.fromApplication
+  } catch (error) {
+    console.error("Erreur lors de la recherche de l'application :", error)
+    return undefined
+  } finally {
+    await client.close()
+  }
+}
+
 export async function isEmailDuplicate(
   client: MongoClient,
   messageId: string,

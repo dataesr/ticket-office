@@ -7,6 +7,7 @@ import {
   generateContributionLink,
 } from "./utils";
 import {
+  findFromApplication,
   lookupCorrectCollection,
   saveReceivedEmail,
   updateContribution,
@@ -307,7 +308,15 @@ export async function fetchEmails() {
         console.log(processedContent);
         if (!processedContent.text) continue;
 
-        const { referenceId, collectionName } = extractReferenceInfo(subject);
+        const reference = extractReferenceInfo(subject);
+        const { referenceId } = reference;
+        const collectionName =
+          referenceId && reference.collectionName === "needs_lookup"
+            ? await lookupCorrectCollection(referenceId)
+            : reference.collectionName;
+        const fromApplication = referenceId
+          ? await findFromApplication(referenceId, collectionName)
+          : undefined;
 
         const saved = await saveReceivedEmail(
           message.envelope,
@@ -315,22 +324,18 @@ export async function fetchEmails() {
           processedContent,
           date,
           referenceId || undefined,
-          collectionName || undefined
+          collectionName || undefined,
+          fromApplication
         );
 
         if (referenceId) {
-          const finalCollectionName =
-            collectionName === "needs_lookup"
-              ? await lookupCorrectCollection(referenceId)
-              : collectionName;
-
           messageList.push({
             uid: message.uid,
             date,
             source: messageSource,
             envelope: message.envelope,
             referenceId,
-            collectionName: finalCollectionName,
+            collectionName,
           });
         } else {
           const senderName =

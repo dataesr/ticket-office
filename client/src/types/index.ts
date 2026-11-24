@@ -112,7 +112,10 @@ export interface ProfileModalProps {
 
 export interface EmailItem {
   images: Record<string, { contentType: string; base64: string }>;
-  href: string;
+  href: string | null;
+  referenceId?: string | null;
+  collectionName?: string | null;
+  fromApplication?: string | null;
   selectedProfile: string;
   _id: string;
   from: { name: string; address: string }[];

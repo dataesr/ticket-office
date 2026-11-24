@@ -1,10 +1,19 @@
 import { useState } from "react";
-import { Notice, Row, Tab, Tabs } from "@dataesr/dsfr-plus";
-import "./styles.scss";
+import {
+  Col,
+  Link,
+  Notice,
+  Row,
+  Tab,
+  Tabs,
+  Text,
+  Title,
+} from "@dataesr/dsfr-plus";
 import MarkdownRenderer from "../../../components/markdown-renderer";
 import ResultsBar from "../../../components/pagination/results-bar";
 import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
 import type { EmailItem } from "../../../types";
+import { getContributionLink } from "../../../utils/contribution-links";
 
 const PAGE_SIZE = 10;
 
@@ -13,6 +22,17 @@ interface LastMailsReceivedProps {
     emails: EmailItem[] | { [key: string]: EmailItem[] };
   };
 }
+
+const getContributionPath = (email: EmailItem) => {
+  if (!email.referenceId || !email.collectionName) return "";
+
+  const link = getContributionLink(
+    email.collectionName,
+    email.fromApplication ?? undefined,
+    email.referenceId
+  );
+  return link.startsWith("/") ? link : "";
+};
 
 const EmailCard: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   email,
@@ -27,46 +47,54 @@ const EmailCard: React.FC<{ email: EmailItem; showSubject?: boolean }> = ({
   const sender = email.from?.[0];
   const images = email.images ? Object.values(email.images) : [];
 
+  const title = `Envoyé par ${sender?.name || "Expéditeur inconnu"}`;
+  const contributionPath = getContributionPath(email);
+
   return (
-    <a className="mail-card" href={email.href} rel="noopener noreferrer">
-      <div className="mail-card__header">
-        <div className="mail-card__header-row">
-          <div>
-            <p className="fr-text--sm fr-mb-0">
-              Envoyé par <strong>{sender?.name || "Expéditeur inconnu"}</strong>
-            </p>
+    <div className="fr-card fr-card--no-icon fr-enlarge-link fr-mb-3w">
+      <div className="fr-card__body">
+        <div className="fr-card__content">
+          <Title as="h2" className="fr-card__title">
+            {contributionPath ? (
+              <Link href={contributionPath}>{title}</Link>
+            ) : (
+              title
+            )}
+          </Title>
+          <div className="fr-card__desc">
             {sender?.address && (
-              <p className="fr-text--xs fr-text-mention--grey fr-mb-0">
+              <Text size="sm" className="fr-text-mention--grey fr-mb-1w">
                 {sender.address}
-              </p>
+              </Text>
             )}
             {showSubject && (
-              <p className="fr-text--sm fr-mb-0 fr-mt-1v">
+              <Text size="sm" className="fr-mb-1w">
                 Objet : <strong>{email.subject}</strong>
-              </p>
+              </Text>
+            )}
+            <MarkdownRenderer content={email.extractedText} clean />
+            {images.length > 0 && (
+              <Row gutters>
+                {images.map((image, index) => (
+                  <Col xs={12} md={4} key={index}>
+                    <img
+                      className="fr-responsive-img"
+                      src={`data:${image.contentType};base64,${image.base64}`}
+                      alt={`Pièce jointe ${index + 1}`}
+                    />
+                  </Col>
+                ))}
+              </Row>
             )}
           </div>
-          <p className="fr-text--sm fr-text-mention--grey fr-mb-0 mail-card__date">
-            Reçu le {formattedDate} à {formattedTime}
-          </p>
+          <div className="fr-card__end">
+            <Text className="fr-card__detail fr-icon-calendar-line">
+              Reçu le {formattedDate} à {formattedTime}
+            </Text>
+          </div>
         </div>
       </div>
-
-      <div className="mail-card__body fr-text--sm">
-        <MarkdownRenderer content={email.extractedText} clean />
-        {images.length > 0 && (
-          <div className="mail-card__images">
-            {images.map((image, index) => (
-              <img
-                key={index}
-                src={`data:${image.contentType};base64,${image.base64}`}
-                alt={`Pièce jointe ${index + 1}`}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </a>
+    </div>
   );
 };
 
@@ -125,11 +153,9 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
               setPage={setTrackedPage}
               pageSize={PAGE_SIZE}
             />
-            <div className="mail-list">
-              {trackedPageEmails.map((email) => (
-                <EmailCard key={email._id} email={email} />
-              ))}
-            </div>
+            {trackedPageEmails.map((email) => (
+              <EmailCard key={email._id} email={email} />
+            ))}
             <Row horizontalAlign="right">
               <BottomPaginationButtons
                 page={safeTrackedPage}
@@ -161,11 +187,9 @@ const LastMailsReceivedItem: React.FC<LastMailsReceivedProps> = ({ data }) => {
               setPage={setUntrackedPage}
               pageSize={PAGE_SIZE}
             />
-            <div className="mail-list">
-              {untrackedPageEmails.map((email) => (
-                <EmailCard key={email._id} email={email} showSubject={true} />
-              ))}
-            </div>
+            {untrackedPageEmails.map((email) => (
+              <EmailCard key={email._id} email={email} showSubject={true} />
+            ))}
             <Row horizontalAlign="right">
               <BottomPaginationButtons
                 page={safeUntrackedPage}
