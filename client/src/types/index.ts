@@ -38,14 +38,13 @@ export interface BaseContribution {
   organisation?: string;
   fonction?: string;
   threads?: Thread[];
-  extra?: Record<string, any>;
+  extra?: Record<string, unknown>;
 }
 
 export interface Contribution extends BaseContribution {
-  selectedProfile: any;
-  objectType: any;
+  selectedProfile: string;
+  objectType: string;
   type: string;
-  emails?: any;
 }
 
 export interface Contribute_Production extends BaseContribution {
@@ -55,8 +54,8 @@ export interface Contribute_Production extends BaseContribution {
 }
 
 export interface UnifiedContribution {
-  contact: any;
-  csv: any;
+  contact?: { email?: string };
+  csv?: string;
   id: string;
   created_at: string;
   status?: string;
@@ -111,9 +110,7 @@ export interface ProfileModalProps {
 export interface EmailItem {
   images: Record<string, { contentType: string; base64: string }>;
   href: string;
-  selectedProfile: any;
-  map(arg0: (email: any) => any): Iterable<unknown>;
-  filter(arg0: (email: any) => boolean): unknown;
+  selectedProfile: string;
   _id: string;
   from: { name: string; address: string }[];
   subject: string;
@@ -235,15 +232,15 @@ export interface ContributionProductionItemProps {
     message: string;
     status?: string;
     tag?: string;
-    productions: any[];
+    productions: Production[];
     created_at: string;
     name: string;
     id: string;
   };
   refetch: () => void;
-  allTags: any[];
+  allTags: string[];
   authorsData: any;
-  landingPages: any;
+  landingPages: Record<string, string>;
   idrefNames: Record<string, string>;
 }
 export interface ExcelExportButtonProps {
@@ -252,7 +249,7 @@ export interface ExcelExportButtonProps {
 
 export interface StaffProductionActionsProps {
   data?: {
-    name: any;
+    name: string;
     threads?: Array<{
       responses: Array<{
         team: string[];
@@ -269,7 +266,7 @@ export interface ContributionDetailsProps {
   selectedContribution: string | number;
   refetch: () => void;
   highlightedQuery?: string;
-  allTags: any[];
+  allTags: string[];
   url?: string;
 }
 
@@ -295,7 +292,7 @@ export interface PaginationProps {
 }
 
 export interface TopPaginationProps extends PaginationProps {
-  meta: any;
+  meta?: { total?: number };
 }
 
 export interface StaffActionsProps {
