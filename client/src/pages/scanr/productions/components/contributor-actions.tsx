@@ -22,45 +22,29 @@ const ContributorActions = ({
   const { dataList, setDataList } = useDataList();
 
   const handleExportAllClick = () => {
-    setDataList((prevState) => {
-      let addedToCart = false;
-      const updatedList = prevState.map((item) => {
-        if (item.person_id === contribution.objectId && !item.export) {
-          addedToCart = true;
-          return { ...item, export: true };
-        } else {
-          return item;
-        }
-      });
+    const isToAdd = (item: (typeof dataList)[number]) =>
+      item.person_id === contribution.objectId && !item.export;
+    const addedCount = dataList.filter(isToAdd).length;
 
-      if (addedToCart) {
-        const count = dataList.filter((item) => item.export === true).length;
+    if (addedCount === 0) {
+      toast.warn(
+        `Les publications de "${contribution.name}" sont déjà dans le panier ! Ou bien, le nom est différent de celui de la contribution. Veuillez vérifier, puis les entrer à la main`,
+        { style: { backgroundColor: "#f57c00", color: "#fff" } }
+      );
+      return;
+    }
 
-        const message =
-          count === 1
-            ? `La publication de "${contribution.name}" a été ajoutée au panier`
-            : `Les publications de "${contribution.name}" ont été ajoutées au panier`;
-
-        toast(message, {
-          style: {
-            backgroundColor: "#4caf50",
-            color: "#fff",
-          },
-        });
-      } else {
-        toast.warn(
-          `Les publications de "${contribution.name}" sont déjà dans le panier ! Ou bien, le nom est différent de celui de la contribution. Veuillez vérifier, puis les entrer à la main`,
-          {
-            style: {
-              backgroundColor: "#f57c00",
-              color: "#fff",
-            },
-          }
-        );
-      }
-
-      return updatedList;
-    });
+    setDataList((prevState) =>
+      prevState.map((item) =>
+        isToAdd(item) ? { ...item, export: true } : item
+      )
+    );
+    toast(
+      addedCount === 1
+        ? `La publication de "${contribution.name}" a été ajoutée au panier`
+        : `Les publications de "${contribution.name}" ont été ajoutées au panier`,
+      { style: { backgroundColor: "#4caf50", color: "#fff" } }
+    );
   };
 
   return (

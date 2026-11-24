@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { Col, Row } from "@dataesr/dsfr-plus";
 import ReactSelect, { CSSObjectWithLabel } from "react-select";
@@ -49,27 +50,46 @@ export default function SelectWithNames({
   };
 
   const closestIndex = findClosestNameIndex();
-  if (
+  const shouldPreselectClosestName =
     closestIndex !== -1 &&
     !hasExistingElement(false) &&
     !dataList.some(
       (e) => e.publi_id === productionId && e.contribution_id === contributionId
-    )
-  ) {
-    const closestName = fullName[closestIndex];
-    setDataList((prevState) => [
-      ...prevState,
-      {
-        fullName: closestName,
-        person_id: idRef,
-        publi_id: productionId,
-        contribution_id: contributionId,
-        first_name: firstName[closestIndex],
-        last_name: lastName[closestIndex],
-        export: false,
-      },
-    ]);
-  }
+    );
+
+  useEffect(() => {
+    if (!shouldPreselectClosestName) return;
+    setDataList((prevState) => {
+      const isAlreadyListed = prevState.some(
+        (e) =>
+          e.publi_id === productionId && e.contribution_id === contributionId
+      );
+      if (isAlreadyListed) return prevState;
+
+      return [
+        ...prevState,
+        {
+          fullName: fullName[closestIndex],
+          person_id: idRef,
+          publi_id: productionId,
+          contribution_id: contributionId,
+          first_name: firstName[closestIndex],
+          last_name: lastName[closestIndex],
+          export: false,
+        },
+      ];
+    });
+  }, [
+    shouldPreselectClosestName,
+    closestIndex,
+    fullName,
+    firstName,
+    lastName,
+    idRef,
+    productionId,
+    contributionId,
+    setDataList,
+  ]);
 
   const handleChange = (option: SelectOption | null) => {
     if (!option) return;
@@ -77,41 +97,29 @@ export default function SelectWithNames({
     const selectedIndex = fullName.indexOf(option.value);
     if (selectedIndex === -1) return;
 
-    if (!hasExistingElement(true)) {
-      setDataList((prevState) => {
-        const newList = [
-          ...prevState,
-          {
-            fullName: option.value,
-            person_id: idRef,
-            publi_id: productionId,
-            contribution_id: contributionId,
-            first_name: firstName[selectedIndex],
-            last_name: lastName[selectedIndex],
-            export: true,
-          },
-        ];
-
-        toast(`La publication de ${option.value} a été ajoutée au panier`, {
-          style: {
-            backgroundColor: "#4caf50",
-            color: "#fff",
-          },
-        });
-
-        return newList;
-      });
-    } else {
+    if (hasExistingElement(true)) {
       toast.warn(
         `La publication de ${option.value} est déjà dans le panier !`,
-        {
-          style: {
-            backgroundColor: "#f57c00",
-            color: "#fff",
-          },
-        }
+        { style: { backgroundColor: "#f57c00", color: "#fff" } }
       );
+      return;
     }
+
+    setDataList((prevState) => [
+      ...prevState,
+      {
+        fullName: option.value,
+        person_id: idRef,
+        publi_id: productionId,
+        contribution_id: contributionId,
+        first_name: firstName[selectedIndex],
+        last_name: lastName[selectedIndex],
+        export: true,
+      },
+    ]);
+    toast(`La publication de ${option.value} a été ajoutée au panier`, {
+      style: { backgroundColor: "#4caf50", color: "#fff" },
+    });
   };
 
   const customStyles = {
