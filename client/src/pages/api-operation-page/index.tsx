@@ -20,6 +20,8 @@ import {
 } from "../../types";
 import "./styles.scss";
 
+const PAGE_SIZE = 20;
+
 const ContributionPage: React.FC = () => {
   const location = useLocation();
 
@@ -82,7 +84,16 @@ const ContributionPage: React.FC = () => {
     updateUrlAndState({ newQuery, newPage: 1 });
   };
 
-  const url = buildURL(location, sort, status, query.join(" "), page);
+  const url = buildURL(
+    location,
+    sort,
+    status,
+    query.join(" "),
+    page,
+    true,
+    undefined,
+    PAGE_SIZE.toString()
+  );
 
   const {
     data: fetchedData,
@@ -94,7 +105,7 @@ const ContributionPage: React.FC = () => {
   const contrib: Contribute_Production[] = fetchedData?.data || [];
 
   const meta: { total?: number } = fetchedData?.meta || {};
-  const maxPage = meta.total ? Math.ceil(meta.total / 10) : 1;
+  const maxPage = meta.total ? Math.ceil(meta.total / PAGE_SIZE) : 1;
 
   const filteredContributions = contrib.filter((contribution) => {
     if (query.length === 0) {
