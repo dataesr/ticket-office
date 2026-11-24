@@ -18,7 +18,44 @@ type InfoRowProps = {
   value: React.ReactNode;
   valueClassName?: string;
   copyText?: string;
+  copiedText: string | null;
+  copyToClipboard: (text: string) => void;
 };
+
+const InfoRow = ({
+  icon,
+  label,
+  value,
+  valueClassName,
+  copyText,
+  copiedText,
+  copyToClipboard,
+}: InfoRowProps) => (
+  <div
+    className={`contribution-info__row${copyText ? " contribution-info__row--pinned" : ""}`}
+  >
+    <span
+      className={`fr-icon-${icon} contribution-info__icon`}
+      aria-hidden="true"
+    />
+    <div className="contribution-info__text">
+      <p className="fr-text--xs fr-text-mention--grey fr-mb-0">{label}</p>
+      <p
+        className={`fr-text--sm fr-mb-0 contribution-info__value ${valueClassName || ""}`}
+      >
+        <span className="contribution-info__value-text">{value}</span>
+        {copyText && (
+          <CopyButton
+            text={copyText}
+            copiedText={copiedText}
+            onCopy={copyToClipboard}
+            ariaLabel={`Copier : ${label.toLowerCase()}`}
+          />
+        )}
+      </p>
+    </div>
+  </div>
+);
 
 const MessagePreview = ({
   data,
@@ -33,40 +70,7 @@ const MessagePreview = ({
   const [scanRClicked, setScanRClicked] = useState(false);
   const { dataList, setDataList } = useDataList();
   const fetchedData = idrefNames[data.objectId] || "";
-  const { copiedText, copyToClipboard } = useCopyToClipboard();
-
-  const InfoRow = ({
-    icon,
-    label,
-    value,
-    valueClassName,
-    copyText,
-  }: InfoRowProps) => (
-    <div
-      className={`contribution-info__row${copyText ? " contribution-info__row--pinned" : ""}`}
-    >
-      <span
-        className={`fr-icon-${icon} contribution-info__icon`}
-        aria-hidden="true"
-      />
-      <div className="contribution-info__text">
-        <p className="fr-text--xs fr-text-mention--grey fr-mb-0">{label}</p>
-        <p
-          className={`fr-text--sm fr-mb-0 contribution-info__value ${valueClassName || ""}`}
-        >
-          <span className="contribution-info__value-text">{value}</span>
-          {copyText && (
-            <CopyButton
-              text={copyText}
-              copiedText={copiedText}
-              onCopy={copyToClipboard}
-              ariaLabel={`Copier : ${label.toLowerCase()}`}
-            />
-          )}
-        </p>
-      </div>
-    </div>
-  );
+  const copy = useCopyToClipboard();
 
   const handleExportAllClick = () => {
     setDataList((prevState) => {
@@ -126,6 +130,7 @@ const MessagePreview = ({
       <div className="contribution-info contribution-info--inline-copy fr-mb-2w">
         {data?.objectId && (
           <InfoRow
+            {...copy}
             icon="links-line"
             label="ID de la personne concernée"
             value={data.objectId}
@@ -134,6 +139,7 @@ const MessagePreview = ({
         )}
 
         <InfoRow
+          {...copy}
           icon="user-star-line"
           label="Nom sur scanR (via IdRef)"
           value={fetchedData || "Nom non existant sur scanR"}
@@ -142,6 +148,7 @@ const MessagePreview = ({
         />
 
         <InfoRow
+          {...copy}
           icon="user-line"
           label="Nom renseigné dans la contribution"
           value={data.name}
@@ -149,6 +156,7 @@ const MessagePreview = ({
 
         {data.email && (
           <InfoRow
+            {...copy}
             icon="mail-line"
             label="Email"
             value={data.email}
@@ -158,6 +166,7 @@ const MessagePreview = ({
 
         {data.comment && (
           <InfoRow
+            {...copy}
             icon="message-2-line"
             label={`Commentaire${data.team?.[0] ? ` (${data.team[0]})` : ""}`}
             value={data.comment}
