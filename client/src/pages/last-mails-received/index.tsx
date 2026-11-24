@@ -1,5 +1,5 @@
 import { Container, Text } from "@dataesr/dsfr-plus";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader";
 import LastMailsReceivedItem from "./components/item";
 import { useReceivedEmails } from "../../api/mails";
 import "./components/styles.scss";
@@ -8,11 +8,7 @@ const LastMailsReceived: React.FC = () => {
   const { data, isLoading, isError } = useReceivedEmails();
 
   if (isLoading) {
-    return (
-      <div className="loading-container">
-        <ClipLoader color="#123abc" size={50} />
-      </div>
-    );
+    return <Loader />;
   }
 
   if (isError)

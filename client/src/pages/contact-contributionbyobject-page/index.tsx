@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader";
 import { ContributionData } from "../../api/contributions";
 import { buildURL } from "../../api/utils/buildURL";
 import Selectors from "../../components/selectors";
@@ -155,9 +155,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
         />
 
         {isLoading ? (
-          <div className="fr-grid-row fr-grid-row--center fr-py-10w">
-            <ClipLoader color="var(--blue-france-sun-113-625)" size={50} />
-          </div>
+          <Loader />
         ) : isError ? (
           <div className="fr-alert fr-alert--error">
             <p className="fr-alert__title">Erreur</p>

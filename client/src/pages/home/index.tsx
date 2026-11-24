@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { Alert, Container, Spinner, Text } from "@dataesr/dsfr-plus";
+import { Alert, Container, Text } from "@dataesr/dsfr-plus";
+import Loader from "../../components/loader";
 import SearchSection from "../../components/search-section";
 import { ContributionAllData } from "../../api/contributions";
 import AllContributions from "./components/item";
@@ -38,11 +39,7 @@ const Home = () => {
 
   const renderResults = () => {
     if (isLoading) {
-      return (
-        <div className="fr-grid-row fr-grid-row--center fr-py-12w">
-          <Spinner size={48} />
-        </div>
-      );
+      return <Loader />;
     }
 
     if (isError) {

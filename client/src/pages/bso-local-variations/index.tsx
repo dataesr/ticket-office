@@ -1,7 +1,7 @@
 import { Col, Container, Row, Text } from "@dataesr/dsfr-plus"
 import { useCallback } from "react"
-import { ClipLoader } from "react-spinners"
 
+import Loader from "../../components/loader"
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import ActionBar from "./components/actions-bar"
 import CheckboxList from "./components/checkbox-list"
@@ -34,11 +34,7 @@ function BsoLocalVariationsPage() {
   const maxPage = meta ? Math.ceil(meta.total / 10) : 1
 
   if (isLoading) {
-    return (
-      <div className="loading-container">
-        <ClipLoader color="#123abc" size={50} />
-      </div>
-    )
+    return <Loader />
   }
 
   if (isError)

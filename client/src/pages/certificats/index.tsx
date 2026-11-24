@@ -1,4 +1,5 @@
 import { Container, Title, Row, Col, Badge } from "@dataesr/dsfr-plus";
+import Loader from "../../components/loader";
 import { useCertificates } from "./api";
 
 const getUrgenceColor = (urgence: string) => {
@@ -79,11 +80,7 @@ const Certificats = () => {
         </p>
       </div>
 
-      {isLoading && (
-        <div className="fr-callout fr-callout--info">
-          <p className="fr-callout__text">Chargement des certificats...</p>
-        </div>
-      )}
+      {isLoading && <Loader />}
 
       {error && (
         <div className="fr-callout fr-callout--error">

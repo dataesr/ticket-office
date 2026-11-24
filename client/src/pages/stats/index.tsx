@@ -10,6 +10,7 @@ import {
   useMatomoRegions,
   useMatomoCities,
 } from "./api";
+import Loader from "../../components/loader";
 import { MATOMO_SITES } from "../../config/matomo-sites";
 import StatsFilters from "./StatsFilters";
 import StatsCards from "./StatsCards";
@@ -117,11 +118,7 @@ const GetStats = () => {
         isQuickActive={isQuickActive}
       />
 
-      {isLoading && (
-        <div className="fr-callout fr-callout--info fr-mt-3w">
-          <p className="fr-callout__text">Chargement des données...</p>
-        </div>
-      )}
+      {isLoading && <Loader />}
 
       {error && (
         <div className="fr-callout fr-callout--error fr-mt-3w">

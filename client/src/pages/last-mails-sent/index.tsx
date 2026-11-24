@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Container, Text } from "@dataesr/dsfr-plus";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import SearchSection from "../../components/search-section";
@@ -90,11 +90,7 @@ const LastMailsSent: React.FC = () => {
     };
 
   if (isLoading) {
-    return (
-      <div className="loading-container">
-        <ClipLoader color="#123abc" size={50} />
-      </div>
-    );
+    return <Loader />;
   }
 
   if (isError)

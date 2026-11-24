@@ -3,7 +3,7 @@ import { Col, Container, Notice, Row, Text, Title } from "@dataesr/dsfr-plus";
 import { useLocation } from "react-router-dom";
 
 import ExcelExportButton from "./export-to-xlsx";
-import { ClipLoader } from "react-spinners";
+import Loader from "../../components/loader";
 import { useDataList } from "./data-list-context";
 import { buildURL } from "../../api/utils/buildURL";
 import { ContributionData } from "../../api/contributions";
@@ -197,9 +197,7 @@ const ContributionPage: React.FC = () => {
               Aucune contribution ne correspond à votre recherche.
             </Notice>
           ) : isPageLoading ? (
-            <div className="fr-my-5w text-center">
-              <ClipLoader color="#000091" size={50} />
-            </div>
+            <Loader />
           ) : (
             filteredContributions.map((contribution) => (
               <ContributionProductionItem
