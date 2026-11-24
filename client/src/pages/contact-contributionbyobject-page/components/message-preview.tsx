@@ -1,6 +1,6 @@
 import HighlightedMessage from "../../../components/highlighted-message";
 import { capitalizeFirstLetter } from "../../../utils/capitalize";
-import { CopyButton } from "../../../components/copy-button";
+import InfoRow from "../../../components/info-row";
 import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
 import { MessagePreviewProps } from "../../../types";
 
@@ -22,45 +22,6 @@ const OBJECT_LINKS: Record<string, { scanr: string; dataesr?: string }> = {
   },
   network: { scanr: `${SCANR_URL}/networks?` },
 };
-
-type InfoRowProps = {
-  icon: string;
-  label: string;
-  value: React.ReactNode;
-  copyText?: string;
-  copiedText: string | null;
-  copyToClipboard: (text: string) => void;
-};
-
-const InfoRow = ({
-  icon,
-  label,
-  value,
-  copyText,
-  copiedText,
-  copyToClipboard,
-}: InfoRowProps) => (
-  <div className="contribution-info__row">
-    <span
-      className={`fr-icon-${icon} contribution-info__icon`}
-      aria-hidden="true"
-    />
-    <div className="contribution-info__text">
-      <p className="fr-text--xs fr-text-mention--grey fr-mb-0">{label}</p>
-      <p className="fr-text--sm fr-mb-0 contribution-info__value">
-        {value}
-        {copyText && (
-          <CopyButton
-            text={copyText}
-            copiedText={copiedText}
-            onCopy={copyToClipboard}
-            ariaLabel={`Copier : ${label.toLowerCase()}`}
-          />
-        )}
-      </p>
-    </div>
-  </div>
-);
 
 const MessagePreview: React.FC<MessagePreviewProps> = ({
   data,
