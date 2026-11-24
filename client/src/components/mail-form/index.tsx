@@ -2,7 +2,6 @@ import { useId, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { postHeaders } from "../../config/api";
-import "./styles.scss";
 
 const TEMPLATES = [
   { label: "Accès API scanR", value: "API" },
@@ -103,7 +102,8 @@ function EmailForm({
   if (!contribution?.email) return null;
 
   return (
-    <div className="email-composer">
+    <>
+      <hr className="fr-mt-3w" />
       <div className="fr-select-group fr-mb-3w">
         <select
           id={templateSelectId}
@@ -154,7 +154,7 @@ function EmailForm({
           </button>
         </li>
       </ul>
-    </div>
+    </>
   );
 }
 
