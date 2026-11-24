@@ -1,6 +1,7 @@
-import { Container, Title, Row, Col, Badge } from "@dataesr/dsfr-plus";
+import { Container, Row, Col, Badge } from "@dataesr/dsfr-plus";
 import Loader from "../../components/loader";
 import { useCertificates } from "./api";
+import PageBanner from "../../components/page-banner";
 
 const getUrgenceColor = (urgence: string) => {
   switch (urgence) {
@@ -72,173 +73,172 @@ const OrganismeBadge = ({ organisme }: { organisme: Organisme }) => (
 const Certificats = () => {
   const { data, isLoading, error } = useCertificates();
   return (
-    <Container className="fr-mt-5w">
-      <div className="fr-mb-3w">
-        <Title look="h3">Certificats SSL</Title>
-        <p className="fr-text--sm">
-          Surveillance de l'expiration des certificats SSL de nos applications
-        </p>
-      </div>
+    <>
+      <PageBanner
+        title="Certificats"
+        description="Surveillance de l'expiration des certificats SSL de nos applications"
+      ></PageBanner>
+      <Container className="fr-mt-5w">
+        {isLoading && <Loader />}
 
-      {isLoading && <Loader />}
-
-      {error && (
-        <div className="fr-callout fr-callout--error">
-          <h3 className="fr-callout__title">Erreur</h3>
-          <p className="fr-callout__text">{error.message}</p>
-        </div>
-      )}
-
-      {data && !isLoading && !error && (
-        <>
-          <div className="fr-callout fr-callout--info fr-mb-3w">
-            <p className="fr-callout__text--xs">
-              Rapport généré le{" "}
-              {new Date(data.date).toLocaleDateString("fr-FR")}
-            </p>
+        {error && (
+          <div className="fr-callout fr-callout--error">
+            <h3 className="fr-callout__title">Erreur</h3>
+            <p className="fr-callout__text">{error.message}</p>
           </div>
+        )}
 
-          <div className="stat-table">
-            <table className="fr-table">
-              <thead>
-                <tr>
-                  <th>Site</th>
-                  <th>Date d'expiration</th>
-                  <th>Jours restants</th>
-                  <th>Statut</th>
-                  <th>Urgence</th>
-                  <th>Gestion</th>
-                  <th>Hébergement</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.certificates.map((certificate, index) => {
-                  const owner = CERTIFICATE_OWNERS[certificate.site];
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <strong>{certificate.site}</strong>
-                        {certificate.error && (
-                          <div className="fr-text fr-text--error">
-                            {certificate.error}
-                          </div>
-                        )}
-                      </td>
-                      <td>{certificate.expiration}</td>
-                      <td>
-                        <span
-                          className={
-                            certificate.joursRestants <= 5
-                              ? "fr-text--error"
-                              : certificate.joursRestants <= 30
-                                ? "fr-text--warning"
-                                : ""
-                          }
-                        >
-                          {certificate.joursRestants < 0
-                            ? "Expiré"
-                            : certificate.joursRestants}
-                        </span>
-                      </td>
-                      <td>{certificate.statut}</td>
-                      <td>
-                        <Badge
-                          color={getUrgenceColor(certificate.urgence)}
-                          size="sm"
-                        >
-                          {certificate.urgence}
-                        </Badge>
-                      </td>
-                      <td>
-                        {owner ? (
-                          <OrganismeBadge organisme={owner.gestion} />
-                        ) : (
-                          "Non renseigné"
-                        )}
-                      </td>
-                      <td>
-                        {owner ? (
-                          <OrganismeBadge organisme={owner.hebergement} />
-                        ) : (
-                          "Non renseigné"
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+        {data && !isLoading && !error && (
+          <>
+            <div className="fr-callout fr-callout--info fr-mb-3w">
+              <p className="fr-callout__text--xs">
+                Rapport généré le{" "}
+                {new Date(data.date).toLocaleDateString("fr-FR")}
+              </p>
+            </div>
 
-          <Row gutters className="fr-mt-3w">
-            <Col xs="12" md="3">
-              <div className="fr-card fr-card--sm">
-                <div className="fr-card__body">
-                  <div className="fr-card__content">
-                    <h3 className="fr-card__title">
-                      {
-                        data.certificates.filter(
-                          (certificate) => certificate.urgence === "Critique"
-                        ).length
-                      }
-                    </h3>
-                    <p className="fr-card__desc">Critiques</p>
+            <div className="stat-table">
+              <table className="fr-table">
+                <thead>
+                  <tr>
+                    <th>Site</th>
+                    <th>Date d'expiration</th>
+                    <th>Jours restants</th>
+                    <th>Statut</th>
+                    <th>Urgence</th>
+                    <th>Gestion</th>
+                    <th>Hébergement</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.certificates.map((certificate, index) => {
+                    const owner = CERTIFICATE_OWNERS[certificate.site];
+                    return (
+                      <tr key={index}>
+                        <td>
+                          <strong>{certificate.site}</strong>
+                          {certificate.error && (
+                            <div className="fr-text fr-text--error">
+                              {certificate.error}
+                            </div>
+                          )}
+                        </td>
+                        <td>{certificate.expiration}</td>
+                        <td>
+                          <span
+                            className={
+                              certificate.joursRestants <= 5
+                                ? "fr-text--error"
+                                : certificate.joursRestants <= 30
+                                  ? "fr-text--warning"
+                                  : ""
+                            }
+                          >
+                            {certificate.joursRestants < 0
+                              ? "Expiré"
+                              : certificate.joursRestants}
+                          </span>
+                        </td>
+                        <td>{certificate.statut}</td>
+                        <td>
+                          <Badge
+                            color={getUrgenceColor(certificate.urgence)}
+                            size="sm"
+                          >
+                            {certificate.urgence}
+                          </Badge>
+                        </td>
+                        <td>
+                          {owner ? (
+                            <OrganismeBadge organisme={owner.gestion} />
+                          ) : (
+                            "Non renseigné"
+                          )}
+                        </td>
+                        <td>
+                          {owner ? (
+                            <OrganismeBadge organisme={owner.hebergement} />
+                          ) : (
+                            "Non renseigné"
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            <Row gutters className="fr-mt-3w">
+              <Col xs="12" md="3">
+                <div className="fr-card fr-card--sm">
+                  <div className="fr-card__body">
+                    <div className="fr-card__content">
+                      <h3 className="fr-card__title">
+                        {
+                          data.certificates.filter(
+                            (certificate) => certificate.urgence === "Critique"
+                          ).length
+                        }
+                      </h3>
+                      <p className="fr-card__desc">Critiques</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-            <Col xs="12" md="3">
-              <div className="fr-card fr-card--sm">
-                <div className="fr-card__body">
-                  <div className="fr-card__content">
-                    <h3 className="fr-card__title">
-                      {
-                        data.certificates.filter(
-                          (certificate) => certificate.urgence === "Élevée"
-                        ).length
-                      }
-                    </h3>
-                    <p className="fr-card__desc">Urgence élevée</p>
+              </Col>
+              <Col xs="12" md="3">
+                <div className="fr-card fr-card--sm">
+                  <div className="fr-card__body">
+                    <div className="fr-card__content">
+                      <h3 className="fr-card__title">
+                        {
+                          data.certificates.filter(
+                            (certificate) => certificate.urgence === "Élevée"
+                          ).length
+                        }
+                      </h3>
+                      <p className="fr-card__desc">Urgence élevée</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-            <Col xs="12" md="3">
-              <div className="fr-card fr-card--sm">
-                <div className="fr-card__body">
-                  <div className="fr-card__content">
-                    <h3 className="fr-card__title">
-                      {
-                        data.certificates.filter(
-                          (certificate) => certificate.urgence === "Moyenne"
-                        ).length
-                      }
-                    </h3>
-                    <p className="fr-card__desc">Urgence moyenne</p>
+              </Col>
+              <Col xs="12" md="3">
+                <div className="fr-card fr-card--sm">
+                  <div className="fr-card__body">
+                    <div className="fr-card__content">
+                      <h3 className="fr-card__title">
+                        {
+                          data.certificates.filter(
+                            (certificate) => certificate.urgence === "Moyenne"
+                          ).length
+                        }
+                      </h3>
+                      <p className="fr-card__desc">Urgence moyenne</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-            <Col xs="12" md="3">
-              <div className="fr-card fr-card--sm">
-                <div className="fr-card__body">
-                  <div className="fr-card__content">
-                    <h3 className="fr-card__title">
-                      {
-                        data.certificates.filter(
-                          (certificate) => certificate.urgence === "Faible"
-                        ).length
-                      }
-                    </h3>
-                    <p className="fr-card__desc">Valides</p>
+              </Col>
+              <Col xs="12" md="3">
+                <div className="fr-card fr-card--sm">
+                  <div className="fr-card__body">
+                    <div className="fr-card__content">
+                      <h3 className="fr-card__title">
+                        {
+                          data.certificates.filter(
+                            (certificate) => certificate.urgence === "Faible"
+                          ).length
+                        }
+                      </h3>
+                      <p className="fr-card__desc">Valides</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Col>
-          </Row>
-        </>
-      )}
-    </Container>
+              </Col>
+            </Row>
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 

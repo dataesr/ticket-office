@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Loader from "../../components/loader";
+import PageBanner from "../../components/page-banner";
 import { ContributionData } from "../../api/contributions";
 import { buildURL } from "../../api/utils/buildURL";
 import Selectors from "../../components/selectors";
@@ -115,36 +116,32 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   const pageTitle = getPageTitle(location.pathname);
 
   return (
-    <main id="content" className="contribution-top-page">
-      <section className="contribution-top-page__banner">
-        <div className="fr-container fr-py-8w">
-          <h1 className="fr-mb-1w">{pageTitle}</h1>
-          <p className="fr-mb-3w fr-text--sm">
-            Vous pouvez consulter les contributions des utilisateurs et les
-            objets auxquels ils ont contribué.
-          </p>
-          <div className="page-header-row">
-            <div className="page-header-row__search">
-              <SearchSection
-                query={query}
-                handleSearch={handleSearch}
-                handleRemoveQueryItem={handleRemoveQueryItem}
-              />
-            </div>
-            <Selectors
-              layout="inline"
-              sort={sort}
-              status={status}
-              setSort={handleSetSort}
-              setStatus={handleSetStatus}
-              searchInMessage={searchInMessage}
-              setSearchInMessage={handleSetSearchInMessage}
-              objectType={objectType}
-              setObjectType={handleSetObjectType}
+    <main id="content">
+      <PageBanner
+        title={pageTitle}
+        description="Vous pouvez consulter les contributions des utilisateurs et les objets auxquels ils ont contribué."
+      >
+        <div className="page-header-row">
+          <div className="page-header-row__search">
+            <SearchSection
+              query={query}
+              handleSearch={handleSearch}
+              handleRemoveQueryItem={handleRemoveQueryItem}
             />
           </div>
+          <Selectors
+            layout="inline"
+            sort={sort}
+            status={status}
+            setSort={handleSetSort}
+            setStatus={handleSetStatus}
+            searchInMessage={searchInMessage}
+            setSearchInMessage={handleSetSearchInMessage}
+            objectType={objectType}
+            setObjectType={handleSetObjectType}
+          />
         </div>
-      </section>
+      </PageBanner>
       <div className="fr-container fr-py-6w">
         <TopPaginationButtons
           meta={meta}

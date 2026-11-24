@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Title, DismissibleTag } from "@dataesr/dsfr-plus";
+import { Container, DismissibleTag } from "@dataesr/dsfr-plus";
 import {
   useMatomoStats,
   useMatomoTopPages,
@@ -18,6 +18,7 @@ import StatsChart from "./StatsChart";
 import TopPagesTable from "./TopPagesTable";
 import StatsLists from "./StatsLists";
 import "./styles.scss";
+import PageBanner from "../../components/page-banner";
 
 const GetStats = () => {
   const [site, setSite] = useState<string>("scanr-prod");
@@ -102,69 +103,71 @@ const GetStats = () => {
     MATOMO_SITES[site as keyof typeof MATOMO_SITES]?.name || "Site";
 
   return (
-    <Container className="fr-mt-5w">
-      <div className="stats-header">
-        <Title look="h3">Statistiques de {currentSiteName}</Title>
-      </div>
-
-      <StatsFilters
-        site={site}
-        setSite={setSite}
-        period={period}
-        setPeriod={setPeriod}
-        customDate={customDate}
-        handleCustomDateChange={handleCustomDateChange}
-        handleQuickDate={handleQuickDate}
-        isQuickActive={isQuickActive}
+    <>
+      <PageBanner
+        title="Statistiques Matomo"
+        description={`Statistiques de ${currentSiteName}`}
       />
+      <Container className="fr-mt-5w">
+        <StatsFilters
+          site={site}
+          setSite={setSite}
+          period={period}
+          setPeriod={setPeriod}
+          customDate={customDate}
+          handleCustomDateChange={handleCustomDateChange}
+          handleQuickDate={handleQuickDate}
+          isQuickActive={isQuickActive}
+        />
 
-      {isLoading && <Loader />}
+        {isLoading && <Loader />}
 
-      {error && (
-        <div className="fr-callout fr-callout--error fr-mt-3w">
-          <h3 className="fr-callout__title">Erreur</h3>
-          <p className="fr-callout__text">{error.message}</p>
-        </div>
-      )}
+        {error && (
+          <div className="fr-callout fr-callout--error fr-mt-3w">
+            <h3 className="fr-callout__title">Erreur</h3>
+            <p className="fr-callout__text">{error.message}</p>
+          </div>
+        )}
 
-      {stats && !isLoading && !error && (
-        <div>
-          {((useCustomDate && customDate) || dateInput !== "today") && (
-            <div className="fr-mb-3w">
-              <DismissibleTag
-                size="sm"
-                onClick={() => handleQuickDate("today")}
-              >
-                📅{" "}
-                {useCustomDate && customDate
-                  ? new Date(customDate).toLocaleDateString("fr-FR")
-                  : dateInput === "yesterday"
-                    ? "Hier"
-                    : dateInput === "last7"
-                      ? "7 derniers jours"
-                      : dateInput === "last30"
-                        ? "30 derniers jours"
-                        : dateInput}
-              </DismissibleTag>
-            </div>
-          )}
+        {stats && !isLoading && !error && (
+          <div>
+            {((useCustomDate && customDate) || dateInput !== "today") && (
+              <div className="fr-mb-3w">
+                <DismissibleTag
+                  size="sm"
+                  onClick={() => handleQuickDate("today")}
+                >
+                  📅{" "}
+                  {useCustomDate && customDate
+                    ? new Date(customDate).toLocaleDateString("fr-FR")
+                    : dateInput === "yesterday"
+                      ? "Hier"
+                      : dateInput === "last7"
+                        ? "7 derniers jours"
+                        : dateInput === "last30"
+                          ? "30 derniers jours"
+                          : dateInput}
+                </DismissibleTag>
+              </div>
+            )}
 
-          <StatsCards stats={stats} />
+            <StatsCards stats={stats} />
 
-          {evolutionData && <StatsChart evolutionData={evolutionData} />}
+            {evolutionData && <StatsChart evolutionData={evolutionData} />}
 
-          <TopPagesTable topPages={topPages || []} />
+            <TopPagesTable topPages={topPages || []} />
 
-          <StatsLists
-            referrers={referrers}
-            devices={devices}
-            osFamilies={osFamilies}
-            regions={regions}
-            cities={cities}
-          />
-        </div>
-      )}
-    </Container>
+            <StatsLists
+              referrers={referrers}
+              devices={devices}
+              osFamilies={osFamilies}
+              regions={regions}
+              cities={cities}
+            />
+          </div>
+        )}
+      </Container>
+    </>
   );
 };
 

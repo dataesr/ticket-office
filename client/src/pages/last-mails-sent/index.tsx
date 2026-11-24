@@ -5,6 +5,7 @@ import Loader from "../../components/loader";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import SearchSection from "../../components/search-section";
+import PageBanner from "../../components/page-banner";
 import { useSentEmails } from "../../api/mails";
 import MailFilters from "./components/selectors";
 import LastMailsSentItem from "./components/item";
@@ -101,41 +102,36 @@ const LastMailsSent: React.FC = () => {
     );
 
   return (
-    <main id="content" className="mails-top-page">
-      <section className="mails-top-page__banner">
-        <div className="fr-container fr-py-8w">
-          <h1 className="fr-mb-1w">Derniers mails envoyés</h1>
-          <p className="fr-mb-3w fr-text--sm">
-            Filtrez les réponses envoyées par type d'objet, application, profil,
-            période ou mot-clé.
-          </p>
-
-          <div className="mails-header-row">
-            <div className="mails-header-row__search">
-              <SearchSection
-                query={query}
-                handleSearch={handleSearch}
-                handleRemoveQueryItem={handleRemoveQueryItem}
-              />
-            </div>
-            <MailFilters
-              profile={profile}
-              profiles={uniqueProfiles}
-              onProfile={withPageReset(setProfile)}
-              objectType={objectType}
-              objectTypes={objectTypeOptions}
-              onObjectType={withPageReset(setObjectType)}
-              application={application}
-              applications={applications}
-              onApplication={withPageReset(setApplication)}
-              dateFrom={dateFrom}
-              onDateFrom={withPageReset(setDateFrom)}
-              dateTo={dateTo}
-              onDateTo={withPageReset(setDateTo)}
+    <main id="content">
+      <PageBanner
+        title="Derniers mails envoyés"
+        description="Filtrez les réponses envoyées par type d'objet, application, profil, période ou mot-clé."
+      >
+        <div className="mails-header-row">
+          <div className="mails-header-row__search">
+            <SearchSection
+              query={query}
+              handleSearch={handleSearch}
+              handleRemoveQueryItem={handleRemoveQueryItem}
             />
           </div>
+          <MailFilters
+            profile={profile}
+            profiles={uniqueProfiles}
+            onProfile={withPageReset(setProfile)}
+            objectType={objectType}
+            objectTypes={objectTypeOptions}
+            onObjectType={withPageReset(setObjectType)}
+            application={application}
+            applications={applications}
+            onApplication={withPageReset(setApplication)}
+            dateFrom={dateFrom}
+            onDateFrom={withPageReset(setDateFrom)}
+            dateTo={dateTo}
+            onDateTo={withPageReset(setDateTo)}
+          />
         </div>
-      </section>
+      </PageBanner>
 
       <Container className="fr-py-6w">
         <TopPaginationButtons

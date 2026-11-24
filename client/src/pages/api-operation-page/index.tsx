@@ -4,6 +4,7 @@ import { useLocation } from "react-router-dom";
 
 import ExcelExportButton from "./export-to-xlsx";
 import Loader from "../../components/loader";
+import PageBanner from "../../components/page-banner";
 import { useDataList } from "./data-list-context";
 import { buildURL } from "../../api/utils/buildURL";
 import { ContributionData } from "../../api/contributions";
@@ -144,35 +145,31 @@ const ContributionPage: React.FC = () => {
   }
 
   return (
-    <main id="content" className="contribution-top-page">
-      <section className="contribution-top-page__banner">
-        <div className="fr-container fr-py-8w">
-          <h1 className="fr-mb-1w">Lier des publications</h1>
-          <p className="fr-mb-3w fr-text--sm">
-            Associez les publications proposées par les contributeurs aux
-            profils correspondants.
-          </p>
-          <div className="page-header-row">
-            <div className="page-header-row__search">
-              <SearchSection
-                query={query}
-                handleSearch={handleSearch}
-                handleRemoveQueryItem={handleRemoveQueryItem}
-              />
-            </div>
-            <Selectors
-              layout="inline"
-              sort={sort}
-              status={status}
-              setSort={handleSetSort}
-              setStatus={handleSetStatus}
-              searchInMessage={true}
-              objectType={undefined}
-              setObjectType={undefined}
+    <main id="content">
+      <PageBanner
+        title="Lier des publications"
+        description="Associez les publications proposées par les contributeurs aux profils correspondants."
+      >
+        <div className="page-header-row">
+          <div className="page-header-row__search">
+            <SearchSection
+              query={query}
+              handleSearch={handleSearch}
+              handleRemoveQueryItem={handleRemoveQueryItem}
             />
           </div>
+          <Selectors
+            layout="inline"
+            sort={sort}
+            status={status}
+            setSort={handleSetSort}
+            setStatus={handleSetStatus}
+            searchInMessage={true}
+            objectType={undefined}
+            setObjectType={undefined}
+          />
         </div>
-      </section>
+      </PageBanner>
 
       <Container className="fr-py-6w">
         <TopPaginationButtons

@@ -2,6 +2,7 @@ import { Col, Container, Row, Text } from "@dataesr/dsfr-plus"
 import { useCallback } from "react"
 
 import Loader from "../../components/loader"
+import PageBanner from "../../components/page-banner"
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import ActionBar from "./components/actions-bar"
 import CheckboxList from "./components/checkbox-list"
@@ -73,16 +74,13 @@ export default function BsoLocalVariations({ type }: { type: VariationsTypes }) 
 
   return (
     <VariationsContext>
-      <main id="content" className="bso-top-page">
-        <section className="bso-top-page__banner">
-          <div className="fr-container fr-py-8w">
-            <h1 className="fr-mb-1w">{title}</h1>
-            <p className="fr-mb-3w fr-text--sm">
-              Recherchez et traitez les demandes de déclinaisons locales du BSO.
-            </p>
-            <FiltersBar />
-          </div>
-        </section>
+      <main id="content">
+        <PageBanner
+          title={title}
+          description="Recherchez et traitez les demandes de déclinaisons locales du BSO."
+        >
+          <FiltersBar />
+        </PageBanner>
         <BsoLocalVariationsPage />
       </main>
     </VariationsContext>

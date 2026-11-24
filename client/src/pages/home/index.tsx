@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import { Alert, Container, Text } from "@dataesr/dsfr-plus";
 import Loader from "../../components/loader";
+import PageBanner from "../../components/page-banner";
 import SearchSection from "../../components/search-section";
 import { ContributionAllData } from "../../api/contributions";
 import AllContributions from "./components/item";
 import { filterContributions } from "./utils";
-import "./styles.scss";
 
 const Home = () => {
   const [query, setQuery] = useState<string[]>([]);
@@ -82,21 +82,16 @@ const Home = () => {
 
   return (
     <main id="content">
-      <Container fluid className="home-header__wrapper">
-        <Container className="fr-py-8w">
-          <h1 className="fr-mb-1w">Bureau des contributions</h1>
-          <p className="fr-mb-5w fr-text--sm">
-            Recherchez et traitez les contributions reçues via scanR et le BSO.
-            Sans recherche active, seules les contributions des dernières 24
-            heures sont affichées.
-          </p>
-          <SearchSection
-            query={query}
-            handleSearch={handleSearch}
-            handleRemoveQueryItem={handleRemoveQueryItem}
-          />
-        </Container>
-      </Container>
+      <PageBanner
+        title="Bureau des contributions"
+        description="Recherchez et traitez les contributions reçues via scanR et le BSO. Sans recherche active, seules les contributions des dernières 24 heures sont affichées."
+      >
+        <SearchSection
+          query={query}
+          handleSearch={handleSearch}
+          handleRemoveQueryItem={handleRemoveQueryItem}
+        />
+      </PageBanner>
       <Container className="fr-py-6w">{renderResults()}</Container>
     </main>
   );

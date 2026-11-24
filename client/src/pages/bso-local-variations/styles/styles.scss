@@ -110,16 +110,6 @@ button.active {
   box-shadow: 0 0 10px #000;
 }
 
-// Bandeau de couleur en haut de page + en-tête recherche / filtres, même motif
-// que les autres pages (dégradé sur tokens DSFR, géré en clair comme en sombre).
-.bso-top-page__banner {
-  background: linear-gradient(
-    15deg,
-    var(--background-default-grey) 0%,
-    var(--background-flat-success) 100%
-  );
-}
-
 .bso-header-row {
   display: flex;
   align-items: flex-end;
