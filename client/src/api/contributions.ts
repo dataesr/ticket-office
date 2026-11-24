@@ -1,4 +1,5 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { API_ROUTES } from "../config/api-routes";
 import { escapeRegex } from "./utils/escapeRegex";
 import { fetchJson } from "./utils/fetchJson";
 
@@ -10,16 +11,6 @@ export const ContributionData = (url: string) => {
 
   return { data, isLoading, isError, refetch };
 };
-
-const routes = [
-  "contacts",
-  "contribute",
-  "production",
-  "remove-user",
-  "update-user-data",
-  "bso-local-variations/publications",
-  "bso-local-variations/datasets",
-];
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 const SEARCH_FIELDS = ["name", "email", "message", "id"];
@@ -48,7 +39,7 @@ export const ContributionAllData = (search = "") => {
       const maxResults = search ? 2000 : 200;
       const where = encodeURIComponent(JSON.stringify(buildWhere(search)));
       return Promise.all(
-        routes.map((route) =>
+        API_ROUTES.map((route) =>
           fetchJson(
             `/api/${route}?sort=-created_at&max_results=${maxResults}&where=${where}`,
             {},

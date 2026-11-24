@@ -3,16 +3,9 @@ import { toast } from "react-toastify";
 import { Modal, ModalContent, ModalTitle } from "@dataesr/dsfr-plus";
 import { DismissibleTag } from "../tag";
 import { postHeaders } from "../../config/api";
+import { getApiRoute } from "../../config/api-routes";
 import TagSelectionModal from "./modal-select-tags";
 import { EditModalProps, Inputs } from "../../types";
-
-const getBasePath = (pathname: string) => {
-  if (pathname.includes("contributionPage")) return "contribute";
-  if (pathname.includes("scanr-removeuser")) return "remove-user";
-  if (pathname.includes("scanr-namechange")) return "update-user-data";
-  if (pathname.includes("apioperations")) return "production";
-  return "contacts";
-};
 
 const EditModal: React.FC<EditModalProps> = ({
   isOpen,
@@ -54,7 +47,7 @@ const EditModal: React.FC<EditModalProps> = ({
     contributionType: data?.contributionType || "",
   });
 
-  const url = `/api/${getBasePath(window.location.pathname)}/${data?.id}`;
+  const url = `/api/${getApiRoute(window.location.pathname)}/${data?.id}`;
 
   const handleInputChange = (key: keyof Inputs, value: any) => {
     setInputs((prevInputs) => ({ ...prevInputs, [key]: value }));

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { Modal, ModalContent, ModalTitle } from "@dataesr/dsfr-plus";
 import EmailForm from "../mail-form";
-import { getCollectionNameFromUrl } from "../../api/utils/collectionName";
+import { getCollectionName } from "../../config/api-routes";
 import { Contribution, Contribute_Production } from "../../types";
 
 type EmailSenderProps = {
@@ -18,7 +18,7 @@ function EmailSender({ contribution, refetch }: EmailSenderProps) {
 
   const sendEmail = async () => {
     const formattedResponse = userResponse.replace(/\n/g, "<br/>");
-    const collectionName = getCollectionNameFromUrl(window.location.href);
+    const collectionName = getCollectionName(window.location.pathname);
 
     const emailPayload = {
       contributionId: contribution.id,

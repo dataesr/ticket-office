@@ -1,3 +1,4 @@
+import { getApiRoute } from "../../config/api-routes";
 import { VariationTags } from "../../pages/bso-local-variations/types";
 import { escapeRegex } from "./escapeRegex";
 
@@ -13,23 +14,7 @@ export const buildURL = (
   tags?: VariationTags,
   objectType?: string
 ): string => {
-  let baseUrl = "contacts";
-
-  if (location?.pathname?.includes("scanr-contributionPage")) {
-    baseUrl = "contribute";
-  } else if (location?.pathname?.includes("removeuser")) {
-    baseUrl = "remove-user";
-  } else if (location?.pathname?.includes("namechange")) {
-    baseUrl = "update-user-data";
-  } else if (location?.pathname?.includes("apioperations")) {
-    baseUrl = "production";
-  } else if (
-    location?.pathname?.includes("bso-local-variations-publications")
-  ) {
-    baseUrl = "bso-local-variations/publications";
-  } else if (location?.pathname?.includes("bso-local-variations-datasets")) {
-    baseUrl = "bso-local-variations/datasets";
-  }
+  const baseUrl = getApiRoute(location.pathname);
 
   const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
 

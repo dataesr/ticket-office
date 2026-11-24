@@ -10,7 +10,7 @@ import SearchSection from "../../components/search-section";
 import ContributionDetails from "./components/contribution-details";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import { getTagsUrl } from "../../config/urlHelper";
+import { getApiRoute } from "../../config/api-routes";
 import { Contribution, ContributionPageProps } from "../../types";
 import { filterContributions, getPageTitle, updateUrlParams } from "./utils";
 
@@ -82,7 +82,9 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   const meta = data?.meta;
   const maxPage = meta ? Math.ceil(meta.total / PAGE_SIZE) : 1;
 
-  const { data: allTags } = ContributionData(getTagsUrl(location.pathname));
+  const { data: allTags } = ContributionData(
+    `/api/tags/${getApiRoute(location.pathname)}`
+  );
 
   const [selectedContribution, setSelectedContribution] = useState("");
 

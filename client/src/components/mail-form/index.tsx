@@ -2,6 +2,7 @@ import { useId, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import { postHeaders } from "../../config/api";
+import { getApiRoute } from "../../config/api-routes";
 
 const TEMPLATES = [
   { label: "Accès API scanR", value: "API" },
@@ -41,14 +42,6 @@ const TEMPLATE_MESSAGES: Record<string, string> = {
     "Bonjour, scanR n'est pas une plateforme de mise en relation. Votre message parvient à scanR qui est un agrégateur de métadonnées liées à la recherche et à l'innovation. Cordialement L'équipe scanR",
 };
 
-const getBasePath = (pathname: string) => {
-  if (pathname.includes("contributionPage")) return "contribute";
-  if (pathname.includes("scanr-removeuser")) return "remove-user";
-  if (pathname.includes("scanr-namechange")) return "update-user-data";
-  if (pathname.includes("apioperations")) return "production";
-  return "contacts";
-};
-
 function EmailForm({
   userResponse,
   setUserResponse,
@@ -61,7 +54,7 @@ function EmailForm({
   const [selectedTemplate, setSelectedTemplate] = useState("");
   const [tags, setTags] = useState<string[]>(contribution?.tags || []);
 
-  const url = `/api/${getBasePath(window.location.pathname)}/${contribution?.id}`;
+  const url = `/api/${getApiRoute(window.location.pathname)}/${contribution?.id}`;
 
   const { mutate: updateTags } = useMutation({
     mutationFn: async (updatedTags: string[]) => {
