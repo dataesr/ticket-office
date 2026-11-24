@@ -107,30 +107,26 @@ const LastMailsSent: React.FC = () => {
         title="Derniers mails envoyés"
         description="Filtrez les réponses envoyées par type d'objet, application, profil, période ou mot-clé."
       >
-        <div className="mails-header-row">
-          <div className="mails-header-row__search">
-            <SearchSection
-              query={query}
-              handleSearch={handleSearch}
-              handleRemoveQueryItem={handleRemoveQueryItem}
-            />
-          </div>
-          <MailFilters
-            profile={profile}
-            profiles={uniqueProfiles}
-            onProfile={withPageReset(setProfile)}
-            objectType={objectType}
-            objectTypes={objectTypeOptions}
-            onObjectType={withPageReset(setObjectType)}
-            application={application}
-            applications={applications}
-            onApplication={withPageReset(setApplication)}
-            dateFrom={dateFrom}
-            onDateFrom={withPageReset(setDateFrom)}
-            dateTo={dateTo}
-            onDateTo={withPageReset(setDateTo)}
-          />
-        </div>
+        <SearchSection
+          query={query}
+          handleSearch={handleSearch}
+          handleRemoveQueryItem={handleRemoveQueryItem}
+        />
+        <MailFilters
+          profile={profile}
+          profiles={uniqueProfiles}
+          onProfile={withPageReset(setProfile)}
+          objectType={objectType}
+          objectTypes={objectTypeOptions}
+          onObjectType={withPageReset(setObjectType)}
+          application={application}
+          applications={applications}
+          onApplication={withPageReset(setApplication)}
+          dateFrom={dateFrom}
+          onDateFrom={withPageReset(setDateFrom)}
+          dateTo={dateTo}
+          onDateTo={withPageReset(setDateTo)}
+        />
       </PageBanner>
 
       <Container className="fr-py-6w">

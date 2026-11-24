@@ -53,21 +53,29 @@ const LastMailsSentItem: React.FC<LastMailsSentProps> = ({ data }) => (
           <div className="mail-card__header">
             <ul className="fr-badges-group fr-mb-1w">
               <li>
-                <Badge size="sm" color="green-menthe">{label}</Badge>
+                <Badge size="sm" color="green-menthe">
+                  {label}
+                </Badge>
               </li>
               {SCANR_COLLECTIONS.includes(label) && (
                 <li>
-                  <Badge size="sm" color="blue-ecume">scanR</Badge>
+                  <Badge size="sm" color="blue-ecume">
+                    scanR
+                  </Badge>
                 </li>
               )}
               {label === "Demande de bso local" && (
                 <li>
-                  <Badge size="sm" color="blue-ecume">BSO</Badge>
+                  <Badge size="sm" color="blue-ecume">
+                    BSO
+                  </Badge>
                 </li>
               )}
               {mail.fromApplication && (
                 <li>
-                  <Badge size="sm" color="blue-ecume">{mail.fromApplication}</Badge>
+                  <Badge size="sm" color="blue-ecume">
+                    {mail.fromApplication}
+                  </Badge>
                 </li>
               )}
             </ul>
