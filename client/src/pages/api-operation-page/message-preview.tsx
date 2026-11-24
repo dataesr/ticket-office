@@ -7,10 +7,7 @@ import { useDataList } from "./data-list-context";
 import { CopyButton } from "../../components/copy-button";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import "./styles.scss";
-import {
-  Contribute_Production,
-  MessagePreviewProductionProps,
-} from "../../types";
+import { MessagePreviewProductionProps } from "../../types";
 
 type InfoRowProps = {
   icon: string;
@@ -122,7 +119,7 @@ const MessagePreview = ({
         refetch={refetch}
         isOpen={showModal}
         onClose={() => setShowModal(false)}
-        data={data as unknown as Contribute_Production}
+        data={data}
         allTags={allTags}
         dataProduction={[]}
       />

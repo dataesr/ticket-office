@@ -48,7 +48,7 @@ const StaffProductionActions = ({
           )}
         </Col>
       )}
-      <EmailSender contribution={data as any} refetch={refetch} />
+      <EmailSender contribution={data} refetch={refetch} />
     </>
   );
 };

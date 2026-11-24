@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
 import { Col, Row } from "@dataesr/dsfr-plus";
-import ReactSelect from "react-select";
+import ReactSelect, { CSSObjectWithLabel } from "react-select";
 import { levenshteinDistance } from "../../utils/compare";
 import { useDataList } from "./data-list-context";
-import { ExtendedSelectWithNamesProps, SelectOption } from "../../types";
+import { SelectWithNamesProps, SelectOption } from "../../types";
 
 export default function SelectWithNames({
   contributionId,
@@ -12,7 +12,7 @@ export default function SelectWithNames({
   coloredName,
   authorData: propAuthorData,
   landingPage,
-}: ExtendedSelectWithNamesProps) {
+}: SelectWithNamesProps) {
   const defaultAuthorData = {
     fullName: [],
     firstName: [],
@@ -115,7 +115,7 @@ export default function SelectWithNames({
   };
 
   const customStyles = {
-    option: (provided: any, state: { data: SelectOption }) => ({
+    option: (provided: CSSObjectWithLabel, state: { data: SelectOption }) => ({
       ...provided,
       color: state.data.isColored ? "#1f8d49" : "black",
     }),
@@ -148,7 +148,7 @@ export default function SelectWithNames({
           styles={customStyles}
           placeholder={coloredName}
           menuPortalTarget={document.body}
-          menuPosition={"fixed" as any}
+          menuPosition="fixed"
         />
       </Col>
     </Row>

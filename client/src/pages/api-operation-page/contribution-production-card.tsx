@@ -30,11 +30,6 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
             </Badge>
           </li>
         )}
-        {data.tag && (
-          <li>
-            <Badge size="sm" color="green-menthe">{data.tag}</Badge>
-          </li>
-        )}
         <li>
           <Badge size="sm" color="green-emeraude" icon="links-line">
             {`${productionsCount} publication${productionsCount > 1 ? "s" : ""} à lier`}

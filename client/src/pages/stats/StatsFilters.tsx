@@ -53,7 +53,7 @@ const StatsFilters = ({
               id="period-select"
               className="fr-select"
               value={period}
-              onChange={(e) => setPeriod(e.target.value as any)}
+              onChange={(e) => setPeriod(e.target.value as StatsFiltersProps["period"])}
             >
               <option value="day">Jour</option>
               <option value="week">Semaine</option>

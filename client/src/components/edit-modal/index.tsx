@@ -49,7 +49,7 @@ const EditModal: React.FC<EditModalProps> = ({
 
   const url = `/api/${getApiRoute(window.location.pathname)}/${data?.id}`;
 
-  const handleInputChange = (key: keyof Inputs, value: any) => {
+  const handleInputChange = (key: keyof Inputs, value: Inputs[keyof Inputs]) => {
     setInputs((prevInputs) => ({ ...prevInputs, [key]: value }));
   };
 

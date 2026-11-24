@@ -33,6 +33,7 @@ export interface BaseContribution {
   comment?: string;
   team?: string[];
   modified_at?: string;
+  treated_at?: string;
   fromApplication?: string;
   contributionType?: string;
   organisation?: string;
@@ -42,6 +43,7 @@ export interface BaseContribution {
 }
 
 export interface Contribution extends BaseContribution {
+  objectId?: string;
   selectedProfile: string;
   objectType: string;
   type: string;
@@ -130,18 +132,6 @@ export interface Inputs {
   contributionType?: string;
 }
 
-export interface DataListItem {
-  publi_id: string;
-  person_id?: string;
-  export: boolean;
-  fullName?: string;
-}
-
-export interface DataListContextType {
-  dataList: DataListItem[];
-  setDataList: React.Dispatch<React.SetStateAction<DataListItem[]>>;
-}
-
 export interface ExternalLinksProps {
   productionId: string;
   name: string;
@@ -151,7 +141,7 @@ export interface ExternalLinksProps {
 export interface ContributorRequestsProps {
   data: Contribute_Production;
   coloredName: string;
-  authorsData?: Record<string, any>;
+  authorsData?: Record<string, AuthorData>;
   landingPages?: Record<string, string>;
   idrefNames?: Record<string, string>;
 }
@@ -161,23 +151,20 @@ export interface SelectWithNamesProps {
   idRef: string;
   coloredName: string;
   contributionId: string;
-  authorData?: {
-    fullName?: string[];
-    firstName?: string[];
-    lastName?: string[];
-  };
+  authorData?: AuthorData;
+  landingPage?: string;
 }
 
 export interface MessagePreviewProps {
-  data: any;
+  data: Contribution;
   highlightedQuery?: string;
 }
 export interface MessagePreviewProductionProps {
-  data: any;
+  data: Contribute_Production;
   highlightedQuery?: string;
   refetch: () => void;
   allTags: string[];
-  authorsData: AuthorData;
+  authorsData: Record<string, AuthorData>;
   landingPages: Record<string, string>;
   idrefNames: Record<string, string>;
 }
@@ -216,31 +203,12 @@ export interface ContributionData {
   export: boolean;
 }
 
-export interface ExtendedSelectWithNamesProps extends SelectWithNamesProps {
-  authorData?: {
-    fullName: string[];
-    firstName: string[];
-    lastName: string[];
-  };
-  landingPage?: string;
-}
-
 
 export interface ContributionProductionItemProps {
-  data: {
-    threads: any[];
-    email: string;
-    message: string;
-    status?: string;
-    tag?: string;
-    productions: Production[];
-    created_at: string;
-    name: string;
-    id: string;
-  };
+  data: Contribute_Production;
   refetch: () => void;
   allTags: string[];
-  authorsData: any;
+  authorsData: Record<string, AuthorData>;
   landingPages: Record<string, string>;
   idrefNames: Record<string, string>;
 }
@@ -249,21 +217,12 @@ export interface ExcelExportButtonProps {
 }
 
 export interface StaffProductionActionsProps {
-  data?: {
-    name: string;
-    threads?: Array<{
-      responses: Array<{
-        team: string[];
-        timestamp: string | number | Date;
-        responseMessage: string;
-      }>;
-    }>;
-  };
+  data?: Contribute_Production;
   refetch: () => void;
 }
 
 export interface ContributionDetailsProps {
-  filteredContributions: any[];
+  filteredContributions: Contribution[];
   selectedContribution: string | number;
   refetch: () => void;
   highlightedQuery?: string;
