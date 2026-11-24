@@ -21,6 +21,13 @@ const countResponses = (threads: Contribution["threads"]) =>
     0
   ) ?? 0;
 
+const EXCERPT_LENGTH = 120;
+
+const getExcerpt = (message = "") =>
+  message.length > EXCERPT_LENGTH
+    ? `${message.slice(0, EXCERPT_LENGTH)}…`
+    : message;
+
 const ContributionList = ({
   contributions,
   selectedId,
@@ -32,84 +39,69 @@ const ContributionList = ({
   };
 
   return (
-    <nav aria-label="Contributions" className="contribution-list">
-      <Text
-        size="sm"
-        className="fr-text--bold fr-mb-0 contribution-list__header"
-      >
-        {`Contributions (${contributions.length})`}
-      </Text>
-      <ul className="contribution-list__items">
-        {contributions.map((contribution, index) => {
-          const isSelected = contribution.id === selectedId;
-          const responseCount = countResponses(contribution.threads);
+    <nav aria-label="Contributions" className="fr-sidemenu">
+      <div className="fr-sidemenu__inner">
+        <div className="fr-sidemenu__title">
+          {`Contributions (${contributions.length})`}
+        </div>
+        <ul className="fr-sidemenu__list">
+          {contributions.map((contribution, index) => {
+            const isSelected = contribution.id === selectedId;
+            const responseCount = countResponses(contribution.threads);
 
-          return (
-            <li key={`${contribution.id}-${index}`}>
-              <button
-                type="button"
-                className={`contribution-list__item${isSelected ? " contribution-list__item--selected" : ""}`}
-                aria-current={isSelected ? "true" : undefined}
-                onClick={() => handleClick(contribution.id)}
+            return (
+              <li
+                className="fr-sidemenu__item"
+                key={`${contribution.id}-${index}`}
               >
-                <span className="contribution-list__item-row">
-                  <Text
-                    as="span"
-                    size="sm"
-                    className="fr-text--bold fr-mb-0 contribution-list__item-name"
-                  >
-                    {contribution.name}
-                  </Text>
-                  <Text
-                    as="span"
-                    size="xs"
-                    className="fr-text-mention--grey fr-mb-0"
-                  >
-                    {new Date(contribution.created_at).toLocaleDateString()}
-                  </Text>
-                </span>
-
-                <span className="contribution-list__item-badges">
-                  {contribution.status && (
-                    <Badge
-                      size="sm"
-                      color={BadgeStatus({ status: contribution.status })}
-                    >
-                      {StatusLabel({ status: contribution.status })}
-                    </Badge>
-                  )}
-                  {contribution.type && (
-                    <Badge
-                      size="sm"
-                      icon={typeIcon({ icon: contribution.type })}
-                      color={BadgeColor({ type: contribution.type })}
-                    >
-                      {TypeLabel({ type: contribution.type })}
-                    </Badge>
-                  )}
-                  <Text
-                    as="span"
-                    size="xs"
-                    className="fr-text-mention--grey fr-mb-0"
-                  >
-                    {responseCount > 0
-                      ? `${responseCount} réponse${responseCount > 1 ? "s" : ""}`
-                      : "Sans réponse"}
-                  </Text>
-                </span>
-
-                <Text
-                  as="span"
-                  size="xs"
-                  className="fr-text-mention--grey fr-mb-0 contribution-list__item-excerpt"
+                <button
+                  type="button"
+                  className="fr-sidemenu__btn"
+                  aria-current={isSelected ? "true" : undefined}
+                  onClick={() => handleClick(contribution.id)}
                 >
-                  {contribution.message}
-                </Text>
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+                  <span>
+                    {contribution.name}
+                    <br />
+                    {contribution.status && (
+                      <Badge
+                        size="sm"
+                        className="fr-mr-1v"
+                        color={BadgeStatus({ status: contribution.status })}
+                      >
+                        {StatusLabel({ status: contribution.status })}
+                      </Badge>
+                    )}
+                    {contribution.type && (
+                      <Badge
+                        size="sm"
+                        icon={typeIcon({ icon: contribution.type })}
+                        color={BadgeColor({ type: contribution.type })}
+                      >
+                        {TypeLabel({ type: contribution.type })}
+                      </Badge>
+                    )}
+                    <br />
+                    <Text
+                      as="span"
+                      size="xs"
+                      className="fr-text--regular fr-text-mention--grey"
+                    >
+                      {new Date(contribution.created_at).toLocaleDateString()}
+                      {" · "}
+                      {responseCount > 0
+                        ? `${responseCount} réponse${responseCount > 1 ? "s" : ""}`
+                        : "Sans réponse"}
+                      <br />
+                      {getExcerpt(contribution.message)}
+                    </Text>
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </nav>
   );
 };

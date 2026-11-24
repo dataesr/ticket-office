@@ -7,7 +7,6 @@ import ContributionDetail from "./contribution-detail";
 import ContributionList from "./contribution-list";
 import { PAGE_SIZE, useContributions } from "./useContributions";
 import { useContributionFilters } from "./useContributionFilters";
-import "./styles.scss";
 
 type ContributionsBrowserProps = ReturnType<typeof useContributions> & {
   filters: ReturnType<typeof useContributionFilters>;

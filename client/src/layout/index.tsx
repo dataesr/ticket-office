@@ -22,6 +22,7 @@ import {
 } from "../components/footer";
 import ProfileModal from "../components/profil-modal";
 import SwitchTheme from "./switch-theme";
+import "./styles.scss";
 
 const { VITE_HEADER_TAG } = import.meta.env;
 

@@ -1,0 +1,10 @@
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-x: auto;
+  max-width: 100%;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  background-color: var(--background-contrast-grey);
+  color: var(--text-default-grey);
+}

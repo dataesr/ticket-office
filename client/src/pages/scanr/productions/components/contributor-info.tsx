@@ -1,3 +1,4 @@
+import { Row } from "@dataesr/dsfr-plus";
 import InfoRow from "../../../../components/info-row";
 import { useCopyToClipboard } from "../../../../hooks/useCopyToClipboard";
 import { Contribute_Production } from "../../../../types";
@@ -11,7 +12,7 @@ const ContributorInfo = ({ contribution, idrefName }: ContributorInfoProps) => {
   const copy = useCopyToClipboard();
 
   return (
-    <div className="contribution-info contribution-info--inline-copy fr-mb-2w">
+    <Row gutters className="fr-mb-2w">
       {contribution.objectId && (
         <InfoRow
           {...copy}
@@ -56,7 +57,7 @@ const ContributorInfo = ({ contribution, idrefName }: ContributorInfoProps) => {
           value={contribution.comment}
         />
       )}
-    </div>
+    </Row>
   );
 };
 

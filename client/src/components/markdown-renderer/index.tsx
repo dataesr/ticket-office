@@ -4,6 +4,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Text } from "@dataesr/dsfr-plus";
 import { cleanResponseMessage } from "./clean-response";
+import "./styles.scss";
 
 const convertUrlsToMarkdownLinks = (content) => {
   if (!content) return "";

@@ -1,3 +1,4 @@
+import { Row } from "@dataesr/dsfr-plus";
 import InfoRow from "../info-row";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import { capitalizeFirstLetter } from "../../utils/capitalize";
@@ -13,7 +14,7 @@ const ContributionInfo = ({ contribution }: ContributionInfoProps) => {
     : [];
 
   return (
-    <div className="contribution-info fr-mb-2w">
+    <Row gutters className="fr-mb-2w">
       <InfoRow
         {...copy}
         icon="user-line"
@@ -83,7 +84,7 @@ const ContributionInfo = ({ contribution }: ContributionInfoProps) => {
           />
         );
       })}
-    </div>
+    </Row>
   );
 };
 

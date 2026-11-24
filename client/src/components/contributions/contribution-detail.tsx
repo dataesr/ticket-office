@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Button, Text, Title } from "@dataesr/dsfr-plus";
+import { Alert, Button, Col, Row, Text, Title } from "@dataesr/dsfr-plus";
 import EditModal from "../edit-modal";
 import EmailSender from "../email-sender";
 import HighlightedMessage from "../highlighted-message";
@@ -35,47 +35,48 @@ const ContributionDetail = ({
     : "";
 
   return (
-    <div className="contribution-item">
-      <div className="contribution-item__header">
+    <>
+      <div className="fr-background-alt--grey fr-p-3w">
         <ContributionBadges contribution={contribution} />
 
-        <div className="contribution-item__header-row">
-          <Title as="h2" look="h5" className="fr-mb-0">
-            {contribution?.name || ""}
-            <Text as="span" size="sm" className="fr-ml-1w fr-text--regular">
-              ({contribution?.id || ""})
-              <CopyButton
-                text={contribution?.id || ""}
-                copiedText={copiedText}
-                onCopy={copyToClipboard}
-                ariaLabel="Copier l'identifiant"
-                disabled={!contribution?.id}
-              />
-            </Text>
-          </Title>
-          <div className="contribution-item__actions">
-            <Button
-              type="button"
-              variant="secondary"
-              size="sm"
-              icon="edit-line"
-              onClick={() => setShowEditModal(true)}
-            >
-              Éditer
-            </Button>
+        <Row verticalAlign="middle">
+          <Col xs={12} md={9}>
+            <Title as="h2" look="h5" className="fr-mb-0">
+              {contribution?.name || ""}
+              <Text as="span" size="sm" className="fr-ml-1w fr-text--regular">
+                ({contribution?.id || ""})
+                <CopyButton
+                  text={contribution?.id || ""}
+                  copiedText={copiedText}
+                  onCopy={copyToClipboard}
+                  ariaLabel="Copier l'identifiant"
+                  disabled={!contribution?.id}
+                />
+              </Text>
+            </Title>
             {createdDate && (
-              <Text
-                size="sm"
-                className="fr-text-mention--grey fr-mb-0 contribution-item__date"
-              >
+              <Text size="sm" className="fr-text-mention--grey fr-mb-0">
                 Reçu le {createdDate}
               </Text>
             )}
-          </div>
-        </div>
+          </Col>
+          <Col xs={12} md={3}>
+            <Row horizontalAlign="right">
+              <Button
+                type="button"
+                variant="secondary"
+                size="sm"
+                icon="edit-line"
+                onClick={() => setShowEditModal(true)}
+              >
+                Éditer
+              </Button>
+            </Row>
+          </Col>
+        </Row>
       </div>
 
-      <div className="contribution-item__body">
+      <div className="fr-p-3w">
         {!hasResponse && (
           <Alert
             variant="info"
@@ -91,12 +92,16 @@ const ContributionDetail = ({
           objectType={contribution?.objectType}
           objectId={contribution?.objectId}
         />
-        <div className="contributorSideMessage fr-mb-3w">
-          <HighlightedMessage
-            message={contribution?.message}
-            highlightedQuery={highlightedQuery}
-          />
-        </div>
+        <Row>
+          <Col xs={12} md={9}>
+            <div className="fr-background-alt--green-emeraude fr-p-2w fr-mb-2w">
+              <HighlightedMessage
+                message={contribution?.message}
+                highlightedQuery={highlightedQuery}
+              />
+            </div>
+          </Col>
+        </Row>
 
         <ResponseThread
           threads={contribution?.threads}
@@ -118,7 +123,7 @@ const ContributionDetail = ({
         allTags={allTags}
         apiRoute={apiRoute}
       />
-    </div>
+    </>
   );
 };
 
