@@ -10,7 +10,7 @@ import {
 import { UnifiedContribution } from "../../../types";
 import { getContributionLink } from "../../../utils/contribution-links";
 
-import MarkdownRenderer from "../../../utils/markdownRenderer";
+import MarkdownRenderer from "../../../components/markdown-renderer";
 import { formatDate, formatTime } from "../../../utils/format-date";
 
 type ContributionBadgesProps = { contribution: UnifiedContribution };

@@ -1,7 +1,7 @@
 import SelectWithNames from "./name-selector";
 import { ExternalLinks } from "./external-links";
 import { useDataList } from "./data-list-context";
-import { CopyButton } from "../../utils/copy-button";
+import { CopyButton } from "../../components/copy-button";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import "./styles.scss";
 import { findAuthorData } from "../../utils/normalized-id-productions";

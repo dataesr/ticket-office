@@ -2,7 +2,7 @@ import { Col, Text } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import EmailSender from "../../components/email-sender";
 import { StaffProductionActionsProps } from "../../types";
-import MarkdownRenderer from "../../utils/markdownRenderer";
+import MarkdownRenderer from "../../components/markdown-renderer";
 
 const StaffProductionActions = ({
   data,

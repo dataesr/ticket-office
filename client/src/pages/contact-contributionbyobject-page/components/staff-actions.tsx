@@ -2,7 +2,7 @@ import { useState } from "react";
 import EmailSender from "../../../components/email-sender";
 import { Modal, ModalContent, ModalTitle } from "@dataesr/dsfr-plus";
 import { StaffActionsProps, Thread } from "../../../types";
-import MarkdownRenderer from "../../../utils/markdownRenderer";
+import MarkdownRenderer from "../../../components/markdown-renderer";
 
 const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
   const [modalImage, setModalImage] = useState<string | null>(null);

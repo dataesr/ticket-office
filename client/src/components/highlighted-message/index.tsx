@@ -1,5 +1,5 @@
 import { makeLinksClickable } from "../../utils/make-links-clickable";
-import MarkdownRenderer from "../../utils/markdownRenderer";
+import MarkdownRenderer from "../markdown-renderer";
 
 const HighlightedMessage = ({
   message,

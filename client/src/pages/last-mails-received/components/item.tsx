@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Tabs, Tab, Notice } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import MarkdownRenderer from "../../../utils/markdownRenderer";
+import MarkdownRenderer from "../../../components/markdown-renderer";
 import TopPaginationButtons from "../../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
 import type { EmailItem } from "../../../types";

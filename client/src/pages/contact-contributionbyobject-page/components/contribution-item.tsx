@@ -9,7 +9,7 @@ import {
   TypeLabel,
   typeIcon,
 } from "../../../utils";
-import { CopyButton } from "../../../utils/copy-button";
+import { CopyButton } from "../../../components/copy-button";
 import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
 import "./styles.scss";
 import MessagePreview from "./message-preview";

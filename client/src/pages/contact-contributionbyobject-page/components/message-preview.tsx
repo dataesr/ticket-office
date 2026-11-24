@@ -1,7 +1,7 @@
 import { useLocation } from "react-router-dom";
 import HighlightedMessage from "../../../components/highlighted-message";
 import { capitalizeFirstLetter } from "../../../utils/capitalize";
-import { CopyButton } from "../../../utils/copy-button";
+import { CopyButton } from "../../../components/copy-button";
 import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
 import { MessagePreviewProps } from "../../../types";
 

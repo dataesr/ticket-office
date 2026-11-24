@@ -2,7 +2,7 @@ import "./styles.scss";
 import { Badge } from "@dataesr/dsfr-plus";
 import collectionNameMapping, { SentEmail } from "../utils";
 import { getContributionLink } from "../../../utils/contribution-links";
-import MarkdownRenderer from "../../../utils/markdownRenderer";
+import MarkdownRenderer from "../../../components/markdown-renderer";
 
 interface LastMailsSentProps {
   data: {

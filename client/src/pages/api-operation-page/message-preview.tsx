@@ -4,7 +4,7 @@ import { useState } from "react";
 import EditModal from "../../components/edit-modal";
 import ContributorRequests from "./contributor-requests";
 import { useDataList } from "./data-list-context";
-import { CopyButton } from "../../utils/copy-button";
+import { CopyButton } from "../../components/copy-button";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import "./styles.scss";
 import {

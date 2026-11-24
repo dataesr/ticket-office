@@ -1,7 +1,7 @@
 import { Container, Col, Text } from "@dataesr/dsfr-plus"
 import { Variation } from "../types"
 import { Thread } from "../../../types"
-import MarkdownRenderer from "../../../utils/markdownRenderer"
+import MarkdownRenderer from "../../../components/markdown-renderer"
 import { useState } from "react"
 
 export default function Threads({ variation }: { variation: Variation }) {

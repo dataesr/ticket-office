@@ -2,7 +2,7 @@ import { Accordion, AccordionGroup, Badge } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import StaffProductionActions from "./staff-production-action";
 import { BadgeStatus, StatusLabel } from "../../utils/index";
-import { CopyButton } from "../../utils/copy-button";
+import { CopyButton } from "../../components/copy-button";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import MessagePreview from "./message-preview";
 import { ContributionProductionItemProps } from "../../types";
