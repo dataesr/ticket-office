@@ -171,9 +171,6 @@ const ContributionPage: React.FC = () => {
           status={status}
           setSort={handleSetSort}
           setStatus={handleSetStatus}
-          searchInMessage={true}
-          objectType={undefined}
-          setObjectType={undefined}
         />
       </PageBanner>
 

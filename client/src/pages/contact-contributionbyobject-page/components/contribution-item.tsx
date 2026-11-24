@@ -20,7 +20,6 @@ type ContributionItemProps = {
   highlightedQuery: string;
   refetch: () => void;
   allTags: string[];
-  url: string;
 };
 
 const ContributionItem: React.FC<ContributionItemProps> = ({
@@ -28,7 +27,6 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
   highlightedQuery,
   refetch,
   allTags,
-  url,
 }) => {
   const { copiedText, copyToClipboard } = useCopyToClipboard();
   const [showEditModal, setShowEditModal] = useState(false);
@@ -120,7 +118,7 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
           data={data}
           highlightedQuery={highlightedQuery}
         />
-        <StaffActions url={url} refetch={refetch} data={data} />
+        <StaffActions refetch={refetch} data={data} />
       </div>
 
       <EditModal
@@ -129,7 +127,6 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
         onClose={() => setShowEditModal(false)}
         data={data}
         allTags={allTags}
-        dataProduction={[]}
       />
     </div>
   );

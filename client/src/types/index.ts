@@ -100,7 +100,6 @@ export interface EditModalProps {
   data: Contribution | Contribute_Production;
   refetch: () => void;
   allTags: string[];
-  dataProduction?: Contribute_Production[];
 }
 
 export interface ProfileModalProps {
@@ -227,7 +226,6 @@ export interface ContributionDetailsProps {
   refetch: () => void;
   highlightedQuery?: string;
   allTags: string[];
-  url?: string;
 }
 
 export interface ContributorSummaryProps {
@@ -256,7 +254,6 @@ export interface TopPaginationProps extends PaginationProps {
 }
 
 export interface StaffActionsProps {
-  url: string;
   refetch: () => void;
   data: Contribution;
 }

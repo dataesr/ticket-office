@@ -7,7 +7,6 @@ const ContributionDetails: React.FC<ContributionDetailsProps> = ({
   refetch,
   highlightedQuery,
   allTags,
-  url,
 }) =>
   filteredContributions && filteredContributions.length > 0 ? (
     <ContributionItem
@@ -18,7 +17,6 @@ const ContributionDetails: React.FC<ContributionDetailsProps> = ({
       )}
       refetch={refetch}
       highlightedQuery={highlightedQuery}
-      url={url}
     />
   ) : (
     <p>Aucune contribution trouvée.</p>

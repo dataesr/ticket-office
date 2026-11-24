@@ -173,7 +173,6 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
                 refetch={refetch}
                 highlightedQuery={highlightedQuery}
                 allTags={allTags}
-                url={url}
               />
             </div>
           </div>

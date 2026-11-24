@@ -1,4 +1,3 @@
-import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
 import { useState } from "react";
 import EditModal from "../../components/edit-modal";
@@ -121,7 +120,6 @@ const MessagePreview = ({
         onClose={() => setShowModal(false)}
         data={data}
         allTags={allTags}
-        dataProduction={[]}
       />
 
       <div className="contribution-info contribution-info--inline-copy fr-mb-2w">

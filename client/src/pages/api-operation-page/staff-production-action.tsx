@@ -8,14 +8,10 @@ const StaffProductionActions = ({
   data,
   refetch,
 }: StaffProductionActionsProps) => {
-  const contributorClassName = location.pathname.includes("apioperations")
-    ? "staffSide"
-    : "staffSideContact";
-
   return (
     <>
       {data?.threads?.length > 0 && (
-        <Col className={contributorClassName}>
+        <Col className="staffSide">
           {data.threads.map((thread, threadIndex) =>
             thread.responses.map((response, index) => {
               const responseDate = new Date(
