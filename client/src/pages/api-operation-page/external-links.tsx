@@ -1,7 +1,7 @@
 import { Link } from "@dataesr/dsfr-plus";
 import { useState } from "react";
 import {
-  findLandingPage,
+  findByProductionId,
   getScanRPath,
 } from "../../utils/normalized-id-productions";
 import { ExternalLinksProps } from "../../types";
@@ -16,7 +16,7 @@ export const ExternalLinks: React.FC<ExternalLinksProps> = ({
   const [scanRClicked, setScanRClicked] = useState(false);
   const [landingPageClicked, setLandingPageClicked] = useState(false);
 
-  const landingPage = findLandingPage(productionId, landingPages);
+  const landingPage = findByProductionId(productionId, landingPages);
   const scanRPath = getScanRPath(productionId);
 
   return (

@@ -4,7 +4,7 @@ import { useDataList } from "./data-list-context";
 import { CopyButton } from "../../components/copy-button";
 import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
 import "./styles.scss";
-import { findAuthorData } from "../../utils/normalized-id-productions";
+import { findByProductionId } from "../../utils/normalized-id-productions";
 import { ContributorRequestsProps } from "../../types";
 
 const ContributorRequests: React.FC<ContributorRequestsProps> = ({
@@ -28,7 +28,7 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
     <ul className="production-request-list">
       {data?.productions.map((production) => {
         const hasExport = isExported(production.id, data.id);
-        const currentAuthorData = findAuthorData(production?.id, authorsData);
+        const currentAuthorData = findByProductionId(production?.id, authorsData);
 
         return (
           <li className="production-request" key={production?.id}>

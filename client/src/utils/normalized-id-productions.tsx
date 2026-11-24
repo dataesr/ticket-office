@@ -35,93 +35,26 @@ export const findLongestCommonSubstring = (s1: string, s2: string): string => {
   return longest;
 };
 
-export const findLandingPage = (
+export function findByProductionId<T>(
   productionId: string,
-  landingPages: Record<string, string> = {}
-): string | undefined => {
-  if (!landingPages || !productionId) return undefined;
+  values: Record<string, T> = {}
+): T | undefined {
+  if (!values || !productionId) return undefined;
+  if (values[productionId]) return values[productionId];
 
-  if (landingPages[productionId]) return landingPages[productionId];
-
-  const normalizedProductionId = normalizeId(productionId);
-  const keys = Object.keys(landingPages);
-
-  for (const key of keys) {
-    if (normalizeId(key) === normalizedProductionId) {
-      return landingPages[key];
-    }
-  }
-
-  for (const key of keys) {
-    const normalizedKey = normalizeId(key);
-
-    if (
-      normalizedKey.includes(normalizedProductionId) ||
-      normalizedProductionId.includes(normalizedKey)
-    ) {
-      return landingPages[key];
-    }
-  }
-
-  const minPartLength = 5;
-  for (const key of keys) {
-    const normalizedKey = normalizeId(key);
-    const commonSubstring = findLongestCommonSubstring(
-      normalizedProductionId,
-      normalizedKey
+  const id = normalizeId(productionId);
+  const keys = Object.keys(values);
+  const key =
+    keys.find((key) => normalizeId(key) === id) ??
+    keys.find(
+      (key) => normalizeId(key).includes(id) || id.includes(normalizeId(key))
+    ) ??
+    keys.find(
+      (key) => findLongestCommonSubstring(id, normalizeId(key)).length >= 5
     );
 
-    if (commonSubstring && commonSubstring.length >= minPartLength) {
-      return landingPages[key];
-    }
-  }
-
-  return undefined;
-};
-
-export const findAuthorData = (
-  productionId: string,
-  authorsData: Record<string, any> = {}
-): any | undefined => {
-  if (!authorsData || !productionId) return undefined;
-
-  if (authorsData[productionId]) return authorsData[productionId];
-
-  const normalizedProductionId = normalizeId(productionId);
-  const keys = Object.keys(authorsData);
-
-  for (const key of keys) {
-    if (normalizeId(key) === normalizedProductionId) {
-      return authorsData[key];
-    }
-  }
-
-  for (const key of keys) {
-    const normalizedKey = normalizeId(key);
-
-    if (
-      normalizedKey.includes(normalizedProductionId) ||
-      normalizedProductionId.includes(normalizedKey)
-    ) {
-      return authorsData[key];
-    }
-  }
-
-  const minPartLength = 5;
-  for (const key of keys) {
-    const normalizedKey = normalizeId(key);
-    const commonSubstring = findLongestCommonSubstring(
-      normalizedProductionId,
-      normalizedKey
-    );
-
-    if (commonSubstring && commonSubstring.length >= minPartLength) {
-      return authorsData[key];
-    }
-  }
-
-  return undefined;
-};
+  return key === undefined ? undefined : values[key];
+}
 
 export const getScanRPath = (productionId: string): string => {
   const formattedProductionId = productionId.replace(/\//g, "%2f");
