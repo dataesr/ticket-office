@@ -3,8 +3,8 @@ import { useState } from "react";
 import {
   findByProductionId,
   getScanRPath,
-} from "../../utils/normalized-id-productions";
-import { ExternalLinksProps } from "../../types";
+} from "../../../utils/normalized-id-productions";
+import { ExternalLinksProps } from "../../../types";
 
 export const ExternalLinks: React.FC<ExternalLinksProps> = ({
   productionId,

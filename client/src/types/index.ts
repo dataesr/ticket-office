@@ -137,14 +137,6 @@ export interface ExternalLinksProps {
   landingPages?: Record<string, string>;
 }
 
-export interface ContributorRequestsProps {
-  data: Contribute_Production;
-  coloredName: string;
-  authorsData?: Record<string, AuthorData>;
-  landingPages?: Record<string, string>;
-  idrefNames?: Record<string, string>;
-}
-
 export interface SelectWithNamesProps {
   productionId: string;
   idRef: string;
@@ -152,16 +144,6 @@ export interface SelectWithNamesProps {
   contributionId: string;
   authorData?: AuthorData;
   landingPage?: string;
-}
-
-export interface MessagePreviewProductionProps {
-  data: Contribute_Production;
-  highlightedQuery?: string;
-  refetch: () => void;
-  allTags: string[];
-  authorsData: Record<string, AuthorData>;
-  landingPages: Record<string, string>;
-  idrefNames: Record<string, string>;
 }
 
 export interface ContributionProductionDataResponse {
@@ -198,18 +180,6 @@ export interface ContributionData {
   export: boolean;
 }
 
-
-export interface ContributionProductionItemProps {
-  data: Contribute_Production;
-  refetch: () => void;
-  allTags: string[];
-  authorsData: Record<string, AuthorData>;
-  landingPages: Record<string, string>;
-  idrefNames: Record<string, string>;
-}
-export interface ExcelExportButtonProps {
-  refetch: () => void;
-}
 
 export interface PaginationProps {
   page: number;

@@ -1,8 +1,7 @@
-import { useState } from "react";
 import { Col, Container, Notice, Row, Text, Title } from "@dataesr/dsfr-plus";
 import { useLocation } from "react-router-dom";
 
-import ExcelExportButton from "./export-to-xlsx";
+import ExportBasket from "./components/export-basket";
 import Loader from "../../components/loader";
 import PageBanner from "../../components/page-banner";
 import { useDataList } from "./data-list-context";
@@ -11,7 +10,8 @@ import { ContributionData } from "../../api/contributions";
 import SearchSection from "../../components/search-section";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import Selectors from "../../components/selectors";
-import ContributionProductionItem from "./contribution-production-card";
+import ProductionCard from "./components/production-card";
+import { useProductionFilters } from "./hooks/useProductionFilters";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
 import { useIdrefNames, usePublicationsData } from "../../api/scanr";
 import {
@@ -22,67 +22,20 @@ import "./styles.scss";
 
 const PAGE_SIZE = 20;
 
-const ContributionPage: React.FC = () => {
+const ProductionsPage = () => {
   const location = useLocation();
-
-  const urlParams = new URLSearchParams(location.search);
-  const initialPage = parseInt(urlParams.get("page") || "1");
-  const initialQuery = urlParams.get("query") || "";
-  const initialStatus = urlParams.get("status") || "new";
-
-  const [sort, setSort] = useState("DESC");
-  const [status, setStatus] = useState(initialStatus);
-  const [query, setQuery] = useState<string[]>(
-    initialQuery ? initialQuery.split(",") : []
-  );
-  const [page, setPage] = useState(initialPage);
+  const {
+    sort,
+    setSort,
+    status,
+    setStatus,
+    query,
+    addQuery,
+    removeQuery,
+    page,
+    setPage,
+  } = useProductionFilters();
   const { dataList } = useDataList();
-
-  const updateUrlAndState = (params: {
-    newStatus?: string;
-    newQuery?: string[];
-    newPage?: number;
-    newSort?: string;
-  }) => {
-    if (params.newStatus !== undefined) setStatus(params.newStatus);
-    if (params.newQuery !== undefined) setQuery(params.newQuery);
-    if (params.newPage !== undefined) setPage(params.newPage);
-    if (params.newSort !== undefined) setSort(params.newSort);
-
-    const newSearchParams = new URLSearchParams();
-    newSearchParams.set("page", params.newPage?.toString() || page.toString());
-    newSearchParams.set("query", params.newQuery?.join(",") || query.join(","));
-    newSearchParams.set("status", params.newStatus || status);
-    if (params.newSort) newSearchParams.set("sort", params.newSort);
-
-    const newURL = `${window.location.pathname}?${newSearchParams.toString()}`;
-    window.history.pushState({}, "", newURL);
-  };
-
-  const handleSetStatus = (newStatus: string) => {
-    updateUrlAndState({ newStatus, newPage: 1 });
-  };
-
-  const handleSetPage = (newPage: number) => {
-    updateUrlAndState({ newPage });
-  };
-
-  const handleSetSort = (newSort: string) => {
-    updateUrlAndState({ newSort });
-  };
-
-  const handleSearch = (value: string) => {
-    const trimmedValue = value.trim();
-    if (trimmedValue !== "" && !query.includes(trimmedValue)) {
-      const newQuery = [...query, trimmedValue];
-      updateUrlAndState({ newQuery, newPage: 1 });
-    }
-  };
-
-  const handleRemoveQueryItem = (item: string) => {
-    const newQuery = query.filter((q) => q !== item);
-    updateUrlAndState({ newQuery, newPage: 1 });
-  };
 
   const url = buildURL(
     location,
@@ -163,14 +116,14 @@ const ContributionPage: React.FC = () => {
       >
         <SearchSection
           query={query}
-          handleSearch={handleSearch}
-          handleRemoveQueryItem={handleRemoveQueryItem}
+          handleSearch={addQuery}
+          handleRemoveQueryItem={removeQuery}
         />
         <Selectors
           sort={sort}
           status={status}
-          setSort={handleSetSort}
-          setStatus={handleSetStatus}
+          setSort={setSort}
+          setStatus={setStatus}
         />
       </PageBanner>
 
@@ -179,7 +132,7 @@ const ContributionPage: React.FC = () => {
           meta={meta}
           page={page}
           maxPage={maxPage}
-          setPage={handleSetPage}
+          setPage={setPage}
         />
 
         <div className="fr-mb-3w">
@@ -200,9 +153,9 @@ const ContributionPage: React.FC = () => {
             <Loader />
           ) : (
             filteredContributions.map((contribution) => (
-              <ContributionProductionItem
+              <ProductionCard
                 key={contribution.id}
-                data={{ ...contribution, threads: contribution.threads || [] }}
+                contribution={contribution}
                 refetch={refetch}
                 allTags={fetchedData?.tags || []}
                 authorsData={authorsData}
@@ -213,17 +166,17 @@ const ContributionPage: React.FC = () => {
           )}
         </div>
         {dataList.some((item) => item.export === true) && (
-          <ExcelExportButton refetch={refetch} />
+          <ExportBasket refetch={refetch} />
         )}
 
         <BottomPaginationButtons
           page={page}
           maxPage={maxPage}
-          setPage={handleSetPage}
+          setPage={setPage}
         />
       </Container>
     </main>
   );
 };
 
-export default ContributionPage;
+export default ProductionsPage;

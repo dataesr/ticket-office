@@ -1,42 +1,45 @@
 import SelectWithNames from "./name-selector";
 import { ExternalLinks } from "./external-links";
-import { useDataList } from "./data-list-context";
-import { CopyButton } from "../../components/copy-button";
-import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
-import "./styles.scss";
-import { findByProductionId } from "../../utils/normalized-id-productions";
-import { ContributorRequestsProps } from "../../types";
+import { useDataList } from "../data-list-context";
+import { CopyButton } from "../../../components/copy-button";
+import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
+import { findByProductionId } from "../../../utils/normalized-id-productions";
+import { AuthorData, Contribute_Production } from "../../../types";
 
-const ContributorRequests: React.FC<ContributorRequestsProps> = ({
-  data,
-  coloredName,
+type ProductionListProps = {
+  contribution: Contribute_Production;
+  authorsData?: Record<string, AuthorData>;
+  landingPages?: Record<string, string>;
+};
+
+const ProductionList = ({
+  contribution,
   authorsData = {},
   landingPages,
-}) => {
+}: ProductionListProps) => {
   const { copiedText, copyToClipboard } = useCopyToClipboard();
   const { dataList } = useDataList();
 
-  const isExported = (publicationId: string, contributionId: string) =>
+  const isInBasket = (productionId: string) =>
     dataList.some(
       (item) =>
-        item.publi_id === publicationId &&
-        item.contribution_id === contributionId &&
+        item.publi_id === productionId &&
+        item.contribution_id === contribution.id &&
         item.export === true
     );
 
   return (
     <ul className="production-request-list">
-      {data?.productions.map((production) => {
-        const hasExport = isExported(production.id, data.id);
-        const currentAuthorData = findByProductionId(production?.id, authorsData);
+      {contribution.productions.map((production) => {
+        const inBasket = isInBasket(production.id);
 
         return (
-          <li className="production-request" key={production?.id}>
+          <li className="production-request" key={production.id}>
             <div className="production-request__id">
               <span
-                className={`fr-icon-shopping-cart-2-line production-request__cart${hasExport ? " production-request__cart--done" : ""}`}
+                className={`fr-icon-shopping-cart-2-line production-request__cart${inBasket ? " production-request__cart--done" : ""}`}
                 aria-hidden="true"
-                title={hasExport ? "Ajoutée au panier" : "Pas dans le panier"}
+                title={inBasket ? "Ajoutée au panier" : "Pas dans le panier"}
               />
               <div className="production-request__id-text">
                 <span className="fr-text--xs fr-text-mention--grey fr-mb-0">
@@ -59,10 +62,10 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
             <div className="production-request__select">
               <SelectWithNames
                 productionId={production.id}
-                idRef={data.objectId}
-                coloredName={coloredName}
-                contributionId={data.id}
-                authorData={currentAuthorData}
+                idRef={contribution.objectId}
+                coloredName={contribution.name}
+                contributionId={contribution.id}
+                authorData={findByProductionId(production.id, authorsData)}
               />
             </div>
 
@@ -70,7 +73,7 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
               <ExternalLinks
                 landingPages={landingPages}
                 productionId={production.id}
-                name={data.name}
+                name={contribution.name}
               />
             </div>
           </li>
@@ -80,4 +83,4 @@ const ContributorRequests: React.FC<ContributorRequestsProps> = ({
   );
 };
 
-export default ContributorRequests;
+export default ProductionList;
