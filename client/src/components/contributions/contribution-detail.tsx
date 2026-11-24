@@ -1,11 +1,11 @@
 import { useState } from "react";
-import EditModal from "../../../components/edit-modal";
-import EmailSender from "../../../components/email-sender";
-import HighlightedMessage from "../../../components/highlighted-message";
-import ResponseThread from "../../../components/response-thread";
-import { CopyButton } from "../../../components/copy-button";
-import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
-import { Contribution } from "../../../types";
+import EditModal from "../edit-modal";
+import EmailSender from "../email-sender";
+import HighlightedMessage from "../highlighted-message";
+import ResponseThread from "../response-thread";
+import { CopyButton } from "../copy-button";
+import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
+import { Contribution } from "../../types";
 import ContributionBadges from "./contribution-badges";
 import ContributionInfo from "./contribution-info";
 import ObjectLinks from "./object-links";

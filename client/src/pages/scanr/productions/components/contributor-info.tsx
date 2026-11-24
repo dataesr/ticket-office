@@ -1,6 +1,6 @@
-import InfoRow from "../../../components/info-row";
-import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
-import { Contribute_Production } from "../../../types";
+import InfoRow from "../../../../components/info-row";
+import { useCopyToClipboard } from "../../../../hooks/useCopyToClipboard";
+import { Contribute_Production } from "../../../../types";
 
 type ContributorInfoProps = {
   contribution: Contribute_Production;

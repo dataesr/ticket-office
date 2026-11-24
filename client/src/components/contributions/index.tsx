@@ -1,28 +1,36 @@
 import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
-import Loader from "../../components/loader";
-import PageBanner from "../../components/page-banner";
+import Loader from "../loader";
+import PageBanner from "../page-banner";
 import { ContributionData } from "../../api/contributions";
 import { buildURL } from "../../api/utils/buildURL";
-import Selectors from "../../components/selectors";
-import SearchSection from "../../components/search-section";
-import TopPaginationButtons from "../../components/pagination/top-buttons";
-import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
+import Selectors from "../selectors";
+import SearchSection from "../search-section";
+import TopPaginationButtons from "../pagination/top-buttons";
+import BottomPaginationButtons from "../pagination/bottom-buttons";
 import { getApiRoute } from "../../config/api-routes";
-import { Contribution, ContributionPageProps } from "../../types";
-import ContributionDetail from "./components/contribution-detail";
-import ContributionList from "./components/contribution-list";
-import { useContributionFilters } from "./hooks/useContributionFilters";
-import { filterContributions, getPageTitle } from "./utils";
-import "./components/styles.scss";
+import { Contribution } from "../../types";
+import ContributionDetail from "./contribution-detail";
+import ContributionList from "./contribution-list";
+import { useContributionFilters } from "./useContributionFilters";
+import { filterContributions } from "./utils";
+import "./styles.scss";
 
 const PAGE_SIZE = 20;
 
-const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
+type ContributionsPageProps = {
+  title: string;
+  fromApplication?: string;
+  withObjectType?: boolean;
+};
+
+const ContributionsPage = ({
+  title,
   fromApplication,
-}) => {
+  withObjectType = false,
+}: ContributionsPageProps) => {
   const location = useLocation();
-  const filters = useContributionFilters();
+  const filters = useContributionFilters(withObjectType);
   const [selectedContribution, setSelectedContribution] = useState("");
 
   const url = buildURL(
@@ -39,10 +47,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   );
 
   const { data, isLoading, isError, refetch } = ContributionData(url);
-  const contributions: Contribution[] = useMemo(
-    () => data?.data || [],
-    [data]
-  );
+  const contributions: Contribution[] = useMemo(() => data?.data || [], [data]);
   const meta = data?.meta;
   const maxPage = meta ? Math.ceil(meta.total / PAGE_SIZE) : 1;
 
@@ -68,7 +73,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   return (
     <main id="content">
       <PageBanner
-        title={getPageTitle(location.pathname)}
+        title={title}
         description="Vous pouvez consulter les contributions des utilisateurs et les objets auxquels ils ont contribué."
       >
         <SearchSection
@@ -84,7 +89,7 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
           searchInMessage={filters.searchInMessage}
           setSearchInMessage={filters.setSearchInMessage}
           objectType={filters.objectType}
-          setObjectType={filters.setObjectType}
+          setObjectType={withObjectType ? filters.setObjectType : undefined}
         />
       </PageBanner>
       <div className="fr-container fr-py-6w">
@@ -139,4 +144,4 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   );
 };
 
-export default ContactAndContributionPage;
+export default ContributionsPage;

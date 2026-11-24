@@ -11,10 +11,9 @@ const updateUrlParams = (search: string, updates: Record<string, string>) => {
   );
 };
 
-export const useContributionFilters = () => {
+export const useContributionFilters = (withObjectType: boolean) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const isScanrPage = location.pathname.includes("/scanr-contributionPage");
 
   const [sort, setSortState] = useState(params.get("sort") || "DESC");
   const [status, setStatusState] = useState(params.get("status") || "choose");
@@ -29,7 +28,7 @@ export const useContributionFilters = () => {
   );
   const [highlightedQuery, setHighlightedQuery] = useState("");
   const [objectType, setObjectTypeState] = useState(
-    isScanrPage ? params.get("objectType") || "all" : undefined
+    withObjectType ? params.get("objectType") || "all" : undefined
   );
 
   const updateURL = (updates: Record<string, string>) =>

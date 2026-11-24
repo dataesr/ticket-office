@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify";
 
 import Router from "./router";
 import { DSFRConfig } from "@dataesr/dsfr-plus";
-import { DataListProvider } from "./src/pages/api-operation-page/data-list-context/provider";
+import { DataListProvider } from "./src/pages/scanr/productions/data-list-context/provider";
 import RouterLink from "./src/components/router-link";
 
 const queryClient = new QueryClient({

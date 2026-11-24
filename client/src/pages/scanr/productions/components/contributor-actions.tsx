@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import EditModal from "../../../components/edit-modal";
+import EditModal from "../../../../components/edit-modal";
 import { useDataList } from "../data-list-context";
-import { Contribute_Production } from "../../../types";
+import { Contribute_Production } from "../../../../types";
 
 type ContributorActionsProps = {
   contribution: Contribute_Production;

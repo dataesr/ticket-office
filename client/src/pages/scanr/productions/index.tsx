@@ -2,22 +2,22 @@ import { Col, Container, Notice, Row, Text, Title } from "@dataesr/dsfr-plus";
 import { useLocation } from "react-router-dom";
 
 import ExportBasket from "./components/export-basket";
-import Loader from "../../components/loader";
-import PageBanner from "../../components/page-banner";
+import Loader from "../../../components/loader";
+import PageBanner from "../../../components/page-banner";
 import { useDataList } from "./data-list-context";
-import { buildURL } from "../../api/utils/buildURL";
-import { ContributionData } from "../../api/contributions";
-import SearchSection from "../../components/search-section";
-import TopPaginationButtons from "../../components/pagination/top-buttons";
-import Selectors from "../../components/selectors";
+import { buildURL } from "../../../api/utils/buildURL";
+import { ContributionData } from "../../../api/contributions";
+import SearchSection from "../../../components/search-section";
+import TopPaginationButtons from "../../../components/pagination/top-buttons";
+import Selectors from "../../../components/selectors";
 import ProductionCard from "./components/production-card";
 import { useProductionFilters } from "./hooks/useProductionFilters";
-import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import { useIdrefNames, usePublicationsData } from "../../api/scanr";
+import BottomPaginationButtons from "../../../components/pagination/bottom-buttons";
+import { useIdrefNames, usePublicationsData } from "../../../api/scanr";
 import {
   Contribute_Production,
   ContributionProductionDataHookResponse,
-} from "../../types";
+} from "../../../types";
 import "./styles.scss";
 
 const PAGE_SIZE = 20;

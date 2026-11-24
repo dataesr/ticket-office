@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { ContributionData } from "../../../types";
+import { ContributionData } from "../../../../types";
 
 type DataListContextType = {
   dataList: ContributionData[];

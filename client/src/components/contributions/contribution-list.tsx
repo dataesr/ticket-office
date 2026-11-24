@@ -5,8 +5,8 @@ import {
   StatusLabel,
   TypeLabel,
   typeIcon,
-} from "../../../utils";
-import { Contribution } from "../../../types";
+} from "../../utils";
+import { Contribution } from "../../types";
 
 type ContributionListProps = {
   contributions: Contribution[];

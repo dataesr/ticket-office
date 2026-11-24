@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DataListContext } from ".";
-import { ContributionData } from "../../../types";
+import { ContributionData } from "../../../../types";
 
 export const DataListProvider = ({
   children,

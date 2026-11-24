@@ -1,7 +1,7 @@
-import InfoRow from "../../../components/info-row";
-import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
-import { capitalizeFirstLetter } from "../../../utils/capitalize";
-import { Contribution } from "../../../types";
+import InfoRow from "../info-row";
+import { useCopyToClipboard } from "../../hooks/useCopyToClipboard";
+import { capitalizeFirstLetter } from "../../utils/capitalize";
+import { Contribution } from "../../types";
 
 type ContributionInfoProps = { contribution?: Contribution };
 

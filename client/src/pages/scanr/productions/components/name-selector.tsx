@@ -1,9 +1,9 @@
 import { toast } from "react-toastify";
 import { Col, Row } from "@dataesr/dsfr-plus";
 import ReactSelect, { CSSObjectWithLabel } from "react-select";
-import { levenshteinDistance } from "../../../utils/compare";
+import { levenshteinDistance } from "../../../../utils/compare";
 import { useDataList } from "../data-list-context";
-import { SelectWithNamesProps, SelectOption } from "../../../types";
+import { SelectWithNamesProps, SelectOption } from "../../../../types";
 
 export default function SelectWithNames({
   contributionId,

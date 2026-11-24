@@ -1,10 +1,10 @@
 import SelectWithNames from "./name-selector";
 import { ExternalLinks } from "./external-links";
 import { useDataList } from "../data-list-context";
-import { CopyButton } from "../../../components/copy-button";
-import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
-import { findByProductionId } from "../../../utils/normalized-id-productions";
-import { AuthorData, Contribute_Production } from "../../../types";
+import { CopyButton } from "../../../../components/copy-button";
+import { useCopyToClipboard } from "../../../../hooks/useCopyToClipboard";
+import { findByProductionId } from "../../../../utils/normalized-id-productions";
+import { AuthorData, Contribute_Production } from "../../../../types";
 
 type ProductionListProps = {
   contribution: Contribute_Production;

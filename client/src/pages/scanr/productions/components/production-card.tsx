@@ -1,10 +1,10 @@
 import { Accordion, AccordionGroup, Badge } from "@dataesr/dsfr-plus";
-import EmailSender from "../../../components/email-sender";
-import ResponseThread from "../../../components/response-thread";
-import { CopyButton } from "../../../components/copy-button";
-import { useCopyToClipboard } from "../../../hooks/useCopyToClipboard";
-import { BadgeStatus, StatusLabel } from "../../../utils";
-import { AuthorData, Contribute_Production } from "../../../types";
+import EmailSender from "../../../../components/email-sender";
+import ResponseThread from "../../../../components/response-thread";
+import { CopyButton } from "../../../../components/copy-button";
+import { useCopyToClipboard } from "../../../../hooks/useCopyToClipboard";
+import { BadgeStatus, StatusLabel } from "../../../../utils";
+import { AuthorData, Contribute_Production } from "../../../../types";
 import ContributorActions from "./contributor-actions";
 import ContributorInfo from "./contributor-info";
 import ProductionList from "./production-list";

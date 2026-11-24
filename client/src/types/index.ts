@@ -191,6 +191,3 @@ export interface TopPaginationProps extends PaginationProps {
   meta?: { total?: number };
 }
 
-export interface ContributionPageProps {
-  fromApplication?: string;
-}

@@ -1,5 +1,4 @@
 import { Col, Row } from "@dataesr/dsfr-plus";
-import { useLocation } from "react-router-dom";
 
 type SelectorsProps = {
   sort: string;
@@ -21,11 +20,6 @@ const Selectors: React.FC<SelectorsProps> = ({
   objectType,
   setObjectType,
 }) => {
-  const location = useLocation();
-  const isScanrContributionPage = location.pathname.includes(
-    "/scanr-contributionPage"
-  );
-
   return (
     <Row gutters verticalAlign="middle" className="fr-mt-2w">
       <Col xs={12} md={3}>
@@ -45,7 +39,7 @@ const Selectors: React.FC<SelectorsProps> = ({
         </div>
       </Col>
 
-      {isScanrContributionPage && setObjectType && (
+      {setObjectType && (
         <Col xs={12} md={3}>
           <div className="fr-select-group fr-mb-0">
             <label className="fr-label fr-sr-only" htmlFor="object-type-select">
