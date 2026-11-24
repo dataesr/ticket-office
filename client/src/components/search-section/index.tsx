@@ -1,5 +1,5 @@
-import { useId, useState } from "react";
-import { DismissibleTag } from "../tag";
+import { useRef } from "react";
+import { DismissibleTag, SearchBar, TagGroup } from "@dataesr/dsfr-plus";
 
 type SearchSectionProps = {
   query: string[];
@@ -14,49 +14,40 @@ const SearchSection: React.FC<SearchSectionProps> = ({
   handleRemoveQueryItem,
   isLarge = true,
 }) => {
-  const inputId = useId();
-  const [value, setValue] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const submit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const submit = (value = "") => {
     handleSearch(value);
-    setValue("");
+    if (inputRef.current) inputRef.current.value = "";
   };
 
   const activeTags = query.filter((item) => item.trim() !== "");
 
   return (
     <>
-      <form
-        role="search"
-        className={`fr-search-bar fr-mb-1w${isLarge ? " fr-search-bar--lg" : ""}`}
-        onSubmit={submit}
-      >
-        <label className="fr-label" htmlFor={inputId}>
-          Rechercher
-        </label>
-        <input
-          className="fr-input"
-          type="search"
-          id={inputId}
-          placeholder="Rechercher par nom, ID ou mot clé"
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <button type="submit" className="fr-btn">
-          Rechercher
-        </button>
-      </form>
+      <SearchBar
+        ref={inputRef}
+        className="fr-mb-1w"
+        isLarge={isLarge}
+        label="Rechercher"
+        buttonLabel="Rechercher"
+        placeholder="Rechercher par nom, ID ou mot clé"
+        onSearch={submit}
+      />
       {activeTags.length > 0 && (
-        <ul className="fr-tags-group fr-mb-1w">
+        <TagGroup className="fr-mb-1w">
           {activeTags.map((item) => (
-            <li key={item}>
-              <DismissibleTag onClick={() => handleRemoveQueryItem(item)}>
-                {item}
-              </DismissibleTag>
-            </li>
+            <DismissibleTag
+              key={item}
+              type="button"
+              size="sm"
+              aria-label={`Retirer le tag ${item}`}
+              onClick={() => handleRemoveQueryItem(item)}
+            >
+              {item}
+            </DismissibleTag>
           ))}
-        </ul>
+        </TagGroup>
       )}
     </>
   );

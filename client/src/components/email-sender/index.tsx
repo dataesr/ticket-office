@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { Modal, ModalContent, ModalTitle } from "@dataesr/dsfr-plus";
+import {
+  Alert,
+  Modal,
+  ModalContent,
+  ModalTitle,
+  Text,
+} from "@dataesr/dsfr-plus";
 import EmailForm from "../mail-form";
 import { Contribution, Contribute_Production } from "../../types";
 
@@ -70,21 +76,23 @@ function EmailSender({
       <Modal isOpen={showPreviewModal} hide={() => setShowPreviewModal(false)}>
         <ModalTitle>Prévisualisation du mail</ModalTitle>
         <ModalContent>
-          <p>
+          <Text>
             De : {`${selectedProfile} de l'équipe scanR <support@scanr.fr>`}
-          </p>
-          <p>À : {`${contribution?.name} <${contribution?.email}>`}</p>
-          <p>
+          </Text>
+          <Text>À : {`${contribution?.name} <${contribution?.email}>`}</Text>
+          <Text>
             Objet : Réponse à votre contribution, référence {contribution?.id}
-          </p>
-          <p className="fr-text--bold fr-mb-1w">Message :</p>
+          </Text>
+          <Text className="fr-text--bold fr-mb-1w">Message :</Text>
           {userResponse ? (
             <pre className="fr-p-2w">{userResponse}</pre>
           ) : (
-            <div className="fr-alert fr-alert--warning">
-              <p className="fr-alert__title">Alerte</p>
-              <p>Attention ! Vous n'avez pas encore rédigé de réponse.</p>
-            </div>
+            <Alert
+              variant="warning"
+              title="Alerte"
+              titleAs="p"
+              description="Attention ! Vous n'avez pas encore rédigé de réponse."
+            />
           )}
         </ModalContent>
       </Modal>

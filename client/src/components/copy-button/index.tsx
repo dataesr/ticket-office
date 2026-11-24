@@ -1,3 +1,5 @@
+import { Button } from "@dataesr/dsfr-plus";
+
 export const CopyButton = ({
   text,
   copiedText,
@@ -12,24 +14,20 @@ export const CopyButton = ({
   disabled?: boolean;
 }) => {
   const isCopied = copiedText === text;
-  const classes = [
-    "fr-btn",
-    "fr-btn--tertiary-no-outline",
-    "fr-btn--sm",
-    isCopied ? "fr-icon-check-line" : "fr-icon-clipboard-line",
-  ];
-  if (isCopied) classes.push("fr-btn--icon-left");
 
   return (
-    <button
+    <Button
       type="button"
-      className={classes.join(" ")}
+      variant="text"
+      size="sm"
+      icon={isCopied ? "check-line" : "clipboard-line"}
+      iconPosition="left"
       onClick={() => onCopy(text)}
       title={ariaLabel || "Copier"}
       aria-label={ariaLabel || (isCopied ? "Copié" : "Copier")}
       disabled={disabled}
     >
-      {isCopied ? "Copié" : "Copier"}
-    </button>
+      {isCopied ? "Copié" : undefined}
+    </Button>
   );
 };

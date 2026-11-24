@@ -1,9 +1,12 @@
 import { useState } from "react";
 import {
+  Button,
+  ButtonGroup,
   Modal,
   ModalContent,
   ModalTitle,
   SelectableTag,
+  TagGroup,
 } from "@dataesr/dsfr-plus";
 import { TagSelectionModalProps } from "../../types";
 
@@ -29,40 +32,27 @@ const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
     <Modal isOpen={isOpen} hide={handleCancel}>
       <ModalTitle>Sélectionner des tags</ModalTitle>
       <ModalContent>
-        <ul className="fr-tags-group fr-mb-4w">
+        <TagGroup className="fr-mb-4w">
           {allTags.map((tag) => (
-            <li key={tag}>
-              <SelectableTag
-                type="button"
-                size="sm"
-                selected={selectedTags.includes(tag)}
-                onClick={() => toggleTag(tag)}
-              >
-                {tag}
-              </SelectableTag>
-            </li>
+            <SelectableTag
+              key={tag}
+              type="button"
+              size="sm"
+              selected={selectedTags.includes(tag)}
+              onClick={() => toggleTag(tag)}
+            >
+              {tag}
+            </SelectableTag>
           ))}
-        </ul>
-        <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse">
-          <li>
-            <button
-              type="button"
-              className="fr-btn"
-              onClick={() => onClose(selectedTags)}
-            >
-              Valider
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="fr-btn fr-btn--secondary"
-              onClick={handleCancel}
-            >
-              Annuler
-            </button>
-          </li>
-        </ul>
+        </TagGroup>
+        <ButtonGroup align="right" isReversed>
+          <Button type="button" onClick={() => onClose(selectedTags)}>
+            Valider
+          </Button>
+          <Button type="button" variant="secondary" onClick={handleCancel}>
+            Annuler
+          </Button>
+        </ButtonGroup>
       </ModalContent>
     </Modal>
   );

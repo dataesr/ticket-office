@@ -1,3 +1,4 @@
+import { Text } from "@dataesr/dsfr-plus";
 import { TopPaginationProps } from "../../types";
 
 const TopPaginationButtons = ({
@@ -10,9 +11,9 @@ const TopPaginationButtons = ({
   const to = Math.min(page * pageSize, total);
 
   return (
-    <p className="fr-text--sm fr-text--bold fr-mb-2w">
+    <Text size="sm" className="fr-text--bold fr-mb-2w">
       Résultats : {from}-{to} sur {total}
-    </p>
+    </Text>
   );
 };
 

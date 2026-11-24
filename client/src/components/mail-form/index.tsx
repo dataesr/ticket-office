@@ -1,6 +1,7 @@
 import { useId, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import { Button, ButtonGroup, TextArea } from "@dataesr/dsfr-plus";
 import { postHeaders } from "../../config/api";
 
 const TEMPLATES = [
@@ -113,40 +114,42 @@ function EmailForm({
         </select>
       </div>
 
-      <div className="fr-input-group fr-mb-3w">
-        <label className="fr-label fr-text--bold" htmlFor={responseTextareaId}>
-          Votre réponse
-        </label>
-        <textarea
-          id={responseTextareaId}
-          className="fr-input"
-          rows={6}
-          placeholder="Votre réponse..."
-          value={userResponse}
-          onChange={(e) => setUserResponse(e.target.value)}
-        />
-      </div>
+      <TextArea
+        id={responseTextareaId}
+        className="fr-mb-3w"
+        css={{ "fr-label": "fr-text--bold" }}
+        label="Votre réponse"
+        disableAutoValidation
+        rows={6}
+        placeholder="Votre réponse..."
+        value={userResponse}
+        onChange={(e) => setUserResponse(e.target.value)}
+      />
 
-      <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse fr-btns-group--inline fr-btns-group--icon-left fr-mb-0">
-        <li>
-          <button
-            type="button"
-            className="fr-btn fr-icon-send-plane-line"
-            onClick={sendEmail}
-          >
-            {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
-          </button>
-        </li>
-        <li>
-          <button
-            type="button"
-            className="fr-btn fr-btn--secondary fr-icon-eye-line"
-            onClick={handlePreview}
-          >
-            Prévisualiser le mail
-          </button>
-        </li>
-      </ul>
+      <ButtonGroup
+        align="right"
+        isReversed
+        isInlineFrom="xs"
+        className="fr-mb-0"
+      >
+        <Button
+          type="button"
+          icon="send-plane-line"
+          iconPosition="left"
+          onClick={sendEmail}
+        >
+          {contribution?.mailSent ? "Renvoyer un mail" : "Répondre"}
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          icon="eye-line"
+          iconPosition="left"
+          onClick={handlePreview}
+        >
+          Prévisualiser le mail
+        </Button>
+      </ButtonGroup>
     </>
   );
 }
