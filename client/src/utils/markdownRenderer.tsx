@@ -8,7 +8,7 @@ import { cleanResponseMessage } from "./clean-response";
 const convertUrlsToMarkdownLinks = (content) => {
   if (!content) return "";
 
-  const urlRegex = /(?<![\[\(])(https?:\/\/[^\s\)]+)(?![\]\)])/g;
+  const urlRegex = /(?<![[(])(https?:\/\/[^\s)]+)(?![\])])/g;
   return content.replace(urlRegex, (url) => `[${url}](${url})`);
 };
 
