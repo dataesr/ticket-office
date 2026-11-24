@@ -1,3 +1,4 @@
+import { Text } from "@dataesr/dsfr-plus";
 import { CopyButton } from "../copy-button";
 import "./styles.scss";
 
@@ -28,9 +29,12 @@ const InfoRow = ({
       aria-hidden="true"
     />
     <div className="contribution-info__text">
-      <p className="fr-text--xs fr-text-mention--grey fr-mb-0">{label}</p>
-      <p
-        className={`fr-text--sm fr-mb-0 contribution-info__value ${valueClassName || ""}`}
+      <Text size="xs" className="fr-text-mention--grey fr-mb-0">
+        {label}
+      </Text>
+      <Text
+        size="sm"
+        className={`fr-mb-0 contribution-info__value ${valueClassName || ""}`}
       >
         <span className="contribution-info__value-text">{value}</span>
         {copyText && (
@@ -41,7 +45,7 @@ const InfoRow = ({
             ariaLabel={`Copier : ${label.toLowerCase()}`}
           />
         )}
-      </p>
+      </Text>
     </div>
   </div>
 );

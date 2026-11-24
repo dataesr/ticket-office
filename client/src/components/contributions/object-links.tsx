@@ -1,3 +1,5 @@
+import { Button, ButtonGroup } from "@dataesr/dsfr-plus";
+
 const SCANR_URL = "https://scanr.enseignementsup-recherche.gouv.fr";
 const DATAESR_URL = "http://185.161.45.213/ui";
 
@@ -23,30 +25,34 @@ const ObjectLinks = ({ objectType, objectId }: ObjectLinksProps) => {
   if (!scanrLink) return null;
 
   return (
-    <ul className="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left fr-mb-3w">
-      <li>
-        <a
-          className="fr-btn fr-btn--tertiary fr-btn--sm fr-icon-external-link-line"
+    <ButtonGroup isInlineFrom="xs" className="fr-mb-3w">
+      <Button
+        as="a"
+        variant="tertiary"
+        size="sm"
+        icon="external-link-line"
+        iconPosition="left"
+        target="_blank"
+        rel="noopener noreferrer"
+        href={scanrLink(objectId)}
+      >
+        Sur scanR
+      </Button>
+      {dataesrLink && (
+        <Button
+          as="a"
+          variant="tertiary"
+          size="sm"
+          icon="external-link-line"
+          iconPosition="left"
           target="_blank"
           rel="noopener noreferrer"
-          href={scanrLink(objectId)}
+          href={dataesrLink(objectId)}
         >
-          Sur scanR
-        </a>
-      </li>
-      {dataesrLink && (
-        <li>
-          <a
-            className="fr-btn fr-btn--tertiary fr-btn--sm fr-icon-external-link-line"
-            target="_blank"
-            rel="noopener noreferrer"
-            href={dataesrLink(objectId)}
-          >
-            Sur dataESR
-          </a>
-        </li>
+          Sur dataESR
+        </Button>
       )}
-    </ul>
+    </ButtonGroup>
   );
 };
 

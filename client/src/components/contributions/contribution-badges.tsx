@@ -1,4 +1,4 @@
-import { Badge } from "@dataesr/dsfr-plus";
+import { Badge, BadgeGroup } from "@dataesr/dsfr-plus";
 import {
   BadgeColor,
   BadgeStatus,
@@ -14,47 +14,37 @@ const ContributionBadges = ({ contribution }: ContributionBadgesProps) => {
   const firstResponse = contribution?.threads?.[0]?.responses?.[0];
 
   return (
-    <ul className="fr-badges-group fr-mb-1w">
+    <BadgeGroup className="fr-mb-1w">
       {contribution?.tags?.length > 0 && (
-        <li>
-          <Badge size="sm" color="green-menthe">
-            {contribution.tags.join(", ")}
-          </Badge>
-        </li>
+        <Badge size="sm" color="green-menthe">
+          {contribution.tags.join(", ")}
+        </Badge>
       )}
       {contribution?.status && (
-        <li>
-          <Badge size="sm" color={BadgeStatus({ status: contribution.status })}>
-            {StatusLabel({ status: contribution.status })}
-          </Badge>
-        </li>
+        <Badge size="sm" color={BadgeStatus({ status: contribution.status })}>
+          {StatusLabel({ status: contribution.status })}
+        </Badge>
       )}
       {firstResponse?.team && (
-        <li>
-          <Badge size="sm" color="blue-ecume">
-            {`Réponse : ${firstResponse.team}`}
-          </Badge>
-        </li>
+        <Badge size="sm" color="blue-ecume">
+          {`Réponse : ${firstResponse.team}`}
+        </Badge>
       )}
       {contribution?.comment && contribution?.team?.length > 0 && (
-        <li>
-          <Badge size="sm" color="green-emeraude">
-            {`Commenté par ${contribution.team[0]}`}
-          </Badge>
-        </li>
+        <Badge size="sm" color="green-emeraude">
+          {`Commenté par ${contribution.team[0]}`}
+        </Badge>
       )}
       {contribution?.objectType && (
-        <li>
-          <Badge
-            size="sm"
-            color={BadgeColor({ type: contribution.objectType })}
-            icon={typeIcon({ icon: contribution.objectType })}
-          >
-            {TypeLabel({ type: contribution.objectType })}
-          </Badge>
-        </li>
+        <Badge
+          size="sm"
+          color={BadgeColor({ type: contribution.objectType })}
+          icon={typeIcon({ icon: contribution.objectType })}
+        >
+          {TypeLabel({ type: contribution.objectType })}
+        </Badge>
       )}
-    </ul>
+    </BadgeGroup>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Badge } from "@dataesr/dsfr-plus";
+import { Badge, Text } from "@dataesr/dsfr-plus";
 import {
   BadgeColor,
   BadgeStatus,
@@ -33,9 +33,12 @@ const ContributionList = ({
 
   return (
     <nav aria-label="Contributions" className="contribution-list">
-      <p className="fr-text--sm fr-text--bold fr-mb-0 contribution-list__header">
+      <Text
+        size="sm"
+        className="fr-text--bold fr-mb-0 contribution-list__header"
+      >
         {`Contributions (${contributions.length})`}
-      </p>
+      </Text>
       <ul className="contribution-list__items">
         {contributions.map((contribution, index) => {
           const isSelected = contribution.id === selectedId;
@@ -50,12 +53,20 @@ const ContributionList = ({
                 onClick={() => handleClick(contribution.id)}
               >
                 <span className="contribution-list__item-row">
-                  <span className="fr-text--sm fr-text--bold fr-mb-0 contribution-list__item-name">
+                  <Text
+                    as="span"
+                    size="sm"
+                    className="fr-text--bold fr-mb-0 contribution-list__item-name"
+                  >
                     {contribution.name}
-                  </span>
-                  <span className="fr-text--xs fr-text-mention--grey fr-mb-0">
+                  </Text>
+                  <Text
+                    as="span"
+                    size="xs"
+                    className="fr-text-mention--grey fr-mb-0"
+                  >
                     {new Date(contribution.created_at).toLocaleDateString()}
-                  </span>
+                  </Text>
                 </span>
 
                 <span className="contribution-list__item-badges">
@@ -76,16 +87,24 @@ const ContributionList = ({
                       {TypeLabel({ type: contribution.type })}
                     </Badge>
                   )}
-                  <span className="fr-text--xs fr-text-mention--grey fr-mb-0">
+                  <Text
+                    as="span"
+                    size="xs"
+                    className="fr-text-mention--grey fr-mb-0"
+                  >
                     {responseCount > 0
                       ? `${responseCount} réponse${responseCount > 1 ? "s" : ""}`
                       : "Sans réponse"}
-                  </span>
+                  </Text>
                 </span>
 
-                <p className="fr-text--xs fr-text-mention--grey fr-mb-0 contribution-list__item-excerpt">
+                <Text
+                  as="span"
+                  size="xs"
+                  className="fr-text-mention--grey fr-mb-0 contribution-list__item-excerpt"
+                >
                   {contribution.message}
-                </p>
+                </Text>
               </button>
             </li>
           );

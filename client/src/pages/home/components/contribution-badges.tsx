@@ -1,4 +1,4 @@
-import { Badge } from "@dataesr/dsfr-plus";
+import { Badge, BadgeGroup } from "@dataesr/dsfr-plus";
 import {
   BadgeColor,
   BadgeStatus,
@@ -12,51 +12,39 @@ import { getContributionLabel, isFromScanR } from "../utils";
 type ContributionBadgesProps = { contribution: UnifiedContribution };
 
 const ContributionBadges = ({ contribution }: ContributionBadgesProps) => (
-  <ul className="fr-badges-group">
+  <BadgeGroup>
     {contribution.objectType && (
-      <li>
-        <Badge
-          size="sm"
-          icon={typeIcon({ icon: contribution.objectType })}
-          color={BadgeColor({ type: contribution.objectType })}
-        >
-          {TypeLabel({ type: contribution.objectType })}
-        </Badge>
-      </li>
+      <Badge
+        size="sm"
+        icon={typeIcon({ icon: contribution.objectType })}
+        color={BadgeColor({ type: contribution.objectType })}
+      >
+        {TypeLabel({ type: contribution.objectType })}
+      </Badge>
     )}
     {isFromScanR(contribution) && (
-      <li>
-        <Badge size="sm" color="blue-ecume">
-          scanR
-        </Badge>
-      </li>
-    )}
-    <li>
       <Badge size="sm" color="blue-ecume">
-        {getContributionLabel(contribution)}
+        scanR
       </Badge>
-    </li>
+    )}
+    <Badge size="sm" color="blue-ecume">
+      {getContributionLabel(contribution)}
+    </Badge>
     {contribution.fromApplication &&
       contribution.fromApplication !== "scanr" && (
-        <li>
-          <Badge size="sm" color="blue-ecume">
-            {contribution.fromApplication}
-          </Badge>
-        </li>
+        <Badge size="sm" color="blue-ecume">
+          {contribution.fromApplication}
+        </Badge>
       )}
     {contribution.csv && (
-      <li>
-        <Badge size="sm" color="green-menthe">
-          BSO
-        </Badge>
-      </li>
-    )}
-    <li>
-      <Badge size="sm" color={BadgeStatus({ status: contribution.status })}>
-        {StatusLabel({ status: contribution.status })}
+      <Badge size="sm" color="green-menthe">
+        BSO
       </Badge>
-    </li>
-  </ul>
+    )}
+    <Badge size="sm" color={BadgeStatus({ status: contribution.status })}>
+      {StatusLabel({ status: contribution.status })}
+    </Badge>
+  </BadgeGroup>
 );
 
 export default ContributionBadges;

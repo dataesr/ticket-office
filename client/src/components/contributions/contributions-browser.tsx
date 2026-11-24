@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Alert, Col, Container, Row, Text } from "@dataesr/dsfr-plus";
 import Loader from "../loader";
 import BottomPaginationButtons from "../pagination/bottom-buttons";
 import TopPaginationButtons from "../pagination/top-buttons";
@@ -27,7 +28,7 @@ const ContributionsBrowser = ({
   const maxPage = meta ? Math.ceil(meta.total / PAGE_SIZE) : 1;
 
   return (
-    <div className="fr-container fr-py-6w">
+    <Container className="fr-py-6w">
       <TopPaginationButtons
         meta={meta}
         page={filters.page}
@@ -39,20 +40,22 @@ const ContributionsBrowser = ({
       {isLoading ? (
         <Loader />
       ) : isError ? (
-        <div className="fr-alert fr-alert--error">
-          <p className="fr-alert__title">Erreur</p>
-          <p>Erreur lors du chargement des données.</p>
-        </div>
+        <Alert
+          variant="error"
+          title="Erreur"
+          titleAs="p"
+          description="Erreur lors du chargement des données."
+        />
       ) : (
-        <div className="fr-grid-row fr-grid-row--gutters">
-          <div className="fr-col-12 fr-col-md-4">
+        <Row gutters>
+          <Col xs={12} md={4}>
             <ContributionList
               contributions={contributions}
               selectedId={selectedId}
               onSelect={setSelectedContribution}
             />
-          </div>
-          <div className="fr-col-12 fr-col-md-8">
+          </Col>
+          <Col xs={12} md={8}>
             {contributions.length > 0 ? (
               <ContributionDetail
                 key={selectedId}
@@ -65,17 +68,17 @@ const ContributionsBrowser = ({
                 apiRoute={apiRoute}
               />
             ) : (
-              <p>Aucune contribution trouvée.</p>
+              <Text>Aucune contribution trouvée.</Text>
             )}
-          </div>
-        </div>
+          </Col>
+        </Row>
       )}
       <BottomPaginationButtons
         page={filters.page}
         maxPage={maxPage}
         setPage={filters.setPage}
       />
-    </div>
+    </Container>
   );
 };
 

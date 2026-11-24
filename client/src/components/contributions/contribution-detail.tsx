@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Alert, Button, Text, Title } from "@dataesr/dsfr-plus";
 import EditModal from "../edit-modal";
 import EmailSender from "../email-sender";
 import HighlightedMessage from "../highlighted-message";
@@ -39,9 +40,9 @@ const ContributionDetail = ({
         <ContributionBadges contribution={contribution} />
 
         <div className="contribution-item__header-row">
-          <h2 className="fr-h5 fr-mb-0">
+          <Title as="h2" look="h5" className="fr-mb-0">
             {contribution?.name || ""}
-            <span className="fr-ml-1w fr-text--regular fr-text--sm">
+            <Text as="span" size="sm" className="fr-ml-1w fr-text--regular">
               ({contribution?.id || ""})
               <CopyButton
                 text={contribution?.id || ""}
@@ -50,20 +51,25 @@ const ContributionDetail = ({
                 ariaLabel="Copier l'identifiant"
                 disabled={!contribution?.id}
               />
-            </span>
-          </h2>
+            </Text>
+          </Title>
           <div className="contribution-item__actions">
-            <button
+            <Button
               type="button"
-              className="fr-btn fr-btn--secondary fr-btn--sm fr-icon-edit-line fr-btn--icon-left"
+              variant="secondary"
+              size="sm"
+              icon="edit-line"
               onClick={() => setShowEditModal(true)}
             >
               Éditer
-            </button>
+            </Button>
             {createdDate && (
-              <p className="fr-text--sm fr-text-mention--grey fr-mb-0 contribution-item__date">
+              <Text
+                size="sm"
+                className="fr-text-mention--grey fr-mb-0 contribution-item__date"
+              >
                 Reçu le {createdDate}
-              </p>
+              </Text>
             )}
           </div>
         </div>
@@ -71,9 +77,13 @@ const ContributionDetail = ({
 
       <div className="contribution-item__body">
         {!hasResponse && (
-          <div className="fr-alert fr-alert--info fr-alert--sm fr-mb-3w">
-            <p>Aucune réponse apportée à ce message pour l'instant</p>
-          </div>
+          <Alert
+            variant="info"
+            size="sm"
+            role="note"
+            className="fr-mb-3w"
+            description="Aucune réponse apportée à ce message pour l'instant"
+          />
         )}
 
         <ContributionInfo contribution={contribution} />
