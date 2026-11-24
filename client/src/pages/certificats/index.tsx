@@ -1,4 +1,4 @@
-import { Container, Row, Col, Badge } from "@dataesr/dsfr-plus";
+import { Badge, Col, Container, Row, Text, Title } from "@dataesr/dsfr-plus";
 import Loader from "../../components/loader";
 import { useCertificates } from "./api";
 import PageBanner from "../../components/page-banner";
@@ -70,31 +70,40 @@ const OrganismeBadge = ({ organisme }: { organisme: Organisme }) => (
   </Badge>
 );
 
+const URGENCE_SUMMARY = [
+  { urgence: "Critique", label: "Critiques" },
+  { urgence: "Élevée", label: "Urgence élevée" },
+  { urgence: "Moyenne", label: "Urgence moyenne" },
+  { urgence: "Faible", label: "Valides" },
+];
+
 const Certificats = () => {
   const { data, isLoading, error } = useCertificates();
   return (
-    <>
+    <main id="content">
       <PageBanner
         title="Certificats"
         description="Surveillance de l'expiration des certificats SSL de nos applications"
-      ></PageBanner>
+      />
       <Container className="fr-mt-5w">
         {isLoading && <Loader />}
 
         {error && (
           <div className="fr-callout fr-callout--error">
-            <h3 className="fr-callout__title">Erreur</h3>
-            <p className="fr-callout__text">{error.message}</p>
+            <Title as="h3" className="fr-callout__title">
+              Erreur
+            </Title>
+            <Text className="fr-callout__text">{error.message}</Text>
           </div>
         )}
 
         {data && !isLoading && !error && (
           <>
             <div className="fr-callout fr-callout--info fr-mb-3w">
-              <p className="fr-callout__text--xs">
+              <Text className="fr-callout__text--xs">
                 Rapport généré le{" "}
                 {new Date(data.date).toLocaleDateString("fr-FR")}
-              </p>
+              </Text>
             </div>
 
             <div className="stat-table">
@@ -118,14 +127,15 @@ const Certificats = () => {
                         <td>
                           <strong>{certificate.site}</strong>
                           {certificate.error && (
-                            <div className="fr-text fr-text--error">
+                            <Text className="fr-text--error fr-mb-0">
                               {certificate.error}
-                            </div>
+                            </Text>
                           )}
                         </td>
                         <td>{certificate.expiration}</td>
                         <td>
-                          <span
+                          <Text
+                            as="span"
                             className={
                               certificate.joursRestants <= 5
                                 ? "fr-text--error"
@@ -137,7 +147,7 @@ const Certificats = () => {
                             {certificate.joursRestants < 0
                               ? "Expiré"
                               : certificate.joursRestants}
-                          </span>
+                          </Text>
                         </td>
                         <td>{certificate.statut}</td>
                         <td>
@@ -170,75 +180,29 @@ const Certificats = () => {
             </div>
 
             <Row gutters className="fr-mt-3w">
-              <Col xs="12" md="3">
-                <div className="fr-card fr-card--sm">
-                  <div className="fr-card__body">
-                    <div className="fr-card__content">
-                      <h3 className="fr-card__title">
-                        {
-                          data.certificates.filter(
-                            (certificate) => certificate.urgence === "Critique"
-                          ).length
-                        }
-                      </h3>
-                      <p className="fr-card__desc">Critiques</p>
+              {URGENCE_SUMMARY.map(({ urgence, label }) => (
+                <Col xs="12" md="3" key={urgence}>
+                  <div className="fr-card fr-card--sm">
+                    <div className="fr-card__body">
+                      <div className="fr-card__content">
+                        <Title as="h3" className="fr-card__title">
+                          {
+                            data.certificates.filter(
+                              (certificate) => certificate.urgence === urgence
+                            ).length
+                          }
+                        </Title>
+                        <Text className="fr-card__desc">{label}</Text>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Col>
-              <Col xs="12" md="3">
-                <div className="fr-card fr-card--sm">
-                  <div className="fr-card__body">
-                    <div className="fr-card__content">
-                      <h3 className="fr-card__title">
-                        {
-                          data.certificates.filter(
-                            (certificate) => certificate.urgence === "Élevée"
-                          ).length
-                        }
-                      </h3>
-                      <p className="fr-card__desc">Urgence élevée</p>
-                    </div>
-                  </div>
-                </div>
-              </Col>
-              <Col xs="12" md="3">
-                <div className="fr-card fr-card--sm">
-                  <div className="fr-card__body">
-                    <div className="fr-card__content">
-                      <h3 className="fr-card__title">
-                        {
-                          data.certificates.filter(
-                            (certificate) => certificate.urgence === "Moyenne"
-                          ).length
-                        }
-                      </h3>
-                      <p className="fr-card__desc">Urgence moyenne</p>
-                    </div>
-                  </div>
-                </div>
-              </Col>
-              <Col xs="12" md="3">
-                <div className="fr-card fr-card--sm">
-                  <div className="fr-card__body">
-                    <div className="fr-card__content">
-                      <h3 className="fr-card__title">
-                        {
-                          data.certificates.filter(
-                            (certificate) => certificate.urgence === "Faible"
-                          ).length
-                        }
-                      </h3>
-                      <p className="fr-card__desc">Valides</p>
-                    </div>
-                  </div>
-                </div>
-              </Col>
+                </Col>
+              ))}
             </Row>
           </>
         )}
       </Container>
-    </>
+    </main>
   );
 };
 

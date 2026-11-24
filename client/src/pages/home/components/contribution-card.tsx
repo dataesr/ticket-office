@@ -1,4 +1,4 @@
-import { Link, Text } from "@dataesr/dsfr-plus";
+import { Link, Text, Title } from "@dataesr/dsfr-plus";
 import "./styles.scss";
 import MarkdownRenderer from "../../../components/markdown-renderer";
 import { UnifiedContribution } from "../../../types";
@@ -23,9 +23,9 @@ const ContributionCard = ({ contribution }: ContributionCardProps) => {
           <div className="fr-card__start">
             <ContributionBadges contribution={contribution} />
           </div>
-          <h2 className="fr-card__title">
+          <Title as="h2" className="fr-card__title">
             <Link href={link}>{getContributionTitle(contribution)}</Link>
-          </h2>
+          </Title>
           <div className="fr-card__desc">
             {contribution.email && (
               <Text as="p" size="sm" className="fr-mb-1w">
@@ -45,10 +45,10 @@ const ContributionCard = ({ contribution }: ContributionCardProps) => {
             )}
           </div>
           <div className="fr-card__end">
-            <p className="fr-card__detail fr-icon-calendar-line">
+            <Text className="fr-card__detail fr-icon-calendar-line">
               {formatDate(contribution.created_at)} à{" "}
               {formatTime(contribution.created_at)}
-            </p>
+            </Text>
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+import { Container, Text, Title } from "@dataesr/dsfr-plus";
+
 type PageBannerProps = {
   title: string;
   description: string;
@@ -10,14 +12,16 @@ export default function PageBanner({
   children,
 }: PageBannerProps) {
   return (
-    <section className="fr-background-alt--blue-france">
-      <div className="fr-container fr-py-8w">
-        <h1 className="fr-mb-1w">{title}</h1>
-        <p className={`fr-text--sm ${children ? "fr-mb-3w" : "fr-mb-0"}`}>
+    <Container as="section" fluid className="fr-background-alt--blue-france">
+      <Container className="fr-py-8w">
+        <Title as="h1" className="fr-mb-1w">
+          {title}
+        </Title>
+        <Text size="sm" className={children ? "fr-mb-3w" : "fr-mb-0"}>
           {description}
-        </p>
+        </Text>
         {children}
-      </div>
-    </section>
+      </Container>
+    </Container>
   );
 }
