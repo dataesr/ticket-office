@@ -6,24 +6,28 @@ import {
   TypeLabel,
   typeIcon,
 } from "../../../utils";
-import { ContributorSummaryProps } from "../../../types";
+import { Contribution } from "../../../types";
 
-const countResponses = (
-  threads?: ContributorSummaryProps["contributions"][number]["threads"]
-) =>
+type ContributionListProps = {
+  contributions: Contribution[];
+  selectedId: string;
+  onSelect: (id: string) => void;
+};
+
+const countResponses = (threads: Contribution["threads"]) =>
   threads?.reduce(
     (total, thread) =>
       total + thread.responses.filter((r) => r.responseMessage).length,
     0
   ) ?? 0;
 
-const ContributorSummary: React.FC<ContributorSummaryProps> = ({
+const ContributionList = ({
   contributions,
-  selectedContribution,
-  onSelectContribution,
-}) => {
+  selectedId,
+  onSelect,
+}: ContributionListProps) => {
   const handleClick = (id: string) => {
-    onSelectContribution(id);
+    onSelect(id);
     window.scrollTo({ top: 300, behavior: "smooth" });
   };
 
@@ -34,7 +38,7 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
       </p>
       <ul className="contribution-list__items">
         {contributions.map((contribution, index) => {
-          const isSelected = contribution.id === selectedContribution;
+          const isSelected = contribution.id === selectedId;
           const responseCount = countResponses(contribution.threads);
 
           return (
@@ -56,7 +60,10 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
 
                 <span className="contribution-list__item-badges">
                   {contribution.status && (
-                    <Badge size="sm" color={BadgeStatus({ status: contribution.status })}>
+                    <Badge
+                      size="sm"
+                      color={BadgeStatus({ status: contribution.status })}
+                    >
                       {StatusLabel({ status: contribution.status })}
                     </Badge>
                   )}
@@ -88,4 +95,4 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
   );
 };
 
-export default ContributorSummary;
+export default ContributionList;

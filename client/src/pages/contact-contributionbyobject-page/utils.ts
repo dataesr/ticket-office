@@ -25,16 +25,3 @@ export const filterContributions = (
       (searchInMessage && matches(c.message))
   );
 };
-
-export const updateUrlParams = (
-  search: string,
-  updates: Record<string, string>
-) => {
-  const params = new URLSearchParams(search);
-  Object.entries(updates).forEach(([key, value]) => params.set(key, value));
-  window.history.pushState(
-    {},
-    "",
-    `${window.location.pathname}?${params.toString()}`
-  );
-};

@@ -154,10 +154,6 @@ export interface SelectWithNamesProps {
   landingPage?: string;
 }
 
-export interface MessagePreviewProps {
-  data: Contribution;
-  highlightedQuery?: string;
-}
 export interface MessagePreviewProductionProps {
   data: Contribute_Production;
   highlightedQuery?: string;
@@ -213,29 +209,6 @@ export interface ContributionProductionItemProps {
 }
 export interface ExcelExportButtonProps {
   refetch: () => void;
-}
-
-export interface ContributionDetailsProps {
-  filteredContributions: Contribution[];
-  selectedContribution: string | number;
-  refetch: () => void;
-  highlightedQuery?: string;
-  allTags: string[];
-}
-
-export interface ContributorSummaryProps {
-  contributions: {
-    id: string;
-    type?: string;
-    status?: string;
-    tags?: string[];
-    name: string;
-    created_at: string;
-    message: string;
-    threads?: Thread[];
-  }[];
-  selectedContribution?: string;
-  onSelectContribution: (id: string) => void;
 }
 
 export interface PaginationProps {
