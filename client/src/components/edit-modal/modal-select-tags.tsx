@@ -1,6 +1,10 @@
 import { useState } from "react";
-import { SelectableTag } from "@dataesr/dsfr-plus";
-import Modal from "../modal";
+import {
+  Modal,
+  ModalContent,
+  ModalTitle,
+  SelectableTag,
+} from "@dataesr/dsfr-plus";
 import { TagSelectionModalProps } from "../../types";
 
 const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
@@ -22,45 +26,44 @@ const TagSelectionModal: React.FC<TagSelectionModalProps> = ({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onClose={handleCancel}
-      title="Sélectionner des tags"
-    >
-      <ul className="fr-tags-group fr-mb-4w">
-        {allTags.map((tag) => (
-          <li key={tag}>
-            <SelectableTag
+    <Modal isOpen={isOpen} hide={handleCancel}>
+      <ModalTitle>Sélectionner des tags</ModalTitle>
+      <ModalContent>
+        <ul className="fr-tags-group fr-mb-4w">
+          {allTags.map((tag) => (
+            <li key={tag}>
+              <SelectableTag
+                type="button"
+                size="sm"
+                selected={selectedTags.includes(tag)}
+                onClick={() => toggleTag(tag)}
+              >
+                {tag}
+              </SelectableTag>
+            </li>
+          ))}
+        </ul>
+        <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse">
+          <li>
+            <button
               type="button"
-              size="sm"
-              selected={selectedTags.includes(tag)}
-              onClick={() => toggleTag(tag)}
+              className="fr-btn"
+              onClick={() => onClose(selectedTags)}
             >
-              {tag}
-            </SelectableTag>
+              Valider
+            </button>
           </li>
-        ))}
-      </ul>
-      <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse">
-        <li>
-          <button
-            type="button"
-            className="fr-btn"
-            onClick={() => onClose(selectedTags)}
-          >
-            Valider
-          </button>
-        </li>
-        <li>
-          <button
-            type="button"
-            className="fr-btn fr-btn--secondary"
-            onClick={handleCancel}
-          >
-            Annuler
-          </button>
-        </li>
-      </ul>
+          <li>
+            <button
+              type="button"
+              className="fr-btn fr-btn--secondary"
+              onClick={handleCancel}
+            >
+              Annuler
+            </button>
+          </li>
+        </ul>
+      </ModalContent>
     </Modal>
   );
 };

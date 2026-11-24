@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
 import { toast } from "react-toastify";
-import Modal from "../modal";
+import { Modal, ModalContent, ModalTitle } from "@dataesr/dsfr-plus";
 import { DismissibleTag } from "../tag";
 import { postHeaders } from "../../config/api";
 import TagSelectionModal from "./modal-select-tags";
@@ -110,122 +110,125 @@ const EditModal: React.FC<EditModalProps> = ({
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} title="Édition">
-        <div className="fr-select-group fr-mb-3w">
-          <label className="fr-label" htmlFor={statusSelectId}>
-            Statut
-          </label>
-          <select
-            id={statusSelectId}
-            className="fr-select"
-            value={inputs.status}
-            onChange={(e) => handleInputChange("status", e.target.value)}
-          >
-            <option value="treated">Traité</option>
-            <option value="new">Nouveau</option>
-            <option value="ongoing">En traitement</option>
-          </select>
-        </div>
+      <Modal isOpen={isOpen} hide={onClose}>
+        <ModalTitle>Édition</ModalTitle>
+        <ModalContent>
+          <div className="fr-select-group fr-mb-3w">
+            <label className="fr-label" htmlFor={statusSelectId}>
+              Statut
+            </label>
+            <select
+              id={statusSelectId}
+              className="fr-select"
+              value={inputs.status}
+              onChange={(e) => handleInputChange("status", e.target.value)}
+            >
+              <option value="treated">Traité</option>
+              <option value="new">Nouveau</option>
+              <option value="ongoing">En traitement</option>
+            </select>
+          </div>
 
-        <div className="fr-grid-row fr-grid-row--gutters fr-mb-2w">
-          <div className="fr-col-12 fr-col-md-6">
-            <div className="fr-input-group">
-              <label className="fr-label" htmlFor={tagsInputId}>
-                Ajouter des tags
-                <span className="fr-hint-text">
-                  Séparez les tags par des virgules
-                </span>
-              </label>
-              <input
-                id={tagsInputId}
-                type="text"
-                className="fr-input"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-              />
+          <div className="fr-grid-row fr-grid-row--gutters fr-mb-2w">
+            <div className="fr-col-12 fr-col-md-6">
+              <div className="fr-input-group">
+                <label className="fr-label" htmlFor={tagsInputId}>
+                  Ajouter des tags
+                  <span className="fr-hint-text">
+                    Séparez les tags par des virgules
+                  </span>
+                </label>
+                <input
+                  id={tagsInputId}
+                  type="text"
+                  className="fr-input"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                />
+              </div>
+              {tagInput && (
+                <button
+                  type="button"
+                  className="fr-btn fr-btn--secondary fr-btn--sm fr-mt-1w"
+                  onClick={handleTagInputChange}
+                >
+                  Valider
+                </button>
+              )}
             </div>
-            {tagInput && (
+            <div className="fr-col-12 fr-col-md-6">
+              {inputs.tags.length > 0 && (
+                <ul className="fr-tags-group">
+                  {inputs.tags.map((tag) => (
+                    <li key={tag}>
+                      <DismissibleTag onClick={() => handleTagRemove(tag)}>
+                        {tag}
+                      </DismissibleTag>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="fr-btn fr-btn--secondary fr-btn--sm fr-mb-3w"
+            onClick={() => setShowTagModal(true)}
+          >
+            Sélectionner des tags
+          </button>
+
+          <div className="fr-grid-row fr-grid-row--gutters fr-mb-3w">
+            <div className="fr-col-12 fr-col-md-6">
+              <div className="fr-input-group">
+                <label className="fr-label" htmlFor={extraTextareaId}>
+                  Ajouter des extra
+                  <span className="fr-hint-text">Exemple : clé: valeur</span>
+                </label>
+                <textarea
+                  id={extraTextareaId}
+                  className="fr-input"
+                  rows={4}
+                  value={inputs.extra}
+                  onChange={(e) => handleInputChange("extra", e.target.value)}
+                />
+              </div>
+            </div>
+            <div className="fr-col-12 fr-col-md-6">
+              <div className="fr-input-group">
+                <label className="fr-label" htmlFor={commentTextareaId}>
+                  Commentaire
+                  <span className="fr-hint-text">Ajouter un commentaire</span>
+                </label>
+                <textarea
+                  id={commentTextareaId}
+                  className="fr-input"
+                  rows={4}
+                  value={inputs.comment}
+                  onChange={(e) => handleInputChange("comment", e.target.value)}
+                />
+              </div>
+            </div>
+          </div>
+
+          <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse">
+            <li>
+              <button type="button" className="fr-btn" onClick={handleSubmit}>
+                Enregistrer
+              </button>
+            </li>
+            <li>
               <button
                 type="button"
-                className="fr-btn fr-btn--secondary fr-btn--sm fr-mt-1w"
-                onClick={handleTagInputChange}
+                className="fr-btn fr-btn--secondary"
+                onClick={onClose}
               >
-                Valider
+                Annuler
               </button>
-            )}
-          </div>
-          <div className="fr-col-12 fr-col-md-6">
-            {inputs.tags.length > 0 && (
-              <ul className="fr-tags-group">
-                {inputs.tags.map((tag) => (
-                  <li key={tag}>
-                    <DismissibleTag onClick={() => handleTagRemove(tag)}>
-                      {tag}
-                    </DismissibleTag>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
-
-        <button
-          type="button"
-          className="fr-btn fr-btn--secondary fr-btn--sm fr-mb-3w"
-          onClick={() => setShowTagModal(true)}
-        >
-          Sélectionner des tags
-        </button>
-
-        <div className="fr-grid-row fr-grid-row--gutters fr-mb-3w">
-          <div className="fr-col-12 fr-col-md-6">
-            <div className="fr-input-group">
-              <label className="fr-label" htmlFor={extraTextareaId}>
-                Ajouter des extra
-                <span className="fr-hint-text">Exemple : clé: valeur</span>
-              </label>
-              <textarea
-                id={extraTextareaId}
-                className="fr-input"
-                rows={4}
-                value={inputs.extra}
-                onChange={(e) => handleInputChange("extra", e.target.value)}
-              />
-            </div>
-          </div>
-          <div className="fr-col-12 fr-col-md-6">
-            <div className="fr-input-group">
-              <label className="fr-label" htmlFor={commentTextareaId}>
-                Commentaire
-                <span className="fr-hint-text">Ajouter un commentaire</span>
-              </label>
-              <textarea
-                id={commentTextareaId}
-                className="fr-input"
-                rows={4}
-                value={inputs.comment}
-                onChange={(e) => handleInputChange("comment", e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-
-        <ul className="fr-btns-group fr-btns-group--right fr-btns-group--inline-reverse">
-          <li>
-            <button type="button" className="fr-btn" onClick={handleSubmit}>
-              Enregistrer
-            </button>
-          </li>
-          <li>
-            <button
-              type="button"
-              className="fr-btn fr-btn--secondary"
-              onClick={onClose}
-            >
-              Annuler
-            </button>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        </ModalContent>
       </Modal>
 
       <TagSelectionModal

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EmailSender from "../../../components/email-sender";
-import Modal from "../../../components/modal";
+import { Modal, ModalContent, ModalTitle } from "@dataesr/dsfr-plus";
 import { StaffActionsProps, Thread } from "../../../types";
 import MarkdownRenderer from "../../../utils/markdownRenderer";
 
@@ -69,15 +69,13 @@ const StaffActions: React.FC<StaffActionsProps> = ({ data, refetch }) => {
 
       <EmailSender contribution={data} refetch={refetch} />
 
-      <Modal
-        isOpen={!!modalImage}
-        onClose={() => setModalImage(null)}
-        title="Aperçu de la pièce jointe"
-        size="lg"
-      >
-        {modalImage && (
-          <img className="attachment-preview" src={modalImage} alt="Aperçu" />
-        )}
+      <Modal isOpen={!!modalImage} hide={() => setModalImage(null)} size="lg">
+        <ModalTitle>Aperçu de la pièce jointe</ModalTitle>
+        <ModalContent>
+          {modalImage && (
+            <img className="attachment-preview" src={modalImage} alt="Aperçu" />
+          )}
+        </ModalContent>
       </Modal>
     </>
   );
