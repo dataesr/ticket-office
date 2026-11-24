@@ -21,9 +21,9 @@ export function VariationsContext({ children }) {
   const bsoConfig = useBsoConfig()
 
   const checkId = (id: string) => {
-    checkedIds.includes(id)
-      ? setCheckedIds([...checkedIds.filter((checkId) => checkId !== id)])
-      : setCheckedIds([...checkedIds, id])
+    setCheckedIds(
+      checkedIds.includes(id) ? checkedIds.filter((checkId) => checkId !== id) : [...checkedIds, id]
+    )
   }
   const checkAllIds = (ids: Array<string>) => setCheckedIds(ids)
 

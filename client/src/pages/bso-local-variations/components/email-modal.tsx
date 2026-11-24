@@ -18,7 +18,7 @@ export default function EmailModal({ variations, isOpen, onClose }: EmailModalPr
     getCodeFromBSO,
   } = useVariationsContext();
   const singleVariation = variations?.length === 1 ? variations[0] : null
-  const useTemplate = !!singleVariation ? false : true
+  const useTemplate = !singleVariation
   const displayStructureId = singleVariation?.structure?.id || "${structureId}"
   const displayCommentsName = getCommentsNameFromBSO(singleVariation?.structure?.id) || "${structureCommentsName}"
   const displayUserResponse = notificationGetTemplate("done", api, displayStructureId, displayCommentsName);
