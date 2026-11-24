@@ -9,7 +9,7 @@ import SearchSection from "../../components/search-section";
 import ContributionDetails from "./components/contribution-details";
 import TopPaginationButtons from "../../components/pagination/top-buttons";
 import BottomPaginationButtons from "../../components/pagination/bottom-buttons";
-import { getUrlToSend } from "../../config/urlHelper";
+import { getTagsUrl } from "../../config/urlHelper";
 import { Contribution, ContributionPageProps } from "../../types";
 import { filterContributions, getPageTitle, updateUrlParams } from "./utils";
 import "./styles.scss";
@@ -77,15 +77,12 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
     objectType
   );
 
-  const urlToSend = getUrlToSend(window.location.pathname);
-
   const { data, isLoading, isError, refetch } = ContributionData(url);
   const contributions: Contribution[] = data?.data || [];
   const meta = data?.meta;
   const maxPage = meta ? Math.ceil(meta.total / PAGE_SIZE) : 1;
 
-  const tagsData = ContributionData(urlToSend);
-  const allTags = tagsData?.data?.data?.map((tag) => tag?.tags);
+  const { data: allTags } = ContributionData(getTagsUrl(location.pathname));
 
   const [selectedContribution, setSelectedContribution] = useState("");
 

@@ -17,6 +17,7 @@ import removeUserRoutes from "./routes/remove-user";
 import sendMailToContribution from "./routes/reply/replyRoutes";
 import sendEmail from "./routes/send-email/sendEmailRoutes";
 import storageRoutes from "./routes/storage";
+import tagsRoutes from "./routes/tags";
 import updateUserDataRoutes from "./routes/update-user-data";
 import matomo from "./routes/matomo";
 import certificatsRoutes, {
@@ -83,6 +84,7 @@ const buildApi = () =>
       .use(sendMailToContribution)
       .use(sendEmail)
       .use(storageRoutes)
+      .use(tagsRoutes)
       .use(updateUserDataRoutes)
   );
 
