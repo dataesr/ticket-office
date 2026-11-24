@@ -2,7 +2,6 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { solarizedlight } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Text } from "@dataesr/dsfr-plus";
 import { cleanResponseMessage } from "./clean-response";
 import "./styles.scss";
 
@@ -65,11 +64,11 @@ const MarkdownRenderer: React.FC<{ content: string; clean?: boolean }> = ({
 }) => {
   const processedContent = preprocessContent(content, clean);
   return (
-    <Text>
+    <div>
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={renderers}>
         {processedContent}
       </ReactMarkdown>
-    </Text>
+    </div>
   );
 };
 
