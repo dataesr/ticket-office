@@ -1,10 +1,9 @@
 import { useMemo, useState } from "react";
-import { Alert, Container, Text } from "@dataesr/dsfr-plus";
-import Loader from "../../components/loader";
+import { Container } from "@dataesr/dsfr-plus";
 import PageBanner from "../../components/page-banner";
 import SearchSection from "../../components/search-section";
 import { ContributionAllData } from "../../api/contributions";
-import AllContributions from "./components/item";
+import Results from "./components/results";
 import { filterContributions } from "./utils";
 
 const Home = () => {
@@ -37,49 +36,6 @@ const Home = () => {
     if (item === highlightedQuery) setHighlightedQuery("");
   };
 
-  const renderResults = () => {
-    if (isLoading) {
-      return <Loader />;
-    }
-
-    if (isError) {
-      return (
-        <Alert
-          variant="error"
-          closeMode="disallow"
-          title="Une erreur est survenue"
-          description="Impossible de charger les contributions pour le moment. Veuillez réessayer plus tard."
-        />
-      );
-    }
-
-    if (filteredData.length === 0) {
-      return (
-        <Alert
-          variant="info"
-          closeMode="disallow"
-          title={
-            hasActiveSearch ? "Aucun résultat" : "Aucune contribution récente"
-          }
-          description={
-            hasActiveSearch
-              ? "Aucune contribution ne correspond à votre recherche."
-              : "Aucune contribution n'a été reçue sur les dernières 24 heures."
-          }
-        />
-      );
-    }
-
-    return (
-      <>
-        <Text as="p" size="sm" className="fr-mb-2w fr-text-mention--grey">
-          {filteredData.length} contribution{filteredData.length > 1 ? "s" : ""}
-        </Text>
-        <AllContributions data={filteredData} />
-      </>
-    );
-  };
-
   return (
     <main id="content">
       <PageBanner
@@ -92,7 +48,14 @@ const Home = () => {
           handleRemoveQueryItem={handleRemoveQueryItem}
         />
       </PageBanner>
-      <Container className="fr-py-6w">{renderResults()}</Container>
+      <Container className="fr-py-6w">
+        <Results
+          contributions={filteredData}
+          isLoading={isLoading}
+          isError={isError}
+          hasActiveSearch={hasActiveSearch}
+        />
+      </Container>
     </main>
   );
 };
