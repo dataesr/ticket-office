@@ -78,7 +78,10 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
   );
 
   const { data, isLoading, isError, refetch } = ContributionData(url);
-  const contributions: Contribution[] = data?.data || [];
+  const contributions: Contribution[] = useMemo(
+    () => data?.data || [],
+    [data]
+  );
   const meta = data?.meta;
   const maxPage = meta ? Math.ceil(meta.total / PAGE_SIZE) : 1;
 
@@ -175,7 +178,6 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
             </div>
           </div>
         )}
-
         <BottomPaginationButtons
           page={page}
           maxPage={maxPage}
