@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-interface Certificate {
+export interface Certificate {
   error?: string;
   expiration: string;
   joursRestants: number;
