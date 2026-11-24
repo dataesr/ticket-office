@@ -122,7 +122,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
     try {
       await navigator.clipboard.writeText(formattedData);
       toast.success("Données copiées dans le presse-papiers !");
-    } catch (err) {
+    } catch {
       toast.error("Erreur lors de la copie des données !");
     }
 
