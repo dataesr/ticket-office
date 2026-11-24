@@ -35,7 +35,7 @@ const ContributionDetail = ({
     : "";
 
   return (
-    <>
+    <section id="contribution-detail" aria-label="Détail de la contribution">
       <div className="fr-background-alt--grey fr-p-3w">
         <ContributionBadges contribution={contribution} />
 
@@ -123,7 +123,7 @@ const ContributionDetail = ({
         allTags={allTags}
         apiRoute={apiRoute}
       />
-    </>
+    </section>
   );
 };
 

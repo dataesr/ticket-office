@@ -4,7 +4,7 @@ import Loader from "../loader";
 import BottomPaginationButtons from "../pagination/bottom-buttons";
 import TopPaginationButtons from "../pagination/top-buttons";
 import ContributionDetail from "./contribution-detail";
-import ContributionList from "./contribution-list";
+import ContributionsSideMenu from "./contributions-side-menu";
 import { PAGE_SIZE, useContributions } from "./useContributions";
 import { useContributionFilters } from "./useContributionFilters";
 
@@ -48,7 +48,7 @@ const ContributionsBrowser = ({
       ) : (
         <Row gutters>
           <Col xs={12} md={4}>
-            <ContributionList
+            <ContributionsSideMenu
               contributions={contributions}
               selectedId={selectedId}
               onSelect={setSelectedContribution}
