@@ -150,25 +150,20 @@ const ContributionPage: React.FC = () => {
         title="Lier des publications"
         description="Associez les publications proposées par les contributeurs aux profils correspondants."
       >
-        <div className="page-header-row">
-          <div className="page-header-row__search">
-            <SearchSection
-              query={query}
-              handleSearch={handleSearch}
-              handleRemoveQueryItem={handleRemoveQueryItem}
-            />
-          </div>
-          <Selectors
-            layout="inline"
-            sort={sort}
-            status={status}
-            setSort={handleSetSort}
-            setStatus={handleSetStatus}
-            searchInMessage={true}
-            objectType={undefined}
-            setObjectType={undefined}
-          />
-        </div>
+        <SearchSection
+          query={query}
+          handleSearch={handleSearch}
+          handleRemoveQueryItem={handleRemoveQueryItem}
+        />
+        <Selectors
+          sort={sort}
+          status={status}
+          setSort={handleSetSort}
+          setStatus={handleSetStatus}
+          searchInMessage={true}
+          objectType={undefined}
+          setObjectType={undefined}
+        />
       </PageBanner>
 
       <Container className="fr-py-6w">

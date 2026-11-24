@@ -1,15 +1,3 @@
-.page-header-row {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 1rem;
-
-  &__search {
-    flex: 1 1 20rem;
-    min-width: 16rem;
-  }
-}
-
 .production-item-summary {
   width: 100%;
   text-align: left;

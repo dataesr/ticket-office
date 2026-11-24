@@ -13,7 +13,6 @@ import BottomPaginationButtons from "../../components/pagination/bottom-buttons"
 import { getTagsUrl } from "../../config/urlHelper";
 import { Contribution, ContributionPageProps } from "../../types";
 import { filterContributions, getPageTitle, updateUrlParams } from "./utils";
-import "./styles.scss";
 
 const PAGE_SIZE = 20;
 
@@ -121,26 +120,21 @@ const ContactAndContributionPage: React.FC<ContributionPageProps> = ({
         title={pageTitle}
         description="Vous pouvez consulter les contributions des utilisateurs et les objets auxquels ils ont contribué."
       >
-        <div className="page-header-row">
-          <div className="page-header-row__search">
-            <SearchSection
-              query={query}
-              handleSearch={handleSearch}
-              handleRemoveQueryItem={handleRemoveQueryItem}
-            />
-          </div>
-          <Selectors
-            layout="inline"
-            sort={sort}
-            status={status}
-            setSort={handleSetSort}
-            setStatus={handleSetStatus}
-            searchInMessage={searchInMessage}
-            setSearchInMessage={handleSetSearchInMessage}
-            objectType={objectType}
-            setObjectType={handleSetObjectType}
-          />
-        </div>
+        <SearchSection
+          query={query}
+          handleSearch={handleSearch}
+          handleRemoveQueryItem={handleRemoveQueryItem}
+        />
+        <Selectors
+          sort={sort}
+          status={status}
+          setSort={handleSetSort}
+          setStatus={handleSetStatus}
+          searchInMessage={searchInMessage}
+          setSearchInMessage={handleSetSearchInMessage}
+          objectType={objectType}
+          setObjectType={handleSetObjectType}
+        />
       </PageBanner>
       <div className="fr-container fr-py-6w">
         <TopPaginationButtons
