@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Badge from "../../../components/badge";
+import { Badge } from "@dataesr/dsfr-plus";
 import EditModal from "../../../components/edit-modal";
 import StaffActions from "./staff-actions";
 import {
@@ -45,29 +45,30 @@ const ContributionItem: React.FC<ContributionItemProps> = ({
         <ul className="fr-badges-group fr-mb-1w">
           {data?.tags?.length > 0 && (
             <li>
-              <Badge color="green-menthe">{data.tags.join(", ")}</Badge>
+              <Badge size="sm" color="green-menthe">{data.tags.join(", ")}</Badge>
             </li>
           )}
           {data?.status && (
             <li>
-              <Badge color={BadgeStatus({ status: data.status })}>
+              <Badge size="sm" color={BadgeStatus({ status: data.status })}>
                 {StatusLabel({ status: data.status })}
               </Badge>
             </li>
           )}
           {firstResponse?.team && (
             <li>
-              <Badge color="blue-ecume">{`Réponse : ${firstResponse.team}`}</Badge>
+              <Badge size="sm" color="blue-ecume">{`Réponse : ${firstResponse.team}`}</Badge>
             </li>
           )}
           {data?.comment && data?.team?.length > 0 && (
             <li>
-              <Badge color="green-emeraude">{`Commenté par ${data.team[0]}`}</Badge>
+              <Badge size="sm" color="green-emeraude">{`Commenté par ${data.team[0]}`}</Badge>
             </li>
           )}
           {data?.objectType && (
             <li>
               <Badge
+                size="sm"
                 color={BadgeColor({ type: data.objectType })}
                 icon={typeIcon({ icon: data.objectType })}
               >

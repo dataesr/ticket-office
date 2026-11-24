@@ -1,4 +1,4 @@
-import Badge from "../../../components/badge";
+import { Badge } from "@dataesr/dsfr-plus";
 import {
   BadgeColor,
   BadgeStatus,
@@ -56,12 +56,13 @@ const ContributorSummary: React.FC<ContributorSummaryProps> = ({
 
                 <span className="contribution-list__item-badges">
                   {contribution.status && (
-                    <Badge color={BadgeStatus({ status: contribution.status })}>
+                    <Badge size="sm" color={BadgeStatus({ status: contribution.status })}>
                       {StatusLabel({ status: contribution.status })}
                     </Badge>
                   )}
                   {contribution.type && (
                     <Badge
+                      size="sm"
                       icon={typeIcon({ icon: contribution.type })}
                       color={BadgeColor({ type: contribution.type })}
                     >

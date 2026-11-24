@@ -1,5 +1,7 @@
+import { DSFRColors } from "@dataesr/dsfr-plus";
+
 export const BadgeColor = ({ type }) => {
-  let badgeColor;
+  let badgeColor: DSFRColors;
   switch (type) {
     case "structures":
       badgeColor = "blue-cumulus";
@@ -26,7 +28,7 @@ export const BadgeColor = ({ type }) => {
 };
 
 export const BadgeStatus = ({ status }) => {
-  let badgeStatus;
+  let badgeStatus: DSFRColors;
   switch (status) {
     case "new":
       badgeStatus = "pink-tuile";

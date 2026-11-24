@@ -1,6 +1,5 @@
-import { Accordion, AccordionGroup } from "@dataesr/dsfr-plus";
+import { Accordion, AccordionGroup, Badge } from "@dataesr/dsfr-plus";
 import "./styles.scss";
-import Badge from "../../components/badge";
 import StaffProductionActions from "./staff-production-action";
 import { BadgeStatus, StatusLabel } from "../../utils/index";
 import { CopyButton } from "../../utils/copy-button";
@@ -26,18 +25,18 @@ const ContributionProductionItem: React.FC<ContributionProductionItemProps> = ({
       <ul className="fr-badges-group fr-mb-1w">
         {data?.status && (
           <li>
-            <Badge color={BadgeStatus({ status: data?.status })}>
+            <Badge size="sm" color={BadgeStatus({ status: data?.status })}>
               {StatusLabel({ status: data.status })}
             </Badge>
           </li>
         )}
         {data.tag && (
           <li>
-            <Badge color="green-menthe">{data.tag}</Badge>
+            <Badge size="sm" color="green-menthe">{data.tag}</Badge>
           </li>
         )}
         <li>
-          <Badge color="green-emeraude" icon="links-line">
+          <Badge size="sm" color="green-emeraude" icon="links-line">
             {`${productionsCount} publication${productionsCount > 1 ? "s" : ""} à lier`}
           </Badge>
         </li>

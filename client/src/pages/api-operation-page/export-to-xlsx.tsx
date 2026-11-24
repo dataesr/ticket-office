@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import ExcelJS from "exceljs";
 import { toast } from "react-toastify";
-import Badge from "../../components/badge";
+import { Badge } from "@dataesr/dsfr-plus";
 import { useDataList } from "./data-list-context";
 import "./styles.scss";
 import { postHeaders } from "../../config/api";
@@ -165,7 +165,7 @@ const ExcelExportButton: React.FC<ExcelExportButtonProps> = ({ refetch }) => {
           Publications à exporter
         </p>
         <div className="export-basket__header-actions">
-          <Badge color="blue-ecume">
+          <Badge size="sm" color="blue-ecume">
             {`${displayItems.length} publication${displayItems.length > 1 ? "s" : ""}`}
           </Badge>
           <button
