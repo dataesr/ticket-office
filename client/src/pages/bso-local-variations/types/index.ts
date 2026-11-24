@@ -24,11 +24,6 @@ export interface VariationItemProps {
   refetch: () => void
 }
 
-export interface VariationsSummaryProps {
-  variations: Variation[]
-  onSelectedVariation: (id: string) => void
-}
-
 export type VariationTags = {
   file?: string
   index?: string

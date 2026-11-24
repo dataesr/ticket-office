@@ -4,13 +4,6 @@ type TagProps = {
   className?: string;
 };
 
-export function Tag({ children, size = "md", className }: TagProps) {
-  const classes = ["fr-tag"];
-  if (size === "sm") classes.push("fr-tag--sm");
-  if (className) classes.push(className);
-  return <p className={classes.join(" ")}>{children}</p>;
-}
-
 type DismissibleTagProps = TagProps & {
   onClick: () => void;
 };

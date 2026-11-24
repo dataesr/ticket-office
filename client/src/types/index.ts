@@ -54,11 +54,6 @@ export interface Contribute_Production extends BaseContribution {
   description?: string;
 }
 
-export interface ContributionObject extends BaseContribution {
-  objectId: string;
-  objectType: string;
-}
-
 export interface UnifiedContribution {
   contact: any;
   csv: any;
@@ -293,9 +288,6 @@ export interface ContributorSummaryProps {
   onSelectContribution: (id: string) => void;
 }
 
-export interface PageTitleProps {
-  pathname: string;
-}
 export interface PaginationProps {
   page: number;
   maxPage: number;
@@ -304,12 +296,6 @@ export interface PaginationProps {
 
 export interface TopPaginationProps extends PaginationProps {
   meta: any;
-}
-
-export interface ThreadResponse {
-  timestamp: string | Date;
-  team: string;
-  responseMessage: string;
 }
 
 export interface StaffActionsProps {

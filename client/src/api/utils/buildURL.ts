@@ -81,30 +81,3 @@ export const buildURL = (
 
   return `/api/${baseUrl}?${sorted}&page=${page}&max_results=${max_results}${whereQuery}${fromAppQuery}`;
 };
-
-export const buildStatsURL = (
-  filter: string,
-  sort: string = "ASC",
-  page: number = 1,
-  maxResults: string = "3000"
-): string => {
-  let baseUrl = "contacts";
-
-  switch (filter) {
-    case "object":
-      baseUrl = "contribute";
-      break;
-    case "removeuser":
-      baseUrl = "remove-user";
-      break;
-    case "namechange":
-      baseUrl = "update-user-data";
-      break;
-    default:
-      baseUrl = "contacts";
-  }
-
-  const sorted = sort === "ASC" ? "sort=created_at" : "sort=-created_at";
-
-  return `/api/${baseUrl}?${sorted}&page=${page}&max_results=${maxResults}`;
-};
