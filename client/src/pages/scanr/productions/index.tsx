@@ -91,7 +91,7 @@ const ProductionsPage = () => {
 
   if (isError || isErrorPublications) {
     return (
-      <Container className="fr-my-5w">
+      <Container as="main" id="content" className="fr-my-5w">
         <Row gutters>
           <Col md="12" xs="12">
             <Title as="h1">Lier des publications</Title>

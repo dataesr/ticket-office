@@ -1,3 +1,4 @@
+import { Text } from "@dataesr/dsfr-plus";
 import SelectWithNames from "./name-selector";
 import { ExternalLinks } from "./external-links";
 import { useDataList } from "../data-list-context";
@@ -42,10 +43,18 @@ const ProductionList = ({
                 title={inBasket ? "Ajoutée au panier" : "Pas dans le panier"}
               />
               <div className="production-request__id-text">
-                <span className="fr-text--xs fr-text-mention--grey fr-mb-0">
+                <Text
+                  as="span"
+                  size="xs"
+                  className="fr-text-mention--grey fr-mb-0"
+                >
                   ID de la publication
-                </span>
-                <span className="fr-text--sm fr-mb-0 production-request__id-value">
+                </Text>
+                <Text
+                  as="span"
+                  size="sm"
+                  className="fr-mb-0 production-request__id-value"
+                >
                   <span className="production-request__id-code">
                     {production.id}
                   </span>
@@ -55,7 +64,7 @@ const ProductionList = ({
                     onCopy={copyToClipboard}
                     ariaLabel="Copier l'identifiant de la publication"
                   />
-                </span>
+                </Text>
               </div>
             </div>
 

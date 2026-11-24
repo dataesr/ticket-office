@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { Button, ButtonGroup } from "@dataesr/dsfr-plus";
 import EditModal from "../../../../components/edit-modal";
 import { useDataList } from "../data-list-context";
 import { Contribute_Production } from "../../../../types";
@@ -65,52 +66,59 @@ const ContributorActions = ({
   return (
     <div className="message-preview__actions fr-mb-3w">
       {contribution.id && (
-        <ul className="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left">
-          <li>
-            <a
-              className={`fr-btn fr-btn--tertiary fr-btn--sm fr-icon-external-link-line ${idRefClicked ? "clicked-link" : ""}`}
-              target="_blank"
-              rel="noreferrer noopener external"
-              href={`https://www.idref.fr/${contribution.objectId.replace("idref", "")}`}
-              onClick={() => setIdRefClicked(true)}
-            >
-              Sur IdRef
-            </a>
-          </li>
-          <li>
-            <a
-              className={`fr-btn fr-btn--tertiary fr-btn--sm fr-icon-external-link-line ${scanRClicked ? "clicked-link" : ""}`}
-              target="_blank"
-              rel="noreferrer noopener external"
-              href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${contribution.objectId.replace(/\//g, "%2f")}`}
-              onClick={() => setScanRClicked(true)}
-            >
-              Sur scanR
-            </a>
-          </li>
-        </ul>
+        <ButtonGroup isInlineFrom="xs">
+          <Button
+            as="a"
+            variant="tertiary"
+            size="sm"
+            icon="external-link-line"
+            iconPosition="left"
+            className={idRefClicked ? "clicked-link" : ""}
+            target="_blank"
+            rel="noreferrer noopener external"
+            href={`https://www.idref.fr/${contribution.objectId.replace("idref", "")}`}
+            onClick={() => setIdRefClicked(true)}
+          >
+            Sur IdRef
+          </Button>
+          <Button
+            as="a"
+            variant="tertiary"
+            size="sm"
+            icon="external-link-line"
+            iconPosition="left"
+            className={scanRClicked ? "clicked-link" : ""}
+            target="_blank"
+            rel="noreferrer noopener external"
+            href={`https://scanr.enseignementsup-recherche.gouv.fr/authors/${contribution.objectId.replace(/\//g, "%2f")}`}
+            onClick={() => setScanRClicked(true)}
+          >
+            Sur scanR
+          </Button>
+        </ButtonGroup>
       )}
 
-      <ul className="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left message-preview__actions-main">
-        <li>
-          <button
-            type="button"
-            className="fr-btn fr-btn--sm fr-icon-download-line"
-            onClick={handleExportAllClick}
-          >
-            Tout exporter
-          </button>
-        </li>
-        <li>
-          <button
-            type="button"
-            className="fr-btn fr-btn--secondary fr-btn--sm fr-icon-edit-line"
-            onClick={() => setShowModal(true)}
-          >
-            Éditer la contribution
-          </button>
-        </li>
-      </ul>
+      <ButtonGroup isInlineFrom="xs" className="message-preview__actions-main">
+        <Button
+          type="button"
+          size="sm"
+          icon="download-line"
+          iconPosition="left"
+          onClick={handleExportAllClick}
+        >
+          Tout exporter
+        </Button>
+        <Button
+          type="button"
+          variant="secondary"
+          size="sm"
+          icon="edit-line"
+          iconPosition="left"
+          onClick={() => setShowModal(true)}
+        >
+          Éditer la contribution
+        </Button>
+      </ButtonGroup>
 
       <EditModal
         refetch={refetch}

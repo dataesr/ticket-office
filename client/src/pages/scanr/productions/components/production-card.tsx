@@ -1,4 +1,10 @@
-import { Accordion, AccordionGroup, Badge } from "@dataesr/dsfr-plus";
+import {
+  Accordion,
+  AccordionGroup,
+  Badge,
+  BadgeGroup,
+  Text,
+} from "@dataesr/dsfr-plus";
 import EmailSender from "../../../../components/email-sender";
 import ResponseThread from "../../../../components/response-thread";
 import { CopyButton } from "../../../../components/copy-button";
@@ -33,28 +39,21 @@ const ProductionCard = ({
 
   const renderSummary = () => (
     <div className="production-item-summary">
-      <ul className="fr-badges-group fr-mb-1w">
+      <BadgeGroup className="fr-mb-1w">
         {contribution.status && (
-          <li>
-            <Badge
-              size="sm"
-              color={BadgeStatus({ status: contribution.status })}
-            >
-              {StatusLabel({ status: contribution.status })}
-            </Badge>
-          </li>
-        )}
-        <li>
-          <Badge size="sm" color="green-emeraude" icon="links-line">
-            {`${productionsCount} publication${productionsCount > 1 ? "s" : ""} à lier`}
+          <Badge size="sm" color={BadgeStatus({ status: contribution.status })}>
+            {StatusLabel({ status: contribution.status })}
           </Badge>
-        </li>
-      </ul>
+        )}
+        <Badge size="sm" color="green-emeraude" icon="links-line">
+          {`${productionsCount} publication${productionsCount > 1 ? "s" : ""} à lier`}
+        </Badge>
+      </BadgeGroup>
 
       <div className="production-item-summary__row">
-        <p className="fr-text--sm fr-text--bold fr-mb-0">
+        <Text size="sm" className="fr-text--bold fr-mb-0">
           {contribution.name}
-          <span className="fr-ml-1w fr-text--regular fr-text--sm">
+          <Text as="span" size="sm" className="fr-ml-1w fr-text--regular">
             ({contribution.id})
             <CopyButton
               text={contribution.id}
@@ -62,11 +61,11 @@ const ProductionCard = ({
               onCopy={copyToClipboard}
               ariaLabel="Copier l'identifiant"
             />
-          </span>
-        </p>
-        <p className="fr-text--sm fr-text-mention--grey fr-mb-0">
+          </Text>
+        </Text>
+        <Text size="sm" className="fr-text-mention--grey fr-mb-0">
           Reçu le {receivedDate}
-        </p>
+        </Text>
       </div>
     </div>
   );
