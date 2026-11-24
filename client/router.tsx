@@ -26,30 +26,12 @@ export default function Router() {
           path="/scanr-contact"
         />
         <Route
-          element={<ContactAndContributionPage fromApplication="paysage" />}
-          path="/paysage-contact"
-        />
-        <Route
-          element={<ContactAndContributionPage fromApplication="bso" />}
-          path="/bso-contact"
-        />
-        <Route
           element={<BsoLocalVariations type="datasets" />}
           path="/bso-local-variations-datasets"
         />
         <Route
           element={<BsoLocalVariations type="publications" />}
           path="/bso-local-variations-publications"
-        />
-        <Route
-          element={<ContactAndContributionPage fromApplication="curiexplore" />}
-          path="/curiexplore-contact"
-        />
-        <Route
-          element={
-            <ContactAndContributionPage fromApplication="works-magnet" />
-          }
-          path="/works-magnet-contact"
         />
         <Route
           element={<ContactAndContributionPage fromApplication="tableaux" />}
